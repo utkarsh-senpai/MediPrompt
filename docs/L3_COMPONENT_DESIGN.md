@@ -9,9 +9,10 @@
 ```mermaid
 flowchart TB
     Shell[App shell]
-    Session[Practice session orchestrator]
+    Session[Basic practice controller]
+    Enhanced[Enhanced session orchestrator]
     Topics[Topic selector and random draw]
-    Timer[Preparation and speaking timers]
+    Timer[Focused speaking timer]
     Audio[Recorder and audio analyzer]
     STT[Transcription worker]
     Editor[Transcript editor]
@@ -26,7 +27,8 @@ flowchart TB
     Shell --> Session
     Session --> Topics
     Session --> Timer
-    Session --> Audio
+    Session -.->|capability enabled| Enhanced
+    Enhanced --> Audio
     Audio --> STT
     STT --> Editor
     Editor --> Coverage
@@ -34,7 +36,7 @@ flowchart TB
     Coverage --> Feedback
     Feedback --> Compare
     Compare --> Schedule
-    Session <--> Repo
+    Enhanced <--> Repo
     Topics <--> Packs
     SW --> Packs
 ```
@@ -46,11 +48,19 @@ error boundary, and capability detection. It does not implement learning rules. 
 restores or starts one practice session; settings, history, data controls, and pack information are
 secondary routes or sheets.
 
+### Basic practice controller
+
+This is the non-negotiable product core. It owns mode and subject selection, `Spin`, drawing state,
+topic readiness, `Spin again`, timer entry, the medical answer arc, finish/exit, and repeat. It uses
+only bundled topic data and the clock. It must run when microphone, workers, IndexedDB, network, and
+all review capabilities are missing or disabled.
+
 ### Practice session orchestrator
 
-Implements the session state machine and is the only component allowed to advance a practice
-attempt. It coordinates timers, recording, transcription, correction, review, retry, and save.
-Side effects are exposed through ports so reducer transitions stay deterministic and testable.
+Progressively wraps the basic controller when enhanced attempts are enabled. It coordinates
+recording, transcription, correction, review, retry, and save without changing the base
+mode/subject → spin → timer contract. Side effects are exposed through ports so reducer transitions
+stay deterministic and testable.
 
 ### Topic selector and random draw
 
@@ -63,7 +73,13 @@ learner chooses the due queue.
 
 Stores `startedAt`, `deadlineAt`, duration, pause policy, and last announced threshold. Remaining
 time is derived from the current monotonic clock. `setInterval` only requests a render; it is never
-the source of truth. Browser backgrounding cannot grant extra time.
+the source of truth. Browser backgrounding cannot grant extra time. The basic timer surface always
+shows the topic, `Define → Explain → Apply` or a reviewed topic-specific arc, a large circular
+countdown, current instruction, and a close/end control.
+
+Deep Research first uses the same deadline engine in a research surface. The learner may select
+**Done researching** before expiry; both early completion and expiry lead to a separate
+ready-to-speak confirmation. The speech countdown begins only after that confirmation.
 
 ### Recorder and audio analyzer
 
@@ -140,26 +156,36 @@ requests or learner data. Updates wait until the session is safe to reload.
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Ready
-    Ready --> Preparing: START_PREPARATION
-    Preparing --> Speaking: START_SPEAKING / deadline
-    Speaking --> Processing: STOP_SPEAKING / deadline
-    Speaking --> SelfReview: SKIP_AUDIO
+    [*] --> Idle
+    Idle --> Drawing: SPIN
+    Drawing --> TopicReady: TOPIC_DRAWN
+    TopicReady --> Drawing: SPIN_AGAIN
+    TopicReady --> Researching: START_RESEARCH (Deep Research)
+    Researching --> ReadyToSpeak: RESEARCH_ELAPSED / DONE_RESEARCHING
+    ReadyToSpeak --> Speaking: CONFIRM_READY
+    TopicReady --> Speaking: START_TIMER (Recall Sprint)
+    Speaking --> AttemptComplete: TIMER_ELAPSED / CLOSE_TIMER
+    AttemptComplete --> Drawing: SPIN_AGAIN
+    AttemptComplete --> Processing: ANALYSE (enhancement enabled)
     Processing --> TranscriptReview: TRANSCRIPT_READY
     Processing --> SelfReview: TRANSCRIPTION_UNAVAILABLE
     TranscriptReview --> Review: APPROVE_TRANSCRIPT
     SelfReview --> Review: COMPLETE_SELF_REVIEW
-    Review --> Preparing: START_RETRY
-    Review --> Scheduling: FINISH
+    Review --> TopicReady: START_RETRY
+    Review --> Scheduling: SAVE
     Scheduling --> Complete: SAVED
-    Complete --> Ready: NEXT_TOPIC
-    Ready --> [*]
+    Complete --> Drawing: SPIN_AGAIN
+    Idle --> [*]
     Complete --> [*]
 ```
 
 Permission denial, model failure, cancellation, and low memory are events, not exception-only
 paths. They lead to recoverable states with recording/playback, typed transcript, or self-review
 where safe. A fatal storage error still permits an unsaved session.
+
+`Idle → Drawing → TopicReady → Speaking → AttemptComplete → Drawing` is the v0.2 Recall Sprint
+path. Deep Research inserts `Researching → ReadyToSpeak` before `Speaking`. States after
+`AttemptComplete` are optional extensions and must be removable without breaking either basic path.
 
 ## 3. Primary data flow
 

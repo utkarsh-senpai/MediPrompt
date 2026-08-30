@@ -17,6 +17,11 @@ The public learning loop therefore has no always-on backend, database, account, 
 bill. A connected Spring Boot modular monolith may be added after v1.0 for opt-in synchronization,
 educator workflows, and provider-backed coaching. Local guest mode remains a complete product.
 
+The PWA is layered around a permanent **basic practice core**: mode and subject selection, topic
+draw, focused countdown, answer arc, finish/exit, and spin again. Recording, workers, IndexedDB,
+feedback, scheduling, and connected services are adapters or progressive enhancements. Failure or
+absence of any enhancement cannot disable the basic core.
+
 ## 2. Zero-cost local deployment
 
 ```mermaid
@@ -52,7 +57,8 @@ flowchart TB
 
 | Container | Responsibility | Data held | Versions |
 | --- | --- | --- | --- |
-| Learner PWA | Session UI, timers, orchestration, feedback, retry, scheduling | In-memory active session | v0.2+ |
+| Basic practice core | Mode/subject selection, topic draw, focused timer, answer arc, finish and repeat | In-memory current topic/timer | v0.2+ |
+| Learner enhancements | Recording, review, retry, scheduling and history UI | In-memory active session | v0.3+ |
 | Browser workers | Transcription and semantic coverage off the main thread | Temporary audio/features/model state | v0.3–v0.4+ |
 | IndexedDB | Attempts, settings, pack cache, model metadata, due queue | Learner-owned local data | v0.5+ |
 | Service worker/cache | Offline shell, content and optional pinned model assets | Public immutable assets | v0.2+ |
@@ -197,7 +203,7 @@ remain supported.
 ### Reliability and offline behavior
 
 - Timers derive remaining time from monotonic timestamps rather than interval counts.
-- Active sessions recover from visibility changes without extending preparation or speaking time.
+- Active sessions recover from visibility changes without extending research or speaking time.
 - Atomic IndexedDB transactions and versioned migrations protect progress.
 - A failed model load degrades to recording/playback, typed transcript, or self-review.
 - An old valid pack remains usable until a new pack is fully downloaded and validated.

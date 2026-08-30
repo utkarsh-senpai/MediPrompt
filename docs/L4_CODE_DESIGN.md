@@ -65,9 +65,13 @@ interface TopicRef {
 }
 
 interface TimePolicy {
-  preparationSeconds: number;
   speakingSeconds: number;
-  allowManualEarlyStart: boolean;
+  researchSeconds?: number;
+}
+
+interface SpeechArcStep {
+  id: string;
+  label: string;
 }
 
 interface PracticeSession {
@@ -141,9 +145,13 @@ pack, threshold, and model versions needed to reproduce a result.
 
 ```ts
 type SessionState =
-  | { name: "READY"; topic: TopicSnapshot }
-  | { name: "PREPARING"; attempt: AttemptDraft; deadlineAt: number }
+  | { name: "IDLE"; selection: PracticeSelection }
+  | { name: "DRAWING"; selection: PracticeSelection; requestId: string }
+  | { name: "TOPIC_READY"; topic: TopicSnapshot; speechArc: SpeechArcStep[] }
+  | { name: "RESEARCHING"; attempt: AttemptDraft; deadlineAt: number }
+  | { name: "READY_TO_SPEAK"; attempt: AttemptDraft }
   | { name: "SPEAKING"; attempt: AttemptDraft; deadlineAt: number }
+  | { name: "ATTEMPT_COMPLETE"; attempt: AttemptDraft }
   | { name: "PROCESSING"; attempt: AttemptDraft; audio?: AudioHandle }
   | { name: "TRANSCRIPT_REVIEW"; attempt: AttemptDraft; draft: TranscriptDraft }
   | { name: "SELF_REVIEW"; attempt: AttemptDraft; reason: FallbackReason }
@@ -152,18 +160,32 @@ type SessionState =
   | { name: "COMPLETE"; summary: SessionSummary };
 
 type SessionEvent =
-  | { type: "START_PREPARATION"; now: number }
-  | { type: "START_SPEAKING"; now: number }
-  | { type: "STOP_SPEAKING"; now: number }
+  | { type: "CHANGE_SELECTION"; selection: PracticeSelection }
+  | { type: "SPIN"; requestId: string }
+  | { type: "TOPIC_DRAWN"; requestId: string; topic: TopicSnapshot }
+  | { type: "START_RESEARCH"; now: number }
+  | { type: "RESEARCH_ELAPSED"; now: number }
+  | { type: "DONE_RESEARCHING"; now: number }
+  | { type: "CONFIRM_READY"; now: number }
+  | { type: "START_TIMER"; now: number }
+  | { type: "TIMER_ELAPSED"; now: number }
+  | { type: "CLOSE_TIMER"; now: number }
+  | { type: "SPIN_AGAIN"; requestId: string }
+  | { type: "ANALYSE" }
   | { type: "TRANSCRIPT_READY"; draft: TranscriptDraft }
   | { type: "TRANSCRIPTION_UNAVAILABLE"; reason: FallbackReason }
   | { type: "APPROVE_TRANSCRIPT"; transcript: ApprovedTranscript }
   | { type: "COMPLETE_SELF_REVIEW"; review: SelfReview }
   | { type: "START_RETRY"; now: number }
-  | { type: "FINISH" }
+  | { type: "SAVE" }
   | { type: "SAVED"; summary: SessionSummary }
   | { type: "NEXT_TOPIC"; topic: TopicSnapshot };
 ```
+
+The v0.2 reducer implements `IDLE → DRAWING → TOPIC_READY → SPEAKING → ATTEMPT_COMPLETE` for Recall
+Sprint. Deep Research inserts `RESEARCHING → READY_TO_SPEAK` before `SPEAKING`. `START_TIMER` and
+`START_RESEARCH` are invalid until `TOPIC_DRAWN` for the current request has succeeded. Optional
+intelligence continues from `ATTEMPT_COMPLETE` into `PROCESSING`.
 
 `reduceSession(state, event)` is pure. Effects are returned as commands such as
 `REQUEST_MICROPHONE`, `START_TIMER`, `TRANSCRIBE`, `ANALYSE`, `PERSIST`, or `DISCARD_AUDIO` and run
@@ -308,7 +330,7 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
             "promptId": "explain-cardiac-cycle",
             "mode": "RECALL_SPRINT",
             "wording": "Explain the cardiac cycle in a structured sequence.",
-            "timePolicy": { "preparationSeconds": 30, "speakingSeconds": 90 }
+            "timePolicy": { "speakingSeconds": 90 }
           }],
           "rubrics": [{
             "rubricId": "examiner-core",
@@ -500,7 +522,7 @@ CI performance on hosted runners is not presented as phone performance.
 | Version | Required acceptance evidence |
 | --- | --- |
 | v0.1 | Markdown links valid; diagrams render; architecture/privacy/content decisions reviewed |
-| v0.2 | Landing-to-topic, complete timer-only attempt, random bag, background timer, responsive/a11y/offline shell |
+| v0.2 | Mode/subject controls, drawing state, timer disabled before draw, Spin/Spin again, Recall direct-to-speech path, Deep Research research → ready → speech path, duration settings, focused topic + three-step arc + circular timer, complete/exit/repeat, random bag, background timer, responsive/a11y/offline shell, and operation with mic/storage/models/network disabled |
 | v0.3 | Permission paths, record/playback, deterministic audio fixtures, local STT progress/cancel/failure, device benchmark, zero audio requests |
 | v0.4 | Golden coverage evidence, `NOT_VERIFIABLE`, one prescription, retry and valid Refinement Delta |
 | v0.5 | Viva ladder, register rubrics, deterministic due queue, timezone cases, export/delete-all |
@@ -519,5 +541,6 @@ CI performance on hosted runners is not presented as phone performance.
 6. Add a failure-path test with every new capability.
 7. Keep generated output out of manual editing and verify it has no drift.
 8. Record a short architecture decision when changing a boundary or trust assumption.
-9. Preserve the first useful prompt without account, model, or microphone.
+9. Preserve the complete mode/subject → Spin → focused timer → finish/exit → repeat tool without
+   account, model, microphone, persistent storage, or network.
 10. Do not merge a version until its exit gate in the execution plan has evidence.

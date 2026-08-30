@@ -12,11 +12,12 @@ to connected Spring Boot and AI capabilities without making them prerequisites f
 
 The execution strategy optimizes for validated learning value in this order:
 
-1. A prompt must lead to a completed spoken attempt.
-2. Feedback must cause a better second attempt.
-3. Weak topics must return at the right time.
-4. The system must work on the learner's actual phone, accent, microphone, and network conditions.
-5. Connected and generative capabilities may improve the loop only after the local loop works.
+1. The Unprompted-format mode/subject → spin → timed-speaking tool must work immediately.
+2. A selected medical prompt must lead to a completed spoken attempt without accounts or AI.
+3. Feedback should cause a better second attempt when the learner enables the enhancement.
+4. Weak topics should return at the right time.
+5. The system must work on the learner's actual phone, accent, microphone, and network conditions.
+6. Connected and generative capabilities may improve the loop only after the basic tool works.
 
 ## 2. Evaluation of the updated research memory
 
@@ -24,6 +25,9 @@ The execution strategy optimizes for validated learning value in this order:
 
 - **Execution-led positioning:** “AI viva examiner” is a crowded category. MediPrompt should win
   through low friction, privacy, feedback quality, and demonstrated learning improvement.
+- **Unprompted behavior as the baseline:** mode selection, category selection, a random topic draw,
+  and a focused speaking timer are the smallest complete product. Medical and AI features layer on
+  top without replacing or delaying it.
 - **Content/delivery separation:** this is both pedagogically clearer and technically testable.
 - **Browser-local default:** it gives a defensible zero-cost and privacy story.
 - **Transcript correction before scoring:** this prevents speech-recognition errors from silently
@@ -74,22 +78,39 @@ content model, safety constraints, and code-level contracts.
 
 No learner code is included. Design review changes stay on this branch until approval.
 
-### v0.2 — First playable
+### v0.2 — Unprompted-format medical core
 
 **Planned branch:** `feature/v0.2-first-playable`
 
 Deliver a static TypeScript PWA with:
 
-- Prompt, speaking-timer, and basic review states.
-- Recall Sprint mode.
-- Subject/topic filtering and non-repeating random draw.
+- A one-screen practice surface with mode switch, medical-subject selector, topic stage, and quiet
+  settings access.
+- Recall Sprint and Deep Research mode choices with concise descriptions; Deep Research uses a
+  configurable research duration.
+- A **Spin** action and non-repeating random topic draw, including a visible drawing state and
+  **Spin again**.
+- A disabled timer action until a topic has been drawn.
+- Recall Sprint goes directly from a drawn topic to the speaking timer.
+- Deep Research goes from a drawn topic to a research countdown with **Done researching**, then a
+  ready-to-speak confirmation and the same speaking timer.
+- A settings surface for speech and research durations; settings persist locally when storage is
+  available and fall back to defaults when it is not.
+- A distraction-free speaking view containing the topic, a three-step medical answer arc, large
+  circular countdown, current instruction, and close/end action.
+- A return path to spin again when the timer completes or is closed.
 - One hand-authored demonstration topic pack with at least 20 topics.
-- Preparation and speaking timers that survive background/foreground transitions.
+- Speaking and Deep Research timers that survive background/foreground transitions.
 - No account and no model download.
 - Responsive layout, keyboard navigation, reduced motion, and basic offline application shell.
 
-**Exit gate:** a first-time phone user reaches a topic in under five seconds and completes a timed
-attempt without instructions. Unit, component, accessibility smoke, and mobile viewport tests pass.
+**Exit gate:** a first-time phone user can infer the mode/subject → Spin → Start timer flow, reaches
+a topic in under five seconds, and completes or exits a timed attempt without instructions. The
+basic tool still works with microphone, storage, model, and network capabilities disabled. Unit,
+component, accessibility smoke, and mobile viewport tests pass.
+
+All later versions are additive. Their failure, configuration, or removal must not break this v0.2
+behavioral contract.
 
 ### v0.3 — Private speech intelligence
 

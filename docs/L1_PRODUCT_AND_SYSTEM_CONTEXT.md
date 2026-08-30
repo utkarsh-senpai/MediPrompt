@@ -8,15 +8,18 @@
 
 MediPrompt is a medical speaking-practice application designed to close the gap between
 recognizing information and producing a clear spoken answer. It gives a learner a topic, limits
-preparation and answer time, records or times the answer, separates content coverage from delivery
-observations, prescribes one improvement, and asks for a second attempt. Weak topics return later.
+research and answer time when selected, records or times the answer, separates content coverage
+from delivery observations, prescribes one improvement, and asks for a second attempt. Weak topics
+return later.
 
 The zero-cost product is a browser-local PWA with no mandatory account or server. Reviewed medical
 content lives in versioned topic packs. Java/Spring Boot supports content compilation first and an
 optional connected platform later.
 
-MediPrompt is not positioned as a novel AI category. Products already generate viva questions,
-transcribe speech, and coach delivery. Its product promise is a better learning loop: fast entry,
+MediPrompt is not positioned as a novel AI category. Its first product is deliberately an
+Unprompted-format medical speaking tool: choose mode and subject, spin for a medical topic, then
+speak against a focused timer and short answer arc. Products already generate viva questions,
+transcribe speech, and coach delivery. MediPrompt's later promise is a better learning loop:
 transparent rubrics, privacy, useful failure behavior, and evidence that practice improves the
 next attempt.
 
@@ -141,11 +144,14 @@ medical reviewer.
 ### UJ1 — First practice in under five seconds
 
 1. Learner opens the PWA.
-2. Default subject and Recall Sprint are already selected.
-3. Learner draws or accepts a topic.
-4. Preparation timer begins only on explicit action.
-5. Learner speaks under the timer, initially without requiring microphone access.
-6. Basic self-review appears.
+2. Recall Sprint and a default medical subject are already selected and can be changed.
+3. The topic stage is ready, and **Start timer** is disabled.
+4. Learner presses **Spin** and sees a brief drawing state followed by one medical topic.
+5. **Spin again** and **Start timer** become available.
+6. Learner starts a focused speaking view showing the topic, three-part answer arc, large circular
+   countdown, current instruction, and close/end action.
+7. At completion or close, the learner returns and can spin again. Enhanced review appears only
+   when its later capability is available and enabled.
 
 The first journey must not depend on audio, a model, an account, or a network after the shell and
 pack are loaded.
@@ -193,6 +199,19 @@ pack are loaded.
 
 ## 8. Learning loop
 
+The permanent basic loop is intentionally smaller than the extended coaching loop:
+
+```mermaid
+flowchart LR
+    A[Choose mode and subject] --> B[Spin for a medical topic]
+    B --> C[Start focused timer]
+    C --> D[Speak using the answer arc]
+    D --> E[Finish or exit]
+    E --> B
+```
+
+When optional review capabilities are enabled, the same attempt can continue through:
+
 ```mermaid
 flowchart LR
     A[Select topic] --> B[Retrieve without notes]
@@ -215,7 +234,7 @@ learner with every possible metric. It should select feedback that can change th
 ### Recall Sprint
 
 - Default mode.
-- 15–30 seconds preparation.
+- No enforced preparation timer.
 - 60–90 seconds answer.
 - One prompt and one prescription.
 - Suitable for daily retrieval and first-run use.
@@ -229,7 +248,8 @@ learner with every possible metric. It should select feedback that can change th
 
 ### Deep Research
 
-- Longer preparation window.
+- Configurable research countdown with an explicit **Done researching** action.
+- Separate ready-to-speak confirmation before the speech countdown starts.
 - Shows only reviewed/linked sources.
 - The learner speaks after research; the system compares against the same transparent rubric.
 - No unrestricted web search in the scoring path.
@@ -243,21 +263,28 @@ learner with every possible metric. It should select feedback that can change th
 
 ## 10. Experience and visual direction
 
-The interaction reference is Unprompted's low-friction, focused prompt experience—not its code,
-copy, brand, or exact layout. MediPrompt should improve the reference for learning by making the
-practice state, privacy choice, evidence, and immediate retry unmistakable.
+The interaction reference establishes a required behavioral baseline—not reusable code, content,
+copy, brand, or pixel-identical layout. MediPrompt preserves the compact interaction and gives it a
+distinct medical learning identity. Privacy choices, evidence, and retry appear only as progressive
+enhancements around the basic tool.
 
 ### Screen structure
 
-- **Prompt:** topic, mode, compact time policy, and one dominant “Prepare” action.
-- **Speak:** topic remains visible; preparation/speaking timer and stop action dominate; recording
-  is optional and its state is explicit.
-- **Review:** corrected transcript, separate Content and Delivery sections, one prescription, and a
-  dominant “Try again” action.
+- **Ready:** compact mode switch and medical-subject selector, neutral topic stage, dominant
+  **Spin** action, disabled timer action, and quiet settings access.
+- **Topic drawn:** replace the neutral state with “Your topic,” the medical topic, **Spin again**,
+  and the now-enabled **Start timer** action.
+- **Research:** Deep Research alone uses a focused research countdown, allows early completion, and
+  presents an explicit ready-to-speak handoff.
+- **Speak:** use a focused overlay/page with the topic, three-part medical answer arc, large circular
+  countdown, current instruction, and close/end action. Recording is optional and explicit.
+- **Review enhancement:** when available, show the corrected transcript, separate Content and
+  Delivery sections, one prescription, and a dominant **Try again** action after the basic attempt.
 
 Secondary controls—subject, history, settings, data controls, and pack sources—stay reachable but
 do not compete with the current action. On small screens the flow is one column. Wider screens may
 place evidence beside the transcript only when reading order and focus order remain correct.
+Settings expose speech and research duration without turning the main surface into a form.
 
 ### Visual language
 
@@ -269,6 +296,10 @@ place evidence beside the transcript only when reading order and focus order rem
   scores, gradients, gamified streak pressure, or medical imagery used as decoration.
 - Color combinations must meet WCAG 2.2 AA contrast, and all meaning must also appear in text,
   labels, or shape.
+
+The medical answer arc defaults to **Define → Explain → Apply** and may be overridden by a reviewed
+topic blueprint (for example, a procedure or drug answer structure). It guides speech; it does not
+expose the hidden rubric or turn the timer into a form.
 
 The shipped fonts must be subset/self-hosted or use metric-compatible fallbacks so the first prompt
 does not depend on a third-party font request. The design system defines tokens rather than copying
@@ -379,7 +410,8 @@ flowchart LR
 
 ## 17. References informing the design
 
-- [Unprompted](https://www.unprompted.cool/) — interaction reference only.
+- [Unprompted](https://www.unprompted.cool/) — required behavioral baseline; no code, content,
+  copy, brand, or pixel-identical design reuse.
 - [The Use of Retrieval Practice in the Health Professions](https://pmc.ncbi.nlm.nih.gov/articles/PMC12292765/)
 - [Transformers.js](https://github.com/huggingface/transformers.js)
 - [WebLLM](https://github.com/mlc-ai/web-llm)

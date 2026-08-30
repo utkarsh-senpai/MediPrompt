@@ -6,10 +6,11 @@ MediPrompt is a privacy-first speaking-practice application for medical students
 learner turn knowledge they can recognize in notes or questions into an answer they can retrieve,
 structure, and defend aloud during a viva, OSCE, ward round, seminar, or case presentation.
 
-The product takes inspiration from the low-friction, single-screen practice loop of
-[Unprompted](https://www.unprompted.cool/) without copying its product or visual identity.
-MediPrompt adds medical answer rubrics, observable delivery feedback, a second-attempt refinement
-loop, and spaced resurfacing of weak topics.
+The basic product is the medical-student version of the low-friction practice tool demonstrated by
+[Unprompted](https://www.unprompted.cool/): choose a practice mode and subject, spin for a topic,
+then speak against a focused timer and short answer arc. MediPrompt uses its own implementation,
+content, copy, and visual identity. Medical rubrics, recording, feedback, retry, and spaced
+practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
@@ -26,12 +27,28 @@ contain a runnable learner application. The first playable is planned for v0.2.
 | [L3 design](docs/L3_COMPONENT_DESIGN.md) | Components, state, storage, content packs, and service boundaries |
 | [L4 design](docs/L4_CODE_DESIGN.md) | Repository layout, interfaces, algorithms, contracts, and tests |
 
-## Product loop
+## Basic product contract
+
+The first playable must work without an account, microphone, model, transcript, or backend:
+
+1. Choose **Recall Sprint** or **Deep Research**.
+2. Choose a medical subject.
+3. Press **Spin** to draw a topic; the timer action stays disabled until a topic is drawn.
+4. In Recall Sprint, press **Start timer**. In Deep Research, run or finish the research timer,
+   confirm **Ready to speak**, then enter the same speaking view.
+5. Keep the topic, a three-part medical answer arc, a large circular countdown, and an exit action
+   visible throughout the attempt.
+6. Finish, spin again, or optionally continue into enhanced review when that feature is available.
+
+This compact mode/topic → spin → timed speech flow remains available even after advanced features
+are added.
+
+## Extended learning loop
 
 ```text
 Choose or draw a topic
         ↓
-Prepare under a timer
+Prepare when the selected mode allows it
         ↓
 Explain aloud
         ↓
@@ -44,16 +61,16 @@ Retry with one specific goal
 Resurface weak topics later
 ```
 
-The application is designed around active retrieval and spoken production rather than passive
-rereading. A learner should reach the first prompt without creating an account or installing an
-application.
+The extended loop is progressive enhancement. The basic timed speaking tool remains useful if
+recording, transcription, evaluation, storage, or the network is unavailable.
 
 ## Planned practice modes
 
-- **Recall Sprint:** 15–30 seconds to prepare and 60–90 seconds to answer.
+- **Recall Sprint:** speak immediately for 60–90 seconds.
 - **Viva Round:** a structured answer followed by recall, explanation, application,
   differentiation, and defence questions.
-- **Deep Research:** longer preparation using approved sources before a timed answer.
+- **Deep Research:** a configurable research timer, an explicit ready-to-speak handoff, then the
+  same timed answer.
 - **Teach-back:** explain the same topic to an examiner, junior student, or patient.
 
 ## What feedback means
