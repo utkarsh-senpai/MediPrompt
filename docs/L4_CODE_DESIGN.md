@@ -240,14 +240,19 @@ timer. Tests inject both clocks.
 
 ### Non-repeating random draw
 
-1. Build sorted eligible topic IDs and a filter fingerprint.
-2. Load the remaining shuffled bag for that fingerprint and pack-version set.
-3. If the candidate set changed, intersect the bag and append/shuffle newly eligible IDs.
+1. Build sorted eligible variant IDs and a canonical fingerprint over pack IDs/versions, subject,
+   challenge, implemented mode, and register when it changes eligibility.
+2. Load the remaining bag through an injected `BagStore`; v0.2 uses session memory and later
+   versions may add validated persistence.
+3. Remove duplicate/unknown IDs. If the candidate set changed, intersect the bag and
+   append/shuffle newly eligible IDs.
 4. If empty, Fisher–Yates shuffle all candidates with an injectable cryptographic/random source.
 5. Move a recently drawn ID to the end when at least two alternatives exist.
-6. Pop one ID and persist the remaining bag.
+6. Pop one ID and save the remaining bag through the port.
 
-Deterministic seeded randomness is used in tests. Production uses `crypto.getRandomValues`.
+Deterministic seeded randomness is used in tests. Production uses an unbiased index derived from
+`crypto.getRandomValues`; unavailable Web Crypto falls back visibly to a deterministic ordering,
+not implicit `Math.random`.
 
 ### Audio metrics
 
@@ -406,7 +411,8 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
             "supportLevel": "FULL",
             "wording": "Explain the cardiac cycle in a structured sequence.",
             "answerArc": ["define", "explain", "apply"],
-            "timePolicy": { "speakingSeconds": 90 }
+            "timePolicy": { "speakingSeconds": 90 },
+            "rubricId": "examiner-core"
           }],
           "rubrics": [{
             "rubricId": "examiner-core",
