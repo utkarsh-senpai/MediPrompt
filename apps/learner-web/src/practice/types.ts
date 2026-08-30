@@ -43,7 +43,8 @@ export interface Reviewer {
 export interface PackReview {
   status: ReviewStatus;
   reviewers: Reviewer[];
-  reviewedAt: string;
+  /** Null until an actual review has occurred; APPROVED packs require an ISO date. */
+  reviewedAt: string | null;
 }
 
 export interface Source {

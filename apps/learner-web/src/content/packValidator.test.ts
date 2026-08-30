@@ -150,6 +150,19 @@ describe("assertV02ProductionPack", () => {
     expect(() => assertV02ProductionPack(validatePack(p))).toThrow();
   });
 
+  it("accepts an unattested DRAFT but rejects unattested APPROVED content", () => {
+    const draft = basePack() as RuntimePack;
+    draft.review.status = "DRAFT";
+    draft.review.reviewers = [];
+    draft.review.reviewedAt = null;
+    expect(() => validatePack(draft)).not.toThrow();
+
+    const approved = basePack() as RuntimePack;
+    approved.review.reviewers = [];
+    approved.review.reviewedAt = null;
+    expectInvalid(approved, "schema");
+  });
+
   it("requires medical review for a medical production pack", () => {
     const p = basePack() as RuntimePack;
     p.contentKind = "MEDICAL";

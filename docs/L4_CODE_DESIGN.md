@@ -445,6 +445,13 @@ variants additionally require plausible alternatives and a reviewed follow-up or
 Validator rules reject identical prompt variants that claim greater difficulty only through a
 shorter timer.
 
+Review metadata models absence honestly: an unattested `DRAFT` has `reviewers: []` and
+`reviewedAt: null`. The schema condition requires at least one reviewer and a non-null ISO date for
+`APPROVED`; production validation then enforces the role/content-kind rule. Medical review
+candidates live under `content/candidates/`, must meet the v0.2 topic/trio minimums, and must fail
+the production gate. The copy step reads only `content/packs/`, and artifact validation scans for
+candidate identifiers.
+
 ## 6. Java compiler contracts
 
 ```java

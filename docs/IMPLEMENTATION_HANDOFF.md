@@ -12,10 +12,12 @@ Read only these files first:
 2. `docs/EXECUTION_PLAN.md` - version order and exit gates.
 3. `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` - normative challenge/depth contract.
 4. The relevant L1-L4 section for the task; do not reload all design files unless needed.
-5. `docs/curriculum/MPT-CBC-topics.md` only for curriculum/content work.
+5. `docs/curriculum/MPT-CBC-topics.md` only for broad curriculum inventory work.
+6. `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md` for the first medical-pack review.
 
-The current repository includes the reviewed v0.2 first-playable implementation. Do not mistake
-the MPT authoring inventory for a runtime topic pack.
+The current repository includes the reviewed v0.2 first-playable implementation and a complete
+source-grounded medical review candidate. Do not mistake either the broad MPT inventory or the
+unattested medical candidate for published runtime content.
 
 ## Non-negotiable product invariant
 
@@ -56,6 +58,12 @@ validation, non-repeating full-fingerprint draws, deadline-based timers, respons
 surfaces, and an atomic allowlisted offline cache. It uses a reviewed non-medical interaction pack
 until medical content has an identified medical reviewer. A compiled two-mode non-medical fallback
 keeps the practice loop usable when the full pack is missing or rejected.
+
+`content/candidates/mpt-cardiorespiratory-review-candidate.json` is the first medical publication
+candidate: 20 curriculum-mapped topics, Recall Sprint and Deep Research coverage, 46 source-linked
+rubrics, and three full challenge trios. Its generator, evidence matrix, source-currency decisions,
+and educator checklist are committed. It is `DRAFT`, has no reviewer/date attestation, fails the
+production gate by design, and is excluded from build copying.
 
 The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScript 5.9.3, Vite
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
@@ -109,14 +117,17 @@ Accessibility time adjustments must not change challenge.
 
 See `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` for runtime YAML, UI, progression, and tests.
 
-## Curriculum status
+## Curriculum and medical-content status
 
 - 7 subjects and 265 candidate practice-topic labels are stored under `docs/curriculum/`.
 - IDs are unique lowercase kebab-case; normalized titles are unique.
 - Every candidate maps once to a paper/page-range index.
 - The inventory is `DRAFT`, `REFERENCE_ONLY`, and `runtimeCompatible: false`.
-- Exact per-candidate competency/module mapping, source-use/licence decision, prompt/rubric/case
-  authoring, and educator approval remain outstanding.
+- One 20-topic cardiovascular/respiratory subset has exact competency/page mapping, current source
+  research, original prompt/rubric/case wording, and an explicit reuse boundary. Its automated
+  candidate checks are complete.
+- Qualified educator review of that exact candidate remains outstanding. Do not infer approval from
+  source authority or put a placeholder in the reviewer fields.
 - Do not use the candidate count as an official curriculum competency count.
 
 ## PR review checklist
@@ -141,7 +152,7 @@ behavior first. Merge feature PRs to `develop`; promote an approved release from
 
 ## Open decisions - discover before asking
 
-- Final demo topic content and named medical educator reviewer.
+- Named medical educator reviewer and their attestation for the committed medical candidate.
 - Software/content licences before public contribution.
 - Target phone/browser benchmark and exam date/preferences.
 - Whether the challenge selector uses text tabs, segmented control, or select at narrow widths.

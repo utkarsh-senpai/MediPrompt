@@ -36,6 +36,8 @@ code, content, copy, or visual identity.
   compilation and `unsafe-eval` are prohibited.
 - Compiled reviewed non-medical fallback for both modes if the external pack is unavailable or
   invalid; the app never invents medical content or leaves the topic surface blank.
+- Source-grounded medical candidate lane: 20 cardiovascular/respiratory topics, 46 rubrics, both
+  v0.2 modes, and three Guided/Applied/Viva trios under `content/candidates/`.
 
 ## Content and safety boundary
 
@@ -43,8 +45,16 @@ code, content, copy, or visual identity.
   learner content.
 - Runtime packs declare `contentKind`. An `APPROVED` medical pack requires a
   `MEDICAL_REVIEWER`; owner/editor approval applies only to non-medical interaction fixtures.
-- v0.2 intentionally publishes a 20-topic non-medical fixture until medical prompts, fictional
-  cases, rubrics, sources, licence, and a named reviewer are available.
+- Medical prompt/rubric/case authoring and source research are no longer the blocker for the first
+  subset. The evidence matrix uses the supplied curriculum plus current sources: GOLD 2026, GINA
+  2026, ERS Bronchiectasis 2025, SCCM PADIS 2025, ACC/AHA ACS 2025, AHA BLS 2025, and still-current
+  ATS/ERS/BTS/ESC/ACSM standards where no 2025-2026 replacement exists.
+- v0.2 intentionally publishes the 20-topic non-medical fixture until a qualified educator reviews
+  MediPrompt's exact candidate and records a verifiable attestation. Authoritative sources are
+  provenance, not educator approval.
+- An unattested `DRAFT` must use an empty reviewer list and `reviewedAt: null`. CI validates the
+  candidate's 20-topic/three-trio depth, requires its production rejection, and prevents artifact
+  leakage.
 - Medical feedback may later report reviewed-rubric coverage, never independent correctness.
 - Never score emotion, anxiety, confidence, personality, intelligence, accent, or native-speaker
   likeness. Never store or transmit patient information.
@@ -79,6 +89,8 @@ third-party accuracy claims as product guarantees.
 - `docs/EXECUTION_PLAN.md`: version scope and exit gates.
 - `docs/DIFFICULTY_AND_DEPTH_DESIGN.md`: difficulty/challenge contract.
 - `docs/V0.2_DEVELOPMENT_CONTEXT.md`: v0.2 implementation/security contract.
+- `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: first medical-pack evidence and
+  educator-review contract.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.
 
 If this file conflicts with an exit gate or normative design contract, the execution plan and

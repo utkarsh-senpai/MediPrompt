@@ -33,12 +33,14 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Demo content (v0.2):** the runnable pack at `content/packs/demo-interaction-fixture.json` is a
-**non-medical interaction fixture** approved by the owner (`CONTENT_EDITOR`). Per
-`docs/V0.2_DEVELOPMENT_CONTEXT.md` §8, medical content is not self-marked `APPROVED` while educator
-review is pending; a synthetic `NOT_FOR_PUBLICATION` fixture (`content/fixtures/`) is structurally
-valid but rejected by the production gate. A genuinely reviewed medical pack replaces this fixture
-before public release.
+**Content status (v0.2):** the runnable pack at `content/packs/demo-interaction-fixture.json` is a
+**non-medical interaction fixture** approved by the owner (`CONTENT_EDITOR`). A separate
+20-topic, 46-rubric MPT cardiovascular/respiratory medical pack now exists under
+`content/candidates/`. It is mapped to the supplied curriculum and current sources including GOLD
+2026, GINA 2026, 2025 ERS bronchiectasis, 2025 SCCM PADIS, 2025 ACC/AHA ACS, and 2025 AHA BLS.
+Candidate validation proves its structure and also proves that it cannot enter the production
+artifact while educator attestation is absent. See the
+[source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
 
 | Document | Purpose |
 | --- | --- |
@@ -51,6 +53,7 @@ before public release.
 | [Implementation handoff](docs/IMPLEMENTATION_HANDOFF.md) | Minimum-context entry point for the next agent or contributor |
 | [Project memory](docs/PROJECT_MEMORY.md) | Current decisions, evidence, risks, and next-version pickup |
 | [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
+| [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator attestation |
 
 ## Basic product contract
 
@@ -159,12 +162,12 @@ would make later versions drift from decisions and code merged in earlier versio
 
 ## Near-term target
 
-The first useful beta should serve one real medical student within four to six weeks after v0.1 is
-approved. Success means she can complete the full prompt → speak → review → retry loop on a phone
-and find the feedback useful—not that the repository contains the most features. The first
-curriculum inventory contains 265 MPT candidate practice-topic labels; it remains a
-[reference-only draft](docs/curriculum/MPT-CBC-topics.md) pending exact competency mapping, licence
-review, prompt/rubric authoring, and educator approval.
+The first useful beta should serve one real medical student and let her complete the full prompt →
+speak → review → retry loop on a phone. The broad inventory contains 265
+[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset is
+now source-grounded as a 20-topic cardiovascular/respiratory review candidate. Publication remains
+blocked only on qualified educator review of MediPrompt's exact prompts, rubrics, cases, accepted
+phrases, source scope, and exam relevance—not on missing source research or authoring.
 
 ## Contributing
 

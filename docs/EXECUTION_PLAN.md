@@ -83,8 +83,11 @@ No learner code is included. Design review changes stay on this branch until app
 
 **Branch:** `feature/v0.2-first-playable`
 
-**Implementation status:** complete; automated, accessibility, offline, responsive, content, and
-dependency-security gates are part of the promotion review.
+**Implementation status:** application complete; automated, accessibility, offline, responsive,
+content, and dependency-security gates are part of the promotion review. Medical-content
+preparation now includes a validated 20-topic cardiovascular/respiratory candidate with 46
+source-linked rubrics and three full challenge trios. It remains excluded from runtime pending
+qualified educator attestation; the approved non-medical interaction fixture remains active.
 
 Deliver a static TypeScript PWA with:
 
@@ -109,6 +112,8 @@ Deliver a static TypeScript PWA with:
 - Speaking and Deep Research timers that survive background/foreground transitions.
 - No account and no model download.
 - Responsive layout, keyboard navigation, reduced motion, and basic offline application shell.
+- A separate medical-candidate lane that validates source links, minimum topic/depth coverage, empty
+  pre-review attestation, production-gate rejection, and exclusion from the static artifact.
 
 **Exit gate:** a first-time phone user can infer the mode/challenge/subject → Spin → Start timer
 flow, reaches a topic in under five seconds, and completes or exits a timed attempt without
