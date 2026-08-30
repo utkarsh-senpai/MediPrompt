@@ -248,41 +248,42 @@ topicId: pulmonary-rehabilitation
 variants:
   - variantId: pulmonary-rehabilitation-guided-v1
     challengePreset: GUIDED
-    profileVersion: difficulty-profile/1.0
+    difficultyProfileVersion: difficulty-profile/1.0
     blueprint: explain-concept
-    prompt: "Educator-authored wording"
+    wording: "Educator-authored wording"
     answerArc: [define, explain, apply]
     timePolicy: { preparationSeconds: 0, speakingSeconds: 90 }
     caseRef: null
     followUpRefs: []
-    rubricRef: pulmonary-rehabilitation-guided-rubric-v1
+    rubricId: pulmonary-rehabilitation-guided-rubric-v1
   - variantId: pulmonary-rehabilitation-applied-v1
     challengePreset: APPLIED
-    profileVersion: difficulty-profile/1.0
+    difficultyProfileVersion: difficulty-profile/1.0
     blueprint: manage-case
-    prompt: "Educator-authored wording"
+    wording: "Educator-authored wording"
     answerArc: [summarize, reason, plan]
     timePolicy: { preparationSeconds: 45, speakingSeconds: 120 }
     caseRef: stable-fictional-case-id
     followUpRefs: [reviewed-follow-up-id]
-    rubricRef: pulmonary-rehabilitation-applied-rubric-v1
+    rubricId: pulmonary-rehabilitation-applied-rubric-v1
 ```
 
-The schema must require stable variant IDs, profile version, blueprint, answer arc, time policy, and
+The schema must require stable variant IDs, difficulty-profile version, blueprint, answer arc, time policy, and
 a difficulty-specific rubric. Applied/Viva variants require a reviewed fictional case; Viva also
 requires a competing option plus follow-up or evidence update. Generated cases and real patient
 details are prohibited.
 
 ### Session identity
 
-Persist these fields so attempts remain reproducible:
+Carry these fields from the first playable and persist them when attempt history is introduced so
+comparisons remain reproducible:
 
 ```ts
 type ChallengePreset = "GUIDED" | "APPLIED" | "VIVA";
 
 interface ChallengeIdentity {
   preset: ChallengePreset;
-  profileVersion: string;
+  difficultyProfileVersion: string;
   variantId: string;
   supportLevel: "FULL" | "FADING" | "MINIMAL";
 }

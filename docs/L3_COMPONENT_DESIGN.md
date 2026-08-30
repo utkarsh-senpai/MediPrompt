@@ -214,11 +214,11 @@ TopicPack
          ├─ identity: topicId, title, tags
          ├─ curriculum: program, year, track, paper, module, competencyCodes, sourceLocators
          ├─ classification: primaryDomain, contexts[], promptBlueprints[]
-         ├─ variants[]: variantId, mode, challengePreset, profileVersion, blueprint,
+         ├─ variants[]: variantId, mode, challengePreset, difficultyProfileVersion, blueprint,
          │              supportLevel, wording, answerArc, timePolicy, caseRef, followUpRefs
          ├─ rubrics[]: rubricId, variantId, register, concepts[], reasoning/safety criteria
          │   └─ concept: conceptId, label, accepted phrases, importance, sourceRefs
-         ├─ vivaQuestions[]: stage, wording, rubricRef
+         ├─ vivaQuestions[]: stage, wording, rubricId
          ├─ commonErrors[]: reviewed wording and sourceRefs
          └─ contraindications/limitations metadata when applicable
 ```
