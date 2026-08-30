@@ -54,18 +54,23 @@ classes; JSON Schema and golden fixtures are the language boundary.
 
 ```ts
 type PracticeMode = "RECALL_SPRINT" | "VIVA_ROUND" | "DEEP_RESEARCH" | "TEACH_BACK";
+type ChallengePreset = "GUIDED" | "APPLIED" | "VIVA";
 type Register = "EXAMINER" | "JUNIOR" | "PATIENT";
+type SupportLevel = "FULL" | "FADING" | "MINIMAL";
 
 interface TopicRef {
   packId: string;
   packVersion: string;
   subjectId: string;
   topicId: string;
+  variantId: string;
+  difficultyProfileVersion: string;
   promptId: string;
   rubricId: string;
 }
 
 interface TimePolicy {
+  preparationSeconds?: number;
   speakingSeconds: number;
   researchSeconds?: number;
 }
@@ -81,6 +86,13 @@ interface UserSettings {
   researchSeconds: number;
 }
 
+interface PracticeSelection {
+  mode: PracticeMode;
+  challenge: ChallengePreset;
+  subjectId: string;
+  register?: Register;
+}
+
 interface SettingsStore {
   load(): UserSettings;
   save(settings: UserSettings): void;
@@ -91,6 +103,8 @@ interface PracticeSession {
   id: string;
   topic: TopicRef;
   mode: PracticeMode;
+  challenge: ChallengePreset;
+  supportLevel: SupportLevel;
   register?: Register;
   timePolicy: TimePolicy;
   attemptIds: string[];
@@ -291,7 +305,7 @@ identity (“you are unconfident”) or issue multiple instructions.
 ### Refinement Delta
 
 ```text
-if same topic + prompt + rubric version + mode + time policy:
+if same topic + variant + difficulty profile + prompt + rubric version + mode + register + support + time policy:
     delta = attempt2.weightedCoverage - attempt1.weightedCoverage
 else:
     delta = unavailable(reason)
@@ -317,6 +331,44 @@ The exact matrix is fixture-defined before v0.5. No streak loss or escalating pe
 Changing timezone preserves the intended local due date unless the learner chooses rebasing.
 
 ## 5. Runtime topic-pack schema
+
+### Authoring-inventory boundary
+
+Curriculum extraction produces an authoring inventory, not the runtime schema shown below. The
+current MPT file under `docs/curriculum/` is deliberately `runtimeCompatible: false`; empty prompt
+and rubric arrays are evidence that content has not been authored, not valid learner content.
+
+Minimum candidate shape for the v0.6 authoring schema:
+
+```yaml
+schemaVersion: authoring-inventory/1.0
+documentType: curriculum-authoring-inventory
+publicationStatus: REFERENCE_ONLY
+runtimeCompatible: false
+candidates:
+  - candidateId: stable-lowercase-id
+    title: Concise candidate label
+    lifecycle: candidate
+    curriculum:
+      program: MPT
+      year: 2
+      track: neuro
+      paper: III
+      module: pediatric-neurology
+      competencyCodes: [PPNP1.1]
+      sourceLocators:
+        - { sourceId: src-curriculum, pdfPages: [90] }
+    classification:
+      primaryDomain: foundations-science
+      contexts: [pediatric]
+      promptBlueprints: [explain-concept]
+```
+
+Inventory validation permits unresolved mappings only in `candidate` or `normalized` state. It
+requires exact competency code and page locators before `educator-reviewed`, and original prompts,
+rubrics, medical sources, licence approval, and reviewer evidence before `prompt-ready`. The
+compiler accepts only `published` candidates and emits only an `APPROVED` runtime pack. Source PDF
+ordering is never used as an implicit relationship.
 
 The normative schema will live at `content/schema/topic-pack.schema.json`. Minimum runtime shape:
 
@@ -344,14 +396,21 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
         {
           "topicId": "cardiac-cycle",
           "title": "Cardiac cycle",
-          "prompts": [{
+          "variants": [{
+            "variantId": "cardiac-cycle-guided-v1",
+            "challengePreset": "GUIDED",
+            "difficultyProfileVersion": "difficulty-profile/1.0",
+            "blueprint": "explain-concept",
             "promptId": "explain-cardiac-cycle",
             "mode": "RECALL_SPRINT",
+            "supportLevel": "FULL",
             "wording": "Explain the cardiac cycle in a structured sequence.",
+            "answerArc": ["define", "explain", "apply"],
             "timePolicy": { "speakingSeconds": 90 }
           }],
           "rubrics": [{
             "rubricId": "examiner-core",
+            "variantId": "cardiac-cycle-guided-v1",
             "register": "EXAMINER",
             "concepts": [{
               "conceptId": "phase-sequence",
@@ -370,8 +429,11 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
 ```
 
 Schema restrictions include `additionalProperties: false`, semantic pack versions, valid locale,
-unique stable IDs, bounded timer values, non-empty original wording, resolvable source references,
-allowed review statuses, and no runtime publication when status is not `APPROVED`.
+unique stable IDs, versioned challenge profiles, bounded timer values, non-empty original wording,
+resolvable source references, allowed review statuses, and no runtime publication when status is
+not `APPROVED`. Applied variants require a reviewed fictional case. Viva variants additionally
+require plausible alternatives and a reviewed follow-up or evidence update. Validator rules reject
+identical prompt variants that claim greater difficulty only through a shorter timer.
 
 ## 6. Java compiler contracts
 
@@ -388,6 +450,10 @@ public interface TopicCandidateExtractor {
     List<TopicCandidate> extract(ExtractedDocument document);
 }
 
+public interface CurriculumCoordinateMapper {
+    MappingResult map(List<TopicCandidate> candidates, ExtractedDocument document);
+}
+
 public interface TopicNormalizer {
     NormalizationResult normalize(List<TopicCandidate> candidates);
 }
@@ -397,7 +463,7 @@ public interface PackValidator {
 }
 
 public interface RuntimePackCompiler {
-    CompiledPack compile(ApprovedSourcePack pack);
+    CompiledPack compile(PublishedAuthoringPack pack);
 }
 
 public interface ProvenanceManifestWriter {
@@ -410,6 +476,7 @@ Representative implementations:
 - `PdfBoxDocumentTextExtractor`
 - `RejectByDefaultInputPolicyGate`
 - `LayoutAwareHeadingExtractor`
+- `EvidencePreservingCurriculumCoordinateMapper`
 - `ConservativeTopicNormalizer`
 - `JsonSchemaAndPolicyPackValidator`
 - `DeterministicRuntimePackCompiler`
@@ -422,12 +489,15 @@ small spike. Exit codes are stable: `0` success, `2` validation failure, `3` pol
 Commands:
 
 ```text
-mediprompt-content extract --input syllabus.pdf --source source.yml --output draft.yml
-mediprompt-content validate --input reviewed-pack.yml
-mediprompt-content compile --input reviewed-pack.yml --output runtime/ --manifest manifest.json
+mediprompt-content extract --input syllabus.pdf --source source.yml --output inventory.yml
+mediprompt-content validate --profile inventory --input inventory.yml
+mediprompt-content validate --profile publication --input published-pack.yml
+mediprompt-content compile --input published-pack.yml --output runtime/ --manifest manifest.json
 ```
 
-`compile` accepts only `APPROVED` input and writes to a staging directory before atomic replace.
+`extract` records one-based PDF pages and unresolved row associations. `compile` accepts only
+`published` authoring input with `APPROVED` review and writes to a staging directory before atomic
+replace.
 
 ## 7. Future connected contracts
 
@@ -540,11 +610,11 @@ CI performance on hosted runners is not presented as phone performance.
 | Version | Required acceptance evidence |
 | --- | --- |
 | v0.1 | Markdown links valid; diagrams render; architecture/privacy/content decisions reviewed |
-| v0.2 | Mode/subject controls, drawing state, timer disabled before draw, Spin/Spin again, Recall direct-to-speech path, Deep Research research → ready → speech path, duration settings, focused topic + three-step arc + circular timer, complete/exit/repeat, random bag, background timer, responsive/a11y/offline shell, and operation with mic/storage/models/network disabled |
+| v0.2 | Independent mode/challenge/subject controls, challenge hiding for single-level content, three reviewed prompt trios, drawing state, timer disabled before draw, Spin/Spin again, Recall direct-to-speech path, Deep Research research -> ready -> speech path, duration settings, challenge-specific arc, complete/exit/repeat, full-fingerprint random bag, background timer, responsive/a11y/offline shell, and operation with mic/storage/models/network disabled |
 | v0.3 | Permission paths, record/playback, deterministic audio fixtures, local STT progress/cancel/failure, device benchmark, zero audio requests |
-| v0.4 | Golden coverage evidence, `NOT_VERIFIABLE`, one prescription, retry and valid Refinement Delta |
-| v0.5 | Viva ladder, register rubrics, deterministic due queue, timezone cases, export/delete-all |
-| v0.6 | Safe PDF rejection/extraction, human-review gate, schema policy, deterministic JSON/manifest |
+| v0.4 | Difficulty-specific golden coverage evidence, `NOT_VERIFIABLE`, one prescription, same-identity retry, mismatch rejection and valid Refinement Delta |
+| v0.5 | Reviewed Viva follow-ups/evidence updates, register rubrics, learner-controlled challenge suggestions, deterministic due queue, timezone cases, export/delete-all |
+| v0.6 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
 | v0.7 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
 | v1.0 | Clean-device release journey, offline full loop, three approved packs, licence/privacy/security/recovery checklist |
 | v1.1+ | Consent/authz/sync/provider contracts, retention/deletion, source-grounded results and local-mode regression |
@@ -559,6 +629,6 @@ CI performance on hosted runners is not presented as phone performance.
 6. Add a failure-path test with every new capability.
 7. Keep generated output out of manual editing and verify it has no drift.
 8. Record a short architecture decision when changing a boundary or trust assumption.
-9. Preserve the complete mode/subject → Spin → focused timer → finish/exit → repeat tool without
+9. Preserve the complete mode/challenge/subject -> Spin -> focused timer -> finish/exit -> repeat tool without
    account, model, microphone, persistent storage, or network.
 10. Do not merge a version until its exit gate in the execution plan has evidence.

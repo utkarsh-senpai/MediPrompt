@@ -132,10 +132,10 @@ management.
 
 ```mermaid
 flowchart LR
-    PDF[Authorized syllabus PDF] --> Extract[Extract candidate headings]
-    Extract --> Normalize[Normalize and deduplicate]
+    PDF[Authorized syllabus PDF] --> Extract[Extract candidate labels and coordinates]
+    Extract --> Normalize[Normalize without losing evidence]
     Normalize --> Draft[Draft YAML]
-    Draft --> Review[Human medical and source review]
+    Draft --> Review[Human source, medical, challenge and licence review]
     Review --> Validate[Schema and policy validation]
     Validate --> Compile[Deterministic runtime JSON]
     Compile --> Manifest[Checksums and provenance manifest]
@@ -143,10 +143,11 @@ flowchart LR
     PR --> Pages[Versioned static assets]
 ```
 
-PDF extraction discovers topic names; it does not generate medical truth. Source prose, tables,
-ordering, and patient material are rejected or removed unless their licence and need are explicit.
-Reviewers author original rubrics and cite approved sources. Publication requires machine validation
-and human approval.
+PDF extraction discovers candidate labels and preserves page/curriculum coordinates; it does not
+generate medical truth. Unneeded source prose and any patient material are rejected or removed
+unless lawful use and product need are explicit. Reviewers author original prompts, fictional cases,
+difficulty variants, rubrics, and citations. Publication requires machine validation and human
+approval.
 
 ## 6. Deployment and CI
 
