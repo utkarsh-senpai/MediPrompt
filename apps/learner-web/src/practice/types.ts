@@ -26,6 +26,8 @@ export type ReviewStatus = "APPROVED" | "DRAFT" | "NOT_FOR_PUBLICATION";
 
 export type ReviewerRole = "MEDICAL_REVIEWER" | "CONTENT_EDITOR";
 
+export type ContentKind = "MEDICAL" | "NON_MEDICAL_INTERACTION";
+
 // --- Runtime topic pack ---
 
 export interface Licence {
@@ -116,6 +118,7 @@ export interface Subject {
 
 export interface RuntimePack {
   schemaVersion: "1.0";
+  contentKind: ContentKind;
   packId: string;
   version: string;
   title: string;
@@ -171,9 +174,14 @@ export interface SettingsStore {
 }
 
 export interface BagStore {
-  load(fingerprint: string): readonly string[];
-  save(fingerprint: string, remainingVariantIds: readonly string[]): void;
+  load(fingerprint: string): BagState | undefined;
+  save(fingerprint: string, state: BagState): void;
   clear(): void;
+}
+
+export interface BagState {
+  eligibleVariantIds: readonly string[];
+  remainingVariantIds: readonly string[];
 }
 
 export interface PracticeSession {
@@ -195,6 +203,7 @@ export interface TopicSnapshot {
   topicRef: TopicRef;
   title: string;
   wording: string;
+  caseText?: string;
   expectation: string;
   answerArc: SpeechArcStep[];
   timePolicy: TimePolicy;

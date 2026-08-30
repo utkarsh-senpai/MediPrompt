@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   assertV02ProductionPack,
+  assertV02DemoMinimums,
   PackValidationError,
   validatePack,
 } from "./packValidator";
@@ -12,6 +13,7 @@ function basePack(): unknown {
   return JSON.parse(
     JSON.stringify({
       schemaVersion: "1.0",
+      contentKind: "NON_MEDICAL_INTERACTION",
       packId: "test-pack",
       version: "1.0.0",
       title: "Test pack",
@@ -97,6 +99,16 @@ function expectInvalid(pack: unknown, fragment: string): void {
   }
 }
 
+function expectProductionInvalid(pack: unknown, fragment: string): void {
+  try {
+    assertV02ProductionPack(validatePack(pack));
+    throw new Error("expected production validation to fail");
+  } catch (err) {
+    if (!(err instanceof PackValidationError)) throw err;
+    expect(err.errors.join("\n")).toContain(fragment);
+  }
+}
+
 describe("validatePack — happy paths", () => {
   it("validates the demo interaction fixture", () => {
     const pack = validatePack(demoPackJson);
@@ -117,6 +129,7 @@ describe("validatePack — happy paths", () => {
 describe("assertV02ProductionPack", () => {
   it("accepts the demo pack", () => {
     expect(() => assertV02ProductionPack(validatePack(demoPackJson))).not.toThrow();
+    expect(() => assertV02DemoMinimums(validatePack(demoPackJson))).not.toThrow();
   });
 
   it("rejects the NOT_FOR_PUBLICATION fixture", () => {
@@ -135,6 +148,22 @@ describe("assertV02ProductionPack", () => {
     (p as RuntimePack).review.status = "DRAFT";
     expect(() => validatePack(p)).not.toThrow();
     expect(() => assertV02ProductionPack(validatePack(p))).toThrow();
+  });
+
+  it("requires medical review for a medical production pack", () => {
+    const p = basePack() as RuntimePack;
+    p.contentKind = "MEDICAL";
+    expectProductionInvalid(p, "MEDICAL_REVIEWER");
+  });
+
+  it("rejects unsupported support levels until reviewed scaffold data exists", () => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.variants[0]!.supportLevel = "MINIMAL";
+    expectProductionInvalid(p, "FULL support");
+  });
+
+  it("enforces the demo topic and challenge-trio minimums separately", () => {
+    expect(() => assertV02DemoMinimums(validatePack(basePack()))).toThrow();
   });
 });
 
@@ -155,6 +184,22 @@ describe("validatePack — schema rejections", () => {
     const p = basePack() as RuntimePack;
     p.sources[0]!.url = "http://example.org/x";
     expectInvalid(p, "schema");
+  });
+
+  it("rejects malformed or credential-bearing https source urls", () => {
+    const malformed = basePack() as RuntimePack;
+    malformed.sources[0]!.url = "https://[broken";
+    expectInvalid(malformed, "invalid or credential-bearing");
+
+    const credential = basePack() as RuntimePack;
+    credential.sources[0]!.url = "https://user:password@example.org/x";
+    expectInvalid(credential, "invalid or credential-bearing");
+  });
+
+  it("rejects impossible calendar dates", () => {
+    const p = basePack() as RuntimePack;
+    p.review.reviewedAt = "2026-02-31";
+    expectInvalid(p, "invalid review date");
   });
 
   it("rejects an invalid locale", () => {
@@ -193,6 +238,12 @@ describe("validatePack — custom cross-reference rejections", () => {
     const p = basePack() as RuntimePack;
     p.subjects[0]!.topics[0]!.variants[0]!.rubricId = "nope";
     expectInvalid(p, "missing rubric");
+  });
+
+  it("rejects a variant referencing another variant's rubric", () => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.rubrics[0]!.variantId = "other-variant";
+    expectInvalid(p, "owned by");
   });
 
   it("rejects an Applied variant without a fictional case", () => {

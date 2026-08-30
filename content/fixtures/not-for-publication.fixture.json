@@ -1,5 +1,6 @@
 {
   "schemaVersion": "1.0",
+  "contentKind": "NON_MEDICAL_INTERACTION",
   "packId": "synthetic-not-for-publication",
   "version": "0.0.0",
   "title": "Synthetic fixture - not for publication",

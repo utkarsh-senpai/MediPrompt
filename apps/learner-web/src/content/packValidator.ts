@@ -1,4 +1,3 @@
-import Ajv2020 from "ajv/dist/2020.js";
 import type {
   ChallengePreset,
   RuntimePack,
@@ -6,10 +5,24 @@ import type {
   Topic,
   Variant,
 } from "../practice/types";
-import schema from "../../../../content/schema/topic-pack.schema.json";
+import generatedSchemaValidator from "./generated/topicPackSchemaValidator";
 
-const ajv = new Ajv2020({ strict: false, allErrors: true });
-const validateSchema = ajv.compile(schema);
+interface SchemaError {
+  instancePath?: string;
+  message?: string;
+}
+
+type SchemaValidator = ((value: unknown) => boolean) & {
+  errors?: SchemaError[] | null;
+};
+
+// Compiled at development time so the browser never needs `new Function`/unsafe-eval.
+// Keep CSP strict and verify drift with `pnpm schema:check`.
+const validateSchema = generatedSchemaValidator as SchemaValidator;
+
+export const MAX_PACK_BYTES = 512 * 1024;
+const MAX_SCAN_DEPTH = 16;
+const MAX_SCAN_NODES = 10_000;
 
 export class PackValidationError extends Error {
   constructor(
@@ -30,20 +43,42 @@ const PRESET_RANK: Record<ChallengePreset, number> = {
 const DANGEROUS_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 
 function scanDangerousKeys(value: unknown, path: string, errors: string[]): void {
-  if (Array.isArray(value)) {
-    value.forEach((v, i) => scanDangerousKeys(v, `${path}[${i}]`, errors));
-    return;
-  }
-  if (value && typeof value === "object") {
-    for (const key of Object.keys(value as Record<string, unknown>)) {
-      if (DANGEROUS_KEYS.has(key)) {
-        errors.push(`dangerous object key "${key}" at ${path}`);
+  const pending: Array<{ value: unknown; path: string; depth: number }> = [
+    { value, path, depth: 0 },
+  ];
+  let visited = 0;
+
+  while (pending.length > 0) {
+    const current = pending.pop()!;
+    visited++;
+    if (visited > MAX_SCAN_NODES) {
+      errors.push(`pack exceeds ${MAX_SCAN_NODES} values`);
+      return;
+    }
+    if (current.depth > MAX_SCAN_DEPTH) {
+      errors.push(`pack exceeds maximum nesting depth at ${current.path}`);
+      return;
+    }
+    if (Array.isArray(current.value)) {
+      current.value.forEach((child, index) => {
+        pending.push({
+          value: child,
+          path: `${current.path}[${index}]`,
+          depth: current.depth + 1,
+        });
+      });
+    } else if (current.value && typeof current.value === "object") {
+      const objectValue = current.value as Record<string, unknown>;
+      for (const key of Object.keys(objectValue)) {
+        if (DANGEROUS_KEYS.has(key)) {
+          errors.push(`dangerous object key "${key}" at ${current.path}`);
+        }
+        pending.push({
+          value: objectValue[key],
+          path: `${current.path}.${key}`,
+          depth: current.depth + 1,
+        });
       }
-      scanDangerousKeys(
-        (value as Record<string, unknown>)[key],
-        `${path}.${key}`,
-        errors,
-      );
     }
   }
 }
@@ -57,13 +92,43 @@ function assertUnique(values: string[], label: string, errors: string[]): void {
 }
 
 function deepFreeze<T>(value: T): T {
-  if (value && typeof value === "object") {
-    Object.freeze(value);
-    for (const k of Object.keys(value as Record<string, unknown>)) {
-      deepFreeze((value as Record<string, unknown>)[k]);
+  const pending: object[] = [];
+  if (value && typeof value === "object") pending.push(value);
+  while (pending.length > 0) {
+    const current = pending.pop()!;
+    for (const child of Object.values(current)) {
+      if (child && typeof child === "object" && !Object.isFrozen(child)) {
+        pending.push(child);
+      }
     }
+    Object.freeze(current);
   }
   return value;
+}
+
+function normalizedTitle(value: string): string {
+  return value.normalize("NFKC").trim().replace(/\s+/g, " ").toLocaleLowerCase("en");
+}
+
+function isIsoDate(value: string): boolean {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
+}
+
+function isSafeHttpsUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === "https:" &&
+      url.username === "" &&
+      url.password === "" &&
+      url.hostname.length > 0
+    );
+  } catch {
+    return false;
+  }
 }
 
 function customChecks(pack: RuntimePack, errors: string[]): void {
@@ -76,19 +141,60 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
 
   const allVariantIds: string[] = [];
   const allPromptIds: string[] = [];
+  const allRubricIds: string[] = [];
+  const allCaseIds: string[] = [];
+  const allFollowUpIds: string[] = [];
+  const allConceptIds: string[] = [];
+  const allTopicIds: string[] = [];
+  const allSubjectIds = pack.subjects.map((subject) => subject.subjectId);
+  const allNormalizedTitles: string[] = [];
+
+  if (!isIsoDate(pack.review.reviewedAt)) {
+    errors.push(`invalid review date: ${pack.review.reviewedAt}`);
+  }
+  for (const source of pack.sources) {
+    if (!isSafeHttpsUrl(source.url)) {
+      errors.push(`source ${source.sourceId}: invalid or credential-bearing https URL`);
+    }
+    if (!isIsoDate(source.accessedAt)) {
+      errors.push(`source ${source.sourceId}: invalid access date ${source.accessedAt}`);
+    }
+  }
 
   for (const subject of pack.subjects) {
+    allNormalizedTitles.push(normalizedTitle(subject.title));
     for (const topic of subject.topics) {
+      allTopicIds.push(topic.topicId);
+      allNormalizedTitles.push(normalizedTitle(topic.title));
+      assertUnique(
+        topic.rubrics.map((rubric) => rubric.rubricId),
+        `rubricId in topic ${topic.topicId}`,
+        errors,
+      );
+      assertUnique(
+        topic.cases.map((item) => item.caseId),
+        `caseId in topic ${topic.topicId}`,
+        errors,
+      );
+      assertUnique(
+        topic.followUps.map((item) => item.followUpId),
+        `followUpId in topic ${topic.topicId}`,
+        errors,
+      );
       const variantIds = new Set(topic.variants.map((v) => v.variantId));
-      const rubricIds = new Set(topic.rubrics.map((r) => r.rubricId));
       const caseIds = new Set(topic.cases.map((c) => c.caseId));
       const followUpIds = new Set(topic.followUps.map((f) => f.followUpId));
 
       for (const v of topic.variants) {
         allVariantIds.push(v.variantId);
         allPromptIds.push(v.promptId);
-        if (!rubricIds.has(v.rubricId)) {
+        const rubric = topic.rubrics.find((candidate) => candidate.rubricId === v.rubricId);
+        if (!rubric) {
           errors.push(`topic ${topic.topicId}: variant ${v.variantId} references missing rubric ${v.rubricId}`);
+        } else if (rubric.variantId !== v.variantId) {
+          errors.push(
+            `topic ${topic.topicId}: variant ${v.variantId} references rubric ${v.rubricId} owned by ${rubric.variantId}`,
+          );
         }
         if (v.caseRef !== null && !caseIds.has(v.caseRef)) {
           errors.push(`topic ${topic.topicId}: variant ${v.variantId} references missing case ${v.caseRef}`);
@@ -120,10 +226,17 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
       }
 
       for (const r of topic.rubrics) {
+        allRubricIds.push(r.rubricId);
+        assertUnique(
+          r.concepts.map((concept) => concept.conceptId),
+          `conceptId in rubric ${r.rubricId}`,
+          errors,
+        );
         if (!variantIds.has(r.variantId)) {
           errors.push(`topic ${topic.topicId}: rubric ${r.rubricId} references missing variant ${r.variantId}`);
         }
         for (const c of r.concepts) {
+          allConceptIds.push(c.conceptId);
           for (const ref of c.sourceRefs) {
             if (!sourceIds.has(ref)) {
               errors.push(`topic ${topic.topicId}: concept ${c.conceptId} references missing source ${ref}`);
@@ -131,6 +244,9 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
           }
         }
       }
+
+      allCaseIds.push(...topic.cases.map((item) => item.caseId));
+      allFollowUpIds.push(...topic.followUps.map((item) => item.followUpId));
 
       const hasGuided = topic.variants.some((v) => v.challengePreset === "GUIDED");
       if (!hasGuided) {
@@ -167,8 +283,15 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
     }
   }
 
+  assertUnique(allSubjectIds, "subjectId", errors);
+  assertUnique(allTopicIds, "topicId", errors);
   assertUnique(allVariantIds, "variantId", errors);
   assertUnique(allPromptIds, "promptId", errors);
+  assertUnique(allRubricIds, "rubricId", errors);
+  assertUnique(allCaseIds, "caseId", errors);
+  assertUnique(allFollowUpIds, "followUpId", errors);
+  assertUnique(allConceptIds, "conceptId", errors);
+  assertUnique(allNormalizedTitles, "normalized subject/topic title", errors);
 }
 
 /**
@@ -180,14 +303,15 @@ export function validatePack(obj: unknown): RuntimePack {
 
   scanDangerousKeys(obj, "$", errors);
 
-  if (!validateSchema(obj)) {
+  const schemaValid = validateSchema(obj);
+  if (!schemaValid) {
     for (const e of validateSchema.errors ?? []) {
       errors.push(`schema: ${e.instancePath || "$"} ${e.message ?? "invalid"}`);
     }
   }
 
   // Run custom checks even on schema-valid input; cast is safe after schema passes.
-  if (errors.length === 0 && validateSchema(obj)) {
+  if (errors.length === 0 && schemaValid) {
     customChecks(obj as unknown as RuntimePack, errors);
   }
 
@@ -204,6 +328,12 @@ export function assertV02ProductionPack(pack: RuntimePack): void {
   if (pack.review.status !== "APPROVED") {
     errors.push(`production pack must be APPROVED, got ${pack.review.status}`);
   }
+  if (
+    pack.contentKind === "MEDICAL" &&
+    !pack.review.reviewers.some((reviewer) => reviewer.role === "MEDICAL_REVIEWER")
+  ) {
+    errors.push("an APPROVED medical pack requires a MEDICAL_REVIEWER");
+  }
   for (const subject of pack.subjects) {
     for (const topic of subject.topics) {
       for (const v of topic.variants) {
@@ -212,11 +342,44 @@ export function assertV02ProductionPack(pack: RuntimePack): void {
             `v0.2 production pack must not use unimplemented mode ${v.mode} (variant ${v.variantId})`,
           );
         }
+        if (v.supportLevel !== "FULL") {
+          errors.push(
+            `v0.2 has no reviewed scaffold contract; variant ${v.variantId} must use FULL support`,
+          );
+        }
+        const rubric = topic.rubrics.find((candidate) => candidate.rubricId === v.rubricId);
+        if (rubric?.register !== "EXAMINER") {
+          errors.push(`v0.2 variant ${v.variantId} requires an EXAMINER rubric`);
+        }
       }
     }
   }
   if (errors.length > 0) {
     throw new PackValidationError("production gate failed", errors);
+  }
+}
+
+/** Release-content gate for the primary v0.2 demonstration pack. */
+export function assertV02DemoMinimums(pack: RuntimePack): void {
+  const topics = pack.subjects.flatMap((subject) => subject.topics);
+  const trioCount = topics.filter((topic) => {
+    const byMode = new Map<string, Set<ChallengePreset>>();
+    for (const variant of topic.variants) {
+      const presets = byMode.get(variant.mode) ?? new Set<ChallengePreset>();
+      presets.add(variant.challengePreset);
+      byMode.set(variant.mode, presets);
+    }
+    return [...byMode.values()].some(
+      (presets) =>
+        presets.has("GUIDED") && presets.has("APPLIED") && presets.has("VIVA"),
+    );
+  }).length;
+
+  const errors: string[] = [];
+  if (topics.length < 20) errors.push(`demo pack requires at least 20 topics, got ${topics.length}`);
+  if (trioCount < 3) errors.push(`demo pack requires at least 3 complete challenge trios, got ${trioCount}`);
+  if (errors.length > 0) {
+    throw new PackValidationError("demo content gate failed", errors);
   }
 }
 

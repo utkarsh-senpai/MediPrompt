@@ -19,7 +19,7 @@ export function CountdownRing({ remainingMs, totalMs, caption }: CountdownRingPr
       <svg
         viewBox="0 0 200 200"
         role="img"
-        aria-label={`${seconds} seconds remaining`}
+        aria-label={`${caption ?? "Timer"}: ${seconds} seconds remaining`}
       >
         <circle
           className="ring-bg"

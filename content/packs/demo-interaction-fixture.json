@@ -1,5 +1,6 @@
 {
   "schemaVersion": "1.0",
+  "contentKind": "NON_MEDICAL_INTERACTION",
   "packId": "demo-interaction-fixture",
   "version": "1.0.0",
   "title": "Speaking Practice Demo (non-medical interaction fixture)",
@@ -975,8 +976,8 @@
               "blueprint": "manage-case",
               "promptId": "prompt-paper-vs-digital-applied-rs",
               "mode": "RECALL_SPRINT",
-              "supportLevel": "FADING",
-              "wording": "A fictional learner faces a decision about the trade-off between paper and digital notes. Summarize the situation, reason about the main trade-off, and propose a justified plan.",
+              "supportLevel": "FULL",
+              "wording": "Use the fictional scenario below. Summarize it, reason about the main trade-off in the trade-off between paper and digital notes, and propose a justified plan.",
               "answerArc": [
                 "summarize",
                 "reason",
@@ -999,8 +1000,8 @@
               "blueprint": "compare-differentiate",
               "promptId": "prompt-paper-vs-digital-viva-rs",
               "mode": "RECALL_SPRINT",
-              "supportLevel": "MINIMAL",
-              "wording": "A fictional scenario about the trade-off between paper and digital notes has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.",
+              "supportLevel": "FULL",
+              "wording": "Use the fictional scenario below. New constraint: The commute is no longer available for study, but the learner must find cited facts quickly. Prioritize the competing options, defend your choice, and state what would change your mind.",
               "answerArc": [
                 "prioritize",
                 "defend",
@@ -1161,7 +1162,7 @@
           "cases": [
             {
               "caseId": "paper-vs-digital-case-v1",
-              "text": "Fictional scenario: a student is deciding how to approach the trade-off between paper and digital notes. The situation has realistic constraints and no single obviously correct answer."
+              "text": "A student has four weeks before an oral exam. Handwritten notes aid recall, while searchable digital notes make revision on a daily commute easier; phone notifications are distracting."
             }
           ],
           "followUps": [
@@ -1172,7 +1173,7 @@
             },
             {
               "followUpId": "paper-vs-digital-evidence-v1",
-              "text": "New information arrives that changes one assumption about the trade-off between paper and digital notes. Does your prioritization change, and why?",
+              "text": "The commute is no longer available for study, but the learner must find cited facts quickly. Does your prioritization change, and why?",
               "kind": "EVIDENCE_UPDATE"
             }
           ]
@@ -1209,8 +1210,8 @@
               "blueprint": "manage-case",
               "promptId": "prompt-urban-vs-rural-applied-rs",
               "mode": "RECALL_SPRINT",
-              "supportLevel": "FADING",
-              "wording": "A fictional learner faces a decision about the trade-off between urban and rural living. Summarize the situation, reason about the main trade-off, and propose a justified plan.",
+              "supportLevel": "FULL",
+              "wording": "Use the fictional scenario below. Summarize it, reason about the main trade-off in the trade-off between urban and rural living, and propose a justified plan.",
               "answerArc": [
                 "summarize",
                 "reason",
@@ -1233,8 +1234,8 @@
               "blueprint": "compare-differentiate",
               "promptId": "prompt-urban-vs-rural-viva-rs",
               "mode": "RECALL_SPRINT",
-              "supportLevel": "MINIMAL",
-              "wording": "A fictional scenario about the trade-off between urban and rural living has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.",
+              "supportLevel": "FULL",
+              "wording": "Use the fictional scenario below. New constraint: The rural role adds weekly remote supervision, while the urban rent rises substantially. Prioritize the competing options, defend your choice, and state what would change your mind.",
               "answerArc": [
                 "prioritize",
                 "defend",
@@ -1395,7 +1396,7 @@
           "cases": [
             {
               "caseId": "urban-vs-rural-case-v1",
-              "text": "Fictional scenario: a student is deciding how to approach the trade-off between urban and rural living. The situation has realistic constraints and no single obviously correct answer."
+              "text": "A graduate is comparing an urban role with close specialist supervision and high rent against a rural role with broad responsibility, lower costs, and limited transport."
             }
           ],
           "followUps": [
@@ -1406,7 +1407,7 @@
             },
             {
               "followUpId": "urban-vs-rural-evidence-v1",
-              "text": "New information arrives that changes one assumption about the trade-off between urban and rural living. Does your prioritization change, and why?",
+              "text": "The rural role adds weekly remote supervision, while the urban rent rises substantially. Does your prioritization change, and why?",
               "kind": "EVIDENCE_UPDATE"
             }
           ]
@@ -1443,8 +1444,8 @@
               "blueprint": "manage-case",
               "promptId": "prompt-specialist-vs-generalist-applied-rs",
               "mode": "RECALL_SPRINT",
-              "supportLevel": "FADING",
-              "wording": "A fictional learner faces a decision about the trade-off between specialist and generalist learning. Summarize the situation, reason about the main trade-off, and propose a justified plan.",
+              "supportLevel": "FULL",
+              "wording": "Use the fictional scenario below. Summarize it, reason about the main trade-off in the trade-off between specialist and generalist learning, and propose a justified plan.",
               "answerArc": [
                 "summarize",
                 "reason",
@@ -1467,8 +1468,8 @@
               "blueprint": "compare-differentiate",
               "promptId": "prompt-specialist-vs-generalist-viva-rs",
               "mode": "RECALL_SPRINT",
-              "supportLevel": "MINIMAL",
-              "wording": "A fictional scenario about the trade-off between specialist and generalist learning has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.",
+              "supportLevel": "FULL",
+              "wording": "Use the fictional scenario below. New constraint: A practice result shows safe breadth but repeated weak reasoning in the difficult area. Prioritize the competing options, defend your choice, and state what would change your mind.",
               "answerArc": [
                 "prioritize",
                 "defend",
@@ -1629,7 +1630,7 @@
           "cases": [
             {
               "caseId": "specialist-vs-generalist-case-v1",
-              "text": "Fictional scenario: a student is deciding how to approach the trade-off between specialist and generalist learning. The situation has realistic constraints and no single obviously correct answer."
+              "text": "A learner has one week before a broad viva and must choose between mastering one difficult area deeply or rotating through all major areas with less depth."
             }
           ],
           "followUps": [
@@ -1640,7 +1641,7 @@
             },
             {
               "followUpId": "specialist-vs-generalist-evidence-v1",
-              "text": "New information arrives that changes one assumption about the trade-off between specialist and generalist learning. Does your prioritization change, and why?",
+              "text": "A practice result shows safe breadth but repeated weak reasoning in the difficult area. Does your prioritization change, and why?",
               "kind": "EVIDENCE_UPDATE"
             }
           ]

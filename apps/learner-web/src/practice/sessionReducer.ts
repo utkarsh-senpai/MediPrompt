@@ -59,13 +59,11 @@ function buildAttempt(
 
 function deadlineFor(
   now: number,
-  kind: "speaking" | "research",
-  deps: ReducerDeps,
+  seconds: number,
 ): number {
-  // Durations come from user settings (accessibility time), not the variant's
-  // authored timePolicy, so changing the timer never changes the challenge.
-  const seconds =
-    kind === "speaking" ? deps.defaultSpeakingSeconds : deps.defaultResearchSeconds;
+  // The topic snapshot captures the effective accessibility duration used by
+  // the attempt. A settings change after drawing applies to the next topic and
+  // cannot change this attempt's identity or countdown denominator.
   return startDeadline(now, seconds * 1000);
 }
 
@@ -80,15 +78,26 @@ export function reduceSession(
 ): ReducerResult {
   switch (event.type) {
     case "CHANGE_SELECTION":
+      if (state.name === "SPEAKING" || state.name === "RESEARCHING") {
+        return noChange(state);
+      }
       return { state: { name: "IDLE", selection: event.selection }, commands: [] };
 
     case "SPIN":
+      if (state.name !== "IDLE") return noChange(state);
       return {
         state: { name: "DRAWING", selection: state.selection, requestId: event.requestId },
         commands: [requestDraw(state.selection, event.requestId, deps)],
       };
 
     case "SPIN_AGAIN":
+      if (
+        state.name !== "TOPIC_READY" &&
+        state.name !== "READY_TO_SPEAK" &&
+        state.name !== "ATTEMPT_COMPLETE"
+      ) {
+        return noChange(state);
+      }
       return {
         state: { name: "DRAWING", selection: state.selection, requestId: event.requestId },
         commands: [requestDraw(state.selection, event.requestId, deps)],
@@ -119,7 +128,10 @@ export function reduceSession(
         // Deep Research must go through research first; Start timer is only from READY_TO_SPEAK.
         return noChange(state);
       }
-      const deadlineAt = deadlineFor(event.now, "speaking", deps);
+      const deadlineAt = deadlineFor(
+        event.now,
+        state.topic.timePolicy.speakingSeconds,
+      );
       return {
         state: {
           name: "SPEAKING",
@@ -129,7 +141,10 @@ export function reduceSession(
           attempt: state.attempt,
           deadlineAt,
         },
-        commands: [{ type: "START_DEADLINE", deadlineAt }],
+        commands: [
+          { type: "START_DEADLINE", deadlineAt },
+          { type: "FOCUS_VIEW", target: "speaking" },
+        ],
       };
     }
 
@@ -137,7 +152,9 @@ export function reduceSession(
       if (state.name !== "TOPIC_READY" || state.selection.mode !== "DEEP_RESEARCH") {
         return noChange(state);
       }
-      const deadlineAt = deadlineFor(event.now, "research", deps);
+      const researchSeconds = state.topic.timePolicy.researchSeconds;
+      if (researchSeconds === undefined) return noChange(state);
+      const deadlineAt = deadlineFor(event.now, researchSeconds);
       return {
         state: {
           name: "RESEARCHING",
@@ -147,7 +164,10 @@ export function reduceSession(
           attempt: state.attempt,
           deadlineAt,
         },
-        commands: [{ type: "START_DEADLINE", deadlineAt }],
+        commands: [
+          { type: "START_DEADLINE", deadlineAt },
+          { type: "FOCUS_VIEW", target: "speaking" },
+        ],
       };
     }
 
@@ -166,13 +186,19 @@ export function reduceSession(
           topic: state.topic,
           attempt: state.attempt,
         },
-        commands: [{ type: "STOP_DEADLINE" }],
+        commands: [
+          { type: "STOP_DEADLINE" },
+          { type: "FOCUS_VIEW", target: "topic" },
+        ],
       };
     }
 
     case "CONFIRM_READY": {
       if (state.name !== "READY_TO_SPEAK") return noChange(state);
-      const deadlineAt = deadlineFor(event.now, "speaking", deps);
+      const deadlineAt = deadlineFor(
+        event.now,
+        state.topic.timePolicy.speakingSeconds,
+      );
       return {
         state: {
           name: "SPEAKING",
@@ -182,7 +208,10 @@ export function reduceSession(
           attempt: state.attempt,
           deadlineAt,
         },
-        commands: [{ type: "START_DEADLINE", deadlineAt }],
+        commands: [
+          { type: "START_DEADLINE", deadlineAt },
+          { type: "FOCUS_VIEW", target: "speaking" },
+        ],
       };
     }
 
@@ -202,7 +231,10 @@ export function reduceSession(
             topic: state.topic,
             attempt: state.attempt,
           },
-          commands: [{ type: "STOP_DEADLINE" }],
+          commands: [
+            { type: "STOP_DEADLINE" },
+            { type: "FOCUS_VIEW", target: "topic" },
+          ],
         };
       }
       return {
@@ -227,7 +259,10 @@ export function reduceSession(
             topic: state.topic,
             attempt: state.attempt,
           },
-          commands: [{ type: "STOP_DEADLINE" }],
+          commands: [
+            { type: "STOP_DEADLINE" },
+            { type: "FOCUS_VIEW", target: "topic" },
+          ],
         };
       }
       if (state.name === "SPEAKING") {

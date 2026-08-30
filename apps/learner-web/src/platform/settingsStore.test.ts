@@ -63,6 +63,33 @@ describe("LocalStorageSettingsStore", () => {
     expect(new LocalStorageSettingsStore().load()).toEqual(DEFAULT_SETTINGS);
   });
 
+  it("rejects undeclared properties instead of merging them", () => {
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({
+        schemaVersion: 1,
+        speakingSeconds: 60,
+        researchSeconds: 60,
+        transcript: "must never be stored here",
+      }),
+    );
+    expect(new LocalStorageSettingsStore().load()).toEqual(DEFAULT_SETTINGS);
+  });
+
+  it("sanitizes values before writing them", () => {
+    const store = new LocalStorageSettingsStore();
+    store.save({
+      schemaVersion: 1,
+      speakingSeconds: -10,
+      researchSeconds: Number.POSITIVE_INFINITY,
+    });
+    expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual({
+      schemaVersion: 1,
+      speakingSeconds: TIME_BOUNDS.speakingSeconds.min,
+      researchSeconds: DEFAULT_SETTINGS.researchSeconds,
+    });
+  });
+
   it("falls back to in-memory when localStorage is unavailable", () => {
     const original = globalThis.localStorage;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,5 +118,6 @@ describe("LocalStorageSettingsStore", () => {
     expect(() =>
       store.save({ schemaVersion: 1, speakingSeconds: 100, researchSeconds: 100 }),
     ).not.toThrow();
+    expect(store.load().speakingSeconds).toBe(100);
   });
 });

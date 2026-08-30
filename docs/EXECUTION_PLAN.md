@@ -1,6 +1,6 @@
 # MediPrompt execution plan
 
-**Status:** v0.1 design baseline
+**Status:** v0.2 implemented and security-reviewed; v0.3 is next
 **Owner:** Utkarsh Meshram (`utkarsh-senpai`)
 **Last updated:** 2026-08-30
 
@@ -69,7 +69,7 @@ The execution strategy optimizes for validated learning value in this order:
 Versions are sequential. A later feature branch begins only after the preceding version is merged
 into `develop`, so it inherits the reviewed decisions and implementation.
 
-### v0.1 — Design foundation (current)
+### v0.1 — Design foundation (complete)
 
 **Branch:** `feature/v0.1-design-foundation`
 **Deliverables:** README, execution plan, L1–L4 design, difficulty/depth contract, and
@@ -81,7 +81,10 @@ No learner code is included. Design review changes stay on this branch until app
 
 ### v0.2 — Unprompted-format medical core
 
-**Planned branch:** `feature/v0.2-first-playable`
+**Branch:** `feature/v0.2-first-playable`
+
+**Implementation status:** complete; automated, accessibility, offline, responsive, content, and
+dependency-security gates are part of the promotion review.
 
 Deliver a static TypeScript PWA with:
 

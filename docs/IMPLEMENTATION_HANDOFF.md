@@ -14,8 +14,8 @@ Read only these files first:
 4. The relevant L1-L4 section for the task; do not reload all design files unless needed.
 5. `docs/curriculum/MPT-CBC-topics.md` only for curriculum/content work.
 
-The current repository is a design baseline. Do not mistake the MPT authoring inventory for a
-runtime topic pack.
+The current repository includes the reviewed v0.2 first-playable implementation. Do not mistake
+the MPT authoring inventory for a runtime topic pack.
 
 ## Non-negotiable product invariant
 
@@ -49,23 +49,37 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ## Version pickup map
 
-### Next implementation branch: `feature/v0.2-first-playable`
+### Current baseline: v0.2 first playable
 
-Build only the first-playable PWA plus the minimum challenge contract:
+The React/TypeScript PWA now implements the compact two-mode practice loop, strict topic-pack
+validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
+surfaces, and an atomic allowlisted offline cache. It uses a reviewed non-medical interaction pack
+until medical content has an identified medical reviewer. A compiled two-mode non-medical fallback
+keeps the practice loop usable when the full pack is missing or rejected.
 
-1. Scaffold workspace/tooling described in L4.
-2. Implement pure session reducer and monotonic deadline timer.
-3. Implement mode, challenge, and subject controls; shuffled-bag topic draw; spin-again.
-4. Ship one hand-authored demo pack with at least 20 topics.
-5. Give every published demo topic a Guided variant; include at least three educator-reviewed
-   Guided/Applied/Viva trios to validate the selector and schema.
-6. Hide the challenge selector when the selected content has only one eligible preset.
-7. Implement focused speaking surface, answer arc, completion/exit, settings, responsive layout,
-   keyboard access, reduced motion, and offline shell.
-8. Add unit, component, accessibility-smoke, mobile-viewport, background-timer, and no-capability
-   tests.
+The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScript 5.9.3, Vite
+6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
+checklist** below and in the root README.
 
-Do not add microphone/STT, embeddings, LLM calls, login, database, or Spring Boot to v0.2.
+### Next implementation branch: `feature/v0.3-private-speech`
+
+Add only the private speech-intelligence slice:
+
+1. Preserve the complete v0.2 no-microphone path as the default and regression baseline.
+2. Add explicit microphone permission, denial, unsupported-device, cancellation, and recovery
+   paths.
+3. Record locally with playback and deterministic Web Audio delivery measurements.
+4. Benchmark a lazy, cancellable browser-local transcription worker on representative
+   Indian-English medical speech and low/mid-range devices before selecting a default model tier.
+5. Let the learner correct the transcript before later content evaluation; keep audio and text
+   private to the browser.
+6. Report only observable delivery features—duration, pace, fillers, repetition, silence, pause
+   placement, loudness stability, and clipping—with documented limitations.
+7. Add deterministic audio fixtures, worker failure tests, UI-freeze/performance evidence, and
+   proof that no raw audio request leaves the browser.
+
+Do not add embeddings/rubric scoring, prescriptions, scheduling, login, a database, provider API
+calls, or Spring Boot to v0.3; those belong to later exit gates.
 
 ### Later versions
 
@@ -127,7 +141,6 @@ behavior first. Merge feature PRs to `develop`; promote an approved release from
 
 ## Open decisions - discover before asking
 
-- Exact package manager and scaffold versions when v0.2 starts.
 - Final demo topic content and named medical educator reviewer.
 - Software/content licences before public contribution.
 - Target phone/browser benchmark and exam date/preferences.

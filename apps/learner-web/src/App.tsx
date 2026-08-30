@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   type RuntimePack,
   type SettingsStore,
@@ -24,6 +31,7 @@ interface PracticeAppProps {
   settings: UserSettings;
   settingsStore: SettingsStore;
   onSettingsChange: (next: UserSettings) => void;
+  onFocusModeChange: (active: boolean) => void;
 }
 
 function useMilestones(remainingMsValue: number | null): string {
@@ -50,6 +58,20 @@ function useMilestones(remainingMsValue: number | null): string {
   return msg;
 }
 
+function PromptDetails({ topic }: { topic: TopicSnapshot }) {
+  return (
+    <>
+      <p className="expectation">{topic.expectation}</p>
+      <p>{topic.wording}</p>
+      {topic.caseText ? (
+        <p className="case-context">
+          <strong>Scenario:</strong> {topic.caseText}
+        </p>
+      ) : null}
+    </>
+  );
+}
+
 function TopicCard({
   topic,
   headingId,
@@ -64,8 +86,7 @@ function TopicCard({
       <h2 id={headingId} tabIndex={-1}>
         {topic.title}
       </h2>
-      <p className="expectation">{topic.expectation}</p>
-      <p>{topic.wording}</p>
+      <PromptDetails topic={topic} />
       <ol className="arc" aria-label="Answer arc">
         {topic.answerArc.map((step) => (
           <li key={step.id}>{step.label}</li>
@@ -81,6 +102,7 @@ function PracticeApp({
   settings,
   settingsStore,
   onSettingsChange,
+  onFocusModeChange,
 }: PracticeAppProps) {
   const monotonic = useMemo(() => systemMonotonicClock(), []);
   const wall = useMemo(() => systemWallClock(), []);
@@ -106,27 +128,33 @@ function PracticeApp({
   let totalMs = 0;
   if (s.name === "SPEAKING") {
     remaining = remainingMs(s.deadlineAt, now);
-    totalMs = settings.speakingSeconds * 1000;
+    totalMs = s.topic.timePolicy.speakingSeconds * 1000;
   } else if (s.name === "RESEARCHING") {
     remaining = remainingMs(s.deadlineAt, now);
-    totalMs = settings.researchSeconds * 1000;
+    totalMs = (s.topic.timePolicy.researchSeconds ?? settings.researchSeconds) * 1000;
   }
   const milestone = useMilestones(remaining);
 
   const showSurface = s.name !== "SPEAKING" && s.name !== "RESEARCHING";
+  useEffect(() => {
+    onFocusModeChange(!showSurface);
+    return () => onFocusModeChange(false);
+  }, [onFocusModeChange, showSurface]);
 
   return (
     <>
-      <PracticeSurface
-        subjects={subjects}
-        selection={s.selection}
-        presets={presets}
-        challengeVisible={challengeVisible}
-        eligibleCount={eligibleCount}
-        drawing={s.name === "DRAWING"}
-        onChange={actions.setSelection}
-        onSpin={actions.spin}
-      />
+      {showSurface ? (
+        <PracticeSurface
+          subjects={subjects}
+          selection={s.selection}
+          presets={presets}
+          challengeVisible={challengeVisible}
+          eligibleCount={eligibleCount}
+          drawing={s.name === "DRAWING"}
+          onChange={actions.setSelection}
+          onSpin={s.name === "IDLE" ? actions.spin : actions.spinAgain}
+        />
+      ) : null}
 
       {s.name === "TOPIC_READY" ? (
         <TopicCard topic={s.topic} headingId="topic-heading">
@@ -157,10 +185,11 @@ function PracticeApp({
       ) : null}
 
       {s.name === "RESEARCHING" ? (
-        <section aria-labelledby="speaking-heading">
-          <h2 id="speaking-heading" tabIndex={-1} className="sr-only">
-            Research phase
+        <section className="focus-view" aria-labelledby="speaking-heading">
+          <h2 id="speaking-heading" tabIndex={-1}>
+            {s.topic.title}
           </h2>
+          <PromptDetails topic={s.topic} />
           <CountdownRing
             remainingMs={remaining ?? 0}
             totalMs={totalMs}
@@ -178,13 +207,11 @@ function PracticeApp({
       ) : null}
 
       {s.name === "SPEAKING" ? (
-        <section aria-labelledby="speaking-heading">
-          <h2 id="speaking-heading" tabIndex={-1} className="sr-only">
-            Speaking phase
+        <section className="focus-view" aria-labelledby="speaking-heading">
+          <h2 id="speaking-heading" tabIndex={-1}>
+            {s.topic.title}
           </h2>
-          <p className="expectation" aria-hidden="true">
-            {s.topic.title} — {s.topic.expectation}
-          </p>
+          <PromptDetails topic={s.topic} />
           <CountdownRing
             remainingMs={remaining ?? 0}
             totalMs={totalMs}
@@ -249,15 +276,23 @@ export function App() {
     ...(settingsStore.load() ?? DEFAULT_SETTINGS),
   }));
   const [pack, setPack] = useState<RuntimePack | null>(null);
+  const [packWarning, setPackWarning] = useState<string | null>(null);
   const [packError, setPackError] = useState<string | null>(null);
   const [caps] = useState<Capabilities>(() => detectCapabilities());
-  const [updateAvailable, setUpdateAvailable] = useState(false);
+  const [waitingWorker, setWaitingWorker] = useState<ServiceWorker | null>(null);
+  const [focusMode, setFocusMode] = useState(false);
+  const handleFocusModeChange = useCallback((active: boolean) => {
+    setFocusMode(active);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     loadBundledPack()
-      .then((p) => {
-        if (!cancelled) setPack(p);
+      .then((result) => {
+        if (!cancelled) {
+          setPack(result.pack);
+          setPackWarning(result.warning ?? null);
+        }
       })
       .catch((err: unknown) => {
         if (!cancelled) setPackError((err as Error).message);
@@ -269,21 +304,30 @@ export function App() {
 
   useEffect(() => {
     if (!("serviceWorker" in navigator)) return;
+    let cancelled = false;
+    const observeWorker = (worker: ServiceWorker | null) => {
+      if (!worker) return;
+      const stateChange = () => {
+        if (
+          !cancelled &&
+          worker.state === "installed" &&
+          navigator.serviceWorker.controller
+        ) {
+          setWaitingWorker(worker);
+        }
+      };
+      worker.addEventListener("statechange", stateChange);
+    };
     const register = () => {
       navigator.serviceWorker
         .register(`${import.meta.env.BASE_URL}sw.js`)
         .then((reg) => {
+          if (cancelled) return;
+          if (reg.waiting && navigator.serviceWorker.controller) {
+            setWaitingWorker(reg.waiting);
+          }
           reg.addEventListener("updatefound", () => {
-            const installing = reg.installing;
-            if (!installing) return;
-            installing.addEventListener("statechange", () => {
-              if (
-                installing.state === "installed" &&
-                navigator.serviceWorker.controller
-              ) {
-                setUpdateAvailable(true);
-              }
-            });
+            observeWorker(reg.installing);
           });
         })
         .catch(() => {
@@ -292,26 +336,48 @@ export function App() {
     };
     if (document.readyState === "complete") register();
     else window.addEventListener("load", register, { once: true });
+    return () => {
+      cancelled = true;
+      window.removeEventListener("load", register);
+    };
   }, []);
+
+  const applyUpdate = useCallback(() => {
+    if (!waitingWorker) return;
+    navigator.serviceWorker.addEventListener(
+      "controllerchange",
+      () => window.location.reload(),
+      { once: true },
+    );
+    waitingWorker.postMessage({ type: "SKIP_WAITING" });
+  }, [waitingWorker]);
 
   return (
     <main>
-      <h1>MediPrompt</h1>
-      <p className="status">
-        Practice mode + challenge + subject → Spin → timed speech. No account, no
-        recording, no model download.
-      </p>
+      <header className={focusMode ? "sr-only" : "app-intro"}>
+        <h1>MediPrompt</h1>
+        <p className="status">
+          Practice mode + challenge + subject → Spin → timed speech. No account, no
+          recording, no model download.
+        </p>
+      </header>
 
-      {updateAvailable ? (
+      {waitingWorker && !focusMode ? (
         <div className="topic-card" role="status">
           <p>An update is available.</p>
-          <button type="button" onClick={() => window.location.reload()}>
+          <button type="button" onClick={applyUpdate}>
             Reload to update
           </button>
         </div>
       ) : null}
 
-      {packError ? (
+      {packWarning && !focusMode ? (
+        <div className="topic-card" role="status">
+          <p>{packWarning}</p>
+        </div>
+      ) : null}
+
+      {packError && !focusMode ? (
         <div className="topic-card" role="alert">
           <p>Could not load the practice pack: {packError}</p>
           <p className="status">
@@ -328,14 +394,17 @@ export function App() {
           settings={settings}
           settingsStore={settingsStore}
           onSettingsChange={setSettings}
+          onFocusModeChange={handleFocusModeChange}
         />
       ) : null}
 
-      <p className="status" aria-label="capabilities">
-        Microphone: {caps.microphone ? "available" : "unavailable"} · Storage:{" "}
-        {caps.storage ? "available" : "unavailable"} · Online:{" "}
-        {caps.online ? "yes" : "no"}
-      </p>
+      {!focusMode ? (
+        <p className="status" aria-label="capabilities">
+          Microphone: {caps.microphone ? "available" : "unavailable"} · Storage:{" "}
+          {caps.storage ? "available" : "unavailable"} · Online:{" "}
+          {caps.online ? "yes" : "no"}
+        </p>
+      ) : null}
     </main>
   );
 }

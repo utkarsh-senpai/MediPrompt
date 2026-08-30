@@ -56,7 +56,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
 
   const pendingCommands = useRef<Command[]>([]);
   const stateRef = useRef(state);
-  stateRef.current = state;
 
   const timerRef = useRef<number | null>(null);
   const deadlineRef = useRef<{ deadlineAt: number; requestId: string } | null>(null);
@@ -71,13 +70,20 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     defaultSpeakingSeconds: settings.speakingSeconds,
     defaultResearchSeconds: settings.researchSeconds,
   });
-  reducerDepsRef.current = {
-    pack,
-    now: monotonic.now(),
-    nowIso: wall.isoNow(),
-    defaultSpeakingSeconds: settings.speakingSeconds,
-    defaultResearchSeconds: settings.researchSeconds,
-  };
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  useEffect(() => {
+    reducerDepsRef.current = {
+      pack,
+      now: monotonic.now(),
+      nowIso: wall.isoNow(),
+      defaultSpeakingSeconds: settings.speakingSeconds,
+      defaultResearchSeconds: settings.researchSeconds,
+    };
+  }, [pack, settings, monotonic, wall]);
 
   const dispatch = useCallback((event: SessionEvent) => {
     setState((prev) => {
@@ -141,9 +147,10 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         : target === "speaking"
           ? "speaking-heading"
           : "complete-heading";
-    requestAnimationFrame(() => {
-      document.getElementById(id)?.focus();
-    });
+    // Commands are drained from an effect after React commits the target view,
+    // so the heading already exists. Focusing here avoids an extra-frame race
+    // on slower devices and CI while preserving the visible transition.
+    document.getElementById(id)?.focus();
   }, []);
 
   const runCommand = useCallback(
@@ -152,14 +159,18 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         case "REQUEST_DRAW": {
           if (cmd.eligibleVariantIds.length === 0) return;
           const lastDrawn = lastDrawnRef.current.get(cmd.fingerprint);
-          const bag = bagStore.load(cmd.fingerprint);
+          const bagState = bagStore.load(cmd.fingerprint);
           const { chosen, remaining } = draw({
             eligible: cmd.eligibleVariantIds,
-            bag,
+            bag: bagState?.remainingVariantIds ?? [],
+            previousEligible: bagState?.eligibleVariantIds,
             random,
             lastDrawnId: lastDrawn,
           });
-          bagStore.save(cmd.fingerprint, remaining);
+          bagStore.save(cmd.fingerprint, {
+            eligibleVariantIds: cmd.eligibleVariantIds,
+            remainingVariantIds: remaining,
+          });
           lastDrawnRef.current.set(cmd.fingerprint, chosen);
           const found = findVariant(pack, chosen);
           if (!found) return;

@@ -23,6 +23,8 @@ export default defineConfig({
       strategies: "injectManifest",
       srcDir: "src/sw",
       filename: "sw.ts",
+      // App.tsx owns registration/update prompting; avoid a second injected registrar.
+      injectRegister: false,
       registerType: "prompt",
       injectManifest: {
         globPatterns: ["**/*.{js,css,html,svg,json,webmanifest}"],

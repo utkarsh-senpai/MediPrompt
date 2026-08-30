@@ -5,7 +5,9 @@ import type { RandomSource } from "@/platform/random";
 // untrusted even behind the port: duplicates and unknown IDs are removed.
 
 export function fingerprint(parts: readonly string[]): string {
-  return [...new Set(parts)].sort().join("|");
+  // JSON preserves field order and boundaries. Sorting/deduping would allow
+  // different selection dimensions (or values containing a delimiter) to collide.
+  return JSON.stringify(parts);
 }
 
 function fisherYates<T>(items: readonly T[], random: RandomSource): T[] {
@@ -22,6 +24,7 @@ function fisherYates<T>(items: readonly T[], random: RandomSource): T[] {
 export interface DrawInput {
   eligible: readonly string[];
   bag: readonly string[];
+  previousEligible?: readonly string[];
   random: RandomSource;
   lastDrawnId?: string;
 }
@@ -34,6 +37,9 @@ export interface DrawOutput {
 export function draw(input: DrawInput): DrawOutput {
   const eligibleSet = new Set(input.eligible);
   const eligibleSorted = [...eligibleSet].sort();
+  const previousEligible = new Set(
+    (input.previousEligible ?? []).filter((id): id is string => typeof id === "string"),
+  );
 
   if (eligibleSorted.length === 0) {
     throw new Error("no eligible variants for selection");
@@ -65,6 +71,14 @@ export function draw(input: DrawInput): DrawOutput {
     const [chosen, ...rest] = shuffled;
     return { chosen: chosen!, remaining: rest };
   }
+
+  // A producer that changes candidates without changing its pack version is
+  // invalid, but the bag still fails safely: keep undrawn eligible entries and
+  // append only genuinely new candidates in a random order.
+  const newlyEligible = eligibleSorted.filter(
+    (id) => !previousEligible.has(id) && !seen.has(id),
+  );
+  remaining.push(...fisherYates(newlyEligible, input.random));
 
   const [chosen, ...rest] = remaining;
   return { chosen: chosen!, remaining: rest };

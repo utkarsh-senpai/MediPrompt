@@ -19,6 +19,8 @@ interface TopicSeed {
   concepts: [string, string];
   trio?: boolean;
   deepResearch?: boolean;
+  caseText?: string;
+  evidenceConstraint?: string;
 }
 
 interface SubjectSeed {
@@ -59,9 +61,39 @@ const subjects: SubjectSeed[] = [
     subjectId: "reasoning-and-tradeoffs",
     title: "Reasoning and Trade-offs",
     topics: [
-      { topicId: "paper-vs-digital", title: "Paper versus digital notes", focus: "the trade-off between paper and digital notes", concepts: ["Compares retention and recall", "Weighs searchability against distraction"], trio: true },
-      { topicId: "urban-vs-rural", title: "Urban versus rural living", focus: "the trade-off between urban and rural living", concepts: ["Compares opportunity and cost", "Weighs community against access"], trio: true },
-      { topicId: "specialist-vs-generalist", title: "Specialist versus generalist learning", focus: "the trade-off between specialist and generalist learning", concepts: ["Compares depth and adaptability", "Weighs expertise against flexibility"], trio: true },
+      {
+        topicId: "paper-vs-digital",
+        title: "Paper versus digital notes",
+        focus: "the trade-off between paper and digital notes",
+        concepts: ["Compares retention and recall", "Weighs searchability against distraction"],
+        trio: true,
+        caseText:
+          "A student has four weeks before an oral exam. Handwritten notes aid recall, while searchable digital notes make revision on a daily commute easier; phone notifications are distracting.",
+        evidenceConstraint:
+          "The commute is no longer available for study, but the learner must find cited facts quickly.",
+      },
+      {
+        topicId: "urban-vs-rural",
+        title: "Urban versus rural living",
+        focus: "the trade-off between urban and rural living",
+        concepts: ["Compares opportunity and cost", "Weighs community against access"],
+        trio: true,
+        caseText:
+          "A graduate is comparing an urban role with close specialist supervision and high rent against a rural role with broad responsibility, lower costs, and limited transport.",
+        evidenceConstraint:
+          "The rural role adds weekly remote supervision, while the urban rent rises substantially.",
+      },
+      {
+        topicId: "specialist-vs-generalist",
+        title: "Specialist versus generalist learning",
+        focus: "the trade-off between specialist and generalist learning",
+        concepts: ["Compares depth and adaptability", "Weighs expertise against flexibility"],
+        trio: true,
+        caseText:
+          "A learner has one week before a broad viva and must choose between mastering one difficult area deeply or rotating through all major areas with less depth.",
+        evidenceConstraint:
+          "A practice result shows safe breadth but repeated weak reasoning in the difficult area.",
+      },
       { topicId: "speed-vs-quality", title: "Speed versus quality", focus: "the trade-off between speed and quality of work", concepts: ["Compares throughput and error risk", "Weighs deadlines against rework"], deepResearch: true },
       { topicId: "short-term-vs-long-term", title: "Short-term versus long-term goals", focus: "the trade-off between short-term and long-term goals", concepts: ["Compares immediate payoff and delayed reward", "Weighs motivation against patience"], deepResearch: true },
     ],
@@ -108,8 +140,8 @@ function appliedVariant(t: TopicSeed): object {
     blueprint: "manage-case",
     promptId: `prompt-${t.topicId}-applied-rs`,
     mode: "RECALL_SPRINT",
-    supportLevel: "FADING",
-    wording: `A fictional learner faces a decision about ${t.focus}. Summarize the situation, reason about the main trade-off, and propose a justified plan.`,
+    supportLevel: "FULL",
+    wording: `Use the fictional scenario below. Summarize it, reason about the main trade-off in ${t.focus}, and propose a justified plan.`,
     answerArc: ["summarize", "reason", "plan"],
     timePolicy: { preparationSeconds: 45, speakingSeconds: SPEAKING_APPLIED },
     caseRef: `${t.topicId}-case-v1`,
@@ -126,8 +158,8 @@ function vivaVariant(t: TopicSeed): object {
     blueprint: "compare-differentiate",
     promptId: `prompt-${t.topicId}-viva-rs`,
     mode: "RECALL_SPRINT",
-    supportLevel: "MINIMAL",
-    wording: `A fictional scenario about ${t.focus} has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.`,
+    supportLevel: "FULL",
+    wording: `Use the fictional scenario below. New constraint: ${t.evidenceConstraint ?? "one important assumption changes"} Prioritize the competing options, defend your choice, and state what would change your mind.`,
     answerArc: ["prioritize", "defend", "safety-net"],
     timePolicy: { preparationSeconds: 45, speakingSeconds: SPEAKING_VIVA },
     caseRef: `${t.topicId}-case-v1`,
@@ -176,7 +208,9 @@ function buildTopic(t: TopicSeed): object {
     ? [
         {
           caseId: `${t.topicId}-case-v1`,
-          text: `Fictional scenario: a student is deciding how to approach ${t.focus}. The situation has realistic constraints and no single obviously correct answer.`,
+          text:
+            t.caseText ??
+            `A learner is deciding how to approach ${t.focus}; there is no single obviously correct answer.`,
         },
       ]
     : [];
@@ -190,7 +224,7 @@ function buildTopic(t: TopicSeed): object {
         },
         {
           followUpId: `${t.topicId}-evidence-v1`,
-          text: `New information arrives that changes one assumption about ${t.focus}. Does your prioritization change, and why?`,
+          text: `${t.evidenceConstraint ?? `New information changes one assumption about ${t.focus}.`} Does your prioritization change, and why?`,
           kind: "EVIDENCE_UPDATE",
         },
       ]
@@ -201,6 +235,7 @@ function buildTopic(t: TopicSeed): object {
 
 const pack = {
   schemaVersion: "1.0",
+  contentKind: "NON_MEDICAL_INTERACTION",
   packId: "demo-interaction-fixture",
   version: "1.0.0",
   title: "Speaking Practice Demo (non-medical interaction fixture)",

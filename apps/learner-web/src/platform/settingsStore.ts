@@ -26,6 +26,14 @@ function clampFiniteSeconds(
 function parseSettings(raw: unknown): UserSettings | null {
   if (typeof raw !== "object" || raw === null) return null;
   const obj = raw as Record<string, unknown>;
+  const expectedKeys = ["researchSeconds", "schemaVersion", "speakingSeconds"];
+  const actualKeys = Object.keys(obj).sort();
+  if (
+    actualKeys.length !== expectedKeys.length ||
+    actualKeys.some((key, index) => key !== expectedKeys[index])
+  ) {
+    return null;
+  }
   // Reject dangerous object keys.
   for (const dangerous of ["__proto__", "prototype", "constructor"]) {
     if (Object.prototype.hasOwnProperty.call(obj, dangerous)) return null;
@@ -65,22 +73,23 @@ export class LocalStorageSettingsStore implements SettingsStore {
     try {
       const raw = s.getItem(STORAGE_KEY);
       const parsed = raw ? parseSettings(JSON.parse(raw)) : null;
-      return parsed ?? this.mem.load();
+      if (!parsed) return this.mem.load();
+      this.mem.save(parsed);
+      return parsed;
     } catch {
       return this.mem.load();
     }
   }
 
   save(settings: UserSettings): void {
+    const parsed = parseSettings(settings) ?? { ...DEFAULT_SETTINGS };
+    this.mem.save(parsed);
     const s = safeStorage();
-    if (!s) {
-      this.mem.save(settings);
-      return;
-    }
+    if (!s) return;
     try {
-      s.setItem(STORAGE_KEY, JSON.stringify(settings));
+      s.setItem(STORAGE_KEY, JSON.stringify(parsed));
     } catch {
-      this.mem.save(settings);
+      // The already-updated memory store remains the current-session fallback.
     }
   }
 

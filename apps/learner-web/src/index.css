@@ -3,7 +3,7 @@
   --ivory: #f4efe6;
   --teal: #14524d; /* text on ivory ~7.8:1 */
   --teal-soft: #2c6e68;
-  --terracotta: #c75d3c; /* large/UI only ~3.6:1 */
+  --terracotta: #a24328; /* ivory text ~5.4:1 */
   --sage: #c9d4c5;
   --ink: #1b3b37;
   --muted: #5c6b67;
@@ -15,6 +15,7 @@
     Arial, sans-serif;
   --space: 0.75rem;
   --touch: 44px;
+  color-scheme: light;
 }
 
 * {
@@ -80,6 +81,8 @@ button[aria-pressed="true"] {
 }
 
 button:focus-visible,
+select:focus-visible,
+input:focus-visible,
 [tabindex]:focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 2px;
@@ -117,6 +120,18 @@ button:focus-visible,
   border-radius: 12px;
   padding: calc(var(--space) * 1.2);
   margin-block: var(--space);
+}
+
+.case-context {
+  border-inline-start: 4px solid var(--sage);
+  padding-inline-start: 0.75rem;
+}
+
+.focus-view {
+  min-height: calc(100dvh - 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .expectation {
@@ -185,25 +200,31 @@ button:focus-visible,
 }
 
 .dialog {
-  position: fixed;
-  inset: 0;
-  background: rgba(27, 59, 55, 0.4);
-  display: grid;
-  place-items: center;
-  padding: var(--space);
+  border: 0;
+  border-radius: 14px;
+  padding: 0;
+  width: min(420px, calc(100vw - 2 * var(--space)));
+  max-height: calc(100dvh - 2 * var(--space));
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.dialog::backdrop {
+  background: rgba(27, 59, 55, 0.55);
 }
 
 .dialog > form {
   background: var(--surface);
-  border-radius: 14px;
   padding: calc(var(--space) * 2);
-  max-width: 420px;
   width: 100%;
+  max-height: inherit;
+  overflow: auto;
   display: grid;
   gap: var(--space);
 }
 
-input[type="number"] {
+input[type="number"],
+select {
   font: inherit;
   padding: 0.5rem;
   border: 2px solid var(--sage);

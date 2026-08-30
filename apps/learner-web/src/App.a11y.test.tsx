@@ -9,12 +9,17 @@ import demoPackJson from "@content/packs/demo-interaction-fixture.json";
 const demoPack = validatePack(demoPackJson) as RuntimePack;
 
 function mockFetch(pack: unknown): void {
+  const body = JSON.stringify(pack);
   vi.stubGlobal(
     "fetch",
     vi.fn(async () => ({
       ok: true,
       status: 200,
-      json: async () => pack,
+      redirected: false,
+      type: "basic",
+      url: "",
+      headers: new Headers({ "content-length": String(new TextEncoder().encode(body).byteLength) }),
+      text: async () => body,
     })),
   );
 }
@@ -74,6 +79,20 @@ describe("App accessibility + capability + security", () => {
     expect(document.activeElement).toBe(spin);
   });
 
+  it("uses a modal settings dialog and restores focus when it closes", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Settings" })).toBeEnabled());
+    const trigger = screen.getByRole("button", { name: "Settings" });
+    trigger.focus();
+    await user.click(trigger);
+    expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+    expect(screen.getByLabelText(/Speaking time/)).toHaveFocus();
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog", { name: "Settings" })).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it("renders at a 320px viewport without throwing", async () => {
     Object.defineProperty(window, "innerWidth", {
       configurable: true,
@@ -91,6 +110,7 @@ describe("App accessibility + capability + security", () => {
 
   it("no-capability: reaches a topic with microphone/network/storage unavailable", async () => {
     // jsdom has no mediaDevices → microphone unavailable; the loop must still work.
+    vi.stubGlobal("fetch", vi.fn(async () => Promise.reject(new TypeError("offline"))));
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
     expect(screen.getByText(/Microphone: unavailable/i)).toBeInTheDocument();
@@ -103,79 +123,30 @@ describe("App accessibility + capability + security", () => {
     );
   });
 
+  it("keeps the prompt visible and removes setup controls during focused speech", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
+    await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
+    const promptText = screen.getByRole("article").querySelector("p:not(.expectation)")?.textContent;
+    expect(promptText).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Start timer" }));
+    expect(screen.queryByRole("group", { name: "Practice mode" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("capabilities")).not.toBeInTheDocument();
+    expect(screen.getByText(promptText!)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+  });
+
   it("renders pack wording containing HTML as inert text, not as elements", async () => {
     const htmlWording = "<img src=x onerror=alert(1)><script>alert(2)</script>";
-    const singleVariantPack = {
-      schemaVersion: "1.0",
-      packId: "security-fixture",
-      version: "1.0.0",
-      title: "Security fixture",
-      locale: "en-IN",
-      licence: { id: "CC-BY-4.0", attribution: "Security fixture" },
-      review: {
-        status: "APPROVED",
-        reviewers: [{ id: "tester", role: "CONTENT_EDITOR" }],
-        reviewedAt: "2026-08-30",
-      },
-      sources: [
-        {
-          sourceId: "src-1",
-          citation: "Fixture.",
-          url: "https://example.org/x",
-          accessedAt: "2026-08-30",
-        },
-      ],
-      subjects: [
-        {
-          subjectId: "subj",
-          title: "Subject",
-          topics: [
-            {
-              topicId: "topic",
-              title: "Topic",
-              variants: [
-                {
-                  variantId: "topic-guided-rs-v1",
-                  challengePreset: "GUIDED",
-                  difficultyProfileVersion: "difficulty-profile/1.0",
-                  blueprint: "explain-concept",
-                  promptId: "prompt-topic-guided-rs",
-                  mode: "RECALL_SPRINT",
-                  supportLevel: "FULL",
-                  wording: htmlWording,
-                  answerArc: ["define", "explain"],
-                  timePolicy: { speakingSeconds: 90 },
-                  caseRef: null,
-                  followUpRefs: [],
-                  rubricId: "topic-guided-rs-rubric-v1",
-                },
-              ],
-              rubrics: [
-                {
-                  rubricId: "topic-guided-rs-rubric-v1",
-                  variantId: "topic-guided-rs-v1",
-                  register: "EXAMINER",
-                  concepts: [
-                    {
-                      conceptId: "c1",
-                      label: "Core idea",
-                      acceptedPhrases: ["core"],
-                      weight: 2,
-                      sourceRefs: ["src-1"],
-                    },
-                  ],
-                },
-              ],
-              cases: [],
-              followUps: [],
-            },
-          ],
-        },
-      ],
-    };
-    // The pack is structurally valid and production-gate clean (HTML is just text).
-    expect(() => validatePack(singleVariantPack)).not.toThrow();
-    mockFetch(singleVariantPack);
+    const adversarialPack = JSON.parse(JSON.stringify(demoPack)) as RuntimePack;
+    for (const subject of adversarialPack.subjects) {
+      for (const topic of subject.topics) {
+        for (const variant of topic.variants) variant.wording = htmlWording;
+      }
+    }
+    expect(() => validatePack(adversarialPack)).not.toThrow();
+    mockFetch(adversarialPack);
 
     const u = userEvent.setup();
     render(<App />);

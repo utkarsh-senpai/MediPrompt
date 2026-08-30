@@ -23,7 +23,7 @@ export class CryptoRandom implements RandomSource {
       cryptoObj.getRandomValues(buf);
       return buf[0]!;
     };
-    const limit = Math.floor(0xffffffff / maxExclusive) * maxExclusive;
+    const limit = Math.floor(0x1_0000_0000 / maxExclusive) * maxExclusive;
     let r = u32();
     while (r >= limit) r = u32();
     return r % maxExclusive;

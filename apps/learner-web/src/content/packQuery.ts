@@ -101,10 +101,12 @@ function withDefaults(
 ): TimePolicy {
   return {
     preparationSeconds: timePolicy.preparationSeconds,
-    speakingSeconds: timePolicy.speakingSeconds ?? defaults.speakingSeconds,
+    // These are the effective accessibility settings used by the timer and
+    // captured in AttemptDraft. Challenge remains encoded by the variant.
+    speakingSeconds: defaults.speakingSeconds,
     researchSeconds:
       mode === "DEEP_RESEARCH"
-        ? (timePolicy.researchSeconds ?? defaults.researchSeconds)
+        ? defaults.researchSeconds
         : undefined,
   };
 }
@@ -116,7 +118,14 @@ export function toTopicSnapshot(
   subject: Subject,
   defaults: { speakingSeconds: number; researchSeconds: number },
 ): TopicSnapshot {
-  const mode = variant.mode as V02PracticeMode;
+  if (variant.mode !== "RECALL_SPRINT" && variant.mode !== "DEEP_RESEARCH") {
+    throw new Error(`unsupported v0.2 mode: ${variant.mode}`);
+  }
+  const mode: V02PracticeMode = variant.mode;
+  const caseText =
+    variant.caseRef === null
+      ? undefined
+      : topic.cases.find((candidate) => candidate.caseId === variant.caseRef)?.text;
   const topicRef: TopicRef = {
     packId: pack.packId,
     packVersion: pack.version,
@@ -131,6 +140,7 @@ export function toTopicSnapshot(
     topicRef,
     title: topic.title,
     wording: variant.wording,
+    caseText,
     expectation: PRESET_EXPECTATION[variant.challengePreset],
     answerArc: arcSteps(variant.answerArc),
     timePolicy: withDefaults(variant.timePolicy, defaults, mode),

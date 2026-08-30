@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 // E2E + service-worker tests. Runs against the production preview build.
-// CI installs browsers via the setup-playwright action; not part of `pnpm test`.
+// CI installs the pinned Playwright package's Chromium build; not part of `pnpm test`.
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,

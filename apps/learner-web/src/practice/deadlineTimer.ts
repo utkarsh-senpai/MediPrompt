@@ -11,14 +11,35 @@ export function validateDurationMs(ms: unknown): number {
   return v;
 }
 
+function validateMonotonicMs(value: unknown, label: string): number {
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    value < 0 ||
+    value > Number.MAX_SAFE_INTEGER
+  ) {
+    throw new Error(`${label} must be a finite non-negative monotonic time`);
+  }
+  return value;
+}
+
 export function startDeadline(now: number, durationMs: number): number {
-  return now + validateDurationMs(durationMs);
+  const current = validateMonotonicMs(now, "now");
+  const deadline = current + validateDurationMs(durationMs);
+  if (!Number.isFinite(deadline) || deadline > Number.MAX_SAFE_INTEGER) {
+    throw new Error("deadline overflows the monotonic time range");
+  }
+  return deadline;
 }
 
 export function remainingMs(deadlineAt: number, now: number): number {
-  return Math.max(0, Math.trunc(deadlineAt) - Math.trunc(now));
+  const deadline = validateMonotonicMs(deadlineAt, "deadline");
+  const current = validateMonotonicMs(now, "now");
+  return Math.max(0, Math.trunc(deadline) - Math.trunc(current));
 }
 
 export function isElapsed(deadlineAt: number, now: number): boolean {
-  return Math.trunc(now) >= Math.trunc(deadlineAt);
+  const deadline = validateMonotonicMs(deadlineAt, "deadline");
+  const current = validateMonotonicMs(now, "now");
+  return Math.trunc(current) >= Math.trunc(deadline);
 }

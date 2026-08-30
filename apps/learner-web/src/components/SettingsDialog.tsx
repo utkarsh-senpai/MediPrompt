@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { TIME_BOUNDS } from "@/practice/types";
 import type { SettingsStore, UserSettings } from "@/practice/types";
 
@@ -21,6 +21,21 @@ export function SettingsDialog({
   const [researchSeconds, setResearchSeconds] = useState(
     String(settings.researchSeconds),
   );
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    if (!dialog) return;
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else dialog.setAttribute("open", "");
+    firstInputRef.current?.focus();
+    return () => {
+      if (dialog.open && typeof dialog.close === "function") dialog.close();
+      previouslyFocused?.focus();
+    };
+  }, []);
 
   const clamp = (v: number, bounds: { min: number; max: number }) =>
     Math.max(bounds.min, Math.min(bounds.max, v));
@@ -44,7 +59,21 @@ export function SettingsDialog({
   };
 
   return (
-    <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <dialog
+      ref={dialogRef}
+      className="dialog"
+      aria-labelledby="settings-title"
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          onClose();
+        }
+      }}
+    >
       <form onSubmit={submit}>
         <h2 id="settings-title">Settings</h2>
         <div className="control-row">
@@ -53,11 +82,13 @@ export function SettingsDialog({
             {TIME_BOUNDS.speakingSeconds.max})
           </label>
           <input
+            ref={firstInputRef}
             id="speaking-seconds"
             type="number"
             inputMode="numeric"
             min={TIME_BOUNDS.speakingSeconds.min}
             max={TIME_BOUNDS.speakingSeconds.max}
+            required
             value={speakingSeconds}
             onChange={(e) => setSpeakingSeconds(e.target.value)}
           />
@@ -73,6 +104,7 @@ export function SettingsDialog({
             inputMode="numeric"
             min={TIME_BOUNDS.researchSeconds.min}
             max={TIME_BOUNDS.researchSeconds.max}
+            required
             value={researchSeconds}
             onChange={(e) => setResearchSeconds(e.target.value)}
           />
@@ -84,6 +116,6 @@ export function SettingsDialog({
           </button>
         </div>
       </form>
-    </div>
+    </dialog>
   );
 }
