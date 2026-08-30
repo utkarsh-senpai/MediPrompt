@@ -45,7 +45,7 @@ export default defineConfig({
       injectRegister: false,
       registerType: "prompt",
       injectManifest: {
-        globPatterns: ["**/*.{js,css,html,svg,json,webmanifest}"],
+        globPatterns: ["**/*.{js,css,html,svg,json,webmanifest,woff2}"],
         maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
       },
       manifest: {
@@ -56,8 +56,8 @@ export default defineConfig({
         start_url: `${base}`,
         scope: `${base}`,
         display: "standalone",
-        background_color: "#F4EFE6",
-        theme_color: "#14524D",
+        background_color: "#121816",
+        theme_color: "#121816",
         icons: [
           {
             src: `${base}icon.svg`,

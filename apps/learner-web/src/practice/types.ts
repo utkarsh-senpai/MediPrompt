@@ -160,6 +160,8 @@ export interface UserSettings {
   schemaVersion: 1;
   speakingSeconds: number;
   researchSeconds: number;
+  /** Sound cues off when true; absent in legacy stored settings (treated as false). */
+  soundMuted?: boolean;
 }
 
 export interface PracticeSelection {
@@ -479,6 +481,7 @@ export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   schemaVersion: 1,
   speakingSeconds: 90,
   researchSeconds: 120,
+  soundMuted: false,
 });
 
 /** Documented bounds for durations; clamped by the settings store and reducer. */

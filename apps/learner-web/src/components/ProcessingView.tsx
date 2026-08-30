@@ -76,7 +76,7 @@ export function ProcessingView({
               entirely on this device; your audio is never uploaded.
             </p>
             <div className="toolbar">
-              <button type="button" onClick={onTranscribe}>
+              <button type="button" className="primary" onClick={onTranscribe}>
                 Transcribe my attempt
               </button>
               <button type="button" onClick={onDecline}>

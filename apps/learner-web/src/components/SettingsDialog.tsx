@@ -21,6 +21,7 @@ export function SettingsDialog({
   const [researchSeconds, setResearchSeconds] = useState(
     String(settings.researchSeconds),
   );
+  const [soundMuted, setSoundMuted] = useState(settings.soundMuted ?? false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -52,6 +53,7 @@ export function SettingsDialog({
         Math.round(Number(researchSeconds) || settings.researchSeconds),
         TIME_BOUNDS.researchSeconds,
       ),
+      soundMuted,
     };
     store.save(next);
     onSaved(next);
@@ -109,8 +111,24 @@ export function SettingsDialog({
             onChange={(e) => setResearchSeconds(e.target.value)}
           />
         </div>
+        <div className="settings-sound">
+          <input
+            id="sound-enabled"
+            type="checkbox"
+            checked={!soundMuted}
+            onChange={(e) => setSoundMuted(!e.target.checked)}
+          />
+          <label htmlFor="sound-enabled">
+            Sound effects
+            <span className="settings-hint">
+              Soft cues for spins and the timer, synthesized on this device.
+            </span>
+          </label>
+        </div>
         <div className="toolbar">
-          <button type="submit">Save</button>
+          <button type="submit" className="primary">
+            Save
+          </button>
           <button type="button" onClick={onClose}>
             Cancel
           </button>

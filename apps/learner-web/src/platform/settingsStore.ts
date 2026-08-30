@@ -23,15 +23,18 @@ function clampFiniteSeconds(
   return v;
 }
 
+const REQUIRED_KEYS = ["researchSeconds", "schemaVersion", "speakingSeconds"];
+const OPTIONAL_KEYS = ["soundMuted"];
+
 function parseSettings(raw: unknown): UserSettings | null {
   if (typeof raw !== "object" || raw === null) return null;
   const obj = raw as Record<string, unknown>;
-  const expectedKeys = ["researchSeconds", "schemaVersion", "speakingSeconds"];
-  const actualKeys = Object.keys(obj).sort();
-  if (
-    actualKeys.length !== expectedKeys.length ||
-    actualKeys.some((key, index) => key !== expectedKeys[index])
-  ) {
+  const allowed = new Set([...REQUIRED_KEYS, ...OPTIONAL_KEYS]);
+  const actualKeys = Object.keys(obj);
+  // All required keys present, unknown keys rejected; optional keys may be absent
+  // (legacy v1 payloads predate soundMuted) and default when missing.
+  if (actualKeys.some((key) => !allowed.has(key))) return null;
+  if (REQUIRED_KEYS.some((key) => !Object.prototype.hasOwnProperty.call(obj, key))) {
     return null;
   }
   // Reject dangerous object keys.
@@ -49,7 +52,9 @@ function parseSettings(raw: unknown): UserSettings | null {
     TIME_BOUNDS.researchSeconds,
     DEFAULT_SETTINGS.researchSeconds,
   );
-  return { schemaVersion: 1, speakingSeconds, researchSeconds };
+  const soundMuted =
+    typeof obj["soundMuted"] === "boolean" ? obj["soundMuted"] : false;
+  return { schemaVersion: 1, speakingSeconds, researchSeconds, soundMuted };
 }
 
 function safeStorage(): Storage | null {

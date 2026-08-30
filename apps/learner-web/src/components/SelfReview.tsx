@@ -70,7 +70,7 @@ export function SelfReview({
         />
       </div>
       <div className="toolbar">
-        <button type="button" onClick={() => onSubmit(text)}>
+        <button type="button" className="primary" onClick={() => onSubmit(text)}>
           Save review
         </button>
       </div>

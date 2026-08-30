@@ -87,7 +87,29 @@ describe("LocalStorageSettingsStore", () => {
       schemaVersion: 1,
       speakingSeconds: TIME_BOUNDS.speakingSeconds.min,
       researchSeconds: DEFAULT_SETTINGS.researchSeconds,
+      soundMuted: false,
     });
+  });
+
+  it("loads legacy v1 payloads that predate soundMuted", () => {
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({ schemaVersion: 1, speakingSeconds: 60, researchSeconds: 90 }),
+    );
+    const loaded = new LocalStorageSettingsStore().load();
+    expect(loaded.speakingSeconds).toBe(60);
+    expect(loaded.soundMuted).toBe(false);
+  });
+
+  it("persists and reloads the soundMuted preference", () => {
+    const store = new LocalStorageSettingsStore();
+    store.save({
+      schemaVersion: 1,
+      speakingSeconds: 90,
+      researchSeconds: 120,
+      soundMuted: true,
+    });
+    expect(new LocalStorageSettingsStore().load().soundMuted).toBe(true);
   });
 
   it("falls back to in-memory when localStorage is unavailable", () => {

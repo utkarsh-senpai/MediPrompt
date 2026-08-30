@@ -26,7 +26,7 @@ export function MicPrimer({ onConfirm, onDecline }: MicPrimerProps) {
         same.
       </p>
       <div className="toolbar">
-        <button type="button" onClick={onConfirm}>
+        <button type="button" className="primary" onClick={onConfirm}>
           Allow microphone
         </button>
         <button type="button" onClick={onDecline}>

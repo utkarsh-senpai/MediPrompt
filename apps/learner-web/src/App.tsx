@@ -27,6 +27,8 @@ import {
   type Capabilities,
 } from "@/app/capabilities";
 import { audioIssueCopy } from "@/app/audioCopy";
+import { playSpinTick, playTimerEnd, playTimerStart } from "@/app/sounds";
+import { subjectEmoji } from "@/app/subjectEmoji";
 import { AttemptRecorder } from "@/audio/recorder";
 import { createWebAudioDecoder } from "@/audio/pcmDecode";
 import { createDefaultTranscriptionClient } from "@/speech/transcriptionClient";
@@ -142,14 +144,21 @@ function PromptDetails({ topic }: { topic: TopicSnapshot }) {
 function TopicCard({
   topic,
   headingId,
+  eyebrow,
   children,
 }: {
   topic: TopicSnapshot;
   headingId: string;
+  eyebrow?: string;
   children: ReactNode;
 }) {
   return (
     <article className="topic-card">
+      {eyebrow ? (
+        <span className="eyebrow" aria-hidden="true">
+          {eyebrow}
+        </span>
+      ) : null}
       <h2 id={headingId} tabIndex={-1}>
         {topic.title}
       </h2>
@@ -223,6 +232,46 @@ function PracticeApp({
   }
   const milestone = useMilestones(remaining);
 
+  const muted = settings.soundMuted ?? false;
+  useEffect(() => {
+    if (milestone === "Time's up.") playTimerEnd(muted);
+  }, [milestone, muted]);
+
+  const spin = useCallback(() => {
+    playSpinTick(muted);
+    actions.spin();
+  }, [actions, muted]);
+  const spinAgain = useCallback(() => {
+    playSpinTick(muted);
+    actions.spinAgain();
+  }, [actions, muted]);
+  const startTimer = useCallback(() => {
+    playTimerStart(muted);
+    actions.startTimer();
+  }, [actions, muted]);
+  const startResearch = useCallback(() => {
+    playTimerStart(muted);
+    actions.startResearch();
+  }, [actions, muted]);
+  const confirmReady = useCallback(() => {
+    playTimerStart(muted);
+    actions.confirmReady();
+  }, [actions, muted]);
+
+  const topicEyebrow =
+    s.name !== "IDLE" && s.name !== "DRAWING" && "topic" in s
+      ? (() => {
+          const subjectTitle =
+            subjects.find((opt) => opt.subjectId === s.topic.topicRef.subjectId)?.title ??
+            "";
+          const modeLabel =
+            s.topic.mode === "RECALL_SPRINT" ? "Recall Sprint" : "Deep Research";
+          return subjectTitle
+            ? `${subjectEmoji(subjectTitle)} ${subjectTitle} · ${modeLabel}`
+            : modeLabel;
+        })()
+      : undefined;
+
   const showSurface = s.name !== "SPEAKING" && s.name !== "RESEARCHING";
   useEffect(() => {
     onFocusModeChange(!showSurface);
@@ -240,23 +289,23 @@ function PracticeApp({
           eligibleCount={eligibleCount}
           drawing={s.name === "DRAWING"}
           onChange={actions.setSelection}
-          onSpin={s.name === "IDLE" ? actions.spin : actions.spinAgain}
+          onSpin={s.name === "IDLE" ? spin : spinAgain}
         />
       ) : null}
 
       {s.name === "TOPIC_READY" ? (
         <>
-          <TopicCard topic={s.topic} headingId="topic-heading">
+          <TopicCard topic={s.topic} headingId="topic-heading" eyebrow={topicEyebrow}>
             {s.selection.mode === "DEEP_RESEARCH" ? (
-              <button type="button" onClick={actions.startResearch}>
+              <button type="button" className="primary" onClick={startResearch}>
                 Begin research
               </button>
             ) : (
-              <button type="button" onClick={actions.startTimer}>
+              <button type="button" className="primary" onClick={startTimer}>
                 Start timer
               </button>
             )}
-            <button type="button" onClick={actions.spinAgain}>
+            <button type="button" onClick={spinAgain}>
               Spin again
             </button>
           </TopicCard>
@@ -271,11 +320,11 @@ function PracticeApp({
 
       {s.name === "READY_TO_SPEAK" ? (
         <>
-          <TopicCard topic={s.topic} headingId="topic-heading">
-            <button type="button" onClick={actions.confirmReady}>
+          <TopicCard topic={s.topic} headingId="topic-heading" eyebrow={topicEyebrow}>
+            <button type="button" className="primary" onClick={confirmReady}>
               Start speaking
             </button>
-            <button type="button" onClick={actions.spinAgain}>
+            <button type="button" onClick={spinAgain}>
               Spin again
             </button>
           </TopicCard>
@@ -298,6 +347,7 @@ function PracticeApp({
             remainingMs={remaining ?? 0}
             totalMs={totalMs}
             caption="Research time left"
+            variant="research"
           />
           <div className="toolbar">
             <button type="button" onClick={actions.doneResearching}>
@@ -354,10 +404,10 @@ function PracticeApp({
             </p>
           ) : null}
           <div className="toolbar">
-            <button type="button" onClick={actions.startTypedReview}>
+            <button type="button" className="primary" onClick={actions.startTypedReview}>
               Review this attempt
             </button>
-            <button type="button" onClick={actions.spinAgain}>
+            <button type="button" onClick={spinAgain}>
               Spin again
             </button>
           </div>
@@ -401,7 +451,7 @@ function PracticeApp({
           textMetrics={s.textMetrics}
           transcript={s.transcript}
           audio={session.audio}
-          onSpinAgain={actions.spinAgain}
+          onSpinAgain={spinAgain}
         />
       ) : null}
 
@@ -410,11 +460,18 @@ function PracticeApp({
       </p>
 
       {showSurface ? (
-        <div className="toolbar">
-          <button type="button" onClick={() => setShowSettings(true)}>
-            Settings
-          </button>
-        </div>
+        <button
+          type="button"
+          className="settings-trigger"
+          aria-label="Settings"
+          title="Settings"
+          onClick={() => setShowSettings(true)}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
       ) : null}
 
       {showSettings ? (
@@ -512,14 +569,17 @@ export function App() {
   }, [waitingWorker]);
 
   return (
-    <main>
-      <header className={focusMode ? "sr-only" : "app-intro"}>
-        <h1>MediPrompt</h1>
-        <p className="status">
-          Practice mode + challenge + subject → Spin → timed speech. No account. Optional
-          mic feedback and on-device transcription — audio never leaves this device.
-        </p>
-      </header>
+    <>
+      <div className="atmosphere" aria-hidden="true" />
+      <main>
+        <header className={focusMode ? "sr-only" : "brand"}>
+          <h1>MediPrompt</h1>
+          <p className="brand-line">
+            Spin a topic, speak against the clock, review how you delivered. No account —
+            optional mic feedback and on-device transcription, so audio never leaves this
+            device.
+          </p>
+        </header>
 
       {waitingWorker && !focusMode ? (
         <div className="topic-card" role="status">
@@ -566,7 +626,8 @@ export function App() {
           {caps.online ? "yes" : "no"}
         </p>
       ) : null}
-    </main>
+      </main>
+    </>
   );
 }
 

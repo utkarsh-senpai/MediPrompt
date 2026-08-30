@@ -46,6 +46,7 @@ export function TranscriptEditor({ draft, onApprove, onTypeInstead }: Transcript
       <div className="toolbar">
         <button
           type="button"
+          className="primary"
           onClick={() => onApprove(text)}
           disabled={text.trim().length === 0}
         >

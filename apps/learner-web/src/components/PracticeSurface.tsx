@@ -4,6 +4,7 @@ import type {
   V02PracticeMode,
 } from "@/practice/types";
 import type { SubjectOption } from "@/content/packQuery";
+import { subjectEmoji } from "@/app/subjectEmoji";
 
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
@@ -16,9 +17,9 @@ export interface PracticeSurfaceProps {
   onSpin: () => void;
 }
 
-const MODES: { id: V02PracticeMode; label: string; hint: string }[] = [
-  { id: "RECALL_SPRINT", label: "Recall Sprint", hint: "Draw a topic and speak at once." },
-  { id: "DEEP_RESEARCH", label: "Deep Research", hint: "Research first, then speak." },
+const MODES: { id: V02PracticeMode; label: string; hint: string; emoji: string }[] = [
+  { id: "RECALL_SPRINT", label: "Recall Sprint", hint: "Draw a topic and speak at once.", emoji: "⚡" },
+  { id: "DEEP_RESEARCH", label: "Deep Research", hint: "Research first, then speak.", emoji: "🔬" },
 ];
 
 const PRESET_LABEL: Record<ChallengePreset, string> = {
@@ -40,22 +41,30 @@ export function PracticeSurface({
   const spinDisabled = drawing || eligibleCount === 0;
 
   return (
-    <section aria-labelledby="controls-heading">
+    <section className="setup-surface" aria-labelledby="controls-heading">
       <h2 id="controls-heading" className="sr-only">
         Practice setup
       </h2>
 
       <div className="control-row">
         <span id="mode-label">Practice mode</span>
-        <div className="chips" role="group" aria-labelledby="mode-label">
+        <div
+          className={`mode-switch sel-${MODES.findIndex((m) => m.id === selection.mode)}`}
+          role="group"
+          aria-labelledby="mode-label"
+        >
           {MODES.map((m) => (
             <button
               key={m.id}
               type="button"
+              className="mode-option"
               aria-pressed={selection.mode === m.id}
               title={m.hint}
               onClick={() => onChange({ mode: m.id })}
             >
+              <span className="mode-emoji" aria-hidden="true">
+                {m.emoji}
+              </span>
               {m.label}
             </button>
           ))}
@@ -89,7 +98,7 @@ export function PracticeSurface({
         >
           {subjects.map((s) => (
             <option key={s.subjectId} value={s.subjectId}>
-              {s.title}
+              {subjectEmoji(s.title)} {s.title}
             </option>
           ))}
         </select>
