@@ -77,11 +77,33 @@ export function reduceSession(
   deps: ReducerDeps,
 ): ReducerResult {
   switch (event.type) {
-    case "CHANGE_SELECTION":
+    case "CHANGE_SELECTION": {
       if (state.name === "SPEAKING" || state.name === "RESEARCHING") {
         return noChange(state);
       }
+      // Post-attempt states hold a recording (and maybe a running transcription);
+      // leaving them releases both. ATTEMPT_COMPLETE only holds one when armed.
+      if (
+        state.name === "PROCESSING" ||
+        state.name === "TRANSCRIPT_REVIEW" ||
+        state.name === "SELF_REVIEW" ||
+        state.name === "REVIEW"
+      ) {
+        const commands: Command[] = [];
+        if (state.name === "PROCESSING" && state.transcription === "RUNNING") {
+          commands.push({ type: "CANCEL_TRANSCRIPTION", attemptId: state.attempt.attemptId });
+        }
+        commands.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
+        return { state: { name: "IDLE", selection: event.selection }, commands };
+      }
+      if (state.name === "ATTEMPT_COMPLETE" && deps.audioArmed) {
+        return {
+          state: { name: "IDLE", selection: event.selection },
+          commands: [{ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId }],
+        };
+      }
       return { state: { name: "IDLE", selection: event.selection }, commands: [] };
+    }
 
     case "SPIN":
       if (state.name !== "IDLE") return noChange(state);
@@ -90,18 +112,38 @@ export function reduceSession(
         commands: [requestDraw(state.selection, event.requestId, deps)],
       };
 
-    case "SPIN_AGAIN":
-      if (
-        state.name !== "TOPIC_READY" &&
-        state.name !== "READY_TO_SPEAK" &&
-        state.name !== "ATTEMPT_COMPLETE"
-      ) {
-        return noChange(state);
+    case "SPIN_AGAIN": {
+      // Spinning again discards the attempt: any recording is revoked and any
+      // running transcription cancelled before the next draw.
+      const cleanup: Command[] = [];
+      switch (state.name) {
+        case "TOPIC_READY":
+        case "READY_TO_SPEAK":
+          break;
+        case "ATTEMPT_COMPLETE":
+          if (deps.audioArmed) {
+            cleanup.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
+          }
+          break;
+        case "PROCESSING":
+          if (state.transcription === "RUNNING") {
+            cleanup.push({ type: "CANCEL_TRANSCRIPTION", attemptId: state.attempt.attemptId });
+          }
+          cleanup.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
+          break;
+        case "TRANSCRIPT_REVIEW":
+        case "SELF_REVIEW":
+        case "REVIEW":
+          cleanup.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
+          break;
+        default:
+          return noChange(state);
       }
       return {
         state: { name: "DRAWING", selection: state.selection, requestId: event.requestId },
-        commands: [requestDraw(state.selection, event.requestId, deps)],
+        commands: [...cleanup, requestDraw(state.selection, event.requestId, deps)],
       };
+    }
 
     case "TOPIC_DRAWN": {
       if (state.name !== "DRAWING" || state.requestId !== event.requestId) {
@@ -132,6 +174,15 @@ export function reduceSession(
         event.now,
         state.topic.timePolicy.speakingSeconds,
       );
+      const commands: Command[] = [
+        { type: "START_DEADLINE", deadlineAt },
+        { type: "FOCUS_VIEW", target: "speaking" },
+      ];
+      if (deps.audioArmed) {
+        // Recording arms only with the speaking window; unarmed stays timer-only
+        // and no audio object is ever created.
+        commands.push({ type: "START_RECORDING", attemptId: state.attempt.attemptId });
+      }
       return {
         state: {
           name: "SPEAKING",
@@ -141,10 +192,7 @@ export function reduceSession(
           attempt: state.attempt,
           deadlineAt,
         },
-        commands: [
-          { type: "START_DEADLINE", deadlineAt },
-          { type: "FOCUS_VIEW", target: "speaking" },
-        ],
+        commands,
       };
     }
 
@@ -199,6 +247,13 @@ export function reduceSession(
         event.now,
         state.topic.timePolicy.speakingSeconds,
       );
+      const commands: Command[] = [
+        { type: "START_DEADLINE", deadlineAt },
+        { type: "FOCUS_VIEW", target: "speaking" },
+      ];
+      if (deps.audioArmed) {
+        commands.push({ type: "START_RECORDING", attemptId: state.attempt.attemptId });
+      }
       return {
         state: {
           name: "SPEAKING",
@@ -208,10 +263,7 @@ export function reduceSession(
           attempt: state.attempt,
           deadlineAt,
         },
-        commands: [
-          { type: "START_DEADLINE", deadlineAt },
-          { type: "FOCUS_VIEW", target: "speaking" },
-        ],
+        commands,
       };
     }
 
@@ -237,6 +289,13 @@ export function reduceSession(
           ],
         };
       }
+      const commands: Command[] = [
+        { type: "STOP_DEADLINE" },
+        { type: "FOCUS_VIEW", target: "complete" },
+      ];
+      if (deps.audioArmed) {
+        commands.push({ type: "STOP_RECORDING", attemptId: state.attempt.attemptId });
+      }
       return {
         state: {
           name: "ATTEMPT_COMPLETE",
@@ -244,7 +303,7 @@ export function reduceSession(
           topic: state.topic,
           attempt: state.attempt,
         },
-        commands: [{ type: "STOP_DEADLINE" }, { type: "FOCUS_VIEW", target: "complete" }],
+        commands,
       };
     }
 
@@ -266,6 +325,13 @@ export function reduceSession(
         };
       }
       if (state.name === "SPEAKING") {
+        const commands: Command[] = [
+          { type: "STOP_DEADLINE" },
+          { type: "FOCUS_VIEW", target: "complete" },
+        ];
+        if (deps.audioArmed) {
+          commands.push({ type: "STOP_RECORDING", attemptId: state.attempt.attemptId });
+        }
         return {
           state: {
             name: "ATTEMPT_COMPLETE",
@@ -273,10 +339,224 @@ export function reduceSession(
             topic: state.topic,
             attempt: state.attempt,
           },
-          commands: [{ type: "STOP_DEADLINE" }, { type: "FOCUS_VIEW", target: "complete" }],
+          commands,
         };
       }
       return noChange(state);
+    }
+
+    // --- v0.3 post-attempt extension events (brief §5) ---
+    // All keyed by attemptId: stale async results are dropped, never applied.
+
+    case "RECORDING_READY": {
+      if (state.name !== "ATTEMPT_COMPLETE" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          name: "PROCESSING",
+          selection: state.selection,
+          topic: state.topic,
+          attempt: state.attempt,
+          metrics: null,
+          draft: null,
+          transcription: "IDLE",
+        },
+        commands: [
+          { type: "RUN_ANALYSIS", attemptId: event.attemptId },
+          { type: "FOCUS_VIEW", target: "processing" },
+        ],
+      };
+    }
+
+    case "START_TYPED_REVIEW": {
+      // The typed/self-review path is always available, including when audio or
+      // transcription succeeded — the learner may simply prefer typing.
+      if (state.name === "ATTEMPT_COMPLETE" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            attempt: state.attempt,
+            metrics: null,
+            transcriptionIssue: null,
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "review" }],
+        };
+      }
+      if (state.name === "PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        const commands: Command[] = [];
+        if (state.transcription === "RUNNING") {
+          commands.push({ type: "CANCEL_TRANSCRIPTION", attemptId: event.attemptId });
+        }
+        commands.push({ type: "FOCUS_VIEW", target: "review" });
+        return {
+          state: {
+            name: "SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            transcriptionIssue: null,
+          },
+          commands,
+        };
+      }
+      if (state.name === "TRANSCRIPT_REVIEW" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            transcriptionIssue: null,
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "review" }],
+        };
+      }
+      return noChange(state);
+    }
+
+    case "METRICS_READY": {
+      if (state.name === "PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        // Audio-derived metrics are final at this point; editing a transcript
+        // later never changes them.
+        if (state.draft !== null) {
+          return {
+            state: {
+              name: "TRANSCRIPT_REVIEW",
+              selection: state.selection,
+              topic: state.topic,
+              attempt: state.attempt,
+              metrics: event.metrics,
+              draft: state.draft,
+            },
+            commands: [{ type: "FOCUS_VIEW", target: "review" }],
+          };
+        }
+        return { state: { ...state, metrics: event.metrics }, commands: [] };
+      }
+      if (state.name === "SELF_REVIEW" && state.attempt.attemptId === event.attemptId) {
+        // Analysis can land after a fast transcription failure moved the
+        // learner to self-review; adopt the metrics in place.
+        return { state: { ...state, metrics: event.metrics }, commands: [] };
+      }
+      return noChange(state);
+    }
+
+    case "TRANSCRIBE_REQUESTED": {
+      if (state.name === "PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        if (state.transcription === "RUNNING") return noChange(state);
+        return {
+          state: { ...state, transcription: "RUNNING" },
+          commands: [{ type: "START_TRANSCRIPTION", attemptId: event.attemptId }],
+        };
+      }
+      if (state.name === "SELF_REVIEW" && state.attempt.attemptId === event.attemptId) {
+        // Retry after a recoverable failure (e.g. model download was offline).
+        // Only reachable when the recording still exists — the UI hides the
+        // action otherwise.
+        return {
+          state: {
+            name: "PROCESSING",
+            selection: state.selection,
+            topic: state.topic,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            draft: null,
+            transcription: "RUNNING",
+          },
+          commands: [
+            { type: "START_TRANSCRIPTION", attemptId: event.attemptId },
+            { type: "FOCUS_VIEW", target: "processing" },
+          ],
+        };
+      }
+      return noChange(state);
+    }
+
+    case "TRANSCRIPT_READY": {
+      if (
+        state.name !== "PROCESSING" ||
+        state.attempt.attemptId !== event.attemptId ||
+        state.transcription !== "RUNNING"
+      ) {
+        return noChange(state);
+      }
+      if (state.metrics !== null) {
+        return {
+          state: {
+            name: "TRANSCRIPT_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            draft: event.draft,
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "review" }],
+        };
+      }
+      // Transcript beat the analysis; hold it until METRICS_READY.
+      return {
+        state: { ...state, draft: event.draft, transcription: "IDLE" },
+        commands: [],
+      };
+    }
+
+    case "TRANSCRIPTION_UNAVAILABLE": {
+      if (state.name !== "PROCESSING" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      // A first-class outcome, not an error: continue with self/typed review.
+      return {
+        state: {
+          name: "SELF_REVIEW",
+          selection: state.selection,
+          topic: state.topic,
+          attempt: state.attempt,
+          metrics: state.metrics,
+          transcriptionIssue: event.reason,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "review" }],
+      };
+    }
+
+    case "TRANSCRIPT_APPROVED": {
+      if (state.name !== "TRANSCRIPT_REVIEW" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          name: "REVIEW",
+          selection: state.selection,
+          topic: state.topic,
+          attempt: state.attempt,
+          metrics: state.metrics,
+          textMetrics: event.textMetrics,
+          transcript: event.transcript,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "review" }],
+      };
+    }
+
+    case "SELF_REVIEW_DONE": {
+      if (state.name !== "SELF_REVIEW" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          name: "REVIEW",
+          selection: state.selection,
+          topic: state.topic,
+          attempt: state.attempt,
+          metrics: state.metrics,
+          textMetrics: event.textMetrics,
+          transcript: event.transcript,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "review" }],
+      };
     }
 
     default:

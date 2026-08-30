@@ -14,6 +14,8 @@ export default tseslint.config(
       "coverage",
       "e2e",
       "content",
+      // Generated pinned ORT wasm runtime copy (see scripts/copy-model-runtime.mjs).
+      "public/models",
     ],
   },
   js.configs.recommended,

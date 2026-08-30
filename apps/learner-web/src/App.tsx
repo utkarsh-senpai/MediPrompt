@@ -15,9 +15,21 @@ import {
   DEFAULT_SETTINGS,
 } from "@/practice/types";
 import { remainingMs } from "@/practice/deadlineTimer";
-import { usePracticeSession } from "@/practice/usePracticeSession";
+import {
+  usePracticeSession,
+  type AudioDeps,
+  type AudioUiState,
+} from "@/practice/usePracticeSession";
 import { loadBundledPack } from "@/content/packLoader";
-import { detectCapabilities, type Capabilities } from "@/app/capabilities";
+import {
+  detectCapabilities,
+  speechFeedbackAvailable,
+  type Capabilities,
+} from "@/app/capabilities";
+import { audioIssueCopy } from "@/app/audioCopy";
+import { AttemptRecorder } from "@/audio/recorder";
+import { createWebAudioDecoder } from "@/audio/pcmDecode";
+import { createDefaultTranscriptionClient } from "@/speech/transcriptionClient";
 import { systemMonotonicClock, systemWallClock } from "@/platform/clock";
 import { CryptoRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
@@ -25,13 +37,68 @@ import { LocalStorageSettingsStore } from "@/platform/settingsStore";
 import { PracticeSurface } from "@/components/PracticeSurface";
 import { CountdownRing } from "@/components/CountdownRing";
 import { SettingsDialog } from "@/components/SettingsDialog";
+import { MicPrimer } from "@/components/MicPrimer";
+import { RecordingIndicator } from "@/components/RecordingIndicator";
+import { ProcessingView } from "@/components/ProcessingView";
+import { TranscriptEditor } from "@/components/TranscriptEditor";
+import { SelfReview } from "@/components/SelfReview";
+import { AttemptReview } from "@/components/AttemptReview";
 
 interface PracticeAppProps {
   pack: RuntimePack;
   settings: UserSettings;
   settingsStore: SettingsStore;
+  caps: Capabilities;
   onSettingsChange: (next: UserSettings) => void;
   onFocusModeChange: (active: boolean) => void;
+}
+
+/** Mic opt-in affordance on topic screens; every status is explicit UI, never silent. */
+function MicOptIn({
+  audio,
+  onBegin,
+  onConfirm,
+  onDecline,
+}: {
+  audio: AudioUiState;
+  onBegin: () => void;
+  onConfirm: () => void;
+  onDecline: () => void;
+}) {
+  if (!audio.available) return null;
+  switch (audio.status) {
+    case "OFF":
+      return (
+        <div className="toolbar">
+          <button type="button" onClick={onBegin}>
+            Enable microphone feedback (optional)
+          </button>
+        </div>
+      );
+    case "PRIMER":
+      return <MicPrimer onConfirm={onConfirm} onDecline={onDecline} />;
+    case "ARMING":
+      return (
+        <p className="status" role="status">
+          Requesting microphone permission…
+        </p>
+      );
+    case "ARMED":
+      return (
+        <p className="status">
+          Microphone on for this session — recording and transcription stay on this
+          device.
+        </p>
+      );
+    case "UNAVAILABLE":
+      return (
+        <p className="status" role="status">
+          {audio.issue
+            ? audioIssueCopy(audio.issue)
+            : "Microphone feedback is unavailable on this device. The timer and self-review work exactly the same."}
+        </p>
+      );
+  }
 }
 
 function useMilestones(remainingMsValue: number | null): string {
@@ -101,6 +168,7 @@ function PracticeApp({
   pack,
   settings,
   settingsStore,
+  caps,
   onSettingsChange,
   onFocusModeChange,
 }: PracticeAppProps) {
@@ -109,6 +177,25 @@ function PracticeApp({
   const random = useMemo(() => new CryptoRandom(), []);
   const bagStore = useMemo(() => new InMemoryBagStore(), []);
 
+  // v0.3 speech feedback: constructed once, only where every required platform
+  // piece exists. The worker spawns lazily on explicit learner activation.
+  const audioDeps = useMemo<AudioDeps | undefined>(() => {
+    if (!speechFeedbackAvailable(caps)) return undefined;
+    return {
+      recorder: new AttemptRecorder({
+        getUserMedia: (constraints) => navigator.mediaDevices.getUserMedia(constraints),
+        createMediaRecorder: (stream, mimeType) =>
+          new MediaRecorder(stream, { mimeType }),
+        isTypeSupported: (mimeType) => MediaRecorder.isTypeSupported(mimeType),
+        createObjectUrl: (blob) => URL.createObjectURL(blob),
+        revokeObjectUrl: (url) => URL.revokeObjectURL(url),
+        now: () => monotonic.now(),
+      }),
+      decoder: createWebAudioDecoder(() => new AudioContext()),
+      transcription: createDefaultTranscriptionClient(),
+    };
+  }, [caps, monotonic]);
+
   const session = usePracticeSession({
     pack,
     settings,
@@ -116,6 +203,7 @@ function PracticeApp({
     wall,
     random,
     bagStore,
+    audio: audioDeps,
   });
 
   const { state, now, subjects, presets, challengeVisible, eligibleCount, actions } =
@@ -157,31 +245,47 @@ function PracticeApp({
       ) : null}
 
       {s.name === "TOPIC_READY" ? (
-        <TopicCard topic={s.topic} headingId="topic-heading">
-          {s.selection.mode === "DEEP_RESEARCH" ? (
-            <button type="button" onClick={actions.startResearch}>
-              Begin research
+        <>
+          <TopicCard topic={s.topic} headingId="topic-heading">
+            {s.selection.mode === "DEEP_RESEARCH" ? (
+              <button type="button" onClick={actions.startResearch}>
+                Begin research
+              </button>
+            ) : (
+              <button type="button" onClick={actions.startTimer}>
+                Start timer
+              </button>
+            )}
+            <button type="button" onClick={actions.spinAgain}>
+              Spin again
             </button>
-          ) : (
-            <button type="button" onClick={actions.startTimer}>
-              Start timer
-            </button>
-          )}
-          <button type="button" onClick={actions.spinAgain}>
-            Spin again
-          </button>
-        </TopicCard>
+          </TopicCard>
+          <MicOptIn
+            audio={session.audio}
+            onBegin={actions.beginAudioOptIn}
+            onConfirm={actions.confirmAudioOptIn}
+            onDecline={actions.cancelAudioOptIn}
+          />
+        </>
       ) : null}
 
       {s.name === "READY_TO_SPEAK" ? (
-        <TopicCard topic={s.topic} headingId="topic-heading">
-          <button type="button" onClick={actions.confirmReady}>
-            Start speaking
-          </button>
-          <button type="button" onClick={actions.spinAgain}>
-            Spin again
-          </button>
-        </TopicCard>
+        <>
+          <TopicCard topic={s.topic} headingId="topic-heading">
+            <button type="button" onClick={actions.confirmReady}>
+              Start speaking
+            </button>
+            <button type="button" onClick={actions.spinAgain}>
+              Spin again
+            </button>
+          </TopicCard>
+          <MicOptIn
+            audio={session.audio}
+            onBegin={actions.beginAudioOptIn}
+            onConfirm={actions.confirmAudioOptIn}
+            onDecline={actions.cancelAudioOptIn}
+          />
+        </>
       ) : null}
 
       {s.name === "RESEARCHING" ? (
@@ -217,6 +321,7 @@ function PracticeApp({
             totalMs={totalMs}
             caption="Speaking time left"
           />
+          {session.audio.armed ? <RecordingIndicator /> : null}
           <ol className="arc" aria-label="Answer arc">
             {s.topic.answerArc.map((step) => (
               <li key={step.id}>{step.label}</li>
@@ -238,12 +343,66 @@ function PracticeApp({
           <p className="status">
             You finished a timed attempt on {s.topic.title}. Spin again to keep practicing.
           </p>
+          {session.audio.issue ? (
+            <p className="status" role="status">
+              {audioIssueCopy(session.audio.issue)}
+            </p>
+          ) : null}
+          {session.audio.armed && !session.audio.issue ? (
+            <p className="status" role="status">
+              Finalizing your recording…
+            </p>
+          ) : null}
           <div className="toolbar">
+            <button type="button" onClick={actions.startTypedReview}>
+              Review this attempt
+            </button>
             <button type="button" onClick={actions.spinAgain}>
               Spin again
             </button>
           </div>
         </section>
+      ) : null}
+
+      {s.name === "PROCESSING" ? (
+        <ProcessingView
+          topic={s.topic}
+          metrics={s.metrics}
+          transcription={s.transcription}
+          audio={session.audio}
+          onTranscribe={actions.requestTranscription}
+          onDecline={actions.declineTranscription}
+          onCancel={actions.startTypedReview}
+        />
+      ) : null}
+
+      {s.name === "TRANSCRIPT_REVIEW" ? (
+        <TranscriptEditor
+          draft={s.draft}
+          onApprove={actions.approveTranscript}
+          onTypeInstead={actions.startTypedReview}
+        />
+      ) : null}
+
+      {s.name === "SELF_REVIEW" ? (
+        <SelfReview
+          metrics={s.metrics}
+          transcriptionIssue={s.transcriptionIssue}
+          audio={session.audio}
+          onSubmit={actions.submitSelfReview}
+          onRetryTranscription={actions.requestTranscription}
+        />
+      ) : null}
+
+      {s.name === "REVIEW" ? (
+        <AttemptReview
+          topic={s.topic}
+          metrics={s.metrics}
+          textMetrics={s.textMetrics}
+          transcript={s.transcript}
+          audio={session.audio}
+          onSpinAgain={actions.spinAgain}
+        />
       ) : null}
 
       <p className="status" aria-live="polite">
@@ -357,8 +516,8 @@ export function App() {
       <header className={focusMode ? "sr-only" : "app-intro"}>
         <h1>MediPrompt</h1>
         <p className="status">
-          Practice mode + challenge + subject → Spin → timed speech. No account, no
-          recording, no model download.
+          Practice mode + challenge + subject → Spin → timed speech. No account. Optional
+          mic feedback and on-device transcription — audio never leaves this device.
         </p>
       </header>
 
@@ -393,6 +552,7 @@ export function App() {
           pack={pack}
           settings={settings}
           settingsStore={settingsStore}
+          caps={caps}
           onSettingsChange={setSettings}
           onFocusModeChange={handleFocusModeChange}
         />
@@ -400,7 +560,8 @@ export function App() {
 
       {!focusMode ? (
         <p className="status" aria-label="capabilities">
-          Microphone: {caps.microphone ? "available" : "unavailable"} · Storage:{" "}
+          Microphone: {caps.microphone ? "available" : "unavailable"} · Speech feedback:{" "}
+          {speechFeedbackAvailable(caps) ? "available" : "unsupported"} · Storage:{" "}
           {caps.storage ? "available" : "unavailable"} · Online:{" "}
           {caps.online ? "yes" : "no"}
         </p>

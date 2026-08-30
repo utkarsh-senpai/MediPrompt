@@ -38,6 +38,35 @@ function setMatchMedia(reduceMotion = false): void {
   });
 }
 
+function fakeStream(): unknown {
+  return { getTracks: () => [{ stop: () => {} }] };
+}
+
+function stubSpeechCaps(getUserMedia: () => Promise<unknown>): void {
+  vi.stubGlobal(
+    "MediaRecorder",
+    class {
+      static isTypeSupported(): boolean {
+        return true;
+      }
+    },
+  );
+  vi.stubGlobal("AudioContext", class {});
+  vi.stubGlobal(
+    "Worker",
+    class {
+      postMessage(): void {}
+      terminate(): void {}
+      addEventListener(): void {}
+      removeEventListener(): void {}
+    },
+  );
+  Object.defineProperty(navigator, "mediaDevices", {
+    configurable: true,
+    value: { getUserMedia },
+  });
+}
+
 describe("App accessibility + capability + security", () => {
   beforeEach(() => {
     setMatchMedia(false);
@@ -46,6 +75,8 @@ describe("App accessibility + capability + security", () => {
   afterEach(() => {
     cleanup();
     vi.unstubAllGlobals();
+    // defineProperty stubs are not restored by vi.unstubAllGlobals.
+    delete (navigator as { mediaDevices?: unknown }).mediaDevices;
   });
 
   it("renders a single main landmark, a single page heading, and an aria-live region", async () => {
@@ -134,6 +165,52 @@ describe("App accessibility + capability + security", () => {
     expect(screen.queryByRole("group", { name: "Practice mode" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("capabilities")).not.toBeInTheDocument();
     expect(screen.getByText(promptText!)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
+  });
+
+  it("offers mic opt-in after a spin; the primer is keyboard operable and dismissible", async () => {
+    stubSpeechCaps(() => Promise.resolve(fakeStream()));
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
+    // No opt-in affordance before a topic exists.
+    expect(screen.queryByRole("button", { name: /Enable microphone feedback/i })).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
+    const enable = await screen.findByRole("button", { name: /Enable microphone feedback/i });
+    enable.focus();
+    expect(enable).toHaveFocus();
+    await user.keyboard("{Enter}");
+
+    // The primer explains before the browser prompt; privacy guarantee is explicit.
+    expect(screen.getByRole("heading", { name: "Enable microphone feedback?" })).toBeInTheDocument();
+    expect(
+      screen.getByText(/never leaves this device/i, { selector: "strong" }),
+    ).toBeInTheDocument();
+
+    // "Not now" returns to the pre-opt-in state with no permission request.
+    await user.click(screen.getByRole("button", { name: "Not now" }));
+    expect(screen.queryByRole("heading", { name: "Enable microphone feedback?" })).toBeNull();
+    expect(screen.getByRole("button", { name: /Enable microphone feedback/i })).toBeInTheDocument();
+  });
+
+  it("announces mic permission denial and keeps the timer path intact", async () => {
+    stubSpeechCaps(() =>
+      Promise.reject(new DOMException("denied", "NotAllowedError")),
+    );
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
+    await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
+    await user.click(await screen.findByRole("button", { name: /Enable microphone feedback/i }));
+    await user.click(screen.getByRole("button", { name: "Allow microphone" }));
+
+    await waitFor(() =>
+      expect(screen.getByText(/Microphone access was denied/i)).toBeInTheDocument(),
+    );
+    // The core loop is unaffected: the timer still starts without a mic.
+    await user.click(screen.getByRole("button", { name: "Start timer" }));
+    expect(screen.queryByRole("group", { name: "Practice mode" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
   });
 

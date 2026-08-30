@@ -1,21 +1,29 @@
 /// <reference lib="webworker" />
 
-// MediPrompt service worker (v0.2). Only fixed, build-manifest assets are cached.
+// MediPrompt service worker. Only fixed, build-manifest assets are precached;
+// the v0.3 speech runtime (models/ort/*) is runtime-cached on first explicit
+// activation so transcription works fully offline afterwards.
 // Bump CACHE_FORMAT whenever cache semantics change independently of an asset build.
+// Cache cleanup owns only the "mediprompt-" prefix: the transformers.js browser
+// cache ("transformers-cache", the downloaded model weights) is never touched.
 
 declare const self: ServiceWorkerGlobalScope & {
   __WB_MANIFEST?: { url: string; revision?: string | null }[];
 };
 
 const APP_PREFIX = "mediprompt-";
-const CACHE_FORMAT = "2";
+const CACHE_FORMAT = "3";
 const PACK_PATH = "packs/demo-interaction-fixture.json";
+const ORT_RUNTIME_PREFIX = "models/ort/";
 const MAX_RESPONSE_BYTES = 2 * 1024 * 1024;
 const MAX_PACK_BYTES = 512 * 1024;
+// The pinned ORT wasm runtime (~21 MB) plus its JS loader; sized with headroom.
+const MAX_RUNTIME_BYTES = 32 * 1024 * 1024;
 
 const scopeUrl = new URL(self.registration.scope);
 const indexUrl = new URL("index.html", scopeUrl).href;
 const packUrl = new URL(PACK_PATH, scopeUrl).href;
+const ortRuntimePrefixUrl = new URL(ORT_RUNTIME_PREFIX, scopeUrl);
 const injectedManifest = self.__WB_MANIFEST ?? [];
 
 function shortHash(value: string): string {
@@ -31,7 +39,7 @@ const manifestIdentity = injectedManifest
   .map((entry) => `${entry.url}:${entry.revision ?? "hashed"}`)
   .sort()
   .join("|");
-const CACHE_NAME = `${APP_PREFIX}v0.2-${CACHE_FORMAT}-${shortHash(manifestIdentity)}`;
+const CACHE_NAME = `${APP_PREFIX}v0.3-${CACHE_FORMAT}-${shortHash(manifestIdentity)}`;
 
 const precacheUrls = new Set(
   [...injectedManifest.map((entry) => new URL(entry.url, scopeUrl).href), indexUrl, packUrl],
@@ -60,7 +68,7 @@ function declaredLength(response: Response): number | null {
 async function isSafeResponse(
   response: Response,
   expectedUrl: string,
-  kind: "asset" | "html" | "pack",
+  kind: "asset" | "html" | "pack" | "runtime",
 ): Promise<boolean> {
   if (
     response.status !== 200 ||
@@ -74,7 +82,12 @@ async function isSafeResponse(
   if (kind !== "html" && finalUrl.href !== expectedUrl) return false;
 
   const length = declaredLength(response);
-  const limit = kind === "pack" ? MAX_PACK_BYTES : MAX_RESPONSE_BYTES;
+  const limit =
+    kind === "pack"
+      ? MAX_PACK_BYTES
+      : kind === "runtime"
+        ? MAX_RUNTIME_BYTES
+        : MAX_RESPONSE_BYTES;
   if (length !== null && length > limit) return false;
 
   if (kind === "html") {
@@ -160,6 +173,12 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(cacheFirst(request, packUrl, "pack"));
     return;
   }
+  // v0.3 speech runtime: cached only when first requested (explicit activation),
+  // cache-first afterwards so transcription works fully offline.
+  if (url.pathname.startsWith(ortRuntimePrefixUrl.pathname)) {
+    event.respondWith(cacheFirst(request, url.href, "runtime"));
+    return;
+  }
   if (precacheUrls.has(url.href)) {
     event.respondWith(cacheFirst(request, url.href, "asset"));
   }
@@ -186,7 +205,7 @@ async function networkFirstNavigation(request: Request): Promise<Response> {
 async function cacheFirst(
   request: Request,
   cacheKey: string,
-  kind: "asset" | "pack",
+  kind: "asset" | "pack" | "runtime",
 ): Promise<Response> {
   const cache = await currentCache();
   const cached = await cache.match(cacheKey);

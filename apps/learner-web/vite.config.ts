@@ -18,6 +18,24 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    {
+      name: "strip-duplicate-ort-wasm",
+      apply: "build",
+      enforce: "post",
+      generateBundle(_, bundle) {
+        // @huggingface/transformers references the ORT wasm via a bundled URL,
+        // so Rollup emits a hashed copy into assets/. We override
+        // env.backends.onnx.wasm.wasmPaths to models/ort/ (copied from
+        // node_modules by copy:model-runtime) before any pipeline is created,
+        // so the bundled copy is never fetched — drop it to avoid shipping
+        // the same 21 MB twice.
+        for (const [name, chunk] of Object.entries(bundle)) {
+          if (chunk.type === "asset" && /ort-wasm.*\.wasm$/.test(name)) {
+            delete bundle[name];
+          }
+        }
+      },
+    },
     VitePWA({
       // Custom service worker: same-origin GET only, atomic install, owned-cache cleanup.
       strategies: "injectManifest",
@@ -55,5 +73,10 @@ export default defineConfig({
   build: {
     target: "es2022",
     sourcemap: false,
+  },
+  worker: {
+    // The transcription worker is created with { type: "module" } and must ship
+    // as an ES module; same-origin output keeps worker-src 'self' intact.
+    format: "es",
   },
 });

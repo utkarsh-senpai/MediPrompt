@@ -9,13 +9,14 @@
   },
   "scripts": {
     "dev": "vite",
-    "predev": "pnpm copy:packs",
+    "predev": "pnpm copy:packs && pnpm copy:model-runtime",
     "schema:generate": "node scripts/generate-schema-validator.mjs",
     "schema:check": "node scripts/generate-schema-validator.mjs --check",
     "candidate:generate": "tsx scripts/generate-medical-candidate.ts",
     "candidate:check": "tsx scripts/generate-medical-candidate.ts --check",
     "copy:packs": "node scripts/copy-packs.mjs",
-    "build": "pnpm content:validate && pnpm copy:packs && tsc -b && vite build && pnpm build:validate",
+    "copy:model-runtime": "node scripts/copy-model-runtime.mjs",
+    "build": "pnpm content:validate && pnpm copy:packs && pnpm copy:model-runtime && tsc -b && vite build && pnpm build:validate",
     "build:validate": "node scripts/validate-build.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -26,13 +27,13 @@
     "content:validate": "pnpm schema:check && pnpm candidate:check && tsx scripts/validate-content.ts"
   },
   "dependencies": {
+    "@huggingface/transformers": "3.7.6",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "ajv": "8.20.0",
-    "@playwright/test": "1.62.1",
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.1",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
     "@testing-library/user-event": "14.5.2",
@@ -40,6 +41,7 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.7.0",
+    "ajv": "8.20.0",
     "eslint": "10.9.1",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.5",

@@ -11,13 +11,20 @@
     <!--
       Content Security Policy. GitHub Pages cannot add response headers, so the
       meta tag is the enforcement point. Scripts/styles are external and same-origin
-      only; no inline script, no remote CDN, no analytics, no third-party frames.
+      only; no inline script, no remote CDN code, no analytics, no third-party frames.
+      v0.3 additions (docs/V0.3_DEVELOPMENT_CONTEXT.md §13, explicit decisions):
+      - 'wasm-unsafe-eval' (scoped to WebAssembly only): the on-device whisper
+        runtime compiles WebAssembly; JS eval remains forbidden.
+      - connect-src huggingface.co hosts: inbound-only, one-time model download on
+        explicit learner activation. No audio or transcript ever leaves the device.
+      - media-src blob: in-app playback of the session-local recording object URL.
+      worker-src stays 'self': the transcription worker is a bundled same-origin
+      module; the ORT runtime runs single-threaded so no blob: pthread workers spawn.
       The manifest link and theme-color are injected by vite-plugin-pwa at build.
-      See docs/V0.2_DEVELOPMENT_CONTEXT.md §12.
     -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://huggingface.co https://*.huggingface.co https://*.hf.co https://*.xethub.hf.co; worker-src 'self'; media-src blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
     />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <title>MediPrompt</title>

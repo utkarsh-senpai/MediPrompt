@@ -14,12 +14,18 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.2 — First playable** (current reviewed baseline)
+**v0.3 — Private speech intelligence** (current)
 
-The runnable learner application lives in `apps/learner-web/`. It delivers the compact
-mode/challenge/subject → Spin → timed-speech loop with no account, microphone, model download,
-backend, or persistent storage requirement. Speech intelligence, feedback, scheduling, and the
-connected platform remain progressive enhancements for later versions.
+The runnable learner application lives in `apps/learner-web/`. On top of the compact
+mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
+storage), v0.3 adds optional on-device speech feedback: a plain-language mic primer,
+session-local recording during the speaking window, in-app playback, Web Audio delivery
+observations (time speaking, pauses, clipping, loudness variation), and — on explicit request —
+pinned whisper-base.en transcription that downloads once and runs entirely in the browser.
+Audio and transcripts never leave the device, and the timer-only loop is unchanged when the
+mic is unsupported or declined. Decision resolutions are recorded in
+[docs/V0.3_DEVELOPMENT_CONTEXT.md](docs/V0.3_DEVELOPMENT_CONTEXT.md) §16. Scheduling, feedback
+quality scoring, and the connected platform remain progressive enhancements for later versions.
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -53,6 +59,7 @@ artifact while educator attestation is absent. See the
 | [Implementation handoff](docs/IMPLEMENTATION_HANDOFF.md) | Minimum-context entry point for the next agent or contributor |
 | [Project memory](docs/PROJECT_MEMORY.md) | Current decisions, evidence, risks, and next-version pickup |
 | [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
+| [v0.3 development context](docs/V0.3_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for private speech intelligence |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator attestation |
 
 ## Basic product contract

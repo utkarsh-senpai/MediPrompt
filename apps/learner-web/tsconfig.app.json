@@ -12,5 +12,5 @@
     }
   },
   "include": ["src"],
-  "exclude": ["src/sw"]
+  "exclude": ["src/sw", "src/speech/transcribe.worker.ts"]
 }
