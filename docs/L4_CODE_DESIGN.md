@@ -1,6 +1,6 @@
 # L4 — Code design
 
-**Status:** Proposed for v0.1 review
+**Status:** Accepted v0.1 baseline
 **Scope:** Repository layout, contracts, algorithms, schemas, tests, and acceptance mapping
 **Audience:** Implementers and code reviewers
 
@@ -24,6 +24,7 @@ MediPrompt/
 │       │   ├── feedback/            # deterministic review/prescription
 │       │   ├── scheduling/          # due queue and local-date rules
 │       │   ├── content/             # runtime schema and pack repository
+│       │   ├── settings/            # localStorage preferences + memory fallback
 │       │   ├── persistence/         # IndexedDB, migrations, export/delete
 │       │   └── test/                # shared fixtures and test helpers
 │       └── e2e/
@@ -72,6 +73,18 @@ interface TimePolicy {
 interface SpeechArcStep {
   id: string;
   label: string;
+}
+
+interface UserSettings {
+  schemaVersion: 1;
+  speakingSeconds: number;
+  researchSeconds: number;
+}
+
+interface SettingsStore {
+  load(): UserSettings;
+  save(settings: UserSettings): void;
+  clear(): void;
 }
 
 interface PracticeSession {
@@ -140,6 +153,11 @@ interface Prescription {
 
 Scores are internal numeric evidence, not a learner grade. Persisted records include algorithm,
 pack, threshold, and model versions needed to reproduce a result.
+
+`LocalStorageSettingsStore` owns one namespaced, schema-validated JSON value and falls back to an
+in-memory default store when browser storage is unavailable or throws. It contains no transcript,
+audio, attempt, account, or medical-learning data. `clear()` participates in the user-facing
+delete-all workflow.
 
 ## 3. Session reducer
 

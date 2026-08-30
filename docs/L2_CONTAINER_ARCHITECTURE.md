@@ -1,6 +1,6 @@
 # L2 — Container architecture
 
-**Status:** Proposed for v0.1 review
+**Status:** Accepted v0.1 baseline
 **Scope:** Runtime containers, deployment, trust boundaries, and technology choices
 **Audience:** Engineers, security reviewers, content maintainers, and operators
 
@@ -41,10 +41,12 @@ flowchart TB
         SW[Service worker and cache]
         Workers[STT and embedding workers]
         DB[(IndexedDB)]
+        Settings[(localStorage settings)]
         Audio[MediaRecorder and Web Audio]
         PWA <--> SW
         PWA <--> Workers
         PWA <--> DB
+        PWA <--> Settings
         Audio --> PWA
     end
 
