@@ -26,13 +26,16 @@ contain a runnable learner application. The first playable is planned for v0.2.
 | [L2 design](docs/L2_CONTAINER_ARCHITECTURE.md) | Containers, deployment, trust boundaries, and technology choices |
 | [L3 design](docs/L3_COMPONENT_DESIGN.md) | Components, state, storage, content packs, and service boundaries |
 | [L4 design](docs/L4_CODE_DESIGN.md) | Repository layout, interfaces, algorithms, contracts, and tests |
+| [Difficulty and depth](docs/DIFFICULTY_AND_DEPTH_DESIGN.md) | Guided, Applied, and Viva authoring/behavior contracts |
+| [Implementation handoff](docs/IMPLEMENTATION_HANDOFF.md) | Minimum-context entry point for the next agent or contributor |
 
 ## Basic product contract
 
 The first playable must work without an account, microphone, model, transcript, or backend:
 
 1. Choose **Recall Sprint** or **Deep Research**.
-2. Choose a medical subject.
+2. Choose an available challenge (**Easy - Guided**, **Medium - Applied**, or **Hard - Viva**) and
+   medical subject. Challenge is hidden when the selected pack has only one reviewed level.
 3. Press **Spin** to draw a topic; the timer action stays disabled until a topic is drawn.
 4. In Recall Sprint, press **Start timer**. In Deep Research, run or finish the research timer,
    confirm **Ready to speak**, then enter the same speaking view.
@@ -72,6 +75,11 @@ recording, transcription, evaluation, storage, or the network is unavailable.
 - **Deep Research:** a configurable research timer, an explicit ready-to-speak handoff, then the
   same timed answer.
 - **Teach-back:** explain the same topic to an examiner, junior student, or patient.
+
+Practice mode defines the activity. A separate challenge preset defines reasoning depth: Guided
+retrieval, Applied case reasoning, or Viva defense under uncertainty. Register, visible support,
+and accessibility time remain independent. See the
+[difficulty and depth design](docs/DIFFICULTY_AND_DEPTH_DESIGN.md).
 
 ## What feedback means
 

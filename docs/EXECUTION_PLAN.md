@@ -72,7 +72,8 @@ into `develop`, so it inherits the reviewed decisions and implementation.
 ### v0.1 — Design foundation (current)
 
 **Branch:** `feature/v0.1-design-foundation`
-**Deliverables:** README, execution plan, L1–L4 design.
+**Deliverables:** README, execution plan, L1–L4 design, difficulty/depth contract, and
+minimum-context implementation handoff.
 **Exit gate:** owner approves problem framing, version boundaries, local-first architecture,
 content model, safety constraints, and code-level contracts.
 
@@ -84,8 +85,8 @@ No learner code is included. Design review changes stay on this branch until app
 
 Deliver a static TypeScript PWA with:
 
-- A one-screen practice surface with mode switch, medical-subject selector, topic stage, and quiet
-  settings access.
+- A one-screen practice surface with mode switch, challenge selector when reviewed variants exist,
+  medical-subject selector, topic stage, and quiet settings access.
 - Recall Sprint and Deep Research mode choices with concise descriptions; Deep Research uses a
   configurable research duration.
 - A **Spin** action and non-repeating random topic draw, including a visible drawing state and
@@ -99,13 +100,16 @@ Deliver a static TypeScript PWA with:
 - A distraction-free speaking view containing the topic, a three-step medical answer arc, large
   circular countdown, current instruction, and close/end action.
 - A return path to spin again when the timer completes or is closed.
-- One hand-authored demonstration topic pack with at least 20 topics.
+- One hand-authored demonstration topic pack with at least 20 Guided topics and at least three
+  complete Guided/Applied/Viva prompt trios. Applied/Viva examples require educator-reviewed
+  fictional cases and distinct rubrics; challenge remains hidden when only Guided is available.
 - Speaking and Deep Research timers that survive background/foreground transitions.
 - No account and no model download.
 - Responsive layout, keyboard navigation, reduced motion, and basic offline application shell.
 
-**Exit gate:** a first-time phone user can infer the mode/subject → Spin → Start timer flow, reaches
-a topic in under five seconds, and completes or exits a timed attempt without instructions. The
+**Exit gate:** a first-time phone user can infer the mode/challenge/subject → Spin → Start timer
+flow, reaches a topic in under five seconds, and completes or exits a timed attempt without
+instructions. Challenge, mode, register, support, and accessibility time remain independent. The
 basic tool still works with microphone, storage, model, and network capabilities disabled. Unit,
 component, accessibility smoke, and mobile viewport tests pass.
 
@@ -143,13 +147,14 @@ Add:
 - Rubric concept and synonym matching with visible evidence.
 - Coverage feedback explicitly labelled as coverage, not correctness.
 - One deterministic improvement prescription.
-- Second attempt against the same prompt.
+- Second attempt against the same prompt variant and difficulty profile.
 - Refinement Delta and a sentence/rubric evidence view.
 - “Not verifiable from this rubric” outcome.
 
 **Exit gate:** golden transcript fixtures produce stable matches; false-positive/false-negative
 review is documented; every feedback statement traces to an input metric or rubric item; second
-attempt comparison works offline.
+attempt comparison works offline and rejects mismatched variant, difficulty, register, support,
+rubric, or time identities.
 
 ### v0.5 — Viva and retention
 
@@ -157,7 +162,9 @@ attempt comparison works offline.
 
 Add:
 
-- Viva Round with reviewed Recall → Explain → Apply → Differentiate → Defend questions.
+- Viva Round with reviewed progressive questions and evidence updates for reasoning under
+  uncertainty.
+- Per-topic, learner-controlled challenge suggestions with visible no-penalty scaffolding.
 - Examiner, junior, and patient teach-back register.
 - Exam date and daily queue.
 - Simple deterministic 1/3/7/14-day scheduling adjusted by learner self-rating and coverage.
@@ -173,7 +180,7 @@ all progress can be exported/deleted; three packs pass schema, source, and conte
 
 Add a Java 21/Spring Boot command-line content compiler:
 
-- PDFBox extraction for syllabus/topic-name candidates.
+- PDFBox extraction for syllabus candidate labels and source coordinates.
 - Preservation of program, year, track, paper, module, exact competency-code candidates, and
   one-based PDF page locators through normalization.
 - Duplicate normalization, hierarchy suggestions, primary-domain/context classification
@@ -184,6 +191,8 @@ Add a Java 21/Spring Boot command-line content compiler:
 - JSON Schema validation and deterministic YAML → runtime JSON compilation.
 - Content provenance manifest and pack-version checks.
 - CI validation of every topic pack.
+- Difficulty-vector validation, blueprint/preset coverage reporting, and rejection of timer-only
+  fake escalation; the compiler never generates cases, prompts, rubrics, or safety ground truth.
 
 **Exit gate:** the supplied exam PDF can produce a reviewable draft without copying source prose;
 golden PDF fixtures are reproducible; every educator-reviewed candidate has an exact competency

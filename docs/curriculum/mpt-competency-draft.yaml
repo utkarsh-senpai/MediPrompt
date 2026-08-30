@@ -44,6 +44,11 @@ taxonomies:
     - explain-procedure
     - defend-evidence
     - teach-back
+  challengePresets:
+    - GUIDED
+    - APPLIED
+    - VIVA
+  challengePolicy: "Challenge variants require educator-authored prompts and rubrics; curriculum extraction never generates them."
   lifecycle:
     - candidate
     - normalized

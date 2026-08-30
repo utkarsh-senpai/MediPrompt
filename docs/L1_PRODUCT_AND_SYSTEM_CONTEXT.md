@@ -144,7 +144,8 @@ medical reviewer.
 ### UJ1 — First practice in under five seconds
 
 1. Learner opens the PWA.
-2. Recall Sprint and a default medical subject are already selected and can be changed.
+2. Recall Sprint, Guided challenge, and a default medical subject are already selected and can be
+   changed when reviewed alternatives exist.
 3. The topic stage is ready, and **Start timer** is disabled.
 4. Learner presses **Spin** and sees a brief drawing state followed by one medical topic.
 5. **Spin again** and **Start timer** become available.
@@ -191,8 +192,8 @@ pack are loaded.
 ### UJ6 — Build a syllabus pack
 
 1. Owner runs the local Java content compiler against an authorized PDF.
-2. Tool extracts candidate topic names, drops source ordering, normalizes duplicates, and proposes
-   a hierarchy.
+2. Tool extracts candidate labels, preserves page/curriculum coordinates, normalizes duplicates,
+   and proposes hierarchy and challenge classifications without generating medical ground truth.
 3. Human reviews the draft and writes original rubrics, synonyms, common errors, and sources.
 4. Validator produces runtime JSON and a provenance manifest.
 5. Pull request receives automated and medical-content review.
@@ -260,6 +261,22 @@ learner with every possible metric. It should select feedback that can change th
 - Junior: structured explanation with mechanisms and definitions.
 - Patient: plain language, empathy, and avoidance of jargon.
 - Each register uses a separately reviewed rubric; rewriting vocabulary alone is insufficient.
+
+### Challenge presets
+
+Challenge is independent from practice mode and register:
+
+- **Easy - Guided (`GUIDED`):** retrieve and organize core ideas with a visible answer arc.
+- **Medium - Applied (`APPLIED`):** connect findings, interpretation, and action in a bounded
+  fictional case.
+- **Hard - Viva (`VIVA`):** prioritize and defend a plan in an incomplete or evolving fictional
+  case, including alternatives, uncertainty, and safety-net reasoning.
+
+Hardness comes from reasoning depth, integration, ambiguity, prioritization, and transfer. It does
+not come from obscure trivia, inaccessible time pressure, harsher scoring, or a stressful visual
+design. Support and additional-time settings do not lower cognitive challenge. The normative
+authoring, UI, schema, feedback, and testing contract is in
+`docs/DIFFICULTY_AND_DEPTH_DESIGN.md`.
 
 ## 10. Experience and visual direction
 
@@ -405,6 +422,8 @@ flowchart LR
 - **Prescription:** the single prioritized change recommended for the next attempt.
 - **Refinement Delta:** attempt-two coverage minus attempt-one coverage for the same prompt/rubric.
 - **Topic pack:** versioned subject content containing prompts, rubrics, follow-ups, and sources.
+- **Challenge preset:** versioned reasoning-complexity profile (`GUIDED`, `APPLIED`, or `VIVA`),
+  independent from practice mode, register, support, and accessibility time.
 - **Local mode:** no learner content leaves the device.
 - **Connected mode:** explicitly enabled server/provider processing under documented controls.
 
@@ -417,6 +436,7 @@ flowchart LR
   its stated medical/safety exception, and Chapter II applies from 2 February 2025 under Article
   113(a). MediPrompt adopts the stricter product rule of no emotion inference.
 - [The Use of Retrieval Practice in the Health Professions](https://pmc.ncbi.nlm.nih.gov/articles/PMC12292765/)
+- [MediPrompt difficulty and depth evidence synthesis](DIFFICULTY_AND_DEPTH_DESIGN.md)
 - [Transformers.js](https://github.com/huggingface/transformers.js)
 - [WebLLM](https://github.com/mlc-ai/web-llm)
 - [EU summary of rules for trustworthy artificial intelligence](https://eur-lex.europa.eu/EN/legal-content/summary/rules-for-trustworthy-artificial-intelligence-in-the-eu.html)

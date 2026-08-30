@@ -64,18 +64,20 @@ stay deterministic and testable.
 
 ### Topic selector and random draw
 
-Filters enabled topic packs by subject, mode, level, and due state. Random draw uses a shuffled bag
-per filter fingerprint: each eligible topic appears once before reshuffle. A recent-topic exclusion
-prevents immediate repeats across bag resets. Scheduling may override random selection only when the
-learner chooses the due queue.
+Filters enabled topic variants by subject, practice mode, challenge preset, register, and due state.
+Random draw uses a shuffled bag per full filter fingerprint: each eligible variant appears once
+before reshuffle. A recent-topic exclusion prevents immediate repeats across bag resets. Scheduling
+may override random selection only when the learner chooses the due queue. When only one challenge
+is available, the selector hides the challenge control rather than showing unavailable choices.
 
 ### Timer service
 
 Stores `startedAt`, `deadlineAt`, duration, pause policy, and last announced threshold. Remaining
 time is derived from the current monotonic clock. `setInterval` only requests a render; it is never
 the source of truth. Browser backgrounding cannot grant extra time. The basic timer surface always
-shows the topic, `Define → Explain → Apply` or a reviewed topic-specific arc, a large circular
-countdown, current instruction, and a close/end control.
+shows the topic, a reviewed challenge-specific arc (`Define -> Explain -> Apply`, `Summarize ->
+Reason -> Plan`, or `Prioritize -> Defend -> Safety-net`), a large circular countdown, current
+instruction, and a close/end control. Accessibility time adjustments do not mutate challenge.
 
 Deep Research first uses the same deadline engine in a research surface. The learner may select
 **Done researching** before expiry; both early completion and expiry lead to a separate
@@ -209,11 +211,12 @@ TopicPack
  ├─ provenance: maintainers, reviewers, sources, reviewedAt
  └─ subjects[]
      └─ topics[]
-         ├─ identity: topicId, title, tags, difficulty
+         ├─ identity: topicId, title, tags
          ├─ curriculum: program, year, track, paper, module, competencyCodes, sourceLocators
          ├─ classification: primaryDomain, contexts[], promptBlueprints[]
-         ├─ prompts[]: promptId, mode, wording, time policy
-         ├─ rubrics[]: rubricId, register, concepts[]
+         ├─ variants[]: variantId, mode, challengePreset, profileVersion, blueprint,
+         │              supportLevel, wording, answerArc, timePolicy, caseRef, followUpRefs
+         ├─ rubrics[]: rubricId, variantId, register, concepts[], reasoning/safety criteria
          │   └─ concept: conceptId, label, accepted phrases, importance, sourceRefs
          ├─ vivaQuestions[]: stage, wording, rubricRef
          ├─ commonErrors[]: reviewed wording and sourceRefs
@@ -229,7 +232,14 @@ Rules:
 - Every medical assertion or expected concept links to a pack source entry.
 - Accepted phrases are curated equivalents, not model-generated at runtime.
 - Common errors are optional and never shown as if detected unless transcript evidence supports it.
-- Registers and modes may point to distinct rubrics.
+- Mode, challenge, and register are independent; every published combination points to a reviewed
+  variant-specific rubric.
+- `GUIDED`, `APPLIED`, and `VIVA` are versioned difficulty vectors. A scalar difficulty label is not
+  sufficient authoring metadata.
+- Applied variants require a bounded fictional case. Viva variants additionally require plausible
+  alternatives and a reviewed follow-up/evidence update. Real patient details are prohibited.
+- Additional time and visible rescue scaffolds are accessibility/support choices, not lower
+  challenge levels.
 - A breaking semantic change increments the pack major version; history keeps its snapshot reference.
 - Published packs contain original wording and licence metadata, not copied textbook prose.
 
@@ -347,6 +357,8 @@ required uncertainty fields are missing.
 - Audio: synthetic PCM fixtures for VAD, pause, clipping, and loudness calculations.
 - Workers: protocol, cancellation, stale-response, memory failure, and pinned-version tests.
 - Coverage: educator-labelled positive, ambiguous, negated, and irrelevant transcript fixtures.
+- Challenge: educator-ordered prompt trios, vector/preset validation, scaffold independence,
+  evidence-update paths, and rejection of timer-only fake escalation.
 - Repository: real IndexedDB adapter tests, migrations, quota errors, export/import and delete-all.
 - Service worker: offline shell, update activation, old-pack fallback and cache isolation.
 - Compiler: synthetic golden PDFs, deterministic output, policy rejection and schema compatibility.

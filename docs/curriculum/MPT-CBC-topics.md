@@ -80,6 +80,7 @@ Each reviewed topic may then receive independent classification values:
 | Primary domain | foundations-science; condition-pathophysiology; assessment-investigation; clinical-reasoning; intervention-rehabilitation; procedure-perioperative-critical-care; population-community-participation; research-ethics-evidence-professional-practice; sport-performance | Cross-paper discovery and balanced random draws |
 | Context | pediatric; adult; geriatric; women; athlete; community; upper-quadrant; lower-quadrant; body system | Optional secondary filters; a topic may have several |
 | Prompt blueprint | explain-concept; assess; interpret; manage-case; compare-differentiate; explain-procedure; defend-evidence; teach-back | Generates a reviewed prompt-authoring queue, never medical content automatically |
+| Challenge preset | Guided; Applied; Viva | Creates educator-authored variants that progress from structure to application to defended reasoning; extraction never generates them |
 | Lifecycle | candidate; normalized; educator-reviewed; prompt-ready; published | Prevents raw extraction from reaching learners |
 
 The first UI filters should be year, track, paper, and module. Domain and context tags are secondary;
