@@ -1,0 +1,1873 @@
+{
+  "schemaVersion": "1.0",
+  "packId": "demo-interaction-fixture",
+  "version": "1.0.0",
+  "title": "Speaking Practice Demo (non-medical interaction fixture)",
+  "locale": "en-IN",
+  "licence": {
+    "id": "CC-BY-4.0",
+    "attribution": "Utkarsh Meshram — non-medical interaction fixture. Medical content is pending educator review and is not included in v0.2."
+  },
+  "review": {
+    "status": "APPROVED",
+    "reviewers": [
+      {
+        "id": "utkarsh-senpai",
+        "role": "CONTENT_EDITOR"
+      }
+    ],
+    "reviewedAt": "2026-08-30"
+  },
+  "sources": [
+    {
+      "sourceId": "src-general",
+      "citation": "General-knowledge concepts (public domain); no medical claims.",
+      "url": "https://en.wikipedia.org/wiki/Main_Page",
+      "accessedAt": "2026-08-30"
+    }
+  ],
+  "subjects": [
+    {
+      "subjectId": "everyday-explanations",
+      "title": "Everyday Explanations",
+      "topics": [
+        {
+          "topicId": "how-a-zipper-works",
+          "title": "How a zipper works",
+          "variants": [
+            {
+              "variantId": "how-a-zipper-works-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-how-a-zipper-works-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how a zipper interlocks its teeth to close and open. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "how-a-zipper-works-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "how-a-zipper-works-guided-rs-rubric-v1",
+              "variantId": "how-a-zipper-works-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "how-a-zipper-works-guided-rs-c1",
+                  "label": "Names the interlocking mechanism",
+                  "acceptedPhrases": [
+                    "names the interlocking mechanism"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "how-a-zipper-works-guided-rs-c2",
+                  "label": "Explains the slider role",
+                  "acceptedPhrases": [
+                    "explains the slider role"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "how-an-umbrella-folds",
+          "title": "How an umbrella folds",
+          "variants": [
+            {
+              "variantId": "how-an-umbrella-folds-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-how-an-umbrella-folds-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how an umbrella collapses along its ribs. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "how-an-umbrella-folds-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "how-an-umbrella-folds-guided-rs-rubric-v1",
+              "variantId": "how-an-umbrella-folds-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "how-an-umbrella-folds-guided-rs-c1",
+                  "label": "Names the rib and canopy parts",
+                  "acceptedPhrases": [
+                    "names the rib and canopy parts"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "how-an-umbrella-folds-guided-rs-c2",
+                  "label": "Explains the folding sequence",
+                  "acceptedPhrases": [
+                    "explains the folding sequence"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "why-bread-rises",
+          "title": "Why bread dough rises",
+          "variants": [
+            {
+              "variantId": "why-bread-rises-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-why-bread-rises-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain why bread dough rises as it rests. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "why-bread-rises-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "why-bread-rises-guided-rs-rubric-v1",
+              "variantId": "why-bread-rises-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "why-bread-rises-guided-rs-c1",
+                  "label": "Names yeast as the agent",
+                  "acceptedPhrases": [
+                    "names yeast as the agent"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "why-bread-rises-guided-rs-c2",
+                  "label": "Explains gas trapped in gluten",
+                  "acceptedPhrases": [
+                    "explains gas trapped in gluten"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "how-a-bicycle-stays-up",
+          "title": "How a bicycle stays upright",
+          "variants": [
+            {
+              "variantId": "how-a-bicycle-stays-up-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-how-a-bicycle-stays-up-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how a moving bicycle stays upright. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "how-a-bicycle-stays-up-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "how-a-bicycle-stays-up-guided-rs-rubric-v1",
+              "variantId": "how-a-bicycle-stays-up-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "how-a-bicycle-stays-up-guided-rs-c1",
+                  "label": "Mentions forward motion and balance",
+                  "acceptedPhrases": [
+                    "mentions forward motion and balance"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "how-a-bicycle-stays-up-guided-rs-c2",
+                  "label": "Explains steering corrections",
+                  "acceptedPhrases": [
+                    "explains steering corrections"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "why-ice-melts",
+          "title": "Why ice melts at room temperature",
+          "variants": [
+            {
+              "variantId": "why-ice-melts-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-why-ice-melts-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain why ice melts at room temperature. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "why-ice-melts-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "why-ice-melts-guided-rs-rubric-v1",
+              "variantId": "why-ice-melts-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "why-ice-melts-guided-rs-c1",
+                  "label": "Names heat transfer",
+                  "acceptedPhrases": [
+                    "names heat transfer"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "why-ice-melts-guided-rs-c2",
+                  "label": "Explains the phase change",
+                  "acceptedPhrases": [
+                    "explains the phase change"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "how-a-lock-works",
+          "title": "How a pin tumbler lock works",
+          "variants": [
+            {
+              "variantId": "how-a-lock-works-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-how-a-lock-works-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how a pin tumbler lock opens with a key. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "how-a-lock-works-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "how-a-lock-works-guided-rs-rubric-v1",
+              "variantId": "how-a-lock-works-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "how-a-lock-works-guided-rs-c1",
+                  "label": "Names pins and shear line",
+                  "acceptedPhrases": [
+                    "names pins and shear line"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "how-a-lock-works-guided-rs-c2",
+                  "label": "Explains the key aligning pins",
+                  "acceptedPhrases": [
+                    "explains the key aligning pins"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "why-leaves-fall",
+          "title": "Why leaves fall in autumn",
+          "variants": [
+            {
+              "variantId": "why-leaves-fall-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-why-leaves-fall-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain why leaves fall in autumn. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "why-leaves-fall-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "why-leaves-fall-guided-rs-rubric-v1",
+              "variantId": "why-leaves-fall-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "why-leaves-fall-guided-rs-c1",
+                  "label": "Names the abscission layer",
+                  "acceptedPhrases": [
+                    "names the abscission layer"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "why-leaves-fall-guided-rs-c2",
+                  "label": "Explains reduced daylight role",
+                  "acceptedPhrases": [
+                    "explains reduced daylight role"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "how-a-pencil-works",
+          "title": "How a pencil marks paper",
+          "variants": [
+            {
+              "variantId": "how-a-pencil-works-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-how-a-pencil-works-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how a pencil leaves a mark on paper. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "how-a-pencil-works-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "how-a-pencil-works-guided-rs-rubric-v1",
+              "variantId": "how-a-pencil-works-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "how-a-pencil-works-guided-rs-c1",
+                  "label": "Names graphite as the marking material",
+                  "acceptedPhrases": [
+                    "names graphite as the marking material"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "how-a-pencil-works-guided-rs-c2",
+                  "label": "Explains friction transferring graphite",
+                  "acceptedPhrases": [
+                    "explains friction transferring graphite"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        }
+      ]
+    },
+    {
+      "subjectId": "science-and-nature",
+      "title": "Science and Nature",
+      "topics": [
+        {
+          "topicId": "water-cycle",
+          "title": "The water cycle",
+          "variants": [
+            {
+              "variantId": "water-cycle-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-water-cycle-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain the water cycle and its main stages. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "water-cycle-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "water-cycle-guided-rs-rubric-v1",
+              "variantId": "water-cycle-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "water-cycle-guided-rs-c1",
+                  "label": "Names evaporation and condensation",
+                  "acceptedPhrases": [
+                    "names evaporation and condensation"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "water-cycle-guided-rs-c2",
+                  "label": "Links precipitation to the cycle",
+                  "acceptedPhrases": [
+                    "links precipitation to the cycle"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "photosynthesis",
+          "title": "Photosynthesis",
+          "variants": [
+            {
+              "variantId": "photosynthesis-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-photosynthesis-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain photosynthesis and why it matters. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "photosynthesis-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "photosynthesis-guided-rs-rubric-v1",
+              "variantId": "photosynthesis-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "photosynthesis-guided-rs-c1",
+                  "label": "Names sunlight, water, and carbon dioxide",
+                  "acceptedPhrases": [
+                    "names sunlight, water, and carbon dioxide"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "photosynthesis-guided-rs-c2",
+                  "label": "Explains glucose and oxygen output",
+                  "acceptedPhrases": [
+                    "explains glucose and oxygen output"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "seasons",
+          "title": "Why seasons change",
+          "variants": [
+            {
+              "variantId": "seasons-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-seasons-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain why seasons change through the year. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "seasons-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "seasons-guided-rs-rubric-v1",
+              "variantId": "seasons-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "seasons-guided-rs-c1",
+                  "label": "Names Earth's axial tilt",
+                  "acceptedPhrases": [
+                    "names earth's axial tilt"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "seasons-guided-rs-c2",
+                  "label": "Explains sunlight angle variation",
+                  "acceptedPhrases": [
+                    "explains sunlight angle variation"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "tides",
+          "title": "Why tides occur",
+          "variants": [
+            {
+              "variantId": "tides-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-tides-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain why tides occur along coasts. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "tides-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "tides-guided-rs-rubric-v1",
+              "variantId": "tides-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "tides-guided-rs-c1",
+                  "label": "Names the moon's gravity",
+                  "acceptedPhrases": [
+                    "names the moon's gravity"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "tides-guided-rs-c2",
+                  "label": "Explains the daily cycle",
+                  "acceptedPhrases": [
+                    "explains the daily cycle"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "rainbow-formation",
+          "title": "How a rainbow forms",
+          "variants": [
+            {
+              "variantId": "rainbow-formation-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-rainbow-formation-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how a rainbow forms after rain. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "rainbow-formation-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "rainbow-formation-guided-rs-rubric-v1",
+              "variantId": "rainbow-formation-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "rainbow-formation-guided-rs-c1",
+                  "label": "Names sunlight and water droplets",
+                  "acceptedPhrases": [
+                    "names sunlight and water droplets"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "rainbow-formation-guided-rs-c2",
+                  "label": "Explains refraction and dispersion",
+                  "acceptedPhrases": [
+                    "explains refraction and dispersion"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "sound-travel",
+          "title": "How sound travels",
+          "variants": [
+            {
+              "variantId": "sound-travel-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-sound-travel-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain how sound travels through air. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "sound-travel-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "sound-travel-guided-rs-rubric-v1",
+              "variantId": "sound-travel-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "sound-travel-guided-rs-c1",
+                  "label": "Names vibrations as the source",
+                  "acceptedPhrases": [
+                    "names vibrations as the source"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "sound-travel-guided-rs-c2",
+                  "label": "Explains pressure waves",
+                  "acceptedPhrases": [
+                    "explains pressure waves"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "gravity-basics",
+          "title": "Gravity basics",
+          "variants": [
+            {
+              "variantId": "gravity-basics-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-gravity-basics-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain gravity and its everyday effects. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "gravity-basics-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "gravity-basics-guided-rs-rubric-v1",
+              "variantId": "gravity-basics-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "gravity-basics-guided-rs-c1",
+                  "label": "Names mass as the cause",
+                  "acceptedPhrases": [
+                    "names mass as the cause"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "gravity-basics-guided-rs-c2",
+                  "label": "Explains falling and orbiting",
+                  "acceptedPhrases": [
+                    "explains falling and orbiting"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        }
+      ]
+    },
+    {
+      "subjectId": "reasoning-and-tradeoffs",
+      "title": "Reasoning and Trade-offs",
+      "topics": [
+        {
+          "topicId": "paper-vs-digital",
+          "title": "Paper versus digital notes",
+          "variants": [
+            {
+              "variantId": "paper-vs-digital-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-paper-vs-digital-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain the trade-off between paper and digital notes. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "paper-vs-digital-guided-rs-rubric-v1"
+            },
+            {
+              "variantId": "paper-vs-digital-applied-rs-v1",
+              "challengePreset": "APPLIED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "manage-case",
+              "promptId": "prompt-paper-vs-digital-applied-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FADING",
+              "wording": "A fictional learner faces a decision about the trade-off between paper and digital notes. Summarize the situation, reason about the main trade-off, and propose a justified plan.",
+              "answerArc": [
+                "summarize",
+                "reason",
+                "plan"
+              ],
+              "timePolicy": {
+                "preparationSeconds": 45,
+                "speakingSeconds": 120
+              },
+              "caseRef": "paper-vs-digital-case-v1",
+              "followUpRefs": [
+                "paper-vs-digital-probe-v1"
+              ],
+              "rubricId": "paper-vs-digital-applied-rs-rubric-v1"
+            },
+            {
+              "variantId": "paper-vs-digital-viva-rs-v1",
+              "challengePreset": "VIVA",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "compare-differentiate",
+              "promptId": "prompt-paper-vs-digital-viva-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "MINIMAL",
+              "wording": "A fictional scenario about the trade-off between paper and digital notes has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.",
+              "answerArc": [
+                "prioritize",
+                "defend",
+                "safety-net"
+              ],
+              "timePolicy": {
+                "preparationSeconds": 45,
+                "speakingSeconds": 150
+              },
+              "caseRef": "paper-vs-digital-case-v1",
+              "followUpRefs": [
+                "paper-vs-digital-probe-v1",
+                "paper-vs-digital-evidence-v1"
+              ],
+              "rubricId": "paper-vs-digital-viva-rs-rubric-v1"
+            },
+            {
+              "variantId": "paper-vs-digital-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-paper-vs-digital-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between paper and digital notes, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "paper-vs-digital-guided-dr-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "paper-vs-digital-guided-rs-rubric-v1",
+              "variantId": "paper-vs-digital-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "paper-vs-digital-guided-rs-c1",
+                  "label": "Compares retention and recall",
+                  "acceptedPhrases": [
+                    "compares retention and recall"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "paper-vs-digital-guided-rs-c2",
+                  "label": "Weighs searchability against distraction",
+                  "acceptedPhrases": [
+                    "weighs searchability against distraction"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "paper-vs-digital-applied-rs-rubric-v1",
+              "variantId": "paper-vs-digital-applied-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "paper-vs-digital-applied-rs-c1",
+                  "label": "Compares retention and recall",
+                  "acceptedPhrases": [
+                    "compares retention and recall"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "paper-vs-digital-applied-rs-c2",
+                  "label": "Weighs searchability against distraction",
+                  "acceptedPhrases": [
+                    "weighs searchability against distraction"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "paper-vs-digital-viva-rs-rubric-v1",
+              "variantId": "paper-vs-digital-viva-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "paper-vs-digital-viva-rs-c1",
+                  "label": "Compares retention and recall",
+                  "acceptedPhrases": [
+                    "compares retention and recall"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "paper-vs-digital-viva-rs-c2",
+                  "label": "Weighs searchability against distraction",
+                  "acceptedPhrases": [
+                    "weighs searchability against distraction"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "paper-vs-digital-guided-dr-rubric-v1",
+              "variantId": "paper-vs-digital-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "paper-vs-digital-guided-dr-c1",
+                  "label": "Compares retention and recall",
+                  "acceptedPhrases": [
+                    "compares retention and recall"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "paper-vs-digital-guided-dr-c2",
+                  "label": "Weighs searchability against distraction",
+                  "acceptedPhrases": [
+                    "weighs searchability against distraction"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [
+            {
+              "caseId": "paper-vs-digital-case-v1",
+              "text": "Fictional scenario: a student is deciding how to approach the trade-off between paper and digital notes. The situation has realistic constraints and no single obviously correct answer."
+            }
+          ],
+          "followUps": [
+            {
+              "followUpId": "paper-vs-digital-probe-v1",
+              "text": "What additional information would most change your assessment of the trade-off between paper and digital notes?",
+              "kind": "PROBE"
+            },
+            {
+              "followUpId": "paper-vs-digital-evidence-v1",
+              "text": "New information arrives that changes one assumption about the trade-off between paper and digital notes. Does your prioritization change, and why?",
+              "kind": "EVIDENCE_UPDATE"
+            }
+          ]
+        },
+        {
+          "topicId": "urban-vs-rural",
+          "title": "Urban versus rural living",
+          "variants": [
+            {
+              "variantId": "urban-vs-rural-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-urban-vs-rural-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain the trade-off between urban and rural living. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "urban-vs-rural-guided-rs-rubric-v1"
+            },
+            {
+              "variantId": "urban-vs-rural-applied-rs-v1",
+              "challengePreset": "APPLIED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "manage-case",
+              "promptId": "prompt-urban-vs-rural-applied-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FADING",
+              "wording": "A fictional learner faces a decision about the trade-off between urban and rural living. Summarize the situation, reason about the main trade-off, and propose a justified plan.",
+              "answerArc": [
+                "summarize",
+                "reason",
+                "plan"
+              ],
+              "timePolicy": {
+                "preparationSeconds": 45,
+                "speakingSeconds": 120
+              },
+              "caseRef": "urban-vs-rural-case-v1",
+              "followUpRefs": [
+                "urban-vs-rural-probe-v1"
+              ],
+              "rubricId": "urban-vs-rural-applied-rs-rubric-v1"
+            },
+            {
+              "variantId": "urban-vs-rural-viva-rs-v1",
+              "challengePreset": "VIVA",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "compare-differentiate",
+              "promptId": "prompt-urban-vs-rural-viva-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "MINIMAL",
+              "wording": "A fictional scenario about the trade-off between urban and rural living has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.",
+              "answerArc": [
+                "prioritize",
+                "defend",
+                "safety-net"
+              ],
+              "timePolicy": {
+                "preparationSeconds": 45,
+                "speakingSeconds": 150
+              },
+              "caseRef": "urban-vs-rural-case-v1",
+              "followUpRefs": [
+                "urban-vs-rural-probe-v1",
+                "urban-vs-rural-evidence-v1"
+              ],
+              "rubricId": "urban-vs-rural-viva-rs-rubric-v1"
+            },
+            {
+              "variantId": "urban-vs-rural-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-urban-vs-rural-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between urban and rural living, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "urban-vs-rural-guided-dr-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "urban-vs-rural-guided-rs-rubric-v1",
+              "variantId": "urban-vs-rural-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "urban-vs-rural-guided-rs-c1",
+                  "label": "Compares opportunity and cost",
+                  "acceptedPhrases": [
+                    "compares opportunity and cost"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "urban-vs-rural-guided-rs-c2",
+                  "label": "Weighs community against access",
+                  "acceptedPhrases": [
+                    "weighs community against access"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "urban-vs-rural-applied-rs-rubric-v1",
+              "variantId": "urban-vs-rural-applied-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "urban-vs-rural-applied-rs-c1",
+                  "label": "Compares opportunity and cost",
+                  "acceptedPhrases": [
+                    "compares opportunity and cost"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "urban-vs-rural-applied-rs-c2",
+                  "label": "Weighs community against access",
+                  "acceptedPhrases": [
+                    "weighs community against access"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "urban-vs-rural-viva-rs-rubric-v1",
+              "variantId": "urban-vs-rural-viva-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "urban-vs-rural-viva-rs-c1",
+                  "label": "Compares opportunity and cost",
+                  "acceptedPhrases": [
+                    "compares opportunity and cost"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "urban-vs-rural-viva-rs-c2",
+                  "label": "Weighs community against access",
+                  "acceptedPhrases": [
+                    "weighs community against access"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "urban-vs-rural-guided-dr-rubric-v1",
+              "variantId": "urban-vs-rural-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "urban-vs-rural-guided-dr-c1",
+                  "label": "Compares opportunity and cost",
+                  "acceptedPhrases": [
+                    "compares opportunity and cost"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "urban-vs-rural-guided-dr-c2",
+                  "label": "Weighs community against access",
+                  "acceptedPhrases": [
+                    "weighs community against access"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [
+            {
+              "caseId": "urban-vs-rural-case-v1",
+              "text": "Fictional scenario: a student is deciding how to approach the trade-off between urban and rural living. The situation has realistic constraints and no single obviously correct answer."
+            }
+          ],
+          "followUps": [
+            {
+              "followUpId": "urban-vs-rural-probe-v1",
+              "text": "What additional information would most change your assessment of the trade-off between urban and rural living?",
+              "kind": "PROBE"
+            },
+            {
+              "followUpId": "urban-vs-rural-evidence-v1",
+              "text": "New information arrives that changes one assumption about the trade-off between urban and rural living. Does your prioritization change, and why?",
+              "kind": "EVIDENCE_UPDATE"
+            }
+          ]
+        },
+        {
+          "topicId": "specialist-vs-generalist",
+          "title": "Specialist versus generalist learning",
+          "variants": [
+            {
+              "variantId": "specialist-vs-generalist-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-specialist-vs-generalist-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain the trade-off between specialist and generalist learning. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "specialist-vs-generalist-guided-rs-rubric-v1"
+            },
+            {
+              "variantId": "specialist-vs-generalist-applied-rs-v1",
+              "challengePreset": "APPLIED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "manage-case",
+              "promptId": "prompt-specialist-vs-generalist-applied-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FADING",
+              "wording": "A fictional learner faces a decision about the trade-off between specialist and generalist learning. Summarize the situation, reason about the main trade-off, and propose a justified plan.",
+              "answerArc": [
+                "summarize",
+                "reason",
+                "plan"
+              ],
+              "timePolicy": {
+                "preparationSeconds": 45,
+                "speakingSeconds": 120
+              },
+              "caseRef": "specialist-vs-generalist-case-v1",
+              "followUpRefs": [
+                "specialist-vs-generalist-probe-v1"
+              ],
+              "rubricId": "specialist-vs-generalist-applied-rs-rubric-v1"
+            },
+            {
+              "variantId": "specialist-vs-generalist-viva-rs-v1",
+              "challengePreset": "VIVA",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "compare-differentiate",
+              "promptId": "prompt-specialist-vs-generalist-viva-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "MINIMAL",
+              "wording": "A fictional scenario about the trade-off between specialist and generalist learning has two competing options and a new constraint. Prioritize the options, defend your choice, and state what new information would change your mind.",
+              "answerArc": [
+                "prioritize",
+                "defend",
+                "safety-net"
+              ],
+              "timePolicy": {
+                "preparationSeconds": 45,
+                "speakingSeconds": 150
+              },
+              "caseRef": "specialist-vs-generalist-case-v1",
+              "followUpRefs": [
+                "specialist-vs-generalist-probe-v1",
+                "specialist-vs-generalist-evidence-v1"
+              ],
+              "rubricId": "specialist-vs-generalist-viva-rs-rubric-v1"
+            },
+            {
+              "variantId": "specialist-vs-generalist-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-specialist-vs-generalist-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between specialist and generalist learning, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "specialist-vs-generalist-guided-dr-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "specialist-vs-generalist-guided-rs-rubric-v1",
+              "variantId": "specialist-vs-generalist-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "specialist-vs-generalist-guided-rs-c1",
+                  "label": "Compares depth and adaptability",
+                  "acceptedPhrases": [
+                    "compares depth and adaptability"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "specialist-vs-generalist-guided-rs-c2",
+                  "label": "Weighs expertise against flexibility",
+                  "acceptedPhrases": [
+                    "weighs expertise against flexibility"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "specialist-vs-generalist-applied-rs-rubric-v1",
+              "variantId": "specialist-vs-generalist-applied-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "specialist-vs-generalist-applied-rs-c1",
+                  "label": "Compares depth and adaptability",
+                  "acceptedPhrases": [
+                    "compares depth and adaptability"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "specialist-vs-generalist-applied-rs-c2",
+                  "label": "Weighs expertise against flexibility",
+                  "acceptedPhrases": [
+                    "weighs expertise against flexibility"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "specialist-vs-generalist-viva-rs-rubric-v1",
+              "variantId": "specialist-vs-generalist-viva-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "specialist-vs-generalist-viva-rs-c1",
+                  "label": "Compares depth and adaptability",
+                  "acceptedPhrases": [
+                    "compares depth and adaptability"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "specialist-vs-generalist-viva-rs-c2",
+                  "label": "Weighs expertise against flexibility",
+                  "acceptedPhrases": [
+                    "weighs expertise against flexibility"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "specialist-vs-generalist-guided-dr-rubric-v1",
+              "variantId": "specialist-vs-generalist-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "specialist-vs-generalist-guided-dr-c1",
+                  "label": "Compares depth and adaptability",
+                  "acceptedPhrases": [
+                    "compares depth and adaptability"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "specialist-vs-generalist-guided-dr-c2",
+                  "label": "Weighs expertise against flexibility",
+                  "acceptedPhrases": [
+                    "weighs expertise against flexibility"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [
+            {
+              "caseId": "specialist-vs-generalist-case-v1",
+              "text": "Fictional scenario: a student is deciding how to approach the trade-off between specialist and generalist learning. The situation has realistic constraints and no single obviously correct answer."
+            }
+          ],
+          "followUps": [
+            {
+              "followUpId": "specialist-vs-generalist-probe-v1",
+              "text": "What additional information would most change your assessment of the trade-off between specialist and generalist learning?",
+              "kind": "PROBE"
+            },
+            {
+              "followUpId": "specialist-vs-generalist-evidence-v1",
+              "text": "New information arrives that changes one assumption about the trade-off between specialist and generalist learning. Does your prioritization change, and why?",
+              "kind": "EVIDENCE_UPDATE"
+            }
+          ]
+        },
+        {
+          "topicId": "speed-vs-quality",
+          "title": "Speed versus quality",
+          "variants": [
+            {
+              "variantId": "speed-vs-quality-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-speed-vs-quality-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain the trade-off between speed and quality of work. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "speed-vs-quality-guided-rs-rubric-v1"
+            },
+            {
+              "variantId": "speed-vs-quality-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-speed-vs-quality-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between speed and quality of work, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "speed-vs-quality-guided-dr-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "speed-vs-quality-guided-rs-rubric-v1",
+              "variantId": "speed-vs-quality-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "speed-vs-quality-guided-rs-c1",
+                  "label": "Compares throughput and error risk",
+                  "acceptedPhrases": [
+                    "compares throughput and error risk"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "speed-vs-quality-guided-rs-c2",
+                  "label": "Weighs deadlines against rework",
+                  "acceptedPhrases": [
+                    "weighs deadlines against rework"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "speed-vs-quality-guided-dr-rubric-v1",
+              "variantId": "speed-vs-quality-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "speed-vs-quality-guided-dr-c1",
+                  "label": "Compares throughput and error risk",
+                  "acceptedPhrases": [
+                    "compares throughput and error risk"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "speed-vs-quality-guided-dr-c2",
+                  "label": "Weighs deadlines against rework",
+                  "acceptedPhrases": [
+                    "weighs deadlines against rework"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        },
+        {
+          "topicId": "short-term-vs-long-term",
+          "title": "Short-term versus long-term goals",
+          "variants": [
+            {
+              "variantId": "short-term-vs-long-term-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-short-term-vs-long-term-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain the trade-off between short-term and long-term goals. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "short-term-vs-long-term-guided-rs-rubric-v1"
+            },
+            {
+              "variantId": "short-term-vs-long-term-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-short-term-vs-long-term-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between short-term and long-term goals, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "short-term-vs-long-term-guided-dr-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "short-term-vs-long-term-guided-rs-rubric-v1",
+              "variantId": "short-term-vs-long-term-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "short-term-vs-long-term-guided-rs-c1",
+                  "label": "Compares immediate payoff and delayed reward",
+                  "acceptedPhrases": [
+                    "compares immediate payoff and delayed reward"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "short-term-vs-long-term-guided-rs-c2",
+                  "label": "Weighs motivation against patience",
+                  "acceptedPhrases": [
+                    "weighs motivation against patience"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "short-term-vs-long-term-guided-dr-rubric-v1",
+              "variantId": "short-term-vs-long-term-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "short-term-vs-long-term-guided-dr-c1",
+                  "label": "Compares immediate payoff and delayed reward",
+                  "acceptedPhrases": [
+                    "compares immediate payoff and delayed reward"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "short-term-vs-long-term-guided-dr-c2",
+                  "label": "Weighs motivation against patience",
+                  "acceptedPhrases": [
+                    "weighs motivation against patience"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0",
+  "packId": "synthetic-not-for-publication",
+  "version": "0.0.0",
+  "title": "Synthetic fixture - not for publication",
+  "locale": "en-IN",
+  "licence": {
+    "id": "CC-BY-4.0",
+    "attribution": "Synthetic test fixture - never published."
+  },
+  "review": {
+    "status": "NOT_FOR_PUBLICATION",
+    "reviewers": [{ "id": "synthetic-reviewer", "role": "CONTENT_EDITOR" }],
+    "reviewedAt": "2026-08-30"
+  },
+  "sources": [
+    {
+      "sourceId": "src-synthetic",
+      "citation": "Synthetic.",
+      "url": "https://example.org/synthetic",
+      "accessedAt": "2026-08-30"
+    }
+  ],
+  "subjects": [
+    {
+      "subjectId": "synthetic-subject",
+      "title": "Synthetic subject",
+      "topics": [
+        {
+          "topicId": "synthetic-topic",
+          "title": "Synthetic topic",
+          "variants": [
+            {
+              "variantId": "synthetic-topic-guided-rs-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-synthetic-guided-rs",
+              "mode": "RECALL_SPRINT",
+              "supportLevel": "FULL",
+              "wording": "Explain a synthetic concept for testing only.",
+              "answerArc": ["define", "explain", "apply"],
+              "timePolicy": { "speakingSeconds": 60 },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "synthetic-topic-guided-rs-rubric-v1"
+            }
+          ],
+          "rubrics": [
+            {
+              "rubricId": "synthetic-topic-guided-rs-rubric-v1",
+              "variantId": "synthetic-topic-guided-rs-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "synthetic-c1",
+                  "label": "Synthetic concept",
+                  "acceptedPhrases": ["synthetic"],
+                  "weight": 1,
+                  "sourceRefs": ["src-synthetic"]
+                }
+              ]
+            }
+          ],
+          "cases": [],
+          "followUps": []
+        }
+      ]
+    }
+  ]
+}

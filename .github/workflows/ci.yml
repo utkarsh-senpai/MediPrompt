@@ -1,0 +1,87 @@
+name: ci
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# Never build/run contributor code with elevated tokens (no pull_request_target).
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: lint, typecheck, content, unit, a11y, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Pinned to immutable commit SHAs per docs/V0.2_DEVELOPMENT_CONTEXT.md §12.
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20.18.0
+      - name: Install pnpm
+        run: npm install -g pnpm@9.15.0
+      - name: Cache pnpm store
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - name: Install dependencies (frozen)
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Validate content packs
+        run: pnpm content:validate
+      - name: Unit + component + content tests
+        run: pnpm test
+      - name: Accessibility smoke
+        run: pnpm test:a11y
+      - name: Build
+        run: pnpm build
+
+  e2e:
+    name: e2e + service worker (offline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20.18.0
+      - name: Install pnpm
+        run: npm install -g pnpm@9.15.0
+      - name: Cache pnpm store
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+      - name: Install dependencies (frozen)
+        run: pnpm install --frozen-lockfile
+      - name: Install Playwright browser
+        run: pnpm --filter @mediprompt/learner-web exec playwright install --with-deps chromium
+      - name: Run e2e
+        run: pnpm test:e2e
+
+  dependency-review:
+    name: dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Dependency review
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4

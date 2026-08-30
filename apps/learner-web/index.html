@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="MediPrompt - privacy-first speaking-practice tool for medical students."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <!--
+      Content Security Policy. GitHub Pages cannot add response headers, so the
+      meta tag is the enforcement point. Scripts/styles are external and same-origin
+      only; no inline script, no remote CDN, no analytics, no third-party frames.
+      The manifest link and theme-color are injected by vite-plugin-pwa at build.
+      See docs/V0.2_DEVELOPMENT_CONTEXT.md §12.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'"
+    />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <title>MediPrompt</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
