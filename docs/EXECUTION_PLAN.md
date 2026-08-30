@@ -327,7 +327,7 @@ must not be claimed before the study design supports them.
 ## 8. Current blockers and inputs
 
 - Owner review of v0.1 design.
-- Initial syllabus/topic PDF and its reuse constraints.
+- Initial syllabus/topic PDF and its reuse constraints. (2026-08-30: the MPT competency-based curriculum has been extracted as a draft topic-name reference under `docs/curriculum/`; rubrics and educator review still pending.)
 - Friend's course/year, exam format, date, target subjects, devices, and preferred language.
 - At least one educator review route for rubrics and later calibration.
 - Final software/content licence decision before public contributions.

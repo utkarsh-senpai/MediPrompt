@@ -1,0 +1,318 @@
+schemaVersion: "1.0"
+packId: mpt-competency-draft
+version: 0.1.0-draft
+title: "MPT Competency-Based Curriculum — Draft Topic Reference"
+locale: en-IN
+licence:
+  id: UNREVIEWED
+  note: "Draft reference of topic names only; no copyrighted prose; not for publication until reviewed."
+review:
+  status: DRAFT
+  reviewers: []
+  reviewedAt: null
+sources:
+  - sourceId: src-curriculum
+    citation: "Competency-Based Post Graduate Curriculum for the Indian Physiotherapy, Ravi Nair Physiotherapy College, Datta Meghe Institute of Higher Education and Research, Wardha."
+    url: null
+    accessedAt: "2026-08-30"
+subjects:
+  - subjectId: research-methods-and-bioethics
+    title: "Research Methods and Bioethics"
+    code: "MPT/RESEARCH METHODS & BIOETHICS/2022-2023 to 2026-2027"
+    year: 1
+    topics:
+      - { topicId: rmb-helsinki-declaration-ethics, title: "Helsinki Declaration & ethical issues in physiotherapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-rights-responsibilities-pwd-act, title: "Rights & responsibilities of physiotherapist and client; PWD Act; practice regulations", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-roles-wcpt-who-standards, title: "Roles of the physiotherapist per WCPT/WHO; standards for practice", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-administration-management, title: "Administration & management in physiotherapy (hospital, community, industry)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-education-teaching-technology, title: "Education — formal & non-formal; health-education philosophy; teaching technology; student assessment", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-icf-documentation-future-challenges, title: "ICF-based rehabilitation documentation; future challenges in physiotherapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-introduction-to-research, title: "Introduction to research", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-types-of-research-question, title: "Types of research & defining a research question", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-qualitative-study-designs, title: "Qualitative study designs (grounded theory, phenomenological)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-delphi-process, title: "Delphi process", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-quantitative-study-designs, title: "Quantitative study designs", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-type-i-type-ii-bias, title: "Type I and Type II bias", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-study-design-methods, title: "Study design (case study, cohort, pre-post, time series, repeated measures, RCT)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-sampling-sample-size, title: "Sampling design & minimum sample-size calculation", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-measurement-properties-mcid, title: "Measurement properties (reliability, validity, responsiveness, MCID)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-outcome-measures-rehab, title: "Outcome measures in rehabilitation research", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-research-methods-reporting, title: "Research methods — designing methodology & reporting results", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-communicating-research, title: "Communicating research", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-scientific-writing, title: "Scientific writing (papers, reviews, thesis, reports; APA/MLA; citations)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-report-writing-abstracts, title: "Report writing; abstract preparation; oral & poster presentation", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-introduction-biostatistics, title: "Introduction to biostatistics; sources & presentation of data", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-measures-location-variability, title: "Measures of location & variability; normal distribution & curve", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-sampling-probability-significance, title: "Sampling, probability, sampling variability & significance", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-significance-difference-means, title: "Significance of difference in means (small & large sample)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-statistical-inference-ttest, title: "Statistical inference; T-test", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-analysis-of-variance, title: "Analysis of variance", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-multiple-comparison-nonparametric, title: "Multiple comparison tests; non-parametric tests", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-correlation-regression, title: "Correlation & regression", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-analysis-frequencies-chisquare, title: "Analysis of frequencies — chi-square", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-statistical-reliability, title: "Statistical measure of reliability", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-power-analysis-sample-size, title: "Power analysis & determining sample size", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: rmb-measures-of-population, title: "Measures of population (rate, ratio, proportion, incidence, prevalence, relative risk, odds ratio)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+  - subjectId: applied-physiotherapeutics
+    title: "Applied Physiotherapeutics"
+    code: "MPT/APPLIED PHYSIOTHERAPEUTICS/2022-2023 to 2026-2027"
+    year: 1
+    topics:
+      - { topicId: pap-intro-exercise-physiology, title: "Introduction to exercise physiology (body composition, nutrition, caloric balance)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-energy-transfer-expenditure, title: "Sources of energy, energy transfer & energy expenditure", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-physiologic-support-systems, title: "Physiologic support systems & physical activity (cardio-pulmonary, neuromuscular, hormonal)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-responses-adaptations-exercise, title: "Responses & adaptations of systems to exercise and training", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-endurance-strength-assessment, title: "Assessment & training for endurance and strength (anaerobic & aerobic power)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-environmental-influence-performance, title: "Environmental influence on performance", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-exercise-prescription-age-sex, title: "Exercise prescription for health & fitness; age & sex considerations", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-fatigue-assessment-management, title: "Fatigue — assessment & management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-radiological-imaging, title: "Radiological investigations & imaging (MRI, X-ray) across conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-ecg-pulmonary-function-test, title: "ECG & pulmonary function tests", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-anthropometric-measurements, title: "Anthropometric measurements", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-physical-fitness-assessment, title: "Physical fitness assessment (ETT, field test, 6-min walk, flexibility, strength, agility, balance)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-exercise-types-muscle-effect, title: "Effect of aerobic/anaerobic/isometric/isotonic/isokinetic exercise on muscle & cardio-pulmonary function", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-sd-curve-emg-ncv-biofeedback, title: "S-D curve, EMG, NCV interpretation & biofeedback", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-disability-evaluation-diagnosis, title: "Physical disability evaluation & disability diagnosis", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-posture-gait-analysis, title: "Posture & gait analysis", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-pain-neurobiology-management, title: "Pain — neurobiology, theories, assessment, modulation & management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-medications-activity-performance, title: "Effect of medications on activity performance", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-health-stress-management, title: "Physiotherapy for health & stress management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-cpr-monitoring-respirators, title: "CPR, monitoring systems, defibrillators & artificial respirators", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-modalities-techniques-approaches, title: "Physiotherapy modalities, techniques & approaches", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-aging-physiotherapy-management, title: "Aging — physiological changes & physiotherapy management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-aids-appliances-adaptive-devices, title: "Aids & appliances, adaptive functional devices", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-disaster-management, title: "Physiotherapy in disaster management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-yoga-integration, title: "Integration of yoga in physiotherapy for health promotion", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-aquatic-therapy, title: "Aquatic therapy (properties of water, hydrodynamics, immersion physiology, concepts)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-clinical-decision-making, title: "Clinical decision making in physiotherapeutics", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-screening-subjective-examination, title: "Screening & evaluation — subjective examination", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-pain-evaluation-scales, title: "Pain evaluation — subjective & objective assessment; pain measurement scales", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-physical-examination-systems-review, title: "General survey & physical examination techniques; regional & systems-review screening", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-cv-respiratory-screening, title: "Screening & evaluation for cardiovascular & respiratory disease", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-cancer-screening, title: "Screening & evaluation for cancer", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-spine-region-screening, title: "Screening & evaluation of head, cervical, thoracic & lumbosacral region", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-quadrant-screening, title: "Screening & evaluation of upper & lower quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pap-icf-rehabilitation-assessment, title: "ICF-based rehabilitation assessment & management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+  - subjectId: musculoskeletal-physiotherapy
+    title: "Musculoskeletal Physiotherapy (MPT in Musculoskeletal Sciences)"
+    code: "MPT/MPT IN MUSCULOSKELETAL SCIENCES/2022-2023 to 2026-2027"
+    year: 2
+    topics:
+      - { topicId: pmu-biomechanics-shoulder, title: "Biomechanics & pathomechanics — shoulder complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-biomechanics-elbow, title: "Biomechanics & pathomechanics — elbow complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-biomechanics-wrist, title: "Biomechanics & pathomechanics — wrist complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-biomechanics-cervical-thoracic, title: "Biomechanics & pathomechanics — cervical & thoracic complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-pathophysiology-shoulder, title: "Pathophysiology & clinical features — shoulder complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-pathophysiology-elbow-wrist, title: "Pathophysiology & clinical features — elbow & wrist complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-pathophysiology-cervical-thoracic, title: "Pathophysiology & clinical features — cervical & thoracic complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-assessment-shoulder, title: "Assessment & functional diagnostic procedures — shoulder", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-assessment-elbow, title: "Assessment & functional diagnostic procedures — elbow", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-assessment-wrist, title: "Assessment & functional diagnostic procedures — wrist", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-assessment-cervical-thoracic, title: "Assessment & functional diagnostic procedures — cervical & thoracic", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-management-pediatric-upper, title: "Clinical decision making & management — pediatric upper quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-management-adult-upper, title: "Clinical decision making & management — adult upper quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-management-geriatric-upper, title: "Clinical decision making & management — geriatric upper quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-surgical-traumatic-upper, title: "Surgical procedures & perioperative PT — traumatic upper-quadrant conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-surgical-nontraumatic-upper, title: "Surgical procedures & perioperative PT — non-traumatic upper-quadrant conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-manual-therapy-techniques, title: "Manual therapy techniques & clinical reasoning (McKenzie, Maitland, Cyriax, Mulligan, Kaltenborn)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-myofascial-met-neurodynamics-taping, title: "Myofascial release, muscle energy, neurodynamics, taping (upper quadrant)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-assistive-devices-upper, title: "Assistive devices for stability & mobility (upper quadrant)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-ebp-upper-quadrant, title: "Evidence-based practice in upper quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-integumentary-upper, title: "Integumentary impairments in upper quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-cross-quadrant-lower-in-upper, title: "Clinical decisions for lower-quadrant function with upper-quadrant dysfunction", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-hand-rehab-soft-tissue, title: "Hand rehabilitation — soft-tissue injuries; sensory & motor re-education", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pmu-hand-rehab-deformities-orthotics, title: "Hand rehabilitation — congenital & acquired deformities; orthotics; recent advances", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-biomechanics-hip, title: "Biomechanics & pathomechanics — hip complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-biomechanics-knee, title: "Biomechanics & pathomechanics — knee complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-biomechanics-ankle, title: "Biomechanics & pathomechanics — ankle complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-biomechanics-lumbosacral, title: "Biomechanics & pathomechanics — lumbo-sacral complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-pathophysiology-hip, title: "Pathophysiology & clinical features — hip complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-pathophysiology-knee-ankle, title: "Pathophysiology & clinical features — knee & ankle complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-pathophysiology-lumbosacral, title: "Pathophysiology & clinical features — lumbo-sacral complex", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-assessment-hip, title: "Assessment & functional diagnostic procedures — hip", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-assessment-knee, title: "Assessment & functional diagnostic procedures — knee", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-assessment-ankle, title: "Assessment & functional diagnostic procedures — ankle", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-assessment-lumbosacral, title: "Assessment & functional diagnostic procedures — lumbo-sacral", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-management-pediatric-lower, title: "Clinical decision making & management — pediatric lower quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-management-adult-lower, title: "Clinical decision making & management — adult lower quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-management-geriatric-lower, title: "Clinical decision making & management — geriatric lower quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-surgical-traumatic-lower, title: "Surgical procedures & perioperative PT — traumatic lower-quadrant conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-surgical-nontraumatic-lower, title: "Surgical procedures & perioperative PT — non-traumatic lower-quadrant conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-manual-therapy-techniques, title: "Manual therapy techniques & clinical reasoning (lower quadrant)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-myofascial-met-neurodynamics-taping, title: "Myofascial release, muscle energy, neurodynamics, taping (lower quadrant)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-assistive-devices-lower, title: "Assistive devices for stability & mobility (lower quadrant)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-ebp-lower-quadrant, title: "Evidence-based practice in lower quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-integumentary-lower, title: "Integumentary impairments in lower quadrant", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-cross-quadrant-upper-in-lower, title: "Clinical decisions for upper-quadrant function with lower-quadrant dysfunction", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-sports-philosophy-pharmacology, title: "Sports philosophy, physiology, psychology & pharmacology (MSK track)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-sports-biomechanics-injuries, title: "Biomechanics & pathomechanics of sports injuries (MSK track)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-sport-injury-prevention-rehab, title: "Sport injury — prevention, diagnosis, treatment & rehabilitation (MSK track)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pml-gait-rehabilitation, title: "Gait rehabilitation", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+  - subjectId: neuro-physiotherapy
+    title: "Neuro Physiotherapy (MPT in Neuro Sciences)"
+    code: "MPT/MPT IN NEURO SCIENCES/2022-2023 to 2026-2027"
+    year: 2
+    topics:
+      - { topicId: ppnp-embryology-nervous-system, title: "Embryology of the nervous system; principles of human development", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-motor-development-assessment, title: "Gross & fine motor development; assessment & testing of infant and child", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-developmental-reflexes, title: "Developmental reflexes (primitive, spinal, brainstem, cortical)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-theories-motor-control-learning, title: "Theories of motor development, motor control & motor learning; stages of learning", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-early-identification-intervention, title: "Early identification & early intervention in pediatric neurological disorders", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-high-risk-infant, title: "Infant at high risk for developmental delay", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-cerebral-palsy, title: "Cerebral palsy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-spina-bifida, title: "Spina bifida", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-pediatric-tbi-sci, title: "Pediatric traumatic brain injury & traumatic/non-traumatic spinal cord injury", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-childhood-neuromuscular-disorders, title: "Neuromuscular disorders in childhood (muscular dystrophies, SMA, polyneuropathy, meningitis, encephalitis)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-down-syndrome, title: "Intellectual disabilities — Down syndrome", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-autism-spectrum, title: "Autism spectrum disorder & physical therapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-parent-counselling-family-care, title: "Parent education & counselling; family-centred care", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-investigations-evoked-potentials, title: "Pathological & radiological investigations; evoked potentials", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-advanced-pediatric-assessment, title: "Advanced assessment of pediatric neuropsychological/neurosurgical conditions (GCS, GMFM, sensory profile)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-neuropediatric-surgery, title: "Surgical procedures in neuropediatric disorders (hydrocephalus, spina bifida) & perioperative PT", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-advanced-pt-approaches, title: "Advanced physiotherapy approaches (PNF, NDT, Rood's, Motor Relearning, Vojta)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-ebp-pediatric, title: "Clinical decision making & evidence-based practice (pediatric)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-pediatric-posture-gait, title: "Posture & gait assessment & management in pediatric neurological conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-pediatric-progressive-management, title: "PT management of progressive & non-progressive pediatric conditions; terminally ill; perceptuo-motor & sensory issues", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-neonatal-pediatric-icu, title: "Physiotherapy in neonatal & pediatric intensive care units", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-social-integration-children, title: "Social integration of children (school/community, assistive technology, legislation, orthotics)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: ppnp-pediatric-pharmacotherapeutics, title: "Pharmacotherapeutics in pediatric neurological conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-nervous-system-review, title: "Review of nervous-system basics (anatomical & physiological)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-neural-movement-plasticity, title: "Neural plasticity & movement plasticity", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-ebp-adult, title: "Clinical decision making & evidence-based practice (adult)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-advanced-adult-assessment, title: "Advanced assessment of adult neurological/neurosurgical/neuropsychological conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-adult-outcome-measures, title: "Outcome measures & assessment (GCS, MMSE, Berg Balance, Fugl-Meyer, Barthel, ASIA)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-advanced-neuro-therapeutic-skills, title: "Advanced neuro-therapeutic skills (PNF, NDT, Rood's, Motor Relearning, Brunnstrom, task-oriented)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-cva-management, title: "Pathophysiology & PT management — cerebrovascular accidents (CNS/ANS/PNS)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-inflammatory-degenerative-disorders, title: "Inflammatory, degenerative, metabolic, traumatic & infectious conditions; cranial-nerve disorders", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-sol-tbi-sci-vestibular-myopathy, title: "Space-occupying lesions, TBI, traumatic spinal cord injury, vestibular disorders, myopathies", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-social-integration-adults, title: "Social integration of disabled persons; adaptive equipment; orthotics/prosthetics", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-adult-pharmacotherapeutics, title: "Pharmacotherapeutics in adult neurological conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: panp-recent-technology-advances, title: "Recent advances in technology for neurological physiotherapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+  - subjectId: cardiovascular-respiratory-physiotherapy
+    title: "Cardiovascular & Respiratory Physiotherapy (MPT in Cardiovascular and Respiratory Sciences)"
+    code: "MPT/MPT IN CARDIOVASCULAR AND RESPIRATORY SCIENCES/2022-2023 to 2026-2027"
+    year: 2
+    topics:
+      - { topicId: prp-respiratory-anatomy-physiology, title: "Anatomy, physiology, biomechanics, pathomechanics & embryology of respiratory system & thorax", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-respiratory-assessment, title: "Assessment of neonatal, pediatric, adult & critically ill respiratory patients", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-respiratory-pathophysiology-pharmacotherapy, title: "Pathophysiology & clinical features of acute & chronic respiratory dysfunctions; pharmacotherapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-respiratory-investigations, title: "Investigations (X-ray, PFT, ABG, blood, sputum, CT, MRI) & relevance to physiotherapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-respiratory-clinical-reasoning, title: "Clinical reasoning in PT evaluation & management (respiratory; acute & rehab)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-respiratory-outcome-measures, title: "Recent advances in outcome measures for thoracic & respiratory dysfunction", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-pulmonary-surgery-perioperative, title: "Pulmonary surgical procedures (thoracotomy, VATS, lobectomy, pneumonectomy, transplant) & perioperative PT", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-ricu-ventilator-management, title: "PT management in RICU — monitoring, ventilator modes, weaning, oxygen therapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-ebp-respiratory, title: "Clinical decision making & evidence-based practice (respiratory)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-ergonomics-energy-conservation, title: "Ergonomics & energy conservation in respiratory dysfunction; assistive devices", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-airway-clearance-devices, title: "Recent advances in airway-clearance & inspiratory muscle-training devices", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-covid-19-management, title: "Physiotherapy management in COVID-19 & recent advances", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: prp-pulmonary-rehabilitation, title: "Pulmonary rehabilitation", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-anatomy-physiology, title: "Anatomy, physiology & embryology of cardiovascular system", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-assessment, title: "Assessment of neonatal, pediatric, adult & critically ill cardiac patients", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-pathophysiology-pharmacotherapy, title: "Pathophysiology & clinical features of acute & chronic CV & peripheral vascular disease; pharmacotherapy & PT", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-investigations, title: "Investigations (ECG, X-ray, biomarkers, Doppler, angiography) & relevance to physiotherapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-clinical-reasoning, title: "Clinical reasoning in PT evaluation & management (CV & peripheral vascular; acute & rehab)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-outcome-measures, title: "Recent advances in outcome measures for CV & peripheral vascular dysfunction", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-surgery-perioperative, title: "Cardiac surgical procedures (CABG, MVR, AVR, transplant, angioplasty, ASD/VSD/TOF) & perioperative PT", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-iccu-ventilator-hbot, title: "PT management in ICCU — monitoring, ventilator, hyperbaric oxygen therapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-ebp-cardiovascular, title: "Clinical decision making & evidence-based practice (cardiovascular)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-cardiac-rehabilitation-phases, title: "Cardiac rehabilitation (Phase I, II, III & IV)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-exercise-testing-prescription, title: "Exercise testing & prescription in cardiac conditions, PVD & diabetes mellitus", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-risk-stratification-prevention, title: "Health & performance principles, risk stratification, prevention & health promotion", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcvp-basic-advanced-life-support, title: "Basic & advanced life support", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+  - subjectId: community-health-physiotherapy
+    title: "Community Health Physiotherapy (MPT in Community Health)"
+    code: "MPT/MPT IN COMMUNITY HEALTH/2022-2023 to 2026-2027"
+    year: 2
+    topics:
+      - { topicId: pcp-legal-rehabilitation-acts, title: "Legal issues — national & international (WHO) rehabilitation acts & implementation", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-health-delivery-system-india, title: "Health delivery system in India; health & illness; levels of healthcare", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-fitness-health-promotion-community, title: "Fitness training for health promotion in community", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-basic-concepts-rehabilitation, title: "Basic concepts of rehabilitation; institute-based rehab; multidisciplinary approach", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-community-based-rehabilitation, title: "Community-based rehabilitation (CBR) — methodology, spectrum, govt/NGO roles, outreach, counselling", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-community-physiotherapist-role, title: "Role of community physiotherapist (institutes, district rehab centre, PHC)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-disability-legislation-awareness, title: "Legislation & laws for persons with disability (national & UN); public awareness", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-icf-disability-evaluation, title: "Disability evaluation per ICF (MSK, neurological, cardio-respiratory) & rehab of disabled", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-appropriate-technology-assistive, title: "Appropriate technology & assistive devices for stability & mobility", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-home-exercise-msk, title: "Home exercise programs — musculoskeletal conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-home-exercise-neuro, title: "Home exercise programs — neurological conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-home-exercise-cardiorespiratory, title: "Home exercise programs — cardiorespiratory conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-fitness-yoga-stress-management, title: "Physical fitness, yoga & psychosomatic approaches (meditation) for stress management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-physiology-ageing, title: "Physiology of ageing; factors affecting ageing", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-theories-of-aging, title: "Theories of aging", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-geriatric-medicine-surgery, title: "Geriatric medicine & geriatric surgery", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-common-elderly-diseases, title: "Common diseases affecting the elderly", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-geriatric-assessment, title: "Assessment of geriatric conditions", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-geriatric-rehabilitation-exercise, title: "Geriatric rehabilitation — exercise prescription in geriatrics", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-nutrition-geriatric, title: "Nutrition in geriatric health", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-falls-prevention-elderly, title: "Falls in geriatrics & fall-prevention programme; incontinence, balance; home/workplace modification", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-psychosocial-safety-elderly, title: "Psychosocial & safety issues in the elderly", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-services-for-elderly, title: "Services for the elderly", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-recent-advances-geriatric-pt, title: "Recent advances in geriatric physical therapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-elderly-posture-gait, title: "Posture & gait evaluation & management in the elderly", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-successful-aging, title: "Successful aging", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-holistic-physiotherapy-elderly, title: "Holistic physiotherapy for the elderly", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-ebp-geriatrics, title: "Evidence-based practice in geriatrics", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-womens-reproductive-health, title: "Women's reproductive health care; physiology of pregnancy; assessment of common discomforts", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-antenatal-care-exercise, title: "Antenatal care & exercise prescription", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-pregnancy-complications, title: "Pregnancy-induced complications (cardiac, vascular, respiratory, neurologic)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-labour-pain-relief, title: "Labour — pain mechanism & relief; physical therapy for pain during labour", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-postpartum-care, title: "Postpartum care; post-natal exercises", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-caesarean-section-management, title: "Caesarean section & physiotherapy management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-neonate-handling-education, title: "Neonate handling education (kangaroo care)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-gynaecologic-conditions-management, title: "Common gynaecologic conditions & PT management (PID, incontinence, prolapse, infertility, PCOD, obesity)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-gynaecologic-surgery-management, title: "Common surgical interventions (hysterectomy, laparotomy) & PT management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-childbearing-msk-pain, title: "Musculoskeletal pain & dysfunction in the childbearing year", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-recent-advances-womens-health, title: "Recent advances in women's health", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-menopause-climacteric, title: "Menopause (climacteric) — anatomical, physiological, psychological & cardiovascular changes", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-cancer-rehab-osteoporosis, title: "Cancer rehabilitation (breast & reproductive); osteoporosis, falls & fractures in postmenopausal women", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-exercise-postmenopausal, title: "Exercise prescription for postmenopausal women", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-female-athletes-exercise, title: "Exercise testing & prescription in female athletes", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-occupational-health-hazards, title: "Occupational health, occupational stress, hazards, industrial hygiene, vulnerable worker groups", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-industrial-therapy-assessment, title: "Industrial therapy — traditional medical model vs worker-care spectrum; assessment of worker", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-injury-prevention-ergonomics, title: "Injury prevention — ergonomics, job analysis, pre-employment screening; employee fitness", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-return-to-work-fce, title: "Returning to work — functional capacity evaluation, job simulation, work conditioning & hardening", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-workplace-injuries-cTD, title: "Workplace injuries — design, repetitive motion & cumulative trauma disorders", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-ergonomics-job-design, title: "Ergonomics — principles & application to job/workstation design and redesign", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-recent-advances-industrial-therapy, title: "Recent advances in industrial therapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-physiotherapy-role-industry, title: "Physiotherapy role in industry — preventive, intervention, ergonomic & rehabilitative", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-ergonomics-hand-tools-lifting, title: "Ergonomics of hand tools, posture, material handling & lifting", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcp-ebp-community-health, title: "Evidence-based practice in community health", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+  - subjectId: sports-physiotherapy
+    title: "Sports Physiotherapy (MPT in Sports)"
+    code: "MPT/MPT IN SPORTS/2022-2023 to 2026-2027"
+    year: 2
+    topics:
+      - { topicId: psp-introduction-sports-sciences, title: "Introduction to sports sciences", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-intro-exercise-physiology-sports, title: "Introduction to exercise physiology (sports context)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-sports-cricket-football-basketball-hockey, title: "Cricket, football, basketball & hockey — terminology, rules, equipment, infrastructure", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-sports-tennis-track-aquatic, title: "Tennis, track & field, aquatic sports — terminology, rules, equipment, infrastructure", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-assessment-diagnosis-sports-injuries, title: "Assessment & diagnosis of sports injuries", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-sports-specific-fitness, title: "Sports-specific fitness (cricket, football, track & field, aquatic)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-sports-biomechanics-injury, title: "Principles of sports biomechanics & biomechanics of injury", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-physics-running-throwing-swimming-jumping, title: "Physics in sports — biomechanics of running, throwing, swimming & jumping; advances in biomechanics assessment", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-advanced-cardiorespiratory-strength, title: "Advanced cardio-respiratory exercise physiology; strength training; fitness & strength testing in sports", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-sports-conditioning-agility-equipment, title: "Sports-specific conditioning & agility training; sports equipment", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-psychological-aspects-sports, title: "Psychological aspects in sports (grief/loss models, cognitive stress & emotional response)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-doping-performance-drugs, title: "Doping & performance-enhancing drugs", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-protective-equipment-orthotics-traumatology, title: "Protective equipment in sports incl. orthotics; sports traumatology", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-investigations-imaging-sports, title: "Principles of investigations & imaging in sports injuries", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-soft-tissue-injuries-lower-limb, title: "Tissue healing & soft-tissue injuries of lower limb (hip, thigh, knee, leg, ankle)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-soft-tissue-injuries-upper-limb, title: "Tissue healing & soft-tissue injuries of upper limb (shoulder, elbow, forearm, wrist, hand)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-fractures-dislocations-spinal-injuries, title: "Common fractures & dislocations; spinal injuries in sports", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-overuse-injuries-sports, title: "Overuse injuries in sports", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-special-population-athletes, title: "Sports-specific problems in female, pediatric & elderly athletes", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psp-on-field-assessment-prevention, title: "On-field assessment & decision making; injury prevention in sports", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-principles-sports-injury-management, title: "Principles of sports injury management", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-psychology-management-sports-training, title: "Specific psychology management in sports; sports-specific training", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-advanced-assessment-acute-injuries, title: "Advanced sports assessment skills; initial management of acute sports injuries", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-surgical-management-rehabilitation, title: "Surgical management & rehabilitation (incl. arthroscopic surgery) for sports injuries", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-injury-specific-overuse-management, title: "Injury & sports-specific management; management of overuse injuries", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-electrotherapy-sports-rehabilitation, title: "Electrotherapy in sports rehabilitation; rehabilitation of sports injuries", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-manual-therapy-peripheral-joints, title: "Manual therapy techniques in sports (McKenzie, Maitland, Cyriax, Mulligan, positional release)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-manual-therapy-myofascial-met-neurodynamics, title: "Manual therapy in sports — myofascial release, muscle energy, neurodynamics", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-musculoskeletal-screening-athletes, title: "Musculoskeletal screening of athletes (pre-season, in-season, post-season)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-special-populations-management, title: "Sports management of special populations (geriatric, physically challenged athletes)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-taping-techniques-advances, title: "Taping techniques & recent advances in sports rehabilitation", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-diet-sports-nutrition, title: "Diet & sports (pre-session diet, pre-game meal, carbohydrate loading, high-fat/high-protein diet)", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-ebp-return-to-sports, title: "Evidence-based sports rehabilitation & return-to-sports criteria", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: psa-female-athletes-menstrual-prevention, title: "Problems in female athletes; menstrual synchrony; preventive strategies", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
