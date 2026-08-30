@@ -380,6 +380,7 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
 ```json
 {
   "schemaVersion": "1.0",
+  "contentKind": "MEDICAL",
   "packId": "demo-foundations",
   "version": "1.0.0",
   "title": "Medical Foundations Demo",
@@ -437,9 +438,12 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
 Schema restrictions include `additionalProperties: false`, semantic pack versions, valid locale,
 unique stable IDs, versioned challenge profiles, bounded timer values, non-empty original wording,
 resolvable source references, allowed review statuses, and no runtime publication when status is
-not `APPROVED`. Applied variants require a reviewed fictional case. Viva variants additionally
-require plausible alternatives and a reviewed follow-up or evidence update. Validator rules reject
-identical prompt variants that claim greater difficulty only through a shorter timer.
+not `APPROVED`. `contentKind` is required; an approved `MEDICAL` pack requires at least one
+`MEDICAL_REVIEWER`, while `CONTENT_EDITOR` approval is limited to
+`NON_MEDICAL_INTERACTION` fixtures. Applied variants require a reviewed fictional case. Viva
+variants additionally require plausible alternatives and a reviewed follow-up or evidence update.
+Validator rules reject identical prompt variants that claim greater difficulty only through a
+shorter timer.
 
 ## 6. Java compiler contracts
 

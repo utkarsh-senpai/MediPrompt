@@ -14,10 +14,31 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.1 — Design foundation**
+**v0.2 — First playable** (current reviewed baseline)
 
-This repository currently contains the reviewed product and technical design. It does not yet
-contain a runnable learner application. The first playable is planned for v0.2.
+The runnable learner application lives in `apps/learner-web/`. It delivers the compact
+mode/challenge/subject → Spin → timed-speech loop with no account, microphone, model download,
+backend, or persistent storage requirement. Speech intelligence, feedback, scheduling, and the
+connected platform remain progressive enhancements for later versions.
+
+```bash
+corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
+pnpm install
+pnpm --filter @mediprompt/learner-web dev      # local dev
+pnpm lint && pnpm typecheck && pnpm test       # unit + component + content
+pnpm test:a11y                                  # accessibility smoke
+pnpm content:validate                           # schema + cross-reference checks
+pnpm build                                      # production PWA build
+pnpm test:e2e                                   # Playwright offline/service-worker tests
+pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
+```
+
+**Demo content (v0.2):** the runnable pack at `content/packs/demo-interaction-fixture.json` is a
+**non-medical interaction fixture** approved by the owner (`CONTENT_EDITOR`). Per
+`docs/V0.2_DEVELOPMENT_CONTEXT.md` §8, medical content is not self-marked `APPROVED` while educator
+review is pending; a synthetic `NOT_FOR_PUBLICATION` fixture (`content/fixtures/`) is structurally
+valid but rejected by the production gate. A genuinely reviewed medical pack replaces this fixture
+before public release.
 
 | Document | Purpose |
 | --- | --- |
@@ -28,6 +49,8 @@ contain a runnable learner application. The first playable is planned for v0.2.
 | [L4 design](docs/L4_CODE_DESIGN.md) | Repository layout, interfaces, algorithms, contracts, and tests |
 | [Difficulty and depth](docs/DIFFICULTY_AND_DEPTH_DESIGN.md) | Guided, Applied, and Viva authoring/behavior contracts |
 | [Implementation handoff](docs/IMPLEMENTATION_HANDOFF.md) | Minimum-context entry point for the next agent or contributor |
+| [Project memory](docs/PROJECT_MEMORY.md) | Current decisions, evidence, risks, and next-version pickup |
+| [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
 
 ## Basic product contract
 

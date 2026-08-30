@@ -1,0 +1,97 @@
+import { test, expect } from "@playwright/test";
+
+// Verifies the v0.2 exit gate: the mode/subject -> spin -> timed-speech flow works,
+// and after a successful first load it keeps working with the network disabled
+// (offline shell + precached pack served by the service worker).
+test("core loop works online and after an offline reload", async ({ page, context }) => {
+  await page.goto("./");
+  await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
+
+  // Online core loop: spin -> topic -> start timer -> finish.
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await expect(page.getByRole("button", { name: "Start timer" })).toBeVisible();
+  await page.getByRole("button", { name: "Start timer" }).click();
+  await expect(page.getByRole("button", { name: "Finish now" })).toBeVisible();
+  await expect(page.getByRole("group", { name: "Practice mode" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Finish now" }).click();
+  await expect(page.getByRole("heading", { name: "Attempt complete" })).toBeVisible();
+
+  await page.evaluate(async () => navigator.serviceWorker.ready.then(() => undefined));
+
+  // CSP blocks unapproved outbound connections.
+  const crossOriginBlocked = await page.evaluate(async () => {
+    try {
+      await fetch("https://example.com/mediprompt-csp-probe");
+      return false;
+    } catch {
+      return true;
+    }
+  });
+  expect(crossOriginBlocked).toBe(true);
+
+  // An unknown same-origin request can hit the network but must never enter an app cache.
+  await page.evaluate(async () => {
+    try {
+      await fetch(new URL("untracked.txt", window.location.href));
+    } catch {
+      // A 404/network rejection is acceptable; only cache behavior matters.
+    }
+  });
+  const cacheSnapshot = await page.evaluate(async () => {
+    const keys = await caches.keys();
+    const urls = (
+      await Promise.all(keys.map(async (key) => (await caches.open(key)).keys()))
+    ).flatMap((requests) => requests.map((request) => request.url));
+    return { keys, urls };
+  });
+  expect(cacheSnapshot.keys.length).toBeGreaterThan(0);
+  expect(cacheSnapshot.keys.every((key) => key.startsWith("mediprompt-"))).toBe(true);
+  expect(cacheSnapshot.urls.some((url) => url.endsWith("untracked.txt"))).toBe(false);
+
+  // Offline reload: shell + approved pack are cached; setup surface still works.
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
+  await expect(page.getByText(/small reviewed offline fallback/i)).toHaveCount(0);
+  await context.setOffline(false);
+});
+
+test("phone-width first-time flow remains usable", async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto("./");
+  await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await expect(page.getByRole("button", { name: "Start timer" })).toBeVisible();
+  const hasNoHorizontalOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth <= window.innerWidth,
+  );
+  expect(hasNoHorizontalOverflow).toBe(true);
+});
+
+test("Viva depth and Deep Research handoff remain distinct", async ({ page }) => {
+  await page.goto("./");
+
+  await page.getByLabel("Subject").selectOption("reasoning-and-tradeoffs");
+  const challenge = page.getByRole("group", { name: "Challenge" });
+  await expect(challenge).toBeVisible();
+  await expect(challenge.getByRole("button")).toHaveCount(3);
+  await challenge.getByRole("button", { name: "Hard · Viva" }).click();
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await expect(page.getByText("Scenario:")).toBeVisible();
+  await expect(page.getByRole("list", { name: "Answer arc" })).toContainText(
+    "Safety-net",
+  );
+
+  await page.reload();
+  await page.getByRole("button", { name: "Deep Research" }).click();
+  await page.getByLabel("Subject").selectOption("reasoning-and-tradeoffs");
+  await expect(page.getByRole("group", { name: "Challenge" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await page.getByRole("button", { name: "Begin research" }).click();
+  await expect(page.getByText("Research time left")).toBeVisible();
+  await page.getByRole("button", { name: "Done researching" }).click();
+  await expect(page.getByRole("button", { name: "Start speaking" })).toBeVisible();
+  await page.getByRole("button", { name: "Start speaking" }).click();
+  await expect(page.getByText("Speaking time left")).toBeVisible();
+  await expect(page.getByRole("group", { name: "Practice mode" })).toHaveCount(0);
+});
