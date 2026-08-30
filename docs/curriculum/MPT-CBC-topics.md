@@ -1,15 +1,47 @@
-# MPT Competency-Based Curriculum — Topic Reference (DRAFT)
+# MPT Competency-Based Curriculum - Candidate Practice Topics (DRAFT)
 
 ## Source citation
 
 - **Document title:** Competency-Based Post Graduate Curriculum for the Indian Physiotherapy Post Graduate
 - **Institution:** Ravi Nair Physiotherapy College, Datta Meghe Institute of Higher Education and Research (Deemed University), Wardha, Maharashtra, India
 - **Source file:** `MPT COMPETENCY BASED CURRICULUM.pdf` (extracted with `pdftotext -layout` to ~5,972 lines / 210 pages)
-- **Extracted:** 2026-08-30 by Claude for MediPrompt
+- **Extracted and reviewed:** 2026-08-30 for MediPrompt
 
 ## Provenance and legal note
 
-This file is a **DRAFT reference**, not a reviewed MediPrompt topic pack. It records **topic names only** — short factual labels derived from the competency tables of the source curriculum (competency numbers and module headings). **No copyrighted prose, definitions, or explanatory paragraph text from the curriculum is reproduced here.** Source ordering is partially discarded to fit MediPrompt's nested subject → module → topic structure. Rubrics, prompts, and viva questions have **not** been authored; the matching YAML (`mpt-competency-draft.yaml`) leaves all rubric/prompt/viva fields empty on purpose. Everything here is subject to educator review before any publish, and topic-pack contributions will additionally require source metadata, original rubric wording, automated validation, and human review per the MediPrompt contributing policy.
+This file is a **DRAFT authoring reference**, not a reviewed or publishable MediPrompt topic pack. It
+contains 265 concise **candidate practice-topic labels** derived from curriculum competency tables.
+The number 265 is an authoring count, not an official curriculum count: some source competencies
+were combined for a useful speaking prompt, some were split, and repeated practical rows were
+usually folded into their didactic counterpart.
+
+Only short labels and the minimum source coordinates needed for review are retained. No claim is
+made that every label is outside copyright; publication still requires a documented source-use and
+licence decision. Rubrics, model answers, prompts, viva questions, and medical correctness claims
+have not been authored. The companion YAML is an authoring inventory and intentionally remains
+`DRAFT`. It must not be loaded by the learner application or compiled into a runtime pack until an
+educator has verified the topic-to-competency mapping and independently authored the learning
+content.
+
+## Extraction scope and traceability
+
+PDF pages below are one-based file page numbers, not printed page numbers. The review used both
+layout-aware text extraction and visual inspection of representative table pages in every subject.
+
+| Curriculum section | Program coordinates | Section pages | Competency-table pages | Competency families |
+| --- | --- | ---: | ---: | --- |
+| Research Methods and Bioethics | Year 1, common, Paper I | 1-24 | 9-17 | `RMB` |
+| Applied Physiotherapeutics | Year 1, common, Paper II | 25-49 | 34-42 | `PAP` |
+| Musculoskeletal Physiotherapy | Year 2, specialty, Papers III-IV | 50-80 | 58-69 | `PMU`, `PML` |
+| Neuro Physiotherapy | Year 2, specialty, Papers III-IV | 81-109 | 90-101 | `PPNP`, `PANP` |
+| Cardiovascular and Respiratory Physiotherapy | Year 2, specialty, Papers III-IV | 110-137 | 119-127 | `PRP`, `PCVP` |
+| Community Health Physiotherapy | Year 2, specialty, Papers III-IV | 138-178 | 146-168 | `PCP`, `PCWGP` |
+| Sports Physiotherapy | Year 2, specialty, Papers III-IV | 179-210 | 187-196 | `PSP`, `PSA` |
+
+Included: course-content competency rows and distinct practical skills useful for spoken practice.
+Excluded: preambles, goals, PO/PSO/CO and AETCOM statements, examination schemes, book lists,
+PO-CO matrices, teaching/assessment-method columns, and administrative prose. Those exclusions
+avoid turning curriculum administration into learner prompts.
 
 ## Program overview
 
@@ -27,7 +59,31 @@ This file is a **DRAFT reference**, not a reviewed MediPrompt topic pack. It rec
   4. MPT in Community Health Physiotherapy
   5. MPT in Sports Physiotherapy
 
-Subject codes are taken from the source document headers (e.g. `MPT/RESEARCH METHODS & BIOETHICS/2022-2023 to 2026-2027`). The document is competency-coded (RMB, PAP, PMU/PML, PPNP/PANP, PRP/PCVP, PCP/PCWGP, PSP/PSA); those codes are retained in the YAML `code`/`tags` area where useful but are not required for the topic hierarchy.
+Subject codes are taken from the source document headers. Competency-family prefixes are encoded in
+candidate IDs, but most exact row codes are not yet stored per candidate. The source page ranges and
+competency families above are the present traceability boundary; exact row-code mapping is a
+required educator-review task before compilation.
+
+## Categorization model for MediPrompt
+
+Curriculum navigation and learning classification solve different problems and must stay separate.
+The application should preserve the source hierarchy for browsing:
+
+```text
+program -> year -> common/specialty track -> paper -> module -> competency code -> candidate topic
+```
+
+Each reviewed topic may then receive independent classification values:
+
+| Axis | Controlled values / examples | Product use |
+| --- | --- | --- |
+| Primary domain | foundations-science; condition-pathophysiology; assessment-investigation; clinical-reasoning; intervention-rehabilitation; procedure-perioperative-critical-care; population-community-participation; research-ethics-evidence-professional-practice; sport-performance | Cross-paper discovery and balanced random draws |
+| Context | pediatric; adult; geriatric; women; athlete; community; upper-quadrant; lower-quadrant; body system | Optional secondary filters; a topic may have several |
+| Prompt blueprint | explain-concept; assess; interpret; manage-case; compare-differentiate; explain-procedure; defend-evidence; teach-back | Generates a reviewed prompt-authoring queue, never medical content automatically |
+| Lifecycle | candidate; normalized; educator-reviewed; prompt-ready; published | Prevents raw extraction from reaching learners |
+
+The first UI filters should be year, track, paper, and module. Domain and context tags are secondary;
+they must not replace the curriculum coordinates or imply equivalent depth across specialties.
 
 ## Topic hierarchy
 
@@ -378,12 +434,45 @@ Subject codes are taken from the source document headers (e.g. `MPT/RESEARCH MET
 | 7 | Sports Physiotherapy | III & IV | 2 | 34 |
 | **Total** | | | | **265** |
 
-## Extraction notes (for educator review)
+## Extraction review findings
 
-- **Source form.** The PDF was extracted with `pdftotext -layout`; competency tables survived as multi-line wrapped rows. Topic labels above are condensed from the competency "Topic"/"Competency" column. Competency codes (RMB x.y, PAP x.y, PMU/PML x.y, PPNP/PANP x.y, PRP/PCVP x.y, PCP/PCWGP x.y, PSP/PSA x.y) are preserved as the source granularity but are not reproduced as separate entities here.
-- **Didactic vs non-didactic.** Each specialty paper has a didactic table and a "NON-DIDACTIC CONTENT: PRACTICAL" table. The practical tables repeat the same competency numbers as hands-on skill sessions; they have been folded into the listed topics rather than duplicated, except where the practical block introduces genuinely distinct screening/evaluation sub-skills (Applied Physiotherapeutics "Screening & Evaluation" module).
-- **Recurring topics across years/specialties (flagged for dedup or shared rubric reuse):** exercise-physiology responses/adaptations; anthropometric measurements; physical-fitness assessment; posture & gait analysis; manual therapy schools (McKenzie/Maitland/Cyriax/Mulligan/Kaltenborn); myofascial release / muscle energy / neurodynamics / taping; PNF / NDT / Rood's / Motor Relearning / Brunnstrom; assistive devices & orthotics/prosthetics; pharmacotherapeutics; clinical decision making & evidence-based practice; ICF documentation; home exercise programs; screening & evaluation; cardiopulmonary life support. These recur in the first-year Applied Physiotherapeutics paper and again inside multiple second-year specialty papers — an educator should decide whether to author one shared rubric or specialty-specific variants.
-- **Musculoskeletal track also covers sports.** Paper IV of the Musculoskeletal specialty is explicitly "Lower Quadrant **and Sports**" and contains a short sports module (PML 11.1–12.1), separate from the dedicated Sports Physiotherapy specialty. Both are kept; the overlap is noted so reviewers do not treat them as duplicates.
-- **Image-only / unparseable content.** No image-only pages were encountered in the extracted text for the competency tables. The preamble, goals, PO/PSO/CO statements, AETCOM competencies, scheme of examination, books-recommended and PO-CO mapping blocks are prose/administrative and were deliberately not mined for topics (only the course-content competency tables were).
-- **Ambiguities.** (a) Paper numbering differs slightly between specialties — Cardiovascular & Respiratory lists some Paper IV topics under a "Paper III" column in the source table (PCVP rows); the headings above follow the source section titles (Part II / Paper IV: Cardiovascular). (b) Community Health Paper IV is very large (40 topics across geriatric, women's, industrial) and may warrant splitting into sub-subjects during pack authoring. (c) Some competency codes are duplicated across didactic and practical tables of the same paper — intentional, retained once. (d) Subject-code casing/spelling irregularities in the source (e.g. "MUSCULOSKELETAL SCIENCES", "NEURO", "COMMUNITY") were normalized to the official specialty names.
-- **Not yet authored.** No rubrics, prompts, viva questions, difficulty levels, or tags have been written. The companion `mpt-competency-draft.yaml` is a skeleton only.
+- **Granularity is intentionally non-canonical.** Research mostly yields one label per competency;
+  Community Paper III combines several rows; some composite rows were split where two concepts would
+  make distinct speaking prompts. Practical repetitions were generally folded into the related
+  didactic candidate. This is why the count is explicitly 265 candidate labels rather than 265
+  official topics or competencies.
+- **Practical-table labels are inconsistent in the source.** Most papers distinguish didactic and
+  non-didactic/practical content, but Sports Paper IV labels its repeated skills table "Didactic
+  Content." MediPrompt classifies by the row's learning purpose and provenance, not by assuming all
+  source tables use one label.
+- **Applied Physiotherapeutics adds distinct practical screening candidates.** These are retained
+  where the practical table introduces a usable evaluation skill rather than merely repeating the
+  didactic row.
+- **Cardiovascular Paper IV contains a source anomaly.** Early `PCVP` rows display Paper III in the
+  table column, while the enclosing section is Part II / Paper IV (Cardiovascular Physiotherapy).
+  This reference follows the enclosing section and records the anomaly for review.
+- **Musculoskeletal Paper IV also covers sports.** The `PML` sports block is retained separately
+  from the dedicated Sports specialty because their source coordinates and expected depth differ.
+- **Recurring concepts are not automatic duplicates.** Exercise physiology, physical-fitness
+  assessment, posture/gait, manual therapy, assistive devices, pharmacotherapeutics, clinical
+  reasoning, evidence-based practice, ICF documentation, and life support recur in different
+  contexts. An educator must decide whether a shared rubric is valid or a specialty-specific rubric
+  is required.
+- **No image-only competency tables were found.** Multi-line wrapping and merged cells still make
+  exact automated row association unsafe; page and row-code evidence must survive normalization.
+
+## Educator review checklist
+
+Before any candidate becomes prompt-ready:
+
+1. Confirm the label against the cited PDF page and exact competency code(s).
+2. Confirm its year, track, paper, and module; resolve the documented source anomalies.
+3. Decide whether combined labels should split and whether split labels should recombine.
+4. Assign one primary domain, optional context tags, and suitable prompt blueprint(s).
+5. Author original prompt wording, expected concepts, acceptable variants, limitations, and sources.
+6. Review medical accuracy, scope, and exam relevance; record reviewer identity and date.
+7. Record the content licence and attribution decision.
+8. Promote lifecycle state one gate at a time; only `published` content may enter a runtime pack.
+
+No rubrics, prompts, viva questions, difficulty levels, or classification tags have been authored in
+this inventory. Empty fields are deliberate and must fail publication validation.

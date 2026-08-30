@@ -210,6 +210,8 @@ TopicPack
  └─ subjects[]
      └─ topics[]
          ├─ identity: topicId, title, tags, difficulty
+         ├─ curriculum: program, year, track, paper, module, competencyCodes, sourceLocators
+         ├─ classification: primaryDomain, contexts[], promptBlueprints[]
          ├─ prompts[]: promptId, mode, wording, time policy
          ├─ rubrics[]: rubricId, register, concepts[]
          │   └─ concept: conceptId, label, accepted phrases, importance, sourceRefs
@@ -221,12 +223,26 @@ TopicPack
 Rules:
 
 - Identifiers are stable, lowercase, and pack-scoped; display titles may change.
+- Curriculum coordinates preserve source navigation and are never inferred from display order.
+- Classification is orthogonal to curriculum coordinates: it supports discovery but never replaces
+  year, track, paper, module, competency code, or page evidence.
 - Every medical assertion or expected concept links to a pack source entry.
 - Accepted phrases are curated equivalents, not model-generated at runtime.
 - Common errors are optional and never shown as if detected unless transcript evidence supports it.
 - Registers and modes may point to distinct rubrics.
 - A breaking semantic change increments the pack major version; history keeps its snapshot reference.
 - Published packs contain original wording and licence metadata, not copied textbook prose.
+
+Extracted curriculum inventories are a separate authoring input, not a weak form of `TopicPack`.
+Each candidate moves through `candidate -> normalized -> educator-reviewed -> prompt-ready ->
+published`. Only the last state may be compiled into a runtime pack. At the first three states,
+empty prompts and rubrics are expected and publication validation must reject them.
+
+The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
+assessment/investigation, clinical reasoning, intervention/rehabilitation,
+procedure/perioperative/critical care, population/community/participation,
+research/ethics/evidence/professional practice, and sport/performance. Context tags such as age
+group, population, body region, and system are multi-valued secondary facets.
 
 ## 5. Local persistence and migrations
 
@@ -260,13 +276,14 @@ flowchart LR
     Ingest[Document ingestor]
     Detect[Safety and licence gate]
     Extract[Heading extractor]
+    Locate[Curriculum coordinate mapper]
     Normalize[Topic normalizer]
     Draft[Draft writer]
     Validate[Pack validator]
     Compile[Runtime compiler]
     Manifest[Manifest writer]
 
-    CLI --> Ingest --> Detect --> Extract --> Normalize --> Draft
+    CLI --> Ingest --> Detect --> Extract --> Locate --> Normalize --> Draft
     CLI --> Validate --> Compile --> Manifest
 ```
 
@@ -276,8 +293,12 @@ flowchart LR
   unauthorized input; false positives require an explicit reviewed override outside CI.
 - **Heading extractor:** proposes headings with page references and confidence, never medical
   rubrics.
+- **Curriculum coordinate mapper:** preserves program/year/track/paper/module, exact competency
+  code candidates, one-based PDF page locators, and source anomalies. Ambiguous row associations
+  remain unresolved review items instead of being guessed.
 - **Topic normalizer:** Unicode/case/punctuation normalization, conservative duplicate grouping,
-  and hierarchy suggestions while retaining source evidence.
+  hierarchy and classification suggestions while retaining source evidence. Suggestions never
+  advance lifecycle state.
 - **Draft writer:** emits reviewable YAML with `DRAFT` status and unresolved fields.
 - **Pack validator:** JSON Schema plus policy checks for sources, licences, stable IDs, reviewers,
   dangling refs, duplicates, and prohibited content.

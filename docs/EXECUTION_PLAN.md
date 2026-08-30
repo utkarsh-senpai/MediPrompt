@@ -174,15 +174,21 @@ all progress can be exported/deleted; three packs pass schema, source, and conte
 Add a Java 21/Spring Boot command-line content compiler:
 
 - PDFBox extraction for syllabus/topic-name candidates.
-- Duplicate normalization and hierarchy suggestions.
+- Preservation of program, year, track, paper, module, exact competency-code candidates, and
+  one-based PDF page locators through normalization.
+- Duplicate normalization, hierarchy suggestions, primary-domain/context classification
+  suggestions, and explicit unresolved-mapping reports.
 - Reject-by-default handling for prose, patient identifiers, and unsupported documents.
-- Draft YAML output requiring human review.
+- A versioned authoring-inventory YAML distinct from the runtime-pack schema.
+- Enforced candidate → normalized → educator-reviewed → prompt-ready → published lifecycle gates.
 - JSON Schema validation and deterministic YAML → runtime JSON compilation.
 - Content provenance manifest and pack-version checks.
 - CI validation of every topic pack.
 
 **Exit gate:** the supplied exam PDF can produce a reviewable draft without copying source prose;
-golden PDF fixtures are reproducible; no extracted content is published without approval.
+golden PDF fixtures are reproducible; every educator-reviewed candidate has an exact competency
+mapping and page evidence; no extracted content is published without educator, source-use, licence,
+and runtime-schema approval.
 
 ### v0.7 — Real-user beta hardening
 
@@ -327,7 +333,10 @@ must not be claimed before the study design supports them.
 ## 8. Current blockers and inputs
 
 - Owner review of v0.1 design.
-- Initial syllabus/topic PDF and its reuse constraints. (2026-08-30: the MPT competency-based curriculum has been extracted as a draft topic-name reference under `docs/curriculum/`; rubrics and educator review still pending.)
+- Initial syllabus/topic PDF and its reuse constraints. (2026-08-30: the MPT curriculum has been
+  reviewed into 265 candidate practice-topic labels under `docs/curriculum/`; page-level section
+  provenance is recorded, while exact per-candidate competency mapping, licence decision, prompts,
+  rubrics, and educator approval remain pending.)
 - Friend's course/year, exam format, date, target subjects, devices, and preferred language.
 - At least one educator review route for rubrics and later calibration.
 - Final software/content licence decision before public contributions.

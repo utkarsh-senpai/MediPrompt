@@ -130,10 +130,10 @@ would make later versions drift from decisions and code merged in earlier versio
 
 The first useful beta should serve one real medical student within four to six weeks after v0.1 is
 approved. Success means she can complete the full prompt → speak → review → retry loop on a phone
-and find the feedback useful—not that the repository contains the most features. The first reference
-curriculum extracted is the MPT (Master of Physiotherapy) competency-based curriculum, held as a
-draft topic-name reference under `docs/curriculum/` with rubric authoring and educator review still
-pending.
+and find the feedback useful—not that the repository contains the most features. The first
+curriculum inventory contains 265 MPT candidate practice-topic labels; it remains a
+[reference-only draft](docs/curriculum/MPT-CBC-topics.md) pending exact competency mapping, licence
+review, prompt/rubric authoring, and educator approval.
 
 ## Contributing
 

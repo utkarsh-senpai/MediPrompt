@@ -1,11 +1,15 @@
-schemaVersion: "1.0"
+schemaVersion: "authoring-inventory/0.2"
+documentType: curriculum-authoring-inventory
 packId: mpt-competency-draft
 version: 0.1.0-draft
-title: "MPT Competency-Based Curriculum — Draft Topic Reference"
+title: "MPT Competency-Based Curriculum - Candidate Practice Topics"
 locale: en-IN
+candidateCount: 265
+publicationStatus: REFERENCE_ONLY
+runtimeCompatible: false
 licence:
   id: UNREVIEWED
-  note: "Draft reference of topic names only; no copyrighted prose; not for publication until reviewed."
+  note: "Source-use and licence decision pending; this authoring inventory must not be published."
 review:
   status: DRAFT
   reviewers: []
@@ -15,6 +19,79 @@ sources:
     citation: "Competency-Based Post Graduate Curriculum for the Indian Physiotherapy, Ravi Nair Physiotherapy College, Datta Meghe Institute of Higher Education and Research, Wardha."
     url: null
     accessedAt: "2026-08-30"
+extractionPolicy:
+  included: "Course-content competency rows and distinct practical skills useful for speaking practice."
+  excluded: "Preambles, outcomes, examination schemes, book lists, mappings, and administrative prose."
+  granularity: "Candidate labels may combine or split source competencies; 265 is not an official curriculum count."
+  publicationGate: "Exact competency mapping, educator-authored learning content, medical review, and licence approval required."
+taxonomies:
+  primaryDomains:
+    - foundations-science
+    - condition-pathophysiology
+    - assessment-investigation
+    - clinical-reasoning
+    - intervention-rehabilitation
+    - procedure-perioperative-critical-care
+    - population-community-participation
+    - research-ethics-evidence-professional-practice
+    - sport-performance
+  promptBlueprints:
+    - explain-concept
+    - assess
+    - interpret
+    - manage-case
+    - compare-differentiate
+    - explain-procedure
+    - defend-evidence
+    - teach-back
+  lifecycle:
+    - candidate
+    - normalized
+    - educator-reviewed
+    - prompt-ready
+    - published
+curriculumIndex:
+  - { subjectId: research-methods-and-bioethics, year: 1, track: common, paper: I, tablePages: [9, 17], competencyFamilies: [RMB], candidateIdPrefix: "rmb-" }
+  - { subjectId: applied-physiotherapeutics, year: 1, track: common, paper: II, tablePages: [34, 42], competencyFamilies: [PAP], candidateIdPrefix: "pap-" }
+  - { subjectId: musculoskeletal-physiotherapy, year: 2, track: musculoskeletal, paper: III, tablePages: [58, 63], competencyFamilies: [PMU], candidateIdPrefix: "pmu-" }
+  - { subjectId: musculoskeletal-physiotherapy, year: 2, track: musculoskeletal, paper: IV, tablePages: [64, 69], competencyFamilies: [PML], candidateIdPrefix: "pml-" }
+  - { subjectId: neuro-physiotherapy, year: 2, track: neuro, paper: III, tablePages: [90, 96], competencyFamilies: [PPNP], candidateIdPrefix: "ppnp-" }
+  - { subjectId: neuro-physiotherapy, year: 2, track: neuro, paper: IV, tablePages: [97, 101], competencyFamilies: [PANP], candidateIdPrefix: "panp-" }
+  - { subjectId: cardiovascular-respiratory-physiotherapy, year: 2, track: cardiovascular-respiratory, paper: III, tablePages: [119, 124], competencyFamilies: [PRP], candidateIdPrefix: "prp-" }
+  - subjectId: cardiovascular-respiratory-physiotherapy
+    year: 2
+    track: cardiovascular-respiratory
+    paper: IV
+    tablePages: [125, 127]
+    competencyFamilies: [PCVP]
+    candidateIdPrefix: "pcvp-"
+    sourceAnomaly: "Early PCVP rows show Paper III in the table column; enclosing Part II heading identifies Paper IV."
+  - subjectId: community-health-physiotherapy
+    year: 2
+    track: community-health
+    paper: III
+    tablePages: [146, 151]
+    competencyFamilies: [PCP]
+    candidateIdPrefix: "pcp-"
+    excludeCandidateIds: [pcp-ebp-community-health]
+  - subjectId: community-health-physiotherapy
+    year: 2
+    track: community-health
+    paper: IV
+    tablePages: [152, 168]
+    competencyFamilies: [PCWGP, PCP]
+    candidateIdPrefix: "pcwgp-"
+    additionalCandidateIds: [pcp-ebp-community-health]
+    note: "The cross-cutting community-health evidence-based-practice candidate uses the PCP family and requires exact row mapping."
+  - { subjectId: sports-physiotherapy, year: 2, track: sports, paper: III, tablePages: [187, 192], competencyFamilies: [PSP], candidateIdPrefix: "psp-" }
+  - subjectId: sports-physiotherapy
+    year: 2
+    track: sports
+    paper: IV
+    tablePages: [193, 196]
+    competencyFamilies: [PSA]
+    candidateIdPrefix: "psa-"
+    sourceAnomaly: "The repeated Paper IV skills table is labelled Didactic Content in the source."
 subjects:
   - subjectId: research-methods-and-bioethics
     title: "Research Methods and Bioethics"
@@ -271,7 +348,7 @@ subjects:
       - { topicId: pcwgp-industrial-therapy-assessment, title: "Industrial therapy — traditional medical model vs worker-care spectrum; assessment of worker", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
       - { topicId: pcwgp-injury-prevention-ergonomics, title: "Injury prevention — ergonomics, job analysis, pre-employment screening; employee fitness", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
       - { topicId: pcwgp-return-to-work-fce, title: "Returning to work — functional capacity evaluation, job simulation, work conditioning & hardening", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
-      - { topicId: pcwgp-workplace-injuries-cTD, title: "Workplace injuries — design, repetitive motion & cumulative trauma disorders", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
+      - { topicId: pcwgp-workplace-injuries-ctd, title: "Workplace injuries — design, repetitive motion & cumulative trauma disorders", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
       - { topicId: pcwgp-ergonomics-job-design, title: "Ergonomics — principles & application to job/workstation design and redesign", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
       - { topicId: pcwgp-recent-advances-industrial-therapy, title: "Recent advances in industrial therapy", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }
       - { topicId: pcwgp-physiotherapy-role-industry, title: "Physiotherapy role in industry — preventive, intervention, ergonomic & rehabilitative", tags: [], difficulty: null, prompts: [], rubrics: [], vivaQuestions: [] }

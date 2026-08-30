@@ -318,6 +318,44 @@ Changing timezone preserves the intended local due date unless the learner choos
 
 ## 5. Runtime topic-pack schema
 
+### Authoring-inventory boundary
+
+Curriculum extraction produces an authoring inventory, not the runtime schema shown below. The
+current MPT file under `docs/curriculum/` is deliberately `runtimeCompatible: false`; empty prompt
+and rubric arrays are evidence that content has not been authored, not valid learner content.
+
+Minimum candidate shape for the v0.6 authoring schema:
+
+```yaml
+schemaVersion: authoring-inventory/1.0
+documentType: curriculum-authoring-inventory
+publicationStatus: REFERENCE_ONLY
+runtimeCompatible: false
+candidates:
+  - candidateId: stable-lowercase-id
+    title: Concise candidate label
+    lifecycle: candidate
+    curriculum:
+      program: MPT
+      year: 2
+      track: neuro
+      paper: III
+      module: pediatric-neurology
+      competencyCodes: [PPNP1.1]
+      sourceLocators:
+        - { sourceId: src-curriculum, pdfPages: [90] }
+    classification:
+      primaryDomain: foundations-science
+      contexts: [pediatric]
+      promptBlueprints: [explain-concept]
+```
+
+Inventory validation permits unresolved mappings only in `candidate` or `normalized` state. It
+requires exact competency code and page locators before `educator-reviewed`, and original prompts,
+rubrics, medical sources, licence approval, and reviewer evidence before `prompt-ready`. The
+compiler accepts only `published` candidates and emits only an `APPROVED` runtime pack. Source PDF
+ordering is never used as an implicit relationship.
+
 The normative schema will live at `content/schema/topic-pack.schema.json`. Minimum runtime shape:
 
 ```json
@@ -388,6 +426,10 @@ public interface TopicCandidateExtractor {
     List<TopicCandidate> extract(ExtractedDocument document);
 }
 
+public interface CurriculumCoordinateMapper {
+    MappingResult map(List<TopicCandidate> candidates, ExtractedDocument document);
+}
+
 public interface TopicNormalizer {
     NormalizationResult normalize(List<TopicCandidate> candidates);
 }
@@ -397,7 +439,7 @@ public interface PackValidator {
 }
 
 public interface RuntimePackCompiler {
-    CompiledPack compile(ApprovedSourcePack pack);
+    CompiledPack compile(PublishedAuthoringPack pack);
 }
 
 public interface ProvenanceManifestWriter {
@@ -410,6 +452,7 @@ Representative implementations:
 - `PdfBoxDocumentTextExtractor`
 - `RejectByDefaultInputPolicyGate`
 - `LayoutAwareHeadingExtractor`
+- `EvidencePreservingCurriculumCoordinateMapper`
 - `ConservativeTopicNormalizer`
 - `JsonSchemaAndPolicyPackValidator`
 - `DeterministicRuntimePackCompiler`
@@ -422,12 +465,15 @@ small spike. Exit codes are stable: `0` success, `2` validation failure, `3` pol
 Commands:
 
 ```text
-mediprompt-content extract --input syllabus.pdf --source source.yml --output draft.yml
-mediprompt-content validate --input reviewed-pack.yml
-mediprompt-content compile --input reviewed-pack.yml --output runtime/ --manifest manifest.json
+mediprompt-content extract --input syllabus.pdf --source source.yml --output inventory.yml
+mediprompt-content validate --profile inventory --input inventory.yml
+mediprompt-content validate --profile publication --input published-pack.yml
+mediprompt-content compile --input published-pack.yml --output runtime/ --manifest manifest.json
 ```
 
-`compile` accepts only `APPROVED` input and writes to a staging directory before atomic replace.
+`extract` records one-based PDF pages and unresolved row associations. `compile` accepts only
+`published` authoring input with `APPROVED` review and writes to a staging directory before atomic
+replace.
 
 ## 7. Future connected contracts
 
