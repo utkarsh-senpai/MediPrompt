@@ -1,0 +1,19 @@
+{
+  "name": "mediprompt",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=22.23.2",
+    "pnpm": ">=9.15.0"
+  },
+  "scripts": {
+    "lint": "pnpm -r run lint",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "test:a11y": "pnpm -r run test:a11y",
+    "test:e2e": "pnpm -r run test:e2e",
+    "content:validate": "pnpm -r run content:validate",
+    "build": "pnpm -r run build"
+  }
+}

@@ -1,0 +1,268 @@
+:root {
+  /* WCAG 2.2 AA computed palette (docs/V0.2_DEVELOPMENT_CONTEXT.md visual identity) */
+  --ivory: #f4efe6;
+  --teal: #14524d; /* text on ivory ~7.8:1 */
+  --teal-soft: #2c6e68;
+  --terracotta: #a24328; /* ivory text ~5.4:1 */
+  --sage: #c9d4c5;
+  --ink: #1b3b37;
+  --muted: #5c6b67;
+  --surface: #fbf8f2;
+  --ring: #14524d;
+  --danger: #8a2f1f;
+
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --space: 0.75rem;
+  --touch: 44px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--ivory);
+  line-height: 1.5;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: calc(var(--space) * 2);
+  min-height: 100dvh;
+}
+
+h1 {
+  color: var(--teal);
+  font-size: 1.5rem;
+  margin: 0 0 var(--space);
+}
+
+h2 {
+  color: var(--teal);
+  font-size: 1.15rem;
+  margin: 0 0 calc(var(--space) * 0.5);
+}
+
+button {
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid var(--teal);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  min-height: var(--touch);
+  min-width: var(--touch);
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: var(--sage);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button[aria-pressed="true"] {
+  background: var(--teal);
+  color: var(--ivory);
+  border-color: var(--teal);
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.spin {
+  background: var(--terracotta);
+  color: var(--ivory);
+  border-color: var(--terracotta);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.8rem 1.4rem;
+}
+
+.control-row {
+  display: grid;
+  gap: 0.4rem;
+  margin-block: var(--space);
+}
+
+.control-row > label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.topic-card {
+  background: var(--surface);
+  border: 1px solid var(--sage);
+  border-radius: 12px;
+  padding: calc(var(--space) * 1.2);
+  margin-block: var(--space);
+}
+
+.case-context {
+  border-inline-start: 4px solid var(--sage);
+  padding-inline-start: 0.75rem;
+}
+
+.focus-view {
+  min-height: calc(100dvh - 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.expectation {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 0.25rem;
+}
+
+.arc {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.arc li {
+  background: var(--ivory);
+  border: 1px solid var(--sage);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--teal);
+}
+
+/* Circular countdown */
+.countdown {
+  display: grid;
+  place-items: center;
+  margin-block: calc(var(--space) * 2);
+}
+
+.countdown svg {
+  width: 220px;
+  height: 220px;
+  max-width: 70vw;
+}
+
+.countdown .ring-bg {
+  stroke: var(--sage);
+}
+
+.countdown .ring-fg {
+  stroke: var(--terracotta);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.25s linear;
+}
+
+.countdown .time {
+  font-size: 2.5rem;
+  font-weight: 700;
+  fill: var(--teal);
+}
+
+.status {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: var(--space);
+}
+
+.dialog {
+  border: 0;
+  border-radius: 14px;
+  padding: 0;
+  width: min(420px, calc(100vw - 2 * var(--space)));
+  max-height: calc(100dvh - 2 * var(--space));
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.dialog::backdrop {
+  background: rgba(27, 59, 55, 0.55);
+}
+
+.dialog > form {
+  background: var(--surface);
+  padding: calc(var(--space) * 2);
+  width: 100%;
+  max-height: inherit;
+  overflow: auto;
+  display: grid;
+  gap: var(--space);
+}
+
+input[type="number"],
+select {
+  font: inherit;
+  padding: 0.5rem;
+  border: 2px solid var(--sage);
+  border-radius: 8px;
+  min-height: var(--touch);
+  width: 100%;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 360px) {
+  main {
+    padding: var(--space);
+  }
+  .countdown svg {
+    width: 160px;
+    height: 160px;
+  }
+  .countdown .time {
+    font-size: 1.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .countdown .ring-fg {
+    transition: none;
+  }
+  * {
+    scroll-behavior: auto;
+  }
+}

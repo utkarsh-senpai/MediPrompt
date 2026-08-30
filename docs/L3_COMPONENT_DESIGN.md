@@ -207,7 +207,7 @@ A source pack is review-oriented YAML; runtime packs are compiled JSON. The conc
 
 ```text
 TopicPack
- ├─ identity: packId, version, title, locale, licence
+ ├─ identity: schemaVersion, contentKind, packId, version, title, locale, licence
  ├─ provenance: maintainers, reviewers, sources, reviewedAt
  └─ subjects[]
      └─ topics[]
@@ -226,6 +226,9 @@ TopicPack
 Rules:
 
 - Identifiers are stable, lowercase, and pack-scoped; display titles may change.
+- `contentKind` distinguishes reviewed medical material from an explicitly non-medical interaction
+  fixture. An `APPROVED` medical pack requires a `MEDICAL_REVIEWER`; a content editor cannot
+  promote medical claims.
 - Curriculum coordinates preserve source navigation and are never inferred from display order.
 - Classification is orthogonal to curriculum coordinates: it supports discovery but never replaces
   year, track, paper, module, competency code, or page evidence.
