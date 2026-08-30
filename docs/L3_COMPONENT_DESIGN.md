@@ -229,6 +229,9 @@ Rules:
 - `contentKind` distinguishes reviewed medical material from an explicitly non-medical interaction
   fixture. An `APPROVED` medical pack requires a `MEDICAL_REVIEWER`; a content editor cannot
   promote medical claims.
+- `DRAFT` review candidates carry an empty `reviewers` array and `reviewedAt: null`. This is valid
+  authoring state, not malformed approval. `APPROVED` still requires at least one reviewer and a
+  real ISO review date; the medical production gate additionally requires `MEDICAL_REVIEWER`.
 - Curriculum coordinates preserve source navigation and are never inferred from display order.
 - Classification is orthogonal to curriculum coordinates: it supports discovery but never replaces
   year, track, paper, module, competency code, or page evidence.
@@ -250,6 +253,10 @@ Extracted curriculum inventories are a separate authoring input, not a weak form
 Each candidate moves through `candidate -> normalized -> educator-reviewed -> prompt-ready ->
 published`. Only the last state may be compiled into a runtime pack. At the first three states,
 empty prompts and rubrics are expected and publication validation must reject them.
+
+The first source-grounded candidate is stored in `content/candidates/`, not `content/packs/`.
+Candidate validation applies the runtime schema and demo depth minimums, then asserts that the
+production gate fails. Build copying reads only `content/packs/`.
 
 The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
 assessment/investigation, clinical reasoning, intervention/rehabilitation,

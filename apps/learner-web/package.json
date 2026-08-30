@@ -12,6 +12,8 @@
     "predev": "pnpm copy:packs",
     "schema:generate": "node scripts/generate-schema-validator.mjs",
     "schema:check": "node scripts/generate-schema-validator.mjs --check",
+    "candidate:generate": "tsx scripts/generate-medical-candidate.ts",
+    "candidate:check": "tsx scripts/generate-medical-candidate.ts --check",
     "copy:packs": "node scripts/copy-packs.mjs",
     "build": "pnpm content:validate && pnpm copy:packs && tsc -b && vite build && pnpm build:validate",
     "build:validate": "node scripts/validate-build.mjs",
@@ -21,7 +23,7 @@
     "test": "vitest run",
     "test:a11y": "vitest run -c vitest.a11y.config.ts",
     "test:e2e": "playwright test",
-    "content:validate": "pnpm schema:check && tsx scripts/validate-content.ts"
+    "content:validate": "pnpm schema:check && pnpm candidate:check && tsx scripts/validate-content.ts"
   },
   "dependencies": {
     "react": "18.3.1",

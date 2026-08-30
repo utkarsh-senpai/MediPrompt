@@ -149,7 +149,7 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
   const allSubjectIds = pack.subjects.map((subject) => subject.subjectId);
   const allNormalizedTitles: string[] = [];
 
-  if (!isIsoDate(pack.review.reviewedAt)) {
+  if (pack.review.reviewedAt !== null && !isIsoDate(pack.review.reviewedAt)) {
     errors.push(`invalid review date: ${pack.review.reviewedAt}`);
   }
   for (const source of pack.sources) {

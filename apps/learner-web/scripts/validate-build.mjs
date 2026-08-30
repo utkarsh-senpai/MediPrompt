@@ -29,7 +29,7 @@ for (const name of required) {
 
 for (const name of names) {
   if (name.endsWith(".map")) errors.push(`production source map is forbidden: ${name}`);
-  if (/not-for-publication|mpt-competency-draft/i.test(name)) {
+  if (/not-for-publication|mpt-competency-draft|medical-candidate/i.test(name)) {
     errors.push(`draft/reference content leaked into the artifact: ${name}`);
   }
 }
@@ -41,6 +41,7 @@ const textExtensions = new Set([".html", ".js", ".css", ".json", ".webmanifest",
 const forbiddenText = [
   ["synthetic-not-for-publication", "draft fixture identifier"],
   ["mpt-competency-draft", "reference curriculum marker"],
+  ["mpt-cardiorespiratory-review-candidate", "unapproved medical candidate identifier"],
   ["-----BEGIN PRIVATE KEY-----", "private key"],
 ];
 const credentialPatterns = [

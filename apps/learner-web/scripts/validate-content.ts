@@ -1,5 +1,6 @@
 // Validates content packs against the runtime schema + custom cross-reference checks.
 // - content/packs/*.json : production packs; must also pass the v0.2 production gate.
+// - content/candidates/*.json: medical review candidates; must meet demo depth but fail closed.
 // - content/fixtures/*.json: test fixtures; structural validation only (may be DRAFT /
 //   NOT_FOR_PUBLICATION and must NOT pass the production gate by accident).
 //
@@ -18,6 +19,7 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packsDir = resolve(__dirname, "../../../content/packs");
+const candidatesDir = resolve(__dirname, "../../../content/candidates");
 const fixturesDir = resolve(__dirname, "../../../content/fixtures");
 
 function readJson(file: string): unknown {
@@ -47,6 +49,7 @@ function fail(label: string, err: unknown): void {
 }
 
 const packFiles = listJson(packsDir);
+const candidateFiles = listJson(candidatesDir);
 const fixtureFiles = listJson(fixturesDir);
 
 if (packFiles.length !== 1) {
@@ -55,6 +58,10 @@ if (packFiles.length !== 1) {
 }
 if (fixtureFiles.length === 0) {
   console.error("FAIL content/fixtures must contain a production-gate rejection fixture");
+  failed++;
+}
+if (candidateFiles.length === 0) {
+  console.error("FAIL content/candidates must contain a medical review candidate");
   failed++;
 }
 
@@ -68,6 +75,38 @@ for (const file of packFiles) {
       throw new Error(`filename must match packId (${pack.packId}.json)`);
     }
     console.error(`ok   ${label} (${pack.subjects.reduce((n, s) => n + s.topics.length, 0)} topics, ${pack.review.status})`);
+  } catch (err) {
+    fail(label, err);
+  }
+}
+
+for (const file of candidateFiles) {
+  const label = `candidate:${file.split("/").pop()}`;
+  try {
+    const pack = validatePack(readJson(file));
+    if (pack.contentKind !== "MEDICAL") {
+      throw new Error("candidate must declare MEDICAL contentKind");
+    }
+    if (pack.review.status !== "DRAFT") {
+      throw new Error(`candidate must remain DRAFT, got ${pack.review.status}`);
+    }
+    if (pack.review.reviewers.length !== 0 || pack.review.reviewedAt !== null) {
+      throw new Error("unreviewed candidate must not contain reviewer attestation");
+    }
+    assertV02DemoMinimums(pack);
+    let gateThrew = false;
+    try {
+      assertV02ProductionPack(pack);
+    } catch {
+      gateThrew = true;
+    }
+    if (!gateThrew) throw new Error("candidate unexpectedly passed the production gate");
+    if (basename(file) !== `${pack.packId}.json`) {
+      throw new Error(`filename must match packId (${pack.packId}.json)`);
+    }
+    console.error(
+      `ok   ${label} (${pack.subjects.reduce((n, s) => n + s.topics.length, 0)} topics, review pending)`,
+    );
   } catch (err) {
     fail(label, err);
   }
