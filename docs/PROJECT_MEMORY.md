@@ -49,9 +49,9 @@ code, content, copy, or visual identity.
   subset. The evidence matrix uses the supplied curriculum plus current sources: GOLD 2026, GINA
   2026, ERS Bronchiectasis 2025, SCCM PADIS 2025, ACC/AHA ACS 2025, AHA BLS 2025, and still-current
   ATS/ERS/BTS/ESC/ACSM standards where no 2025-2026 replacement exists.
-- v0.2 intentionally publishes the 20-topic non-medical fixture until a qualified educator reviews
-  MediPrompt's exact candidate and records a verifiable attestation. Authoritative sources are
-  provenance, not educator approval.
+- v0.2 intentionally publishes the 20-topic non-medical fixture in the public production build.
+  The medical candidate may be activated only for the controlled pre-attestation testing described
+  below. Authoritative sources are provenance, not educator approval.
 - An unattested `DRAFT` must use an empty reviewer list and `reviewedAt: null`. CI validates the
   candidate's 20-topic/three-trio depth, requires its production rejection, and prevents artifact
   leakage.
@@ -60,6 +60,28 @@ code, content, copy, or visual identity.
   likeness. Never store or transmit patient information.
 - Do not ship user/provider API keys in this static client. Any future BYOK/provider integration
   needs an explicit threat model; server-managed secrets belong to the optional connected service.
+
+## Pre-attestation testing policy
+
+Educator attestation is deliberately scheduled after feedback from a working v1+ application so
+the reviewer can assess the real learning experience, not only a static content file. Before asking
+for attestation, create an explicit release plan covering the test evidence, unresolved content
+findings, reviewer workflow, content freeze, approval record, rollback, and public-release gate.
+
+The source-grounded `DRAFT` medical candidate may be used before attestation only in local testing
+or a controlled private beta. Implement a deliberate draft-pack activation mechanism before that
+testing begins; it must be disabled in public production and must not weaken the existing
+`APPROVED` medical-pack production validator. Every draft-topic screen and feedback result must
+prominently state that the material is unreviewed educational content and must not be used for
+diagnosis, treatment, patient triage, or clinical decision-making. Draft use must not be presented
+as publication, approval, or proof that source-linked rubric coverage establishes medical
+correctness.
+
+For this policy, **real data** means genuine, curriculum-grounded medical topics plus consented,
+de-identified learner attempts, recordings, and corrected transcripts. It never means identifiable
+patient data. Before any public medical-content release, the candidate must be frozen, corrected
+from beta findings, reviewed by a qualified medical educator, given a verifiable attestation, moved
+to `APPROVED`, and pass the release plan and all production gates.
 
 ## Toolchain and verification
 
@@ -81,7 +103,8 @@ entire v0.2 capability-free path and prove that audio never leaves the browser.
 
 Before implementation, resolve the target phone/browser benchmark and collect only consented,
 de-identified representative speech. Model choice remains a measured decision; do not encode
-third-party accuracy claims as product guarantees.
+third-party accuracy claims as product guarantees. Plan the controlled draft-pack activation path
+for local/private v1+ feedback; do not make the candidate part of the public production artifact.
 
 ## Source of truth
 
