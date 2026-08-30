@@ -64,18 +64,20 @@ stay deterministic and testable.
 
 ### Topic selector and random draw
 
-Filters enabled topic packs by subject, mode, level, and due state. Random draw uses a shuffled bag
-per filter fingerprint: each eligible topic appears once before reshuffle. A recent-topic exclusion
-prevents immediate repeats across bag resets. Scheduling may override random selection only when the
-learner chooses the due queue.
+Filters enabled topic variants by subject, practice mode, challenge preset, register, and due state.
+Random draw uses a shuffled bag per full filter fingerprint: each eligible variant appears once
+before reshuffle. A recent-topic exclusion prevents immediate repeats across bag resets. Scheduling
+may override random selection only when the learner chooses the due queue. When only one challenge
+is available, the selector hides the challenge control rather than showing unavailable choices.
 
 ### Timer service
 
 Stores `startedAt`, `deadlineAt`, duration, pause policy, and last announced threshold. Remaining
 time is derived from the current monotonic clock. `setInterval` only requests a render; it is never
 the source of truth. Browser backgrounding cannot grant extra time. The basic timer surface always
-shows the topic, `Define → Explain → Apply` or a reviewed topic-specific arc, a large circular
-countdown, current instruction, and a close/end control.
+shows the topic, a reviewed challenge-specific arc (`Define -> Explain -> Apply`, `Summarize ->
+Reason -> Plan`, or `Prioritize -> Defend -> Safety-net`), a large circular countdown, current
+instruction, and a close/end control. Accessibility time adjustments do not mutate challenge.
 
 Deep Research first uses the same deadline engine in a research surface. The learner may select
 **Done researching** before expiry; both early completion and expiry lead to a separate
@@ -209,9 +211,12 @@ TopicPack
  ├─ provenance: maintainers, reviewers, sources, reviewedAt
  └─ subjects[]
      └─ topics[]
-         ├─ identity: topicId, title, tags, difficulty
-         ├─ prompts[]: promptId, mode, wording, time policy
-         ├─ rubrics[]: rubricId, register, concepts[]
+         ├─ identity: topicId, title, tags
+         ├─ curriculum: program, year, track, paper, module, competencyCodes, sourceLocators
+         ├─ classification: primaryDomain, contexts[], promptBlueprints[]
+         ├─ variants[]: variantId, mode, challengePreset, profileVersion, blueprint,
+         │              supportLevel, wording, answerArc, timePolicy, caseRef, followUpRefs
+         ├─ rubrics[]: rubricId, variantId, register, concepts[], reasoning/safety criteria
          │   └─ concept: conceptId, label, accepted phrases, importance, sourceRefs
          ├─ vivaQuestions[]: stage, wording, rubricRef
          ├─ commonErrors[]: reviewed wording and sourceRefs
@@ -221,12 +226,33 @@ TopicPack
 Rules:
 
 - Identifiers are stable, lowercase, and pack-scoped; display titles may change.
+- Curriculum coordinates preserve source navigation and are never inferred from display order.
+- Classification is orthogonal to curriculum coordinates: it supports discovery but never replaces
+  year, track, paper, module, competency code, or page evidence.
 - Every medical assertion or expected concept links to a pack source entry.
 - Accepted phrases are curated equivalents, not model-generated at runtime.
 - Common errors are optional and never shown as if detected unless transcript evidence supports it.
-- Registers and modes may point to distinct rubrics.
+- Mode, challenge, and register are independent; every published combination points to a reviewed
+  variant-specific rubric.
+- `GUIDED`, `APPLIED`, and `VIVA` are versioned difficulty vectors. A scalar difficulty label is not
+  sufficient authoring metadata.
+- Applied variants require a bounded fictional case. Viva variants additionally require plausible
+  alternatives and a reviewed follow-up/evidence update. Real patient details are prohibited.
+- Additional time and visible rescue scaffolds are accessibility/support choices, not lower
+  challenge levels.
 - A breaking semantic change increments the pack major version; history keeps its snapshot reference.
 - Published packs contain original wording and licence metadata, not copied textbook prose.
+
+Extracted curriculum inventories are a separate authoring input, not a weak form of `TopicPack`.
+Each candidate moves through `candidate -> normalized -> educator-reviewed -> prompt-ready ->
+published`. Only the last state may be compiled into a runtime pack. At the first three states,
+empty prompts and rubrics are expected and publication validation must reject them.
+
+The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
+assessment/investigation, clinical reasoning, intervention/rehabilitation,
+procedure/perioperative/critical care, population/community/participation,
+research/ethics/evidence/professional practice, and sport/performance. Context tags such as age
+group, population, body region, and system are multi-valued secondary facets.
 
 ## 5. Local persistence and migrations
 
@@ -260,13 +286,14 @@ flowchart LR
     Ingest[Document ingestor]
     Detect[Safety and licence gate]
     Extract[Heading extractor]
+    Locate[Curriculum coordinate mapper]
     Normalize[Topic normalizer]
     Draft[Draft writer]
     Validate[Pack validator]
     Compile[Runtime compiler]
     Manifest[Manifest writer]
 
-    CLI --> Ingest --> Detect --> Extract --> Normalize --> Draft
+    CLI --> Ingest --> Detect --> Extract --> Locate --> Normalize --> Draft
     CLI --> Validate --> Compile --> Manifest
 ```
 
@@ -276,8 +303,12 @@ flowchart LR
   unauthorized input; false positives require an explicit reviewed override outside CI.
 - **Heading extractor:** proposes headings with page references and confidence, never medical
   rubrics.
+- **Curriculum coordinate mapper:** preserves program/year/track/paper/module, exact competency
+  code candidates, one-based PDF page locators, and source anomalies. Ambiguous row associations
+  remain unresolved review items instead of being guessed.
 - **Topic normalizer:** Unicode/case/punctuation normalization, conservative duplicate grouping,
-  and hierarchy suggestions while retaining source evidence.
+  hierarchy and classification suggestions while retaining source evidence. Suggestions never
+  advance lifecycle state.
 - **Draft writer:** emits reviewable YAML with `DRAFT` status and unresolved fields.
 - **Pack validator:** JSON Schema plus policy checks for sources, licences, stable IDs, reviewers,
   dangling refs, duplicates, and prohibited content.
@@ -326,6 +357,8 @@ required uncertainty fields are missing.
 - Audio: synthetic PCM fixtures for VAD, pause, clipping, and loudness calculations.
 - Workers: protocol, cancellation, stale-response, memory failure, and pinned-version tests.
 - Coverage: educator-labelled positive, ambiguous, negated, and irrelevant transcript fixtures.
+- Challenge: educator-ordered prompt trios, vector/preset validation, scaffold independence,
+  evidence-update paths, and rejection of timer-only fake escalation.
 - Repository: real IndexedDB adapter tests, migrations, quota errors, export/import and delete-all.
 - Service worker: offline shell, update activation, old-pack fallback and cache isolation.
 - Compiler: synthetic golden PDFs, deterministic output, policy rejection and schema compatibility.
