@@ -60,7 +60,8 @@ flowchart TB
 | Basic practice core | Mode/subject selection, topic draw, focused timer, answer arc, finish and repeat | In-memory current topic/timer | v0.2+ |
 | Learner enhancements | Recording, review, retry, scheduling and history UI | In-memory active session | v0.3+ |
 | Browser workers | Transcription and semantic coverage off the main thread | Temporary audio/features/model state | v0.3–v0.4+ |
-| IndexedDB | Attempts, settings, pack cache, model metadata, due queue | Learner-owned local data | v0.5+ |
+| localStorage | Accessibility and timer settings | Learner-owned settings | v0.2+ |
+| IndexedDB | Attempts, pack metadata, model metadata, due queue | Learner-owned local data | v0.5+ |
 | Service worker/cache | Offline shell, content and optional pinned model assets | Public immutable assets | v0.2+ |
 | Topic packs | Prompts, reviewed rubrics, follow-ups and source metadata | No learner data | v0.2+ |
 | Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | v0.6+ |

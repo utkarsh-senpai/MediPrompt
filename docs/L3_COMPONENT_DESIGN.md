@@ -230,9 +230,12 @@ Rules:
 
 ## 5. IndexedDB stores and migrations
 
+Settings use `localStorage` from v0.2 because they are small and synchronous, with in-memory
+defaults when storage is unavailable. IndexedDB is introduced at v0.5 for the learning-record and
+metadata stores below.
+
 | Store | Key | Purpose | Sensitive content |
 | --- | --- | --- | --- |
-| `settings` | setting name | Accessibility, timers, enabled capabilities | Low |
 | `packMetadata` | pack id + version | Checksums, activation and provenance | None |
 | `sessions` | session UUID | Mode/topic/version and completion metadata | Learning record |
 | `attempts` | attempt UUID | Approved transcript, metrics, evidence, prescription | Personal data |
