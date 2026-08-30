@@ -1,6 +1,6 @@
 # L1 — Product and system context
 
-**Status:** Proposed for v0.1 review
+**Status:** Accepted v0.1 baseline
 **Scope:** Product intent, users, outcomes, boundaries, and external context
 **Audience:** Owner, medical reviewers, contributors, designers, and engineers
 
@@ -412,9 +412,10 @@ flowchart LR
 
 - [Unprompted](https://www.unprompted.cool/) — required behavioral baseline; no code, content,
   copy, brand, or pixel-identical design reuse.
-- [EU AI Act Article 5(1)(f)](https://artificialintelligenceact.eu/article-5/) — prohibition of
-  emotion recognition in workplaces and education/vocational training, in force since 2 February
-  2025; grounds the no-emotion-inference product boundary.
+- [Regulation (EU) 2024/1689](https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng) — official
+  EUR-Lex text; Article 5(1)(f) restricts emotion inference in workplaces and education, subject to
+  its stated medical/safety exception, and Chapter II applies from 2 February 2025 under Article
+  113(a). MediPrompt adopts the stricter product rule of no emotion inference.
 - [The Use of Retrieval Practice in the Health Professions](https://pmc.ncbi.nlm.nih.gov/articles/PMC12292765/)
 - [Transformers.js](https://github.com/huggingface/transformers.js)
 - [WebLLM](https://github.com/mlc-ai/web-llm)

@@ -1,6 +1,6 @@
 # L3 — Component design
 
-**Status:** Proposed for v0.1 review
+**Status:** Accepted v0.1 baseline
 **Scope:** Application components, state, storage, topic packs, and service boundaries
 **Audience:** Implementers and reviewers
 
@@ -228,11 +228,12 @@ Rules:
 - A breaking semantic change increments the pack major version; history keeps its snapshot reference.
 - Published packs contain original wording and licence metadata, not copied textbook prose.
 
-## 5. IndexedDB stores and migrations
+## 5. Local persistence and migrations
 
 Settings use `localStorage` from v0.2 because they are small and synchronous, with in-memory
-defaults when storage is unavailable. IndexedDB is introduced at v0.5 for the learning-record and
-metadata stores below.
+defaults when storage is unavailable. The value is a versioned, schema-validated JSON object;
+invalid or newer unsupported data falls back safely instead of blocking practice. IndexedDB is
+introduced at v0.5 for the learning-record and metadata stores below.
 
 | Store | Key | Purpose | Sensitive content |
 | --- | --- | --- | --- |
@@ -247,8 +248,9 @@ separate opt-in store, visible storage use, individual deletion, and migration p
 
 Migrations are forward-only, idempotent, fixture-tested, and transaction-scoped. Before a risky
 migration the app offers export. Unknown newer schemas open read-only rather than overwriting data.
-Delete-all removes IndexedDB data, caches that can identify user choices, and any retained local
-recordings while preserving only public application assets needed to show confirmation.
+Delete-all removes the settings key from `localStorage`, IndexedDB data, caches that can identify
+user choices, and any retained local recordings while preserving only public application assets
+needed to show confirmation.
 
 ## 6. Java content compiler components
 
