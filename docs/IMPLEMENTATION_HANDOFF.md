@@ -88,9 +88,10 @@ type ChallengePreset = "GUIDED" | "APPLIED" | "VIVA";
 type Register = "EXAMINER" | "JUNIOR" | "PATIENT";
 ```
 
-Persist `variantId`, `profileVersion`, `ChallengePreset`, support level, time policy, prompt/rubric
-identity, pack/version, and mode in attempt identity. Retry comparison must reject mismatched
-identities. Accessibility time adjustments must not change challenge.
+Carry `variantId`, `difficultyProfileVersion`, `ChallengePreset`, support level, time policy,
+prompt/rubric identity, pack/version, and mode in attempt identity. Persistence begins only in the
+version that introduces attempt history. Retry comparison must reject mismatched identities.
+Accessibility time adjustments must not change challenge.
 
 See `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` for runtime YAML, UI, progression, and tests.
 
@@ -133,4 +134,4 @@ behavior first. Merge feature PRs to `develop`; promote an approved release from
 - Whether the challenge selector uses text tabs, segmented control, or select at narrow widths.
 
 Use a small implementation spike or inspect repository/user context before escalating these. Do not
-invent a licence, reviewer, target device, branch name, or medical rubric.
+invent a licence, reviewer, target device, or medical rubric.
