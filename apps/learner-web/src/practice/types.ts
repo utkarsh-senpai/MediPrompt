@@ -640,6 +640,113 @@ export type ReviewState = Extract<SessionState, { name: "REVIEW" }>;
 /** Bounds the session-local viva answer trace. */
 export const MAX_VIVA_ANSWERS = 19;
 
+// --- v0.7 persisted history & spaced-resurfacing contracts ---
+// v0.7 introduces the first persisted-history layer: completed, reviewed
+// attempts are summarized and stored locally (IndexedDB, with an in-memory
+// fallback). Records never leave the device — the privacy model from v0.2–v0.6
+// (transcripts session-local, never uploaded) is preserved. A pure SM-2-style
+// scheduler derives a resurfacing queue from the history; an exam-countdown
+// triage reorders it as an exam approaches. The v0.2–v0.6 state machine is
+// untouched in v0.7; UI consumption is deferred to a follow-up.
+
+/** Persisted summary of one completed, reviewed attempt. Local-only. */
+export interface AttemptRecord {
+  schemaVersion: 1;
+  /** Matches the in-memory AttemptDraft.attemptId; stable per attempt. */
+  attemptId: string;
+  topicRef: TopicRef;
+  mode: V02PracticeMode;
+  challenge: ChallengePreset;
+  attemptIndex: number;
+  /** ISO wall-clock timestamp the attempt was reviewed. */
+  reviewedAt: string;
+  /** Frozen coverage snapshot from review time. */
+  coverage: CoverageReport;
+  /** Approved transcript text, persisted locally only. */
+  transcriptText: string;
+  /** SM-2-style scheduling state for this topic's review chain. */
+  schedule: SpacedSchedule;
+}
+
+/** SM-2-style per-topic scheduling state. */
+export interface SpacedSchedule {
+  /** Successful-review repetition count (n). */
+  repetitions: number;
+  /** Easiness factor (EF). */
+  easiness: number;
+  /** Interval in days until the next due review. */
+  intervalDays: number;
+  /** ISO day-granularity date the next review is due. */
+  nextDueAt: string;
+}
+
+/** SM-2 recall quality, 0 (blackout) .. 5 (perfect). */
+export type RecallQuality = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface SpacedRepetitionConfig {
+  /** Minimum easiness factor (SM-2 floor). */
+  minEasiness: number;
+  /** Initial easiness factor for a new topic. */
+  initialEasiness: number;
+  /** First interval in days after a successful first review. */
+  firstIntervalDays: number;
+  /** Second interval in days. */
+  secondIntervalDays: number;
+}
+
+export const DEFAULT_SR_CONFIG: Readonly<SpacedRepetitionConfig> = Object.freeze({
+  minEasiness: 1.3,
+  initialEasiness: 2.5,
+  firstIntervalDays: 1,
+  secondIntervalDays: 3,
+});
+
+/** One item in the resurfacing queue, derived from persisted history. */
+export interface ResurfacingItem {
+  topicRef: TopicRef;
+  /** Most recent record for the topic. */
+  lastRecord: AttemptRecord;
+  /** Days until the next due review; negative = overdue. */
+  daysUntilDue: number;
+  /** Whether the next review is due now (daysUntilDue <= 0). */
+  due: boolean;
+}
+
+export interface ResurfacingQueue {
+  /** Due/overdue items, most overdue first. */
+  due: ResurfacingItem[];
+  /** Upcoming (not yet due), soonest first. */
+  upcoming: ResurfacingItem[];
+  /** Topics never attempted, when the caller provided them. */
+  neverAttempted: TopicRef[];
+}
+
+/** Optional exam-date schedule, persisted in localStorage (v0.7). */
+export interface ExamSchedule {
+  schemaVersion: 1;
+  /** ISO day-granularity date of the exam, or null when unset. */
+  examAt: string | null;
+}
+
+export const DEFAULT_EXAM_SCHEDULE: Readonly<ExamSchedule> = Object.freeze({
+  schemaVersion: 1,
+  examAt: null,
+});
+
+/**
+ * Persisted-history port. IndexedDB is async, so the interface is async. Records
+ * are keyed by attemptId and indexed by a topic fingerprint (see
+ * spacedRepetition.topicFingerprint). Implementations must treat stored data as
+ * untrusted and drop malformed records.
+ */
+export interface HistoryStore {
+  loadTopic(topicFingerprint: string): Promise<AttemptRecord[]>;
+  loadAll(): Promise<AttemptRecord[]>;
+  append(record: AttemptRecord): Promise<AttemptRecord>;
+  clearTopic(topicFingerprint: string): Promise<void>;
+  clear(): Promise<void>;
+}
+
 export type SessionEvent =
   | { type: "CHANGE_SELECTION"; selection: PracticeSelection }
   | { type: "SPIN"; requestId: string; now: number }

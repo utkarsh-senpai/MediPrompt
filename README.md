@@ -14,7 +14,7 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.6 — Viva defense ladder** (release candidate)
+**v0.7 — Persisted history & spaced resurfacing** (in development)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
 mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
@@ -47,6 +47,16 @@ increasing and all-or-nothing for one drawn rubric; exit always stops the deadli
 transcription, and clip lifecycle. The full reviewed contract is in
 [docs/V0.6_DEVELOPMENT_CONTEXT.md](docs/V0.6_DEVELOPMENT_CONTEXT.md). Scheduling and persistence
 remain later enhancements.
+
+v0.7 adds the first **persisted-history** layer. Reviewed attempts are summarized
+into a local `AttemptRecord` and appended to an on-device `HistoryStore` (IndexedDB,
+with an in-memory fallback; nothing is uploaded). A pure SM-2-style spaced-resurfacing
+scheduler derives a due/upcoming review queue from that history, and an optional exam
+countdown reorders the due set — most-overdue-first when the exam is far away,
+weakest-coverage-first inside a 14-day cram window. Coverage drives scheduling; not-
+verifiable attempts do not advance it. The v0.2–v0.6 practice loop and scoring are
+unchanged; the resurfacing UI surface is deferred to a v0.7 follow-up. The reviewed
+contract is in [docs/V0.7_DEVELOPMENT_CONTEXT.md](docs/V0.7_DEVELOPMENT_CONTEXT.md).
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -88,6 +98,7 @@ the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 | [v0.4 development context](docs/V0.4_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for content coverage |
 | [v0.5 development context](docs/V0.5_DEVELOPMENT_CONTEXT.md) | Reviewed contract for retries, Refinement Delta, and semantic evidence |
 | [v0.6 development context](docs/V0.6_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the oral-defense ladder and release hardening |
+| [v0.7 development context](docs/V0.7_DEVELOPMENT_CONTEXT.md) | Reviewed contract for persisted history and spaced resurfacing |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
