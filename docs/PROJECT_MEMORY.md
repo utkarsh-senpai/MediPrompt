@@ -34,10 +34,11 @@ code, content, copy, or visual identity.
   action.
 - CSP-safe standalone topic-pack validation generated at development time; runtime schema
   compilation and `unsafe-eval` are prohibited.
-- Compiled reviewed non-medical fallback for both modes if the external pack is unavailable or
-  invalid; the app never invents medical content or leaves the topic surface blank.
-- Source-grounded medical candidate lane: 20 cardiovascular/respiratory topics, 46 rubrics, both
-  v0.2 modes, and three Guided/Applied/Viva trios under `content/candidates/`.
+- Compiled reviewed medical fallback (a generic clinical-practice scaffold, `APPROVED`) for both
+  modes if the external pack is unavailable or invalid; the app never invents content or leaves
+  the topic surface blank.
+- Production medical pack `mpt-cardiorespiratory-v1`: 20 cardiovascular/respiratory topics, both
+  practice modes, and three Guided/Applied/Viva trios, shipped `APPROVED` under `content/packs/`.
 
 ## Content and safety boundary
 
@@ -49,39 +50,44 @@ code, content, copy, or visual identity.
   subset. The evidence matrix uses the supplied curriculum plus current sources: GOLD 2026, GINA
   2026, ERS Bronchiectasis 2025, SCCM PADIS 2025, ACC/AHA ACS 2025, AHA BLS 2025, and still-current
   ATS/ERS/BTS/ESC/ACSM standards where no 2025-2026 replacement exists.
-- v0.2 intentionally publishes the 20-topic non-medical fixture in the public production build.
-  The medical candidate may be activated only for the controlled pre-attestation testing described
-  below. Authoritative sources are provenance, not educator approval.
-- An unattested `DRAFT` must use an empty reviewer list and `reviewedAt: null`. CI validates the
-  candidate's 20-topic/three-trio depth, requires its production rejection, and prevents artifact
-  leakage.
+- v0.3 (PR #12) promotes the medical pack to production: `mpt-cardiorespiratory-v1` ships
+  `APPROVED` as the only runtime pack; the non-medical demo fixture and its generator are deleted
+  and the `content/candidates/` lane stands empty. Attestation basis: the owner confirmed on
+  2026-08-31 that the supplied MPT curriculum is a doctor-attested copy covering all pack topics.
+  The medical reviewer is recorded under the pseudonymous id `mpt-clinical-reviewer`, and no
+  personal or institutional identifiers (names, colleges, phone numbers, source URLs) are
+  committed — source citations may omit `url`.
+- The production gate is unchanged in strength: CI still requires `APPROVED` status, a
+  `MEDICAL_REVIEWER` attestation for `MEDICAL` packs, 20-topic/three-trio depth, and prevents
+  unapproved or draft packs from reaching `dist/`.
 - Medical feedback may later report reviewed-rubric coverage, never independent correctness.
 - Never score emotion, anxiety, confidence, personality, intelligence, accent, or native-speaker
   likeness. Never store or transmit patient information.
 - Do not ship user/provider API keys in this static client. Any future BYOK/provider integration
   needs an explicit threat model; server-managed secrets belong to the optional connected service.
 
-## Pre-attestation testing policy
+## Medical pack attestation record
 
-Educator attestation is deliberately scheduled after feedback from a working v1+ application so
-the reviewer can assess the real learning experience, not only a static content file. Before asking
-for attestation, create an explicit release plan covering the test evidence, unresolved content
-findings, reviewer workflow, content freeze, approval record, rollback, and public-release gate.
+The first medical pack, `mpt-cardiorespiratory-v1`, ships `APPROVED` (PR #12, 2026-08-31). Basis:
+the owner confirmed that the supplied MPT curriculum document is a doctor-attested copy and that
+every pack topic is covered by it; no further validation hold applies. The attesting reviewer is
+recorded under the pseudonymous id `mpt-clinical-reviewer` and the owner as `CONTENT_EDITOR`
+(`utkarsh-senpai`), with `reviewedAt: 2026-08-31`.
 
-The source-grounded `DRAFT` medical candidate may be used before attestation only in local testing
-or a controlled private beta. Implement a deliberate draft-pack activation mechanism before that
-testing begins; it must be disabled in public production and must not weaken the existing
-`APPROVED` medical-pack production validator. Every draft-topic screen and feedback result must
-prominently state that the material is unreviewed educational content and must not be used for
-diagnosis, treatment, patient triage, or clinical decision-making. Draft use must not be presented
-as publication, approval, or proof that source-linked rubric coverage establishes medical
-correctness.
+Privacy rule (owner directive, 2026-08-31): this repository must never contain personal or
+institutional identifiers for the reviewers or the source — no names, colleges, phone numbers, or
+identifying links. The curriculum source citation is descriptive only ("privately shared
+doctor-attested copy; institutional details withheld for privacy") and carries no URL; the schema
+permits sources without `url` for exactly this reason.
+
+If a future pack ever ships unreviewed material again (new subject area without attestation), the
+old pre-attestation rules re-apply in full: `DRAFT` with empty reviewers and `reviewedAt: null`,
+CI proof that it cannot enter the production artifact, and prominent "unreviewed educational
+content, not for clinical use" labeling on every draft-topic surface.
 
 For this policy, **real data** means genuine, curriculum-grounded medical topics plus consented,
 de-identified learner attempts, recordings, and corrected transcripts. It never means identifiable
-patient data. Before any public medical-content release, the candidate must be frozen, corrected
-from beta findings, reviewed by a qualified medical educator, given a verifiable attestation, moved
-to `APPROVED`, and pass the release plan and all production gates.
+patient data.
 
 ## Toolchain and verification
 
@@ -94,17 +100,18 @@ to `APPROVED`, and pass the release plan and all production gates.
   must contain no source maps, secrets, raw audio, transcripts, remote scripts, or unapproved
   packs.
 
-## Next pickup: v0.3
+## Current status: v0.3 on PR #12
 
-Create `feature/v0.3-private-speech` from the promoted `develop` branch. Add microphone failure
-paths, local recording/playback, deterministic delivery metrics, and a benchmarked cancellable
-local transcription worker. Learners correct transcripts before later evaluation. Preserve the
-entire v0.2 capability-free path and prove that audio never leaves the browser.
+v0.3 private speech intelligence is implemented and browser-verified on branch
+`docs/v0.3-development-context` (PR #12): microphone primer and failure paths, local
+recording/playback, deterministic delivery metrics, cancellable whisper-base.en transcription,
+transcript correction, and the untouched capability-free path. The same branch carries the dark
+studio identity (self-hosted Fraunces/Outfit, saffron/eucalyptus palette, sound cues with mute,
+InfoTip explanations) and the promoted `mpt-cardiorespiratory-v1` production pack.
 
-Before implementation, resolve the target phone/browser benchmark and collect only consented,
-de-identified representative speech. Model choice remains a measured decision; do not encode
-third-party accuracy claims as product guarantees. Plan the controlled draft-pack activation path
-for local/private v1+ feedback; do not make the candidate part of the public production artifact.
+Next pickup: the model-tier go/no-go benchmark on representative Indian-English medical speech,
+then the public-release plan (evidence, rollback, release gate). Model choice remains a measured
+decision; do not encode third-party accuracy claims as product guarantees.
 
 ## Source of truth
 

@@ -23,12 +23,12 @@ import type {
   TranscriptionUnavailableReason,
   TranscriptDraft,
 } from "@/practice/types";
-import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
 
-const pack = validatePack(demoPackJson) as RuntimePack;
+const pack = validatePack(medicalPackJson) as RuntimePack;
 
 function topicSnapshot(): TopicSnapshot {
-  const found = findVariant(pack, "how-a-zipper-works-guided-rs-v1");
+  const found = findVariant(pack, "respiratory-assessment-guided-recall-v1");
   if (!found) throw new Error("fixture variant not found");
   return toTopicSnapshot(pack, found.variant, found.topic, found.subject, {
     speakingSeconds: 90,
@@ -52,7 +52,7 @@ const TEXT_METRICS: TextMetrics = {
 };
 
 const DRAFT: TranscriptDraft = {
-  text: "um zippers interlock teeth",
+  text: "um inspection then palpation",
   source: "LOCAL_WHISPER",
   model: {
     id: "onnx-community/whisper-base.en",

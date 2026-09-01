@@ -153,7 +153,7 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
     errors.push(`invalid review date: ${pack.review.reviewedAt}`);
   }
   for (const source of pack.sources) {
-    if (!isSafeHttpsUrl(source.url)) {
+    if (source.url !== undefined && !isSafeHttpsUrl(source.url)) {
       errors.push(`source ${source.sourceId}: invalid or credential-bearing https URL`);
     }
     if (!isIsoDate(source.accessedAt)) {
@@ -376,8 +376,8 @@ export function assertV02DemoMinimums(pack: RuntimePack): void {
   }).length;
 
   const errors: string[] = [];
-  if (topics.length < 20) errors.push(`demo pack requires at least 20 topics, got ${topics.length}`);
-  if (trioCount < 3) errors.push(`demo pack requires at least 3 complete challenge trios, got ${trioCount}`);
+  if (topics.length < 20) errors.push(`production pack requires at least 20 topics, got ${topics.length}`);
+  if (trioCount < 3) errors.push(`production pack requires at least 3 complete challenge trios, got ${trioCount}`);
   if (errors.length > 0) {
     throw new PackValidationError("demo content gate failed", errors);
   }

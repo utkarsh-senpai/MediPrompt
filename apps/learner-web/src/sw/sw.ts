@@ -13,7 +13,7 @@ declare const self: ServiceWorkerGlobalScope & {
 
 const APP_PREFIX = "mediprompt-";
 const CACHE_FORMAT = "3";
-const PACK_PATH = "packs/demo-interaction-fixture.json";
+const PACK_PATH = "packs/mpt-cardiorespiratory-v1.json";
 const ORT_RUNTIME_PREFIX = "models/ort/";
 const MAX_RESPONSE_BYTES = 2 * 1024 * 1024;
 const MAX_PACK_BYTES = 512 * 1024;
@@ -102,7 +102,7 @@ async function isSafeResponse(
       const review = value["review"] as Record<string, unknown> | undefined;
       return (
         value["schemaVersion"] === "1.0" &&
-        value["packId"] === "demo-interaction-fixture" &&
+        value["packId"] === "mpt-cardiorespiratory-v1" &&
         review?.["status"] === "APPROVED"
       );
     } catch {

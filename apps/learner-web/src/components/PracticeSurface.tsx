@@ -5,6 +5,7 @@ import type {
 } from "@/practice/types";
 import type { SubjectOption } from "@/content/packQuery";
 import { subjectEmoji } from "@/app/subjectEmoji";
+import { InfoTip } from "./InfoTip";
 
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
@@ -47,7 +48,13 @@ export function PracticeSurface({
       </h2>
 
       <div className="control-row">
-        <span id="mode-label">Practice mode</span>
+        <span className="label-row">
+          <span id="mode-label">Practice mode</span>
+          <InfoTip label="About the practice modes">
+            Recall Sprint draws a topic and starts the speaking clock at once. Deep
+            Research gives you timed reading first, then the same speaking clock.
+          </InfoTip>
+        </span>
         <div
           className={`mode-switch sel-${MODES.findIndex((m) => m.id === selection.mode)}`}
           role="group"
@@ -73,7 +80,14 @@ export function PracticeSurface({
 
       {challengeVisible ? (
         <div className="control-row">
-          <span id="challenge-label">Challenge</span>
+          <span className="label-row">
+            <span id="challenge-label">Challenge</span>
+            <InfoTip label="About challenge levels">
+              Guided asks you to explain the concept. Applied drops you into a
+              fictional scenario. Viva changes a constraint mid-answer and adds an
+              evidence update to defend against.
+            </InfoTip>
+          </span>
           <div className="chips" role="group" aria-labelledby="challenge-label">
             {presets.map((p) => (
               <button

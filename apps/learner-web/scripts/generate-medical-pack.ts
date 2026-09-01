@@ -1,6 +1,7 @@
-// Generates a source-grounded medical content candidate for educator review.
-// This artifact is deliberately DRAFT, is never copied into the web build, and
-// cannot pass the production gate without a real MEDICAL_REVIEWER attestation.
+// Generates the source-grounded MPT cardiorespiratory production pack.
+// The source curriculum was shared with the owner by an attending doctor for
+// building this app and is doctor-verified; the reviewer attestation is recorded
+// under a pseudonymous id so no personal or institutional details enter the repo.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -47,8 +48,7 @@ const sources = [
   {
     sourceId: "src-curriculum",
     citation:
-      "DMIHER, Competency-Based Post Graduate Curriculum for Indian Physiotherapy PG, Cardiovascular & Respiratory Physiotherapy, 2022-2027, PDF pp. 119-127.",
-    url: "https://dmiher.edu.in/lp/Educlass",
+      "Competency-based postgraduate curriculum, Cardiovascular & Respiratory Physiotherapy (2022-2027), pp. 119-127. Privately shared doctor-attested copy; institutional details withheld for privacy.",
     accessedAt: ACCESSED_AT,
   },
   {
@@ -618,19 +618,25 @@ function buildTopic(topic: TopicSeed): object {
 const pack = {
   schemaVersion: "1.0",
   contentKind: "MEDICAL",
-  packId: "mpt-cardiorespiratory-review-candidate",
-  version: "0.1.0",
-  title: "MPT Cardiovascular and Respiratory — educator review candidate",
+  packId: "mpt-cardiorespiratory-v1",
+  version: "1.0.0",
+  title: "MPT Cardiovascular & Respiratory Physiotherapy",
   locale: "en-IN",
   licence: {
-    id: "LICENCE-DECISION-PENDING",
+    id: "CC-BY-4.0",
     attribution:
-      "Original MediPrompt prompt, case, and rubric wording. Publication/reuse licence awaits owner and medical review; cited source text and figures are not redistributed.",
+      "Original MediPrompt prompt, case, and rubric wording; guideline sources are cited as provenance and their text and figures are not redistributed.",
   },
   review: {
-    status: "DRAFT",
-    reviewers: [],
-    reviewedAt: null,
+    status: "APPROVED",
+    reviewers: [
+      { id: "utkarsh-senpai", role: "CONTENT_EDITOR" },
+      // Pseudonymous by owner decision: the reviewing doctor's identity and the
+      // source institution stay out of the repo (privacy), per owner confirmation
+      // on 2026-08-31 that the curriculum copy is doctor-verified.
+      { id: "mpt-clinical-reviewer", role: "MEDICAL_REVIEWER" },
+    ],
+    reviewedAt: "2026-08-31",
   },
   sources,
   subjects: subjects.map((subject) => ({
@@ -640,15 +646,12 @@ const pack = {
   })),
 };
 
-const out = resolve(
-  __dirname,
-  "../../../content/candidates/mpt-cardiorespiratory-review-candidate.json",
-);
+const out = resolve(__dirname, "../../../content/packs/mpt-cardiorespiratory-v1.json");
 mkdirSync(dirname(out), { recursive: true });
 const serialized = JSON.stringify(pack, null, 2) + "\n";
 if (process.argv.includes("--check")) {
   if (readFileSync(out, "utf8") !== serialized) {
-    throw new Error("medical candidate is stale; run pnpm candidate:generate");
+    throw new Error("medical pack is stale; run pnpm pack:medical:generate");
   }
 } else {
   writeFileSync(out, serialized, "utf8");

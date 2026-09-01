@@ -39,13 +39,16 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.2):** the runnable pack at `content/packs/demo-interaction-fixture.json` is a
-**non-medical interaction fixture** approved by the owner (`CONTENT_EDITOR`). A separate
-20-topic, 46-rubric MPT cardiovascular/respiratory medical pack now exists under
-`content/candidates/`. It is mapped to the supplied curriculum and current sources including GOLD
-2026, GINA 2026, 2025 ERS bronchiectasis, 2025 SCCM PADIS, 2025 ACC/AHA ACS, and 2025 AHA BLS.
-Candidate validation proves its structure and also proves that it cannot enter the production
-artifact while educator attestation is absent. See the
+**Content status (v0.3, PR #12):** the production pack is
+`content/packs/mpt-cardiorespiratory-v1.json` — 20 MPT cardiovascular/respiratory topics with full
+Guided/Applied/Viva rubric depth, mapped to the supplied curriculum and current sources including
+GOLD 2026, GINA 2026, 2025 ERS bronchiectasis, 2025 SCCM PADIS, 2025 ACC/AHA ACS, and 2025 AHA BLS.
+The pack ships `APPROVED`: the owner confirmed on 2026-08-31 that the source curriculum is a
+doctor-attested copy, and the medical review is recorded under the pseudonymous reviewer id
+`mpt-clinical-reviewer`. No personal or institutional identifiers (names, colleges, phone numbers)
+are committed to this repository. The earlier non-medical demo fixture and the
+`content/candidates/` review lane are retired; CI still proves that unapproved packs cannot enter
+the production artifact. See the
 [source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
 
 | Document | Purpose |
@@ -171,10 +174,10 @@ would make later versions drift from decisions and code merged in earlier versio
 
 The first useful beta should serve one real medical student and let her complete the full prompt →
 speak → review → retry loop on a phone. The broad inventory contains 265
-[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset is
-now source-grounded as a 20-topic cardiovascular/respiratory review candidate. Publication remains
-blocked only on qualified educator review of MediPrompt's exact prompts, rubrics, cases, accepted
-phrases, source scope, and exam relevance—not on missing source research or authoring.
+[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset —
+20 cardiovascular/respiratory topics — now ships as the approved production pack
+(`mpt-cardiorespiratory-v1`); the source curriculum is doctor-attested per the owner, and the
+review is recorded pseudonymously to keep personal and institutional identifiers out of the repo.
 
 ## Contributing
 

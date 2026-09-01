@@ -17,9 +17,9 @@ import {
   type RuntimePack,
   type TranscriptDraft,
 } from "./types";
-import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
 
-const pack = validatePack(demoPackJson) as RuntimePack;
+const pack = validatePack(medicalPackJson) as RuntimePack;
 
 function setup() {
   const nowRef = { value: 0 };
@@ -85,7 +85,7 @@ describe("usePracticeSession", () => {
     act(() =>
       result.current.actions.setSelection({
         mode: "DEEP_RESEARCH",
-        subjectId: "reasoning-and-tradeoffs",
+        subjectId: "respiratory-physiotherapy",
       }),
     );
     expect(result.current.state.name).toBe("IDLE");
@@ -123,7 +123,7 @@ describe("usePracticeSession", () => {
 const SPEECH_PCM = concat(sineBurst(0.4), silence(0.3), sineBurst(0.4));
 
 const WHISPER_DRAFT: TranscriptDraft = {
-  text: "um zippers interlock teeth",
+  text: "um inspection then palpation",
   source: "LOCAL_WHISPER",
   model: { id: "whisper-base.en", version: "pinned-revision", quantization: "q4" },
   uncertainRanges: [],
@@ -311,7 +311,7 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     expect(result.current.state.name).toBe("TRANSCRIPT_REVIEW");
     expect(result.current.audio.transcriptionProgress).toBeNull();
 
-    act(() => result.current.actions.approveTranscript("zippers interlock teeth"));
+    act(() => result.current.actions.approveTranscript("inspection then palpation"));
     expect(result.current.state.name).toBe("REVIEW");
     if (result.current.state.name === "REVIEW") {
       expect(result.current.state.transcript.wasEdited).toBe(true);

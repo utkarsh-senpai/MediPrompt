@@ -6,7 +6,7 @@ import {
   validatePack,
 } from "./packValidator";
 import type { RuntimePack } from "@/practice/types";
-import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
 import nfpFixture from "@content/fixtures/not-for-publication.fixture.json";
 
 function basePack(): unknown {
@@ -111,7 +111,7 @@ function expectProductionInvalid(pack: unknown, fragment: string): void {
 
 describe("validatePack — happy paths", () => {
   it("validates the demo interaction fixture", () => {
-    const pack = validatePack(demoPackJson);
+    const pack = validatePack(medicalPackJson);
     expect(pack.subjects.reduce((n, s) => n + s.topics.length, 0)).toBe(20);
   });
 
@@ -127,9 +127,9 @@ describe("validatePack — happy paths", () => {
 });
 
 describe("assertV02ProductionPack", () => {
-  it("accepts the demo pack", () => {
-    expect(() => assertV02ProductionPack(validatePack(demoPackJson))).not.toThrow();
-    expect(() => assertV02DemoMinimums(validatePack(demoPackJson))).not.toThrow();
+  it("accepts the production pack", () => {
+    expect(() => assertV02ProductionPack(validatePack(medicalPackJson))).not.toThrow();
+    expect(() => assertV02DemoMinimums(validatePack(medicalPackJson))).not.toThrow();
   });
 
   it("rejects the NOT_FOR_PUBLICATION fixture", () => {

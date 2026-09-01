@@ -12,8 +12,6 @@
     "predev": "pnpm copy:packs && pnpm copy:model-runtime",
     "schema:generate": "node scripts/generate-schema-validator.mjs",
     "schema:check": "node scripts/generate-schema-validator.mjs --check",
-    "candidate:generate": "tsx scripts/generate-medical-candidate.ts",
-    "candidate:check": "tsx scripts/generate-medical-candidate.ts --check",
     "copy:packs": "node scripts/copy-packs.mjs",
     "copy:model-runtime": "node scripts/copy-model-runtime.mjs",
     "build": "pnpm content:validate && pnpm copy:packs && pnpm copy:model-runtime && tsc -b && vite build && pnpm build:validate",
@@ -24,7 +22,9 @@
     "test": "vitest run",
     "test:a11y": "vitest run -c vitest.a11y.config.ts",
     "test:e2e": "playwright test",
-    "content:validate": "pnpm schema:check && pnpm candidate:check && tsx scripts/validate-content.ts"
+    "content:validate": "pnpm schema:check && pnpm pack:medical:check && tsx scripts/validate-content.ts",
+    "pack:medical:generate": "tsx scripts/generate-medical-pack.ts",
+    "pack:medical:check": "tsx scripts/generate-medical-pack.ts --check"
   },
   "dependencies": {
     "@huggingface/transformers": "3.7.6",

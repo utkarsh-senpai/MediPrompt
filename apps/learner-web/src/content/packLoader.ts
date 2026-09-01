@@ -8,7 +8,7 @@ import {
 import { FALLBACK_PACK } from "./fallbackPack";
 
 /** The pack precached by the service worker and fetched at activation. */
-export const PRODUCTION_PACK_ID = "demo-interaction-fixture";
+export const PRODUCTION_PACK_ID = "mpt-cardiorespiratory-v1";
 
 /**
  * Fetch, validate, and production-gate the bundled runtime pack.

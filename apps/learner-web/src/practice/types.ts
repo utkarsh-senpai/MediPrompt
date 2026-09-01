@@ -51,7 +51,8 @@ export interface PackReview {
 export interface Source {
   sourceId: string;
   citation: string;
-  url: string;
+  /** Optional: privately shared sources (e.g. the attested curriculum copy) cite without a URL. */
+  url?: string;
   accessedAt: string;
 }
 

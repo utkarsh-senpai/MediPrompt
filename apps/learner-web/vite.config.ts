@@ -56,8 +56,8 @@ export default defineConfig({
         start_url: `${base}`,
         scope: `${base}`,
         display: "standalone",
-        background_color: "#121816",
-        theme_color: "#121816",
+        background_color: "#0e1716",
+        theme_color: "#0e1716",
         icons: [
           {
             src: `${base}icon.svg`,

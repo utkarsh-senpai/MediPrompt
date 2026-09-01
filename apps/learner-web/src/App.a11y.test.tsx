@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { App } from "./App";
 import { validatePack } from "@/content/packValidator";
 import type { RuntimePack } from "@/practice/types";
-import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
 
-const demoPack = validatePack(demoPackJson) as RuntimePack;
+const demoPack = validatePack(medicalPackJson) as RuntimePack;
 
 function mockFetch(pack: unknown): void {
   const body = JSON.stringify(pack);
@@ -93,7 +93,7 @@ describe("App accessibility + capability + security", () => {
     // Select a subject that has multiple challenge presets for Recall Sprint.
     await user.selectOptions(
       screen.getByLabelText("Subject"),
-      "reasoning-and-tradeoffs",
+      "respiratory-physiotherapy",
     );
     const challengeGroup = screen.getByRole("group", { name: "Challenge" });
     const pressedButtons = within(challengeGroup).getAllByRole("button");

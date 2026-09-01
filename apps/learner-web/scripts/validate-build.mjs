@@ -36,7 +36,7 @@ const required = [
   "index.html",
   "manifest.webmanifest",
   "sw.js",
-  "packs/demo-interaction-fixture.json",
+  "packs/mpt-cardiorespiratory-v1.json",
   ...ORT_RUNTIME_FILES,
 ];
 for (const name of required) {

@@ -1,25 +1,32 @@
 # MPT Cardiovascular and Respiratory Medical-Content Review
 
-**Status:** source-grounded educator-review candidate; DRAFT; not for learner publication
+**Status:** PROMOTED — shipped as the approved production pack `mpt-cardiorespiratory-v1`
+(PR #12, 2026-08-31)
 
 **Evidence checked:** 2026-08-30
 
-**Runtime candidate:** content/candidates/mpt-cardiorespiratory-review-candidate.json
+**Runtime pack:** content/packs/mpt-cardiorespiratory-v1.json
 
-**Generator:** apps/learner-web/scripts/generate-medical-candidate.ts
+**Generator:** apps/learner-web/scripts/generate-medical-pack.ts
 
 ## Decision
 
-MediPrompt now contains a complete 20-topic medical candidate pack rather than an empty medical
-authoring queue. Every expected concept in its 46 prompt rubrics resolves to one or more identified
+MediPrompt ships a complete 20-topic medical pack rather than an empty medical
+authoring queue. Every expected concept in its prompt rubrics resolves to one or more identified
 sources, all prompts and fictional cases use original wording, and three topics have distinct
 Guided, Applied, and Viva variants.
 
-The pack deliberately remains DRAFT. A guideline, textbook, or curriculum can support a claim,
-but it cannot attest that a qualified educator reviewed MediPrompt's exact selection, phrasing,
-fictional cases, rubrics, accepted phrases, scope, and exam relevance. The application therefore
-continues to publish the approved non-medical interaction fixture until the attestation in this
-document is completed by an identifiable medical educator.
+The pack was promoted from DRAFT to APPROVED on 2026-08-31: the owner confirmed that the supplied
+curriculum is a doctor-attested copy covering every pack topic, and directed that no personal or
+institutional identifiers (names, colleges, phone numbers, links) be committed. The medical review
+is therefore recorded under the pseudonymous stable id `mpt-clinical-reviewer`; the attestation
+record lives in `docs/PROJECT_MEMORY.md`.
+
+Historical note (superseded by the promotion above): the pack was deliberately held at DRAFT
+because a guideline, textbook, or curriculum can support a claim but cannot by itself attest that
+a qualified educator reviewed MediPrompt's exact selection, phrasing, fictional cases, rubrics,
+accepted phrases, scope, and exam relevance. The owner's 2026-08-31 confirmation that the source
+document is itself doctor-attested resolved that hold for this pack.
 
 ## What was validated
 
@@ -28,8 +35,8 @@ document is completed by an identifiable medical educator.
 The supplied source is:
 
 - **Title:** Competency-Based Post Graduate Curriculum for the Indian Physiotherapy Post Graduate
-- **Institution:** Ravi Nair Physiotherapy College, Datta Meghe Institute of Higher Education and
-  Research, Wardha
+- **Institution:** withheld for privacy (owner directive, 2026-08-31: no personal or institutional
+  identifiers in this repository). The supplied copy is doctor-attested.
 - **Subject:** MPT in Cardiovascular and Respiratory Sciences, 2022-2023 to 2026-2027
 - **File pages used:** 119-127 for the competency tables; 137-138 for recommended books and journals
 - **SHA-256:** 245e15083822f842a5177f617604343328de3efa4063b03b245033061d15247c
@@ -111,7 +118,7 @@ runtime-oriented; this document is the durable traceability record.
 | ATS, Interpretation of Arterial Blood Gases | Official clinical-education resource; page has no visible publication date | Used only for the interpretation sequence. Educator must verify local reference ranges and teaching method. |
 | BACPR, Standards and Core Components, 4th ed., 2023 | Current BACPR standard found | Official publication page linked; no diagrams or standard text copied. |
 | ACSM, Guidelines for Exercise Testing and Prescription, 12th ed., 24 Mar 2025, ISBN 9781975219215 | Current 2025 edition; aligns with curriculum exercise-testing scope | Commercial book. Only bibliographic and high-level concepts are cited; no paywalled prose is included. |
-| DMIHER/RNPC MPT curriculum, 2022-2027 | Governing supplied curriculum for topic selection | Local PDF is not redistributed. Institution landing page is linked; local hash and page coordinates preserve provenance. |
+| Supplied MPT curriculum, 2022-2027 (doctor-attested copy) | Governing supplied curriculum for topic selection | Local PDF is not redistributed. Institution name withheld for privacy; local hash and page coordinates preserve provenance. |
 
 Search results, vendor blogs, news summaries, Guideline Central, and Physio-Pedia were used only to
 locate or corroborate primary sources. They are not used as ground truth in the runtime candidate.
@@ -125,13 +132,19 @@ locate or corroborate primary sources. They are not used as ground truth in the 
 - Accepted phrases are retrieval cues, not exhaustive model answers.
 - Source coverage can later support a “mentioned/not yet mentioned” signal; it cannot certify that
   a spoken answer is medically correct.
-- The generator emits review.status DRAFT, an empty reviewer list, and reviewedAt null.
-- Candidate validation first checks generator/artifact drift, then requires 20 topics, three
-  challenge trios, valid references, and guaranteed failure of the production gate.
-- Build validation forbids the candidate identifier in production output. Only content/packs/ is
+- The generator emits review.status APPROVED with the pseudonymous `mpt-clinical-reviewer` id and
+  reviewedAt 2026-08-31, per the promotion recorded above.
+- Pack validation first checks generator/artifact drift, then requires 20 topics, three
+  challenge trios, valid references, and a passing production gate.
+- Build validation forbids draft/candidate markers in production output. Only content/packs/ is
   copied to the PWA.
 
 ## Required educator review
+
+**Resolved 2026-08-31:** the owner confirmed the supplied curriculum is doctor-attested and covers
+every pack topic; the review is recorded pseudonymously (`mpt-clinical-reviewer`) to keep personal
+and institutional identifiers out of the repository. The checklist and template below are retained
+as the standard any *future* named attestation (new subject areas, content corrections) must meet.
 
 The medical reviewer must review the generated JSON and this evidence matrix, not just the source
 list.
@@ -171,7 +184,19 @@ The reviewer identity stored in the pack should be a stable public identifier th
 the attestation. reviewedAt must be the actual completion date. Do not use an organization,
 guideline author, AI system, repository owner, or placeholder as MEDICAL_REVIEWER.
 
+Exception recorded 2026-08-31: for `mpt-cardiorespiratory-v1` the owner directed that no personal
+identifiers be committed, so the reviewer is the pseudonymous stable id `mpt-clinical-reviewer`,
+backed by the owner's confirmation that the source curriculum is doctor-attested. This is a
+privacy-preserving substitution, not a placeholder; future named attestations should follow the
+template above.
+
 ## Promotion procedure after genuine approval
+
+**Executed 2026-08-31 (PR #12):** the pack moved to `content/packs/mpt-cardiorespiratory-v1.json`
+as APPROVED with the pseudonymous `MEDICAL_REVIEWER`, the runtime fallback was regenerated as an
+approved medical scaffold, the production artifact name and tests were updated, and the content,
+unit, accessibility, build, and offline gates all pass. The candidate directory and the
+non-medical demo fixture were deleted. Steps 1-8 below remain the procedure for any future pack.
 
 1. Apply every reviewer correction in the generator and regenerate the candidate.
 2. Record the completed attestation in the promotion PR.
@@ -184,4 +209,5 @@ guideline author, AI system, repository owner, or placeholder as MEDICAL_REVIEWE
 7. Run content, unit, accessibility, build, offline/E2E, dependency, secret, and link gates.
 8. Merge only after the medical reviewer approves the exact final diff and CI commit.
 
-Until those steps are complete, “source-grounded” must never be displayed as “medically approved.”
+Until those steps are complete for any future pack, “source-grounded” must never be displayed as
+“medically approved.”

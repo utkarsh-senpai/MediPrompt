@@ -575,9 +575,7 @@ export function App() {
         <header className={focusMode ? "sr-only" : "brand"}>
           <h1>MediPrompt</h1>
           <p className="brand-line">
-            Spin a topic, speak against the clock, review how you delivered. No account —
-            optional mic feedback and on-device transcription, so audio never leaves this
-            device.
+            Spin a topic. Speak against the clock. Audio never leaves this device.
           </p>
         </header>
 

@@ -13,9 +13,9 @@ import type {
   TopicSnapshot,
   TranscriptDraft,
 } from "./types";
-import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
 
-const pack = validatePack(demoPackJson) as RuntimePack;
+const pack = validatePack(medicalPackJson) as RuntimePack;
 
 const deps: ReducerDeps = {
   pack,
@@ -26,7 +26,7 @@ const deps: ReducerDeps = {
   audioArmed: false,
 };
 
-function recallSelection(subjectId = "everyday-explanations"): PracticeSelection {
+function recallSelection(subjectId = "respiratory-physiotherapy"): PracticeSelection {
   return {
     mode: "RECALL_SPRINT",
     challenge: "GUIDED",
@@ -39,7 +39,7 @@ function deepResearchSelection(): PracticeSelection {
   return {
     mode: "DEEP_RESEARCH",
     challenge: "GUIDED",
-    subjectId: "reasoning-and-tradeoffs",
+    subjectId: "respiratory-physiotherapy",
     register: "EXAMINER",
   };
 }
@@ -53,8 +53,8 @@ function snapshot(variantId: string): TopicSnapshot {
   });
 }
 
-const GUIDED = "how-a-zipper-works-guided-rs-v1";
-const GUIDED_DR = "paper-vs-digital-guided-dr-v1";
+const GUIDED = "respiratory-assessment-guided-recall-v1";
+const GUIDED_DR = "respiratory-assessment-guided-deep-v1";
 
 const METRICS: DeliveryMetrics = {
   durationMs: 90_000,
@@ -66,7 +66,7 @@ const METRICS: DeliveryMetrics = {
 };
 
 const DRAFT: TranscriptDraft = {
-  text: "um the zipper has teeth that interlock",
+  text: "um the assessment starts with patient history",
   source: "LOCAL_WHISPER",
   model: { id: "whisper-base.en", version: "pinned-revision", quantization: "q4" },
   uncertainRanges: [],
@@ -74,7 +74,7 @@ const DRAFT: TranscriptDraft = {
 
 const APPROVED: ApprovedTranscript = {
   rawText: DRAFT.text,
-  text: "the zipper has teeth that interlock",
+  text: "the assessment starts with patient history",
   approvedAt: "2026-08-30T00:02:00.000Z",
   wasEdited: true,
 };
@@ -110,11 +110,11 @@ describe("reduceSession — IDLE / DRAWING", () => {
     ).state;
     const { state } = reduceSession(
       drawing,
-      { type: "CHANGE_SELECTION", selection: recallSelection("science-and-nature") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
       deps,
     );
     expect(state.name).toBe("IDLE");
-    if (state.name === "IDLE") expect(state.selection.subjectId).toBe("science-and-nature");
+    if (state.name === "IDLE") expect(state.selection.subjectId).toBe("cardiovascular-physiotherapy");
   });
 });
 
@@ -157,7 +157,7 @@ describe("reduceSession — invalid transitions are inert", () => {
 
     const changed = reduceSession(
       state,
-      { type: "CHANGE_SELECTION", selection: recallSelection("science-and-nature") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
       deps,
     );
     expect(changed.state).toBe(state);
@@ -232,7 +232,7 @@ describe("reduceSession — Recall Sprint path", () => {
 
 describe("resolved topic snapshot", () => {
   it("uses effective accessibility durations and resolves the reviewed case", () => {
-    const found = findVariant(pack, "paper-vs-digital-applied-rs-v1");
+    const found = findVariant(pack, "copd-assessment-planning-applied-recall-v1");
     if (!found) throw new Error("fixture variant missing");
     const resolved = toTopicSnapshot(
       pack,
@@ -242,14 +242,14 @@ describe("resolved topic snapshot", () => {
       { speakingSeconds: 75, researchSeconds: 180 },
     );
     expect(resolved.timePolicy.speakingSeconds).toBe(75);
-    expect(resolved.caseText).toContain("oral exam");
+    expect(resolved.caseText).toContain("stable COPD");
     expect(resolved.supportLevel).toBe("FULL");
   });
 });
 
 describe("reduceSession — Deep Research path", () => {
   function drSelection(): PracticeSelection {
-    return { mode: "DEEP_RESEARCH", challenge: "GUIDED", subjectId: "reasoning-and-tradeoffs", register: "EXAMINER" };
+    return { mode: "DEEP_RESEARCH", challenge: "GUIDED", subjectId: "respiratory-physiotherapy", register: "EXAMINER" };
   }
 
   it("START_TIMER from TOPIC_READY is invalid for Deep Research (must research first)", () => {
@@ -737,7 +737,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     const review = transcriptReviewState();
     const { state, commands } = reduceSession(
       review,
-      { type: "CHANGE_SELECTION", selection: recallSelection("science-and-nature") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
       armed,
     );
     expect(state.name).toBe("IDLE");
@@ -752,7 +752,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "r1", now: 90_000 }, deps).state;
     const { commands } = reduceSession(
       s,
-      { type: "CHANGE_SELECTION", selection: recallSelection("science-and-nature") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
       deps,
     );
     expect(commands).toEqual([]);

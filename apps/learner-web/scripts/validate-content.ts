@@ -1,6 +1,7 @@
 // Validates content packs against the runtime schema + custom cross-reference checks.
 // - content/packs/*.json : production packs; must also pass the v0.2 production gate.
-// - content/candidates/*.json: medical review candidates; must meet demo depth but fail closed.
+// - content/candidates/*.json: optional medical review candidates; when present they must
+//   meet demo depth but fail closed (the MPT pack graduated to content/packs on attestation).
 // - content/fixtures/*.json: test fixtures; structural validation only (may be DRAFT /
 //   NOT_FOR_PUBLICATION and must NOT pass the production gate by accident).
 //
@@ -30,10 +31,14 @@ function readJson(file: string): unknown {
 }
 
 function listJson(dir: string): string[] {
-  return readdirSync(dir)
-    .filter((f) => f.endsWith(".json"))
-    .sort()
-    .map((f) => resolve(dir, f));
+  try {
+    return readdirSync(dir)
+      .filter((f) => f.endsWith(".json"))
+      .sort()
+      .map((f) => resolve(dir, f));
+  } catch {
+    return []; // a retired/optional content tier may not exist on disk
+  }
 }
 
 let failed = 0;
@@ -61,8 +66,7 @@ if (fixtureFiles.length === 0) {
   failed++;
 }
 if (candidateFiles.length === 0) {
-  console.error("FAIL content/candidates must contain a medical review candidate");
-  failed++;
+  console.error("ok   no review candidates pending (medical pack is in production)");
 }
 
 for (const file of packFiles) {
