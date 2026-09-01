@@ -1,6 +1,6 @@
-// Generates a source-grounded medical content candidate for educator review.
-// This artifact is deliberately DRAFT, is never copied into the web build, and
-// cannot pass the production gate without a real MEDICAL_REVIEWER attestation.
+// Generates the source-grounded MPT cardiorespiratory educator-review candidate.
+// The artifact is deliberately DRAFT. It can run only in the explicit local
+// medical-beta mode and cannot pass the public-production content gate.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -648,7 +648,7 @@ mkdirSync(dirname(out), { recursive: true });
 const serialized = JSON.stringify(pack, null, 2) + "\n";
 if (process.argv.includes("--check")) {
   if (readFileSync(out, "utf8") !== serialized) {
-    throw new Error("medical candidate is stale; run pnpm candidate:generate");
+    throw new Error("medical candidate is stale; run pnpm candidate:medical:generate");
   }
 } else {
   writeFileSync(out, serialized, "utf8");

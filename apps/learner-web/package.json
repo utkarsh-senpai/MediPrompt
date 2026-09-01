@@ -2,20 +2,20 @@
   "name": "@mediprompt/learner-web",
   "private": true,
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "engines": {
     "node": ">=22.23.2",
     "pnpm": ">=9.15.0"
   },
   "scripts": {
+    "predev": "pnpm copy:packs && pnpm copy:model-runtime",
     "dev": "vite",
-    "predev": "pnpm copy:packs",
+    "dev:medical": "pnpm copy:packs --draft-beta && pnpm copy:model-runtime && vite --mode medical-beta",
     "schema:generate": "node scripts/generate-schema-validator.mjs",
     "schema:check": "node scripts/generate-schema-validator.mjs --check",
-    "candidate:generate": "tsx scripts/generate-medical-candidate.ts",
-    "candidate:check": "tsx scripts/generate-medical-candidate.ts --check",
     "copy:packs": "node scripts/copy-packs.mjs",
-    "build": "pnpm content:validate && pnpm copy:packs && tsc -b && vite build && pnpm build:validate",
+    "copy:model-runtime": "node scripts/copy-model-runtime.mjs",
+    "build": "pnpm content:validate && pnpm copy:packs && pnpm copy:model-runtime && tsc -b && vite build && pnpm build:validate",
     "build:validate": "node scripts/validate-build.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -23,16 +23,20 @@
     "test": "vitest run",
     "test:a11y": "vitest run -c vitest.a11y.config.ts",
     "test:e2e": "playwright test",
-    "content:validate": "pnpm schema:check && pnpm candidate:check && tsx scripts/validate-content.ts"
+    "content:validate": "pnpm schema:check && pnpm pack:demo:check && pnpm candidate:medical:check && tsx scripts/validate-content.ts",
+    "pack:demo:generate": "tsx scripts/generate-demo-pack.ts",
+    "pack:demo:check": "tsx scripts/generate-demo-pack.ts --check",
+    "candidate:medical:generate": "tsx scripts/generate-medical-candidate.ts",
+    "candidate:medical:check": "tsx scripts/generate-medical-candidate.ts --check"
   },
   "dependencies": {
+    "@huggingface/transformers": "3.7.6",
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "ajv": "8.20.0",
-    "@playwright/test": "1.62.1",
     "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.1",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
     "@testing-library/user-event": "14.5.2",
@@ -40,6 +44,7 @@
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.7.0",
+    "ajv": "8.20.0",
     "eslint": "10.9.1",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.5",

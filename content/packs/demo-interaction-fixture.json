@@ -7,7 +7,7 @@
   "locale": "en-IN",
   "licence": {
     "id": "CC-BY-4.0",
-    "attribution": "Utkarsh Meshram — non-medical interaction fixture. Medical content is pending educator review and is not included in v0.2."
+    "attribution": "Utkarsh Meshram — original non-medical interaction fixture."
   },
   "review": {
     "status": "APPROVED",
@@ -22,7 +22,7 @@
   "sources": [
     {
       "sourceId": "src-general",
-      "citation": "General-knowledge concepts (public domain); no medical claims.",
+      "citation": "General-knowledge concepts used only to exercise the speaking interaction; no medical claims.",
       "url": "https://en.wikipedia.org/wiki/Main_Page",
       "accessedAt": "2026-08-30"
     }
@@ -970,6 +970,28 @@
               "rubricId": "paper-vs-digital-guided-rs-rubric-v1"
             },
             {
+              "variantId": "paper-vs-digital-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-paper-vs-digital-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between paper and digital notes, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "paper-vs-digital-guided-dr-rubric-v1"
+            },
+            {
               "variantId": "paper-vs-digital-applied-rs-v1",
               "challengePreset": "APPLIED",
               "difficultyProfileVersion": "difficulty-profile/1.0",
@@ -977,7 +999,7 @@
               "promptId": "prompt-paper-vs-digital-applied-rs",
               "mode": "RECALL_SPRINT",
               "supportLevel": "FULL",
-              "wording": "Use the fictional scenario below. Summarize it, reason about the main trade-off in the trade-off between paper and digital notes, and propose a justified plan.",
+              "wording": "Use the fictional scenario. Summarize it, reason about the main trade-off in the trade-off between paper and digital notes, and propose a justified plan.",
               "answerArc": [
                 "summarize",
                 "reason",
@@ -1001,7 +1023,7 @@
               "promptId": "prompt-paper-vs-digital-viva-rs",
               "mode": "RECALL_SPRINT",
               "supportLevel": "FULL",
-              "wording": "Use the fictional scenario below. New constraint: The commute is no longer available for study, but the learner must find cited facts quickly. Prioritize the competing options, defend your choice, and state what would change your mind.",
+              "wording": "Use the fictional scenario. New constraint: The commute is no longer available for study, but the learner must find cited facts quickly. Prioritize the options, defend your choice, and state what would change your mind.",
               "answerArc": [
                 "prioritize",
                 "defend",
@@ -1017,28 +1039,6 @@
                 "paper-vs-digital-evidence-v1"
               ],
               "rubricId": "paper-vs-digital-viva-rs-rubric-v1"
-            },
-            {
-              "variantId": "paper-vs-digital-guided-dr-v1",
-              "challengePreset": "GUIDED",
-              "difficultyProfileVersion": "difficulty-profile/1.0",
-              "blueprint": "explain-concept",
-              "promptId": "prompt-paper-vs-digital-guided-dr",
-              "mode": "DEEP_RESEARCH",
-              "supportLevel": "FULL",
-              "wording": "Research the trade-off between paper and digital notes, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
-              "answerArc": [
-                "define",
-                "explain",
-                "apply"
-              ],
-              "timePolicy": {
-                "speakingSeconds": 90,
-                "researchSeconds": 120
-              },
-              "caseRef": null,
-              "followUpRefs": [],
-              "rubricId": "paper-vs-digital-guided-dr-rubric-v1"
             }
           ],
           "rubrics": [
@@ -1060,6 +1060,35 @@
                 },
                 {
                   "conceptId": "paper-vs-digital-guided-rs-c2",
+                  "label": "Weighs searchability against distraction",
+                  "acceptedPhrases": [
+                    "weighs searchability against distraction"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "paper-vs-digital-guided-dr-rubric-v1",
+              "variantId": "paper-vs-digital-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "paper-vs-digital-guided-dr-c1",
+                  "label": "Compares retention and recall",
+                  "acceptedPhrases": [
+                    "compares retention and recall"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "paper-vs-digital-guided-dr-c2",
                   "label": "Weighs searchability against distraction",
                   "acceptedPhrases": [
                     "weighs searchability against distraction"
@@ -1128,35 +1157,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "rubricId": "paper-vs-digital-guided-dr-rubric-v1",
-              "variantId": "paper-vs-digital-guided-dr-v1",
-              "register": "EXAMINER",
-              "concepts": [
-                {
-                  "conceptId": "paper-vs-digital-guided-dr-c1",
-                  "label": "Compares retention and recall",
-                  "acceptedPhrases": [
-                    "compares retention and recall"
-                  ],
-                  "weight": 2,
-                  "sourceRefs": [
-                    "src-general"
-                  ]
-                },
-                {
-                  "conceptId": "paper-vs-digital-guided-dr-c2",
-                  "label": "Weighs searchability against distraction",
-                  "acceptedPhrases": [
-                    "weighs searchability against distraction"
-                  ],
-                  "weight": 2,
-                  "sourceRefs": [
-                    "src-general"
-                  ]
-                }
-              ]
             }
           ],
           "cases": [
@@ -1168,7 +1168,7 @@
           "followUps": [
             {
               "followUpId": "paper-vs-digital-probe-v1",
-              "text": "What additional information would most change your assessment of the trade-off between paper and digital notes?",
+              "text": "What information would most change your assessment of the trade-off between paper and digital notes?",
               "kind": "PROBE"
             },
             {
@@ -1204,6 +1204,28 @@
               "rubricId": "urban-vs-rural-guided-rs-rubric-v1"
             },
             {
+              "variantId": "urban-vs-rural-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-urban-vs-rural-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between urban and rural living, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "urban-vs-rural-guided-dr-rubric-v1"
+            },
+            {
               "variantId": "urban-vs-rural-applied-rs-v1",
               "challengePreset": "APPLIED",
               "difficultyProfileVersion": "difficulty-profile/1.0",
@@ -1211,7 +1233,7 @@
               "promptId": "prompt-urban-vs-rural-applied-rs",
               "mode": "RECALL_SPRINT",
               "supportLevel": "FULL",
-              "wording": "Use the fictional scenario below. Summarize it, reason about the main trade-off in the trade-off between urban and rural living, and propose a justified plan.",
+              "wording": "Use the fictional scenario. Summarize it, reason about the main trade-off in the trade-off between urban and rural living, and propose a justified plan.",
               "answerArc": [
                 "summarize",
                 "reason",
@@ -1235,7 +1257,7 @@
               "promptId": "prompt-urban-vs-rural-viva-rs",
               "mode": "RECALL_SPRINT",
               "supportLevel": "FULL",
-              "wording": "Use the fictional scenario below. New constraint: The rural role adds weekly remote supervision, while the urban rent rises substantially. Prioritize the competing options, defend your choice, and state what would change your mind.",
+              "wording": "Use the fictional scenario. New constraint: The rural role adds weekly remote supervision, while the urban rent rises substantially. Prioritize the options, defend your choice, and state what would change your mind.",
               "answerArc": [
                 "prioritize",
                 "defend",
@@ -1251,28 +1273,6 @@
                 "urban-vs-rural-evidence-v1"
               ],
               "rubricId": "urban-vs-rural-viva-rs-rubric-v1"
-            },
-            {
-              "variantId": "urban-vs-rural-guided-dr-v1",
-              "challengePreset": "GUIDED",
-              "difficultyProfileVersion": "difficulty-profile/1.0",
-              "blueprint": "explain-concept",
-              "promptId": "prompt-urban-vs-rural-guided-dr",
-              "mode": "DEEP_RESEARCH",
-              "supportLevel": "FULL",
-              "wording": "Research the trade-off between urban and rural living, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
-              "answerArc": [
-                "define",
-                "explain",
-                "apply"
-              ],
-              "timePolicy": {
-                "speakingSeconds": 90,
-                "researchSeconds": 120
-              },
-              "caseRef": null,
-              "followUpRefs": [],
-              "rubricId": "urban-vs-rural-guided-dr-rubric-v1"
             }
           ],
           "rubrics": [
@@ -1294,6 +1294,35 @@
                 },
                 {
                   "conceptId": "urban-vs-rural-guided-rs-c2",
+                  "label": "Weighs community against access",
+                  "acceptedPhrases": [
+                    "weighs community against access"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "urban-vs-rural-guided-dr-rubric-v1",
+              "variantId": "urban-vs-rural-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "urban-vs-rural-guided-dr-c1",
+                  "label": "Compares opportunity and cost",
+                  "acceptedPhrases": [
+                    "compares opportunity and cost"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "urban-vs-rural-guided-dr-c2",
                   "label": "Weighs community against access",
                   "acceptedPhrases": [
                     "weighs community against access"
@@ -1362,35 +1391,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "rubricId": "urban-vs-rural-guided-dr-rubric-v1",
-              "variantId": "urban-vs-rural-guided-dr-v1",
-              "register": "EXAMINER",
-              "concepts": [
-                {
-                  "conceptId": "urban-vs-rural-guided-dr-c1",
-                  "label": "Compares opportunity and cost",
-                  "acceptedPhrases": [
-                    "compares opportunity and cost"
-                  ],
-                  "weight": 2,
-                  "sourceRefs": [
-                    "src-general"
-                  ]
-                },
-                {
-                  "conceptId": "urban-vs-rural-guided-dr-c2",
-                  "label": "Weighs community against access",
-                  "acceptedPhrases": [
-                    "weighs community against access"
-                  ],
-                  "weight": 2,
-                  "sourceRefs": [
-                    "src-general"
-                  ]
-                }
-              ]
             }
           ],
           "cases": [
@@ -1402,7 +1402,7 @@
           "followUps": [
             {
               "followUpId": "urban-vs-rural-probe-v1",
-              "text": "What additional information would most change your assessment of the trade-off between urban and rural living?",
+              "text": "What information would most change your assessment of the trade-off between urban and rural living?",
               "kind": "PROBE"
             },
             {
@@ -1438,6 +1438,28 @@
               "rubricId": "specialist-vs-generalist-guided-rs-rubric-v1"
             },
             {
+              "variantId": "specialist-vs-generalist-guided-dr-v1",
+              "challengePreset": "GUIDED",
+              "difficultyProfileVersion": "difficulty-profile/1.0",
+              "blueprint": "explain-concept",
+              "promptId": "prompt-specialist-vs-generalist-guided-dr",
+              "mode": "DEEP_RESEARCH",
+              "supportLevel": "FULL",
+              "wording": "Research the trade-off between specialist and generalist learning, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
+              "answerArc": [
+                "define",
+                "explain",
+                "apply"
+              ],
+              "timePolicy": {
+                "speakingSeconds": 90,
+                "researchSeconds": 120
+              },
+              "caseRef": null,
+              "followUpRefs": [],
+              "rubricId": "specialist-vs-generalist-guided-dr-rubric-v1"
+            },
+            {
               "variantId": "specialist-vs-generalist-applied-rs-v1",
               "challengePreset": "APPLIED",
               "difficultyProfileVersion": "difficulty-profile/1.0",
@@ -1445,7 +1467,7 @@
               "promptId": "prompt-specialist-vs-generalist-applied-rs",
               "mode": "RECALL_SPRINT",
               "supportLevel": "FULL",
-              "wording": "Use the fictional scenario below. Summarize it, reason about the main trade-off in the trade-off between specialist and generalist learning, and propose a justified plan.",
+              "wording": "Use the fictional scenario. Summarize it, reason about the main trade-off in the trade-off between specialist and generalist learning, and propose a justified plan.",
               "answerArc": [
                 "summarize",
                 "reason",
@@ -1469,7 +1491,7 @@
               "promptId": "prompt-specialist-vs-generalist-viva-rs",
               "mode": "RECALL_SPRINT",
               "supportLevel": "FULL",
-              "wording": "Use the fictional scenario below. New constraint: A practice result shows safe breadth but repeated weak reasoning in the difficult area. Prioritize the competing options, defend your choice, and state what would change your mind.",
+              "wording": "Use the fictional scenario. New constraint: A practice result shows safe breadth but repeated weak reasoning in the difficult area. Prioritize the options, defend your choice, and state what would change your mind.",
               "answerArc": [
                 "prioritize",
                 "defend",
@@ -1485,28 +1507,6 @@
                 "specialist-vs-generalist-evidence-v1"
               ],
               "rubricId": "specialist-vs-generalist-viva-rs-rubric-v1"
-            },
-            {
-              "variantId": "specialist-vs-generalist-guided-dr-v1",
-              "challengePreset": "GUIDED",
-              "difficultyProfileVersion": "difficulty-profile/1.0",
-              "blueprint": "explain-concept",
-              "promptId": "prompt-specialist-vs-generalist-guided-dr",
-              "mode": "DEEP_RESEARCH",
-              "supportLevel": "FULL",
-              "wording": "Research the trade-off between specialist and generalist learning, then explain it aloud. Organize your answer as definition, key components, and why it matters.",
-              "answerArc": [
-                "define",
-                "explain",
-                "apply"
-              ],
-              "timePolicy": {
-                "speakingSeconds": 90,
-                "researchSeconds": 120
-              },
-              "caseRef": null,
-              "followUpRefs": [],
-              "rubricId": "specialist-vs-generalist-guided-dr-rubric-v1"
             }
           ],
           "rubrics": [
@@ -1528,6 +1528,35 @@
                 },
                 {
                   "conceptId": "specialist-vs-generalist-guided-rs-c2",
+                  "label": "Weighs expertise against flexibility",
+                  "acceptedPhrases": [
+                    "weighs expertise against flexibility"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                }
+              ]
+            },
+            {
+              "rubricId": "specialist-vs-generalist-guided-dr-rubric-v1",
+              "variantId": "specialist-vs-generalist-guided-dr-v1",
+              "register": "EXAMINER",
+              "concepts": [
+                {
+                  "conceptId": "specialist-vs-generalist-guided-dr-c1",
+                  "label": "Compares depth and adaptability",
+                  "acceptedPhrases": [
+                    "compares depth and adaptability"
+                  ],
+                  "weight": 2,
+                  "sourceRefs": [
+                    "src-general"
+                  ]
+                },
+                {
+                  "conceptId": "specialist-vs-generalist-guided-dr-c2",
                   "label": "Weighs expertise against flexibility",
                   "acceptedPhrases": [
                     "weighs expertise against flexibility"
@@ -1596,35 +1625,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "rubricId": "specialist-vs-generalist-guided-dr-rubric-v1",
-              "variantId": "specialist-vs-generalist-guided-dr-v1",
-              "register": "EXAMINER",
-              "concepts": [
-                {
-                  "conceptId": "specialist-vs-generalist-guided-dr-c1",
-                  "label": "Compares depth and adaptability",
-                  "acceptedPhrases": [
-                    "compares depth and adaptability"
-                  ],
-                  "weight": 2,
-                  "sourceRefs": [
-                    "src-general"
-                  ]
-                },
-                {
-                  "conceptId": "specialist-vs-generalist-guided-dr-c2",
-                  "label": "Weighs expertise against flexibility",
-                  "acceptedPhrases": [
-                    "weighs expertise against flexibility"
-                  ],
-                  "weight": 2,
-                  "sourceRefs": [
-                    "src-general"
-                  ]
-                }
-              ]
             }
           ],
           "cases": [
@@ -1636,7 +1636,7 @@
           "followUps": [
             {
               "followUpId": "specialist-vs-generalist-probe-v1",
-              "text": "What additional information would most change your assessment of the trade-off between specialist and generalist learning?",
+              "text": "What information would most change your assessment of the trade-off between specialist and generalist learning?",
               "kind": "PROBE"
             },
             {

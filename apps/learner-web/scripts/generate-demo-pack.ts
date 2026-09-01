@@ -1,13 +1,9 @@
-// Generates the v0.2 demo interaction fixture (non-medical, owner-approved).
-// Run: pnpm --filter @mediprompt/learner-web tsx scripts/generate-demo-pack.ts
-//
-// Per docs/V0.2_DEVELOPMENT_CONTEXT.md §8: while medical educator review is pending,
-// the runnable pack is a NON-MEDICAL interaction fixture that the owner can genuinely
-// approve (CONTENT_EDITOR, no medical claims). Medical content replaces this before
-// public release. This generator is a build tool; the emitted JSON is the artifact.
+// Generates the public non-medical interaction fixture.
+// Genuine medical curriculum content stays in the explicit local beta lane
+// until its exact prompts and rubrics receive educator attestation.
 
-import { writeFileSync, mkdirSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -67,10 +63,8 @@ const subjects: SubjectSeed[] = [
         focus: "the trade-off between paper and digital notes",
         concepts: ["Compares retention and recall", "Weighs searchability against distraction"],
         trio: true,
-        caseText:
-          "A student has four weeks before an oral exam. Handwritten notes aid recall, while searchable digital notes make revision on a daily commute easier; phone notifications are distracting.",
-        evidenceConstraint:
-          "The commute is no longer available for study, but the learner must find cited facts quickly.",
+        caseText: "A student has four weeks before an oral exam. Handwritten notes aid recall, while searchable digital notes make revision on a daily commute easier; phone notifications are distracting.",
+        evidenceConstraint: "The commute is no longer available for study, but the learner must find cited facts quickly.",
       },
       {
         topicId: "urban-vs-rural",
@@ -78,10 +72,8 @@ const subjects: SubjectSeed[] = [
         focus: "the trade-off between urban and rural living",
         concepts: ["Compares opportunity and cost", "Weighs community against access"],
         trio: true,
-        caseText:
-          "A graduate is comparing an urban role with close specialist supervision and high rent against a rural role with broad responsibility, lower costs, and limited transport.",
-        evidenceConstraint:
-          "The rural role adds weekly remote supervision, while the urban rent rises substantially.",
+        caseText: "A graduate is comparing an urban role with close specialist supervision and high rent against a rural role with broad responsibility, lower costs, and limited transport.",
+        evidenceConstraint: "The rural role adds weekly remote supervision, while the urban rent rises substantially.",
       },
       {
         topicId: "specialist-vs-generalist",
@@ -89,10 +81,8 @@ const subjects: SubjectSeed[] = [
         focus: "the trade-off between specialist and generalist learning",
         concepts: ["Compares depth and adaptability", "Weighs expertise against flexibility"],
         trio: true,
-        caseText:
-          "A learner has one week before a broad viva and must choose between mastering one difficult area deeply or rotating through all major areas with less depth.",
-        evidenceConstraint:
-          "A practice result shows safe breadth but repeated weak reasoning in the difficult area.",
+        caseText: "A learner has one week before a broad viva and must choose between mastering one difficult area deeply or rotating through all major areas with less depth.",
+        evidenceConstraint: "A practice result shows safe breadth but repeated weak reasoning in the difficult area.",
       },
       { topicId: "speed-vs-quality", title: "Speed versus quality", focus: "the trade-off between speed and quality of work", concepts: ["Compares throughput and error risk", "Weighs deadlines against rework"], deepResearch: true },
       { topicId: "short-term-vs-long-term", title: "Short-term versus long-term goals", focus: "the trade-off between short-term and long-term goals", concepts: ["Compares immediate payoff and delayed reward", "Weighs motivation against patience"], deepResearch: true },
@@ -105,76 +95,73 @@ const SPEAKING_APPLIED = 120;
 const SPEAKING_VIVA = 150;
 const RESEARCH = 120;
 
-function guidedVariant(t: TopicSeed, mode: "RECALL_SPRINT" | "DEEP_RESEARCH"): object {
+function guidedVariant(topic: TopicSeed, mode: "RECALL_SPRINT" | "DEEP_RESEARCH"): object {
   const suffix = mode === "RECALL_SPRINT" ? "rs" : "dr";
-  const wording =
-    mode === "RECALL_SPRINT"
-      ? `Explain ${t.focus}. Organize your answer as definition, key components, and why it matters.`
-      : `Research ${t.focus}, then explain it aloud. Organize your answer as definition, key components, and why it matters.`;
-  const timePolicy =
-    mode === "RECALL_SPRINT"
-      ? { speakingSeconds: SPEAKING_GUIDED }
-      : { speakingSeconds: SPEAKING_GUIDED, researchSeconds: RESEARCH };
+  const wording = mode === "RECALL_SPRINT"
+    ? `Explain ${topic.focus}. Organize your answer as definition, key components, and why it matters.`
+    : `Research ${topic.focus}, then explain it aloud. Organize your answer as definition, key components, and why it matters.`;
   return {
-    variantId: `${t.topicId}-guided-${suffix}-v1`,
+    variantId: `${topic.topicId}-guided-${suffix}-v1`,
     challengePreset: "GUIDED",
     difficultyProfileVersion: "difficulty-profile/1.0",
     blueprint: "explain-concept",
-    promptId: `prompt-${t.topicId}-guided-${suffix}`,
+    promptId: `prompt-${topic.topicId}-guided-${suffix}`,
     mode,
     supportLevel: "FULL",
     wording,
     answerArc: ["define", "explain", "apply"],
-    timePolicy,
+    timePolicy: mode === "RECALL_SPRINT"
+      ? { speakingSeconds: SPEAKING_GUIDED }
+      : { speakingSeconds: SPEAKING_GUIDED, researchSeconds: RESEARCH },
     caseRef: null,
     followUpRefs: [],
-    rubricId: `${t.topicId}-guided-${suffix}-rubric-v1`,
+    rubricId: `${topic.topicId}-guided-${suffix}-rubric-v1`,
   };
 }
 
-function appliedVariant(t: TopicSeed): object {
+function appliedVariant(topic: TopicSeed): object {
   return {
-    variantId: `${t.topicId}-applied-rs-v1`,
+    variantId: `${topic.topicId}-applied-rs-v1`,
     challengePreset: "APPLIED",
     difficultyProfileVersion: "difficulty-profile/1.0",
     blueprint: "manage-case",
-    promptId: `prompt-${t.topicId}-applied-rs`,
+    promptId: `prompt-${topic.topicId}-applied-rs`,
     mode: "RECALL_SPRINT",
     supportLevel: "FULL",
-    wording: `Use the fictional scenario below. Summarize it, reason about the main trade-off in ${t.focus}, and propose a justified plan.`,
+    wording: `Use the fictional scenario. Summarize it, reason about the main trade-off in ${topic.focus}, and propose a justified plan.`,
     answerArc: ["summarize", "reason", "plan"],
     timePolicy: { preparationSeconds: 45, speakingSeconds: SPEAKING_APPLIED },
-    caseRef: `${t.topicId}-case-v1`,
-    followUpRefs: [`${t.topicId}-probe-v1`],
-    rubricId: `${t.topicId}-applied-rs-rubric-v1`,
+    caseRef: `${topic.topicId}-case-v1`,
+    followUpRefs: [`${topic.topicId}-probe-v1`],
+    rubricId: `${topic.topicId}-applied-rs-rubric-v1`,
   };
 }
 
-function vivaVariant(t: TopicSeed): object {
+function vivaVariant(topic: TopicSeed): object {
   return {
-    variantId: `${t.topicId}-viva-rs-v1`,
+    variantId: `${topic.topicId}-viva-rs-v1`,
     challengePreset: "VIVA",
     difficultyProfileVersion: "difficulty-profile/1.0",
     blueprint: "compare-differentiate",
-    promptId: `prompt-${t.topicId}-viva-rs`,
+    promptId: `prompt-${topic.topicId}-viva-rs`,
     mode: "RECALL_SPRINT",
     supportLevel: "FULL",
-    wording: `Use the fictional scenario below. New constraint: ${t.evidenceConstraint ?? "one important assumption changes"} Prioritize the competing options, defend your choice, and state what would change your mind.`,
+    wording: `Use the fictional scenario. New constraint: ${topic.evidenceConstraint ?? "one important assumption changes"} Prioritize the options, defend your choice, and state what would change your mind.`,
     answerArc: ["prioritize", "defend", "safety-net"],
     timePolicy: { preparationSeconds: 45, speakingSeconds: SPEAKING_VIVA },
-    caseRef: `${t.topicId}-case-v1`,
-    followUpRefs: [`${t.topicId}-probe-v1`, `${t.topicId}-evidence-v1`],
-    rubricId: `${t.topicId}-viva-rs-rubric-v1`,
+    caseRef: `${topic.topicId}-case-v1`,
+    followUpRefs: [`${topic.topicId}-probe-v1`, `${topic.topicId}-evidence-v1`],
+    rubricId: `${topic.topicId}-viva-rs-rubric-v1`,
   };
 }
 
-function rubric(t: TopicSeed, variantSuffix: string): object {
+function rubric(topic: TopicSeed, variantSuffix: string): object {
   return {
-    rubricId: `${t.topicId}-${variantSuffix}-rubric-v1`,
-    variantId: `${t.topicId}-${variantSuffix}-v1`,
+    rubricId: `${topic.topicId}-${variantSuffix}-rubric-v1`,
+    variantId: `${topic.topicId}-${variantSuffix}-v1`,
     register: "EXAMINER",
-    concepts: t.concepts.map((label, i) => ({
-      conceptId: `${t.topicId}-${variantSuffix}-c${i + 1}`,
+    concepts: topic.concepts.map((label, index) => ({
+      conceptId: `${topic.topicId}-${variantSuffix}-c${index + 1}`,
       label,
       acceptedPhrases: [label.toLowerCase()],
       weight: 2,
@@ -183,54 +170,28 @@ function rubric(t: TopicSeed, variantSuffix: string): object {
   };
 }
 
-function buildTopic(t: TopicSeed): object {
-  const variants: object[] = [];
-  const rubrics: object[] = [];
-
-  variants.push(guidedVariant(t, "RECALL_SPRINT"));
-  rubrics.push(rubric(t, "guided-rs"));
-
-  if (t.deepResearch) {
-    variants.push(guidedVariant(t, "DEEP_RESEARCH"));
-    rubrics.push(rubric(t, "guided-dr"));
+function buildTopic(topic: TopicSeed): object {
+  const variants: object[] = [guidedVariant(topic, "RECALL_SPRINT")];
+  const rubrics: object[] = [rubric(topic, "guided-rs")];
+  if (topic.deepResearch || topic.trio) {
+    variants.push(guidedVariant(topic, "DEEP_RESEARCH"));
+    rubrics.push(rubric(topic, "guided-dr"));
   }
-
-  if (t.trio) {
-    variants.push(appliedVariant(t));
-    variants.push(vivaVariant(t));
-    variants.push(guidedVariant(t, "DEEP_RESEARCH"));
-    rubrics.push(rubric(t, "applied-rs"));
-    rubrics.push(rubric(t, "viva-rs"));
-    rubrics.push(rubric(t, "guided-dr"));
+  if (topic.trio) {
+    variants.push(appliedVariant(topic), vivaVariant(topic));
+    rubrics.push(rubric(topic, "applied-rs"), rubric(topic, "viva-rs"));
   }
-
-  const cases = t.trio
-    ? [
-        {
-          caseId: `${t.topicId}-case-v1`,
-          text:
-            t.caseText ??
-            `A learner is deciding how to approach ${t.focus}; there is no single obviously correct answer.`,
-        },
-      ]
-    : [];
-
-  const followUps = t.trio
-    ? [
-        {
-          followUpId: `${t.topicId}-probe-v1`,
-          text: `What additional information would most change your assessment of ${t.focus}?`,
-          kind: "PROBE",
-        },
-        {
-          followUpId: `${t.topicId}-evidence-v1`,
-          text: `${t.evidenceConstraint ?? `New information changes one assumption about ${t.focus}.`} Does your prioritization change, and why?`,
-          kind: "EVIDENCE_UPDATE",
-        },
-      ]
-    : [];
-
-  return { topicId: t.topicId, title: t.title, variants, rubrics, cases, followUps };
+  return {
+    topicId: topic.topicId,
+    title: topic.title,
+    variants,
+    rubrics,
+    cases: topic.trio ? [{ caseId: `${topic.topicId}-case-v1`, text: topic.caseText }] : [],
+    followUps: topic.trio ? [
+      { followUpId: `${topic.topicId}-probe-v1`, text: `What information would most change your assessment of ${topic.focus}?`, kind: "PROBE" },
+      { followUpId: `${topic.topicId}-evidence-v1`, text: `${topic.evidenceConstraint} Does your prioritization change, and why?`, kind: "EVIDENCE_UPDATE" },
+    ] : [],
+  };
 }
 
 const pack = {
@@ -242,42 +203,36 @@ const pack = {
   locale: "en-IN",
   licence: {
     id: "CC-BY-4.0",
-    attribution:
-      "Utkarsh Meshram — non-medical interaction fixture. Medical content is pending educator review and is not included in v0.2.",
+    attribution: "Utkarsh Meshram — original non-medical interaction fixture.",
   },
   review: {
     status: "APPROVED",
-    reviewers: [
-      {
-        id: "utkarsh-senpai",
-        role: "CONTENT_EDITOR",
-      },
-    ],
+    reviewers: [{ id: "utkarsh-senpai", role: "CONTENT_EDITOR" }],
     reviewedAt: "2026-08-30",
   },
-  sources: [
-    {
-      sourceId: "src-general",
-      citation: "General-knowledge concepts (public domain); no medical claims.",
-      url: "https://en.wikipedia.org/wiki/Main_Page",
-      accessedAt: "2026-08-30",
-    },
-  ],
-  subjects: subjects.map((s) => ({
-    subjectId: s.subjectId,
-    title: s.title,
-    topics: s.topics.map(buildTopic),
+  sources: [{
+    sourceId: "src-general",
+    citation: "General-knowledge concepts used only to exercise the speaking interaction; no medical claims.",
+    url: "https://en.wikipedia.org/wiki/Main_Page",
+    accessedAt: "2026-08-30",
+  }],
+  subjects: subjects.map((subject) => ({
+    subjectId: subject.subjectId,
+    title: subject.title,
+    topics: subject.topics.map(buildTopic),
   })),
 };
 
 const out = resolve(__dirname, "../../../content/packs/demo-interaction-fixture.json");
 mkdirSync(dirname(out), { recursive: true });
-writeFileSync(out, JSON.stringify(pack, null, 2) + "\n", "utf8");
-
-const topicCount = subjects.reduce((n, s) => n + s.topics.length, 0);
-const trioCount = subjects.reduce(
-  (n, s) => n + s.topics.filter((t) => t.trio).length,
-  0,
+const serialized = JSON.stringify(pack, null, 2) + "\n";
+if (process.argv.includes("--check")) {
+  if (readFileSync(out, "utf8") !== serialized) {
+    throw new Error("demo pack is stale; run pnpm pack:demo:generate");
+  }
+} else {
+  writeFileSync(out, serialized, "utf8");
+}
+console.log(
+  `${process.argv.includes("--check") ? "verified" : "wrote"} ${out} (${subjects.reduce((sum, subject) => sum + subject.topics.length, 0)} topics)`,
 );
-console.log(`wrote ${out}`);
-console.log(`topics: ${topicCount}, trios: ${trioCount}`);

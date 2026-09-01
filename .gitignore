@@ -10,6 +10,9 @@ dist-ssr/
 # generated runtime pack copy (built from content/packs via copy:packs)
 apps/learner-web/public/packs/
 
+# pinned ORT wasm runtime copy (built from @huggingface/transformers via copy:model-runtime)
+apps/learner-web/public/models/
+
 # test / coverage
 coverage/
 playwright-report/

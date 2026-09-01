@@ -3,19 +3,21 @@ interface CountdownRingProps {
   totalMs: number;
   /** Visible label under the number, e.g. "seconds left" or "research left". */
   caption?: string;
+  /** Research phases get the cool teal ring; speaking keeps warm terracotta. */
+  variant?: "speaking" | "research";
 }
 
 const RADIUS = 90;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function CountdownRing({ remainingMs, totalMs, caption }: CountdownRingProps) {
+export function CountdownRing({ remainingMs, totalMs, caption, variant }: CountdownRingProps) {
   const fraction =
     totalMs > 0 ? Math.max(0, Math.min(1, remainingMs / totalMs)) : 0;
   const offset = CIRCUMFERENCE * (1 - fraction);
   const seconds = Math.ceil(remainingMs / 1000);
 
   return (
-    <div className="countdown">
+    <div className={variant === "research" ? "countdown is-research" : "countdown"}>
       <svg
         viewBox="0 0 200 200"
         role="img"

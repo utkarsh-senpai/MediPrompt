@@ -1,5 +1,6 @@
-// Domain types for the v0.2 first-playable loop.
-// See docs/V0.2_DEVELOPMENT_CONTEXT.md §4 for the contract.
+// Domain types for the v0.2 first-playable loop and the v0.3 private
+// speech-intelligence extension.
+// See docs/V0.2_DEVELOPMENT_CONTEXT.md §4 and docs/V0.3_DEVELOPMENT_CONTEXT.md §4.
 
 // --- Selection dimensions (kept independent) ---
 
@@ -159,6 +160,8 @@ export interface UserSettings {
   schemaVersion: 1;
   speakingSeconds: number;
   researchSeconds: number;
+  /** Sound cues off when true; absent in legacy stored settings (treated as false). */
+  soundMuted?: boolean;
 }
 
 export interface PracticeSelection {
@@ -215,7 +218,80 @@ export interface TopicSnapshot {
   challengeIdentity: ChallengeIdentity;
 }
 
-// --- Session state machine (v0.2 slice only) ---
+// --- v0.3 speech intelligence contracts (verbatim from L4) ---
+
+export type TranscriptSource = "LOCAL_WHISPER" | "WEB_SPEECH" | "TYPED";
+
+export interface TranscriptModel {
+  id: string;
+  /** Pinned model revision (commit hash). */
+  version: string;
+  quantization: string;
+}
+
+export interface TranscriptDraft {
+  text: string;
+  source: TranscriptSource;
+  model?: TranscriptModel;
+  /** Character ranges the transcriber flagged as low-confidence; never auto-corrected. */
+  uncertainRanges: Array<{ start: number; end: number }>;
+}
+
+export interface ApprovedTranscript {
+  rawText?: string;
+  text: string;
+  approvedAt: string;
+  wasEdited: boolean;
+}
+
+export type PauseKind = "MID_CLAUSE" | "BOUNDARY" | "UNKNOWN";
+
+export interface PauseObservation {
+  startMs: number;
+  durationMs: number;
+  kind: PauseKind;
+}
+
+/**
+ * Delivery observations. Absent optional fields mean "not measurable on this
+ * device/recording", never zero. Audio-derived fields are final when computed;
+ * transcript-derived fields appear only after the learner approves a transcript.
+ */
+export interface DeliveryMetrics {
+  durationMs: number;
+  spokenMs?: number;
+  wordsPerMinute?: number;
+  fillerCount?: number;
+  repeatedPhraseCount?: number;
+  pauses: PauseObservation[];
+  clippingRatio?: number;
+  loudnessVariationDb?: number;
+  limitations: string[];
+}
+
+/** Transcript-derived subset of DeliveryMetrics, computed on approval. */
+export type TextMetrics = Pick<
+  DeliveryMetrics,
+  "wordsPerMinute" | "fillerCount" | "repeatedPhraseCount"
+>;
+
+export type AudioErrorCode =
+  | "AUDIO_MIC_PERMISSION_DENIED"
+  | "AUDIO_MIC_UNAVAILABLE"
+  | "AUDIO_RECORD_FAILED"
+  | "AUDIO_DECODE_FAILED"
+  | "AUDIO_ANALYSIS_FAILED";
+
+export type TranscriptionUnavailableReason =
+  | "DECLINED"
+  | "LOAD_FAILED"
+  | "OFFLINE"
+  | "TIMEOUT"
+  | "LOW_MEMORY"
+  | "CANCELLED"
+  | "ERROR";
+
+// --- Session state machine ---
 
 export interface AttemptDraft {
   sessionId: string;
@@ -268,6 +344,44 @@ export type SessionState =
       selection: PracticeSelection;
       topic: TopicSnapshot;
       attempt: AttemptDraft;
+    }
+  // --- v0.3 post-attempt extension states (optional; removing them must leave
+  // the v0.2 paths behaviorally identical). Stale async results are dropped by
+  // attemptId, the post-attempt identity key. ---
+  | {
+      name: "PROCESSING";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics | null;
+      draft: TranscriptDraft | null;
+      transcription: "IDLE" | "RUNNING";
+    }
+  | {
+      name: "TRANSCRIPT_REVIEW";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics;
+      draft: TranscriptDraft;
+    }
+  | {
+      name: "SELF_REVIEW";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics | null;
+      /** Why no transcript is in play (null when the learner chose the typed path directly). */
+      transcriptionIssue: TranscriptionUnavailableReason | null;
+    }
+  | {
+      name: "REVIEW";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics | null;
+      textMetrics: TextMetrics | null;
+      transcript: ApprovedTranscript;
     };
 
 export type SessionEvent =
@@ -280,7 +394,43 @@ export type SessionEvent =
   | { type: "START_TIMER"; now: number }
   | { type: "TIMER_ELAPSED"; requestId: string; now: number }
   | { type: "CLOSE_TIMER"; now: number }
-  | { type: "SPIN_AGAIN"; requestId: string; now: number };
+  | { type: "SPIN_AGAIN"; requestId: string; now: number }
+  // --- v0.3 post-attempt events ---
+  | { type: "START_TYPED_REVIEW"; attemptId: string; now: number }
+  | { type: "RECORDING_READY"; attemptId: string; now: number }
+  | {
+      type: "METRICS_READY";
+      attemptId: string;
+      metrics: DeliveryMetrics;
+      now: number;
+    }
+  | { type: "TRANSCRIBE_REQUESTED"; attemptId: string; now: number }
+  | {
+      type: "TRANSCRIPT_READY";
+      attemptId: string;
+      draft: TranscriptDraft;
+      now: number;
+    }
+  | {
+      type: "TRANSCRIPTION_UNAVAILABLE";
+      attemptId: string;
+      reason: TranscriptionUnavailableReason;
+      now: number;
+    }
+  | {
+      type: "TRANSCRIPT_APPROVED";
+      attemptId: string;
+      transcript: ApprovedTranscript;
+      textMetrics: TextMetrics;
+      now: number;
+    }
+  | {
+      type: "SELF_REVIEW_DONE";
+      attemptId: string;
+      transcript: ApprovedTranscript;
+      textMetrics: TextMetrics;
+      now: number;
+    };
 
 // --- Commands the orchestrator runs as effects ---
 
@@ -293,7 +443,17 @@ export type Command =
     }
   | { type: "START_DEADLINE"; deadlineAt: number }
   | { type: "STOP_DEADLINE" }
-  | { type: "FOCUS_VIEW"; target: "topic" | "speaking" | "complete" };
+  | {
+      type: "FOCUS_VIEW";
+      target: "topic" | "speaking" | "complete" | "processing" | "review";
+    }
+  // --- v0.3 commands (orchestrator effects; reducer stays pure) ---
+  | { type: "START_RECORDING"; attemptId: string }
+  | { type: "STOP_RECORDING"; attemptId: string }
+  | { type: "RUN_ANALYSIS"; attemptId: string }
+  | { type: "START_TRANSCRIPTION"; attemptId: string }
+  | { type: "CANCEL_TRANSCRIPTION"; attemptId: string }
+  | { type: "REVOKE_RECORDING"; attemptId: string };
 
 export interface ReducerDeps {
   pack: RuntimePack;
@@ -304,6 +464,12 @@ export interface ReducerDeps {
   /** Default durations when a variant omits them. */
   defaultSpeakingSeconds: number;
   defaultResearchSeconds: number;
+  /**
+   * Whether the recorder is armed for this attempt (capability present,
+   * primer accepted, permission granted, codec supported). Owned by the
+   * orchestrator; the reducer only uses it to emit recording commands.
+   */
+  audioArmed: boolean;
 }
 
 export interface ReducerResult {
@@ -315,6 +481,7 @@ export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   schemaVersion: 1,
   speakingSeconds: 90,
   researchSeconds: 120,
+  soundMuted: false,
 });
 
 /** Documented bounds for durations; clamped by the settings store and reducer. */

@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   type RuntimePack,
   type SettingsStore,
@@ -15,9 +8,22 @@ import {
   DEFAULT_SETTINGS,
 } from "@/practice/types";
 import { remainingMs } from "@/practice/deadlineTimer";
-import { usePracticeSession } from "@/practice/usePracticeSession";
+import {
+  usePracticeSession,
+  type AudioDeps,
+} from "@/practice/usePracticeSession";
 import { loadBundledPack } from "@/content/packLoader";
-import { detectCapabilities, type Capabilities } from "@/app/capabilities";
+import {
+  detectCapabilities,
+  speechFeedbackAvailable,
+  type Capabilities,
+} from "@/app/capabilities";
+import { audioIssueCopy } from "@/app/audioCopy";
+import { playSpinTick, playTimerEnd, playTimerStart } from "@/app/sounds";
+import { subjectEmoji } from "@/app/subjectEmoji";
+import { AttemptRecorder } from "@/audio/recorder";
+import { createWebAudioDecoder } from "@/audio/pcmDecode";
+import { createDefaultTranscriptionClient } from "@/speech/transcriptionClient";
 import { systemMonotonicClock, systemWallClock } from "@/platform/clock";
 import { CryptoRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
@@ -25,11 +31,20 @@ import { LocalStorageSettingsStore } from "@/platform/settingsStore";
 import { PracticeSurface } from "@/components/PracticeSurface";
 import { CountdownRing } from "@/components/CountdownRing";
 import { SettingsDialog } from "@/components/SettingsDialog";
+import { MicControl } from "@/components/MicControl";
+import { RecordingIndicator } from "@/components/RecordingIndicator";
+import { AnswerCompass } from "@/components/AnswerCompass";
+import { InfoTip } from "@/components/InfoTip";
+import { ProcessingView } from "@/components/ProcessingView";
+import { TranscriptEditor } from "@/components/TranscriptEditor";
+import { SelfReview } from "@/components/SelfReview";
+import { AttemptReview } from "@/components/AttemptReview";
 
 interface PracticeAppProps {
   pack: RuntimePack;
   settings: UserSettings;
   settingsStore: SettingsStore;
+  caps: Capabilities;
   onSettingsChange: (next: UserSettings) => void;
   onFocusModeChange: (active: boolean) => void;
 }
@@ -60,38 +75,49 @@ function useMilestones(remainingMsValue: number | null): string {
 
 function PromptDetails({ topic }: { topic: TopicSnapshot }) {
   return (
-    <>
-      <p className="expectation">{topic.expectation}</p>
-      <p>{topic.wording}</p>
+    <p className="prompt-copy">{topic.wording}</p>
+  );
+}
+
+function TopicInfo({ topic }: { topic: TopicSnapshot }) {
+  return (
+    <InfoTip label="More about this topic">
+      <span className="topic-info-copy">{topic.expectation}</span>
       {topic.caseText ? (
-        <p className="case-context">
-          <strong>Scenario:</strong> {topic.caseText}
-        </p>
+        <span className="topic-info-copy">
+          <strong>Fictional scenario:</strong> {topic.caseText}
+        </span>
       ) : null}
-    </>
+    </InfoTip>
   );
 }
 
 function TopicCard({
   topic,
   headingId,
+  eyebrow,
   children,
 }: {
   topic: TopicSnapshot;
   headingId: string;
+  eyebrow?: string;
   children: ReactNode;
 }) {
   return (
     <article className="topic-card">
-      <h2 id={headingId} tabIndex={-1}>
-        {topic.title}
-      </h2>
+      {eyebrow ? (
+        <span className="eyebrow" aria-hidden="true">
+          {eyebrow}
+        </span>
+      ) : null}
+      <div className="topic-title-row">
+        <h2 id={headingId} tabIndex={-1}>
+          {topic.title}
+        </h2>
+        <TopicInfo topic={topic} />
+      </div>
       <PromptDetails topic={topic} />
-      <ol className="arc" aria-label="Answer arc">
-        {topic.answerArc.map((step) => (
-          <li key={step.id}>{step.label}</li>
-        ))}
-      </ol>
+      <AnswerCompass steps={topic.answerArc} />
       <div className="toolbar">{children}</div>
     </article>
   );
@@ -101,6 +127,7 @@ function PracticeApp({
   pack,
   settings,
   settingsStore,
+  caps,
   onSettingsChange,
   onFocusModeChange,
 }: PracticeAppProps) {
@@ -109,6 +136,25 @@ function PracticeApp({
   const random = useMemo(() => new CryptoRandom(), []);
   const bagStore = useMemo(() => new InMemoryBagStore(), []);
 
+  // v0.3 speech feedback: constructed once, only where every required platform
+  // piece exists. The worker spawns lazily on explicit learner activation.
+  const audioDeps = useMemo<AudioDeps | undefined>(() => {
+    if (!speechFeedbackAvailable(caps)) return undefined;
+    return {
+      recorder: new AttemptRecorder({
+        getUserMedia: (constraints) => navigator.mediaDevices.getUserMedia(constraints),
+        createMediaRecorder: (stream, mimeType) =>
+          new MediaRecorder(stream, { mimeType }),
+        isTypeSupported: (mimeType) => MediaRecorder.isTypeSupported(mimeType),
+        createObjectUrl: (blob) => URL.createObjectURL(blob),
+        revokeObjectUrl: (url) => URL.revokeObjectURL(url),
+        now: () => monotonic.now(),
+      }),
+      decoder: createWebAudioDecoder(() => new AudioContext()),
+      transcription: createDefaultTranscriptionClient(),
+    };
+  }, [caps, monotonic]);
+
   const session = usePracticeSession({
     pack,
     settings,
@@ -116,6 +162,7 @@ function PracticeApp({
     wall,
     random,
     bagStore,
+    audio: audioDeps,
   });
 
   const { state, now, subjects, presets, challengeVisible, eligibleCount, actions } =
@@ -135,6 +182,48 @@ function PracticeApp({
   }
   const milestone = useMilestones(remaining);
 
+  const muted = settings.soundMuted ?? false;
+  useEffect(() => {
+    if (milestone === "Time's up.") playTimerEnd(muted);
+  }, [milestone, muted]);
+
+  const spin = useCallback(() => {
+    playSpinTick(muted);
+    actions.spin();
+  }, [actions, muted]);
+  const spinAgain = useCallback(() => {
+    playSpinTick(muted);
+    actions.spinAgain();
+  }, [actions, muted]);
+  const startTimer = useCallback(() => {
+    void actions.startTimer().then((started) => {
+      if (started) playTimerStart(muted);
+    });
+  }, [actions, muted]);
+  const startResearch = useCallback(() => {
+    playTimerStart(muted);
+    actions.startResearch();
+  }, [actions, muted]);
+  const confirmReady = useCallback(() => {
+    void actions.confirmReady().then((started) => {
+      if (started) playTimerStart(muted);
+    });
+  }, [actions, muted]);
+
+  const topicEyebrow =
+    s.name !== "IDLE" && s.name !== "DRAWING" && "topic" in s
+      ? (() => {
+          const subjectTitle =
+            subjects.find((opt) => opt.subjectId === s.topic.topicRef.subjectId)?.title ??
+            "";
+          const modeLabel =
+            s.topic.mode === "RECALL_SPRINT" ? "Recall Sprint" : "Deep Research";
+          return subjectTitle
+            ? `${subjectEmoji(subjectTitle)} ${subjectTitle} · ${modeLabel}`
+            : modeLabel;
+        })()
+      : undefined;
+
   const showSurface = s.name !== "SPEAKING" && s.name !== "RESEARCHING";
   useEffect(() => {
     onFocusModeChange(!showSurface);
@@ -143,6 +232,13 @@ function PracticeApp({
 
   return (
     <>
+      {pack.review.status === "DRAFT" ? (
+        <aside className="draft-notice" role="note">
+          <strong>Curriculum beta · unreviewed draft</strong>
+          <span>Practice only — not for diagnosis, treatment, or clinical decisions.</span>
+        </aside>
+      ) : null}
+
       {showSurface ? (
         <PracticeSurface
           subjects={subjects}
@@ -152,48 +248,78 @@ function PracticeApp({
           eligibleCount={eligibleCount}
           drawing={s.name === "DRAWING"}
           onChange={actions.setSelection}
-          onSpin={s.name === "IDLE" ? actions.spin : actions.spinAgain}
+          onSpin={s.name === "IDLE" ? spin : spinAgain}
         />
       ) : null}
 
       {s.name === "TOPIC_READY" ? (
-        <TopicCard topic={s.topic} headingId="topic-heading">
-          {s.selection.mode === "DEEP_RESEARCH" ? (
-            <button type="button" onClick={actions.startResearch}>
-              Begin research
+        <>
+          <TopicCard topic={s.topic} headingId="topic-heading" eyebrow={topicEyebrow}>
+            {s.selection.mode === "DEEP_RESEARCH" ? (
+              <button type="button" className="primary" onClick={startResearch}>
+                Begin research
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="primary"
+                onClick={startTimer}
+                disabled={session.audio.status === "STARTING"}
+              >
+                {session.audio.status === "STARTING" ? "Starting mic…" : "Start timer"}
+              </button>
+            )}
+            <button type="button" onClick={spinAgain}>
+              Spin again
             </button>
-          ) : (
-            <button type="button" onClick={actions.startTimer}>
-              Start timer
-            </button>
-          )}
-          <button type="button" onClick={actions.spinAgain}>
-            Spin again
-          </button>
-        </TopicCard>
+          </TopicCard>
+          <MicControl
+            audio={session.audio}
+            onBegin={actions.beginAudioOptIn}
+            onConfirm={actions.confirmAudioOptIn}
+            onDecline={actions.cancelAudioOptIn}
+          />
+        </>
       ) : null}
 
       {s.name === "READY_TO_SPEAK" ? (
-        <TopicCard topic={s.topic} headingId="topic-heading">
-          <button type="button" onClick={actions.confirmReady}>
-            Start speaking
-          </button>
-          <button type="button" onClick={actions.spinAgain}>
-            Spin again
-          </button>
-        </TopicCard>
+        <>
+          <TopicCard topic={s.topic} headingId="topic-heading" eyebrow={topicEyebrow}>
+            <button
+              type="button"
+              className="primary"
+              onClick={confirmReady}
+              disabled={session.audio.status === "STARTING"}
+            >
+              {session.audio.status === "STARTING" ? "Starting mic…" : "Start speaking"}
+            </button>
+            <button type="button" onClick={spinAgain}>
+              Spin again
+            </button>
+          </TopicCard>
+          <MicControl
+            audio={session.audio}
+            onBegin={actions.beginAudioOptIn}
+            onConfirm={actions.confirmAudioOptIn}
+            onDecline={actions.cancelAudioOptIn}
+          />
+        </>
       ) : null}
 
       {s.name === "RESEARCHING" ? (
         <section className="focus-view" aria-labelledby="speaking-heading">
-          <h2 id="speaking-heading" tabIndex={-1}>
-            {s.topic.title}
-          </h2>
+          <div className="focus-title-row">
+            <h2 id="speaking-heading" tabIndex={-1}>
+              {s.topic.title}
+            </h2>
+            <TopicInfo topic={s.topic} />
+          </div>
           <PromptDetails topic={s.topic} />
           <CountdownRing
             remainingMs={remaining ?? 0}
             totalMs={totalMs}
             caption="Research time left"
+            variant="research"
           />
           <div className="toolbar">
             <button type="button" onClick={actions.doneResearching}>
@@ -208,20 +334,30 @@ function PracticeApp({
 
       {s.name === "SPEAKING" ? (
         <section className="focus-view" aria-labelledby="speaking-heading">
-          <h2 id="speaking-heading" tabIndex={-1}>
-            {s.topic.title}
-          </h2>
+          <div className="focus-title-row">
+            <h2 id="speaking-heading" tabIndex={-1}>
+              {s.topic.title}
+            </h2>
+            <TopicInfo topic={s.topic} />
+          </div>
           <PromptDetails topic={s.topic} />
           <CountdownRing
             remainingMs={remaining ?? 0}
             totalMs={totalMs}
             caption="Speaking time left"
           />
-          <ol className="arc" aria-label="Answer arc">
-            {s.topic.answerArc.map((step) => (
-              <li key={step.id}>{step.label}</li>
-            ))}
-          </ol>
+          {session.audio.status === "ACTIVE" ? <RecordingIndicator /> : null}
+          {session.audio.issue ? (
+            <p className="status" role="status">
+              {audioIssueCopy(session.audio.issue)}
+            </p>
+          ) : null}
+          <AnswerCompass
+            steps={s.topic.answerArc}
+            remainingMs={remaining}
+            totalMs={totalMs}
+            active
+          />
           <div className="toolbar">
             <button type="button" onClick={actions.closeTimer}>
               Finish now
@@ -238,12 +374,66 @@ function PracticeApp({
           <p className="status">
             You finished a timed attempt on {s.topic.title}. Spin again to keep practicing.
           </p>
+          {session.audio.issue ? (
+            <p className="status" role="status">
+              {audioIssueCopy(session.audio.issue)}
+            </p>
+          ) : null}
+          {session.audio.armed && !session.audio.issue ? (
+            <p className="status" role="status">
+              Finalizing your recording…
+            </p>
+          ) : null}
           <div className="toolbar">
-            <button type="button" onClick={actions.spinAgain}>
+            <button type="button" className="primary" onClick={actions.startTypedReview}>
+              Review this attempt
+            </button>
+            <button type="button" onClick={spinAgain}>
               Spin again
             </button>
           </div>
         </section>
+      ) : null}
+
+      {s.name === "PROCESSING" ? (
+        <ProcessingView
+          topic={s.topic}
+          metrics={s.metrics}
+          transcription={s.transcription}
+          audio={session.audio}
+          onTranscribe={actions.requestTranscription}
+          onDecline={actions.declineTranscription}
+          onCancel={actions.startTypedReview}
+        />
+      ) : null}
+
+      {s.name === "TRANSCRIPT_REVIEW" ? (
+        <TranscriptEditor
+          draft={s.draft}
+          onApprove={actions.approveTranscript}
+          onTypeInstead={actions.startTypedReview}
+        />
+      ) : null}
+
+      {s.name === "SELF_REVIEW" ? (
+        <SelfReview
+          metrics={s.metrics}
+          transcriptionIssue={s.transcriptionIssue}
+          audio={session.audio}
+          onSubmit={actions.submitSelfReview}
+          onRetryTranscription={actions.requestTranscription}
+        />
+      ) : null}
+
+      {s.name === "REVIEW" ? (
+        <AttemptReview
+          topic={s.topic}
+          metrics={s.metrics}
+          textMetrics={s.textMetrics}
+          transcript={s.transcript}
+          audio={session.audio}
+          onSpinAgain={spinAgain}
+        />
       ) : null}
 
       <p className="status" aria-live="polite">
@@ -251,11 +441,18 @@ function PracticeApp({
       </p>
 
       {showSurface ? (
-        <div className="toolbar">
-          <button type="button" onClick={() => setShowSettings(true)}>
-            Settings
-          </button>
-        </div>
+        <button
+          type="button"
+          className="settings-trigger"
+          aria-label="Settings"
+          title="Settings"
+          onClick={() => setShowSettings(true)}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </button>
       ) : null}
 
       {showSettings ? (
@@ -353,14 +550,13 @@ export function App() {
   }, [waitingWorker]);
 
   return (
-    <main>
-      <header className={focusMode ? "sr-only" : "app-intro"}>
-        <h1>MediPrompt</h1>
-        <p className="status">
-          Practice mode + challenge + subject → Spin → timed speech. No account, no
-          recording, no model download.
-        </p>
-      </header>
+    <>
+      <div className="atmosphere" aria-hidden="true" />
+      <main>
+        <header className={focusMode ? "sr-only" : "brand"}>
+          <h1>MediPrompt</h1>
+          <p className="brand-line">Think clearly. Speak clinically.</p>
+        </header>
 
       {waitingWorker && !focusMode ? (
         <div className="topic-card" role="status">
@@ -393,19 +589,14 @@ export function App() {
           pack={pack}
           settings={settings}
           settingsStore={settingsStore}
+          caps={caps}
           onSettingsChange={setSettings}
           onFocusModeChange={handleFocusModeChange}
         />
       ) : null}
 
-      {!focusMode ? (
-        <p className="status" aria-label="capabilities">
-          Microphone: {caps.microphone ? "available" : "unavailable"} · Storage:{" "}
-          {caps.storage ? "available" : "unavailable"} · Online:{" "}
-          {caps.online ? "yes" : "no"}
-        </p>
-      ) : null}
-    </main>
+      </main>
+    </>
   );
 }
 

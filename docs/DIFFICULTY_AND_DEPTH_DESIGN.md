@@ -4,7 +4,7 @@
 
 **Owner:** Utkarsh Meshram (`utkarsh-senpai`)
 
-**Last updated:** 2026-08-30
+**Last updated:** 2026-09-01
 
 ## 1. Decision
 
@@ -13,17 +13,17 @@ and learner support as separate choices:
 
 | UI label | Internal ID | Mental model | Primary learning job |
 | --- | --- | --- | --- |
-| Easy - Guided | `GUIDED` | Learn the map | Retrieve and organize core ideas |
-| Medium - Applied | `APPLIED` | Use the route | Apply and connect ideas in a bounded case |
-| Hard - Viva | `VIVA` | Handle the detour | Prioritize and defend a decision under uncertainty |
+| Explain | `GUIDED` | Learn the map | Retrieve and organize core ideas |
+| Apply | `APPLIED` | Use the route | Apply and connect ideas in a bounded case |
+| Defend | `VIVA` | Handle the detour | Prioritize and defend a decision under uncertainty |
 
 The navigation analogy is deliberate: a harder journey changes the decisions and conditions, not
 the readability of the map. The equivalent medical progression is classroom explanation -> ward
 application -> viva defense. Difficulty must never come from obscure trivia, faster speech, an
 accent ideal, an intimidating interface, or withheld evaluation criteria.
 
-These are authoring presets, not learner identities. The interface may say "Try Applied next" but
-must not label a learner easy, medium, weak, advanced, or failing.
+These are authoring presets, not learner identities. The learner interface uses verbs—Explain,
+Apply, Defend—and must not label a learner easy, medium, hard, weak, advanced, or failing.
 
 ## 2. Keep four concepts independent
 
@@ -55,7 +55,7 @@ The frameworks below are complementary, not interchangeable scoring systems.
 | Retrieval/desirable difficulties | retrieval, spacing, interleaving, generation, and variation can improve durable learning | Attempt before hints; resurface and interleave reviewed topics; vary cases | A difficulty is desirable only when the learner has a reasonable path through it |
 | Deliberate practice | specific objective, measurable behavior, focused repetition, actionable feedback | One prescription followed by an immediate retry | Repetition without a target and feedback is not deliberate practice |
 | SNAPPS/oral case presentation | concise summary, narrowed alternatives, analysis, uncertainty, plan, self-study | Applied and Viva prompt arcs; make uncertainty discussable | It is a presentation scaffold, not proof of medical correctness |
-| Script concordance | reasoning in ill-defined situations can be explored with changing evidence | Hard-mode evidence updates and defended likelihood changes | Formal SCT scoring requires carefully constructed items and expert panels; MediPrompt must not imitate the score casually |
+| Script concordance | reasoning in ill-defined situations can be explored with changing evidence | Defend-preset evidence updates and defended likelihood changes | Formal SCT scoring requires carefully constructed items and expert panels; MediPrompt must not imitate the score casually |
 | Teach-back | clear explanation is checked through restatement in the listener's own words | Patient register and plain-language transfer tasks | Plain language is not merely deleting technical vocabulary |
 
 The evidence supports retrieval, appropriate scaffolding, feedback, and repeated practice. The exact
@@ -88,7 +88,7 @@ of assistive technology must not cause a difficulty downgrade.
 
 ## 5. Mode contracts
 
-### Easy - Guided
+### Explain (`GUIDED`)
 
 Goal: build a usable schema and a complete answer shape.
 
@@ -101,7 +101,7 @@ Goal: build a usable schema and a complete answer shape.
 Success evidence is a structured explanation covering reviewed essentials. A list of disconnected
 facts may be useful progress but is not deep understanding.
 
-### Medium - Applied
+### Apply (`APPLIED`)
 
 Goal: turn knowledge into bounded clinical reasoning.
 
@@ -114,7 +114,7 @@ Goal: turn knowledge into bounded clinical reasoning.
 Success evidence is a coherent chain: salient finding -> interpretation -> justified plan ->
 monitoring/precaution when applicable.
 
-### Hard - Viva
+### Defend (`VIVA`)
 
 Goal: rehearse defensible reasoning under realistic uncertainty.
 
@@ -127,7 +127,7 @@ Goal: rehearse defensible reasoning under realistic uncertainty.
 - Feedback prioritizes unsafe certainty, unconnected claims, or failure to revise after evidence.
 
 Success is not agreement with one magic sentence. The reviewed rubric defines acceptable reasoning
-paths and non-negotiable safety boundaries. Hard mode remains formative and cannot award a clinical
+paths and non-negotiable safety boundaries. The Defend preset remains formative and cannot award a clinical
 competence or fitness-to-practise decision.
 
 ## 6. Blueprint transformation rules
@@ -212,7 +212,7 @@ Common reviewed rubric dimensions:
 
 The local semantic engine may report rubric coverage and transcript evidence. It must not infer that
 a fluent answer is medically correct, score confidence/emotion/accent, or issue a pass/fail grade.
-Hard answers may have lower raw coverage because the task is harder; cross-difficulty scores are not
+Defend-preset answers may have lower raw coverage because the task is more complex; cross-preset scores are not
 directly comparable. Refinement Delta is valid only for the same topic, prompt variant, rubric,
 difficulty profile, register, and time policy.
 
@@ -313,7 +313,7 @@ Keep the Unprompted-style interaction compact:
 
 ```text
 Practice mode  [Recall] [Viva] [Research] [Teach-back]
-Challenge      [Easy · Guided] [Medium · Applied] [Hard · Viva]
+Challenge      [Explain] [Apply] [Defend]
 Subject        [selected subject]
                          [Spin]
 ```
@@ -361,7 +361,7 @@ Subject        [selected subject]
 
 - Unsupported medical correctness returns `NOT_VERIFIABLE`.
 - Delivery metrics cannot alter content coverage.
-- Hard mode produces no pass/fail, competence, confidence, emotion, personality, or accent label.
+- The Defend preset produces no pass/fail, competence, confidence, emotion, personality, or accent label.
 - New-evidence fixtures verify that only educator-authored acceptable paths receive coverage.
 
 ### Research validation

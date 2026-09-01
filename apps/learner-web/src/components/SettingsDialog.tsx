@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { TIME_BOUNDS } from "@/practice/types";
 import type { SettingsStore, UserSettings } from "@/practice/types";
+import { InfoTip } from "./InfoTip";
 
 interface SettingsDialogProps {
   store: SettingsStore;
@@ -21,6 +22,7 @@ export function SettingsDialog({
   const [researchSeconds, setResearchSeconds] = useState(
     String(settings.researchSeconds),
   );
+  const [soundMuted, setSoundMuted] = useState(settings.soundMuted ?? false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -52,6 +54,7 @@ export function SettingsDialog({
         Math.round(Number(researchSeconds) || settings.researchSeconds),
         TIME_BOUNDS.researchSeconds,
       ),
+      soundMuted,
     };
     store.save(next);
     onSaved(next);
@@ -77,10 +80,16 @@ export function SettingsDialog({
       <form onSubmit={submit}>
         <h2 id="settings-title">Settings</h2>
         <div className="control-row">
-          <label htmlFor="speaking-seconds">
-            Speaking time (seconds, {TIME_BOUNDS.speakingSeconds.min}–
-            {TIME_BOUNDS.speakingSeconds.max})
-          </label>
+          <span className="label-row">
+            <label htmlFor="speaking-seconds">
+              Speaking time (seconds, {TIME_BOUNDS.speakingSeconds.min}–
+              {TIME_BOUNDS.speakingSeconds.max})
+            </label>
+            <InfoTip label="About speaking time">
+              The countdown for your spoken answer. A shorter clock forces sharper
+              structure; a longer one allows more depth.
+            </InfoTip>
+          </span>
           <input
             ref={firstInputRef}
             id="speaking-seconds"
@@ -94,10 +103,16 @@ export function SettingsDialog({
           />
         </div>
         <div className="control-row">
-          <label htmlFor="research-seconds">
-            Research time (seconds, {TIME_BOUNDS.researchSeconds.min}–
-            {TIME_BOUNDS.researchSeconds.max})
-          </label>
+          <span className="label-row">
+            <label htmlFor="research-seconds">
+              Research time (seconds, {TIME_BOUNDS.researchSeconds.min}–
+              {TIME_BOUNDS.researchSeconds.max})
+            </label>
+            <InfoTip label="About research time">
+              In Deep Research mode this is your reading time before the speaking
+              clock starts. It has no effect in Recall Sprint.
+            </InfoTip>
+          </span>
           <input
             id="research-seconds"
             type="number"
@@ -109,8 +124,24 @@ export function SettingsDialog({
             onChange={(e) => setResearchSeconds(e.target.value)}
           />
         </div>
+        <div className="settings-sound">
+          <input
+            id="sound-enabled"
+            type="checkbox"
+            checked={!soundMuted}
+            onChange={(e) => setSoundMuted(!e.target.checked)}
+          />
+          <label htmlFor="sound-enabled">
+            Sound effects
+            <span className="settings-hint">
+              Soft cues for spins and the timer, synthesized on this device.
+            </span>
+          </label>
+        </div>
         <div className="toolbar">
-          <button type="submit">Save</button>
+          <button type="submit" className="primary">
+            Save
+          </button>
           <button type="button" onClick={onClose}>
             Cancel
           </button>
