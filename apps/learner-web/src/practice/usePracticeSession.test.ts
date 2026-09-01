@@ -42,6 +42,16 @@ function setup() {
       drawDelayMs: 0,
     }),
   );
+  // Default to an authored subject + APPLIED challenge so spin() always draws
+  // a coverable topic (scaffold topics are GUIDED-only with empty rubrics).
+  act(() =>
+    hook.result.current.actions.setSelection({
+      mode: "RECALL_SPRINT",
+      challenge: "APPLIED",
+      subjectId: "respiratory-physiotherapy",
+      register: "EXAMINER",
+    }),
+  );
   // Advance both the fake clock (to flush interval ticks) and the injected monotonic value.
   const advance = (ms: number) =>
     act(() => {
@@ -235,6 +245,14 @@ describe("usePracticeSession", () => {
       }),
     );
 
+    act(() =>
+      hook.result.current.actions.setSelection({
+        mode: "RECALL_SPRINT",
+        challenge: "APPLIED",
+        subjectId: "respiratory-physiotherapy",
+        register: "EXAMINER",
+      }),
+    );
     act(() => hook.result.current.actions.spin());
     const ready = hook.result.current.state;
     if (ready.name !== "TOPIC_READY") throw new Error("topic missing");
@@ -313,6 +331,14 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
       });
     const { result } = hook;
 
+    act(() =>
+      result.current.actions.setSelection({
+        mode: "RECALL_SPRINT",
+        challenge: "APPLIED",
+        subjectId: "respiratory-physiotherapy",
+        register: "EXAMINER",
+      }),
+    );
     act(() => result.current.actions.spin());
     await act(async () => {
       await result.current.actions.startTimer();
@@ -386,6 +412,14 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
         vi.advanceTimersByTime(ms);
       });
     const { result } = hook;
+    act(() =>
+      result.current.actions.setSelection({
+        mode: "RECALL_SPRINT",
+        challenge: "APPLIED",
+        subjectId: "respiratory-physiotherapy",
+        register: "EXAMINER",
+      }),
+    );
     act(() => result.current.actions.spin());
     await act(async () => {
       await result.current.actions.startTimer();
@@ -522,6 +556,14 @@ function setupAudio(
       bagStore,
       audio: { recorder, decoder, transcription: transcription.client },
       drawDelayMs: 0,
+    }),
+  );
+  act(() =>
+    hook.result.current.actions.setSelection({
+      mode: "RECALL_SPRINT",
+      challenge: "APPLIED",
+      subjectId: "respiratory-physiotherapy",
+      register: "EXAMINER",
     }),
   );
   const advance = (ms: number) =>

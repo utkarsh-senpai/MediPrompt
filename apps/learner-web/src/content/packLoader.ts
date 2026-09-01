@@ -1,5 +1,4 @@
 import type { RuntimePack } from "@/practice/types";
-import medicalPracticeBetaJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 import {
   MAX_PACK_BYTES,
   assertPublicDraftPracticePack,
@@ -39,8 +38,14 @@ async function parseBoundedResponse(response: Response): Promise<unknown> {
   return JSON.parse(text) as unknown;
 }
 
-function compiledFallback(): RuntimePack {
-  const pack = validatePack(medicalPracticeBetaJson);
+// The 265-topic pack (~400 KiB) is dynamically imported so it loads as a separate
+// chunk only when the fetched pack is unavailable, keeping the initial entry JS
+// within the 512 KiB budget. The service-worker precache is the primary offline path.
+async function compiledFallback(): Promise<RuntimePack> {
+  const mod = (await import(
+    "@content/candidates/mpt-cardiorespiratory-review-candidate.json"
+  )) as { default: unknown };
+  const pack = validatePack(mod.default);
   assertPublicDraftPracticePack(pack);
   return pack;
 }
@@ -65,7 +70,7 @@ async function loadPublicPracticePack(): Promise<PackLoadResult> {
     return { pack, source: "PUBLIC_DRAFT" };
   } catch {
     return {
-      pack: compiledFallback(),
+      pack: await compiledFallback(),
       source: "COMPILED_FALLBACK",
       warning:
         "The downloaded physiotherapy pack was unavailable or invalid. The same bundled curriculum-beta snapshot is active offline.",

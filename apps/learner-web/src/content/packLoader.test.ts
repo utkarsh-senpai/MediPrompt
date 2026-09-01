@@ -32,10 +32,16 @@ describe("loadBundledPack", () => {
       reviewedAt: null,
     });
     expect(result.pack.subjects.map((subject) => subject.title)).toEqual([
+      "Research Methods and Bioethics",
+      "Applied Physiotherapeutics",
+      "Musculoskeletal Physiotherapy",
+      "Neuro Physiotherapy",
       "Respiratory Physiotherapy",
       "Cardiovascular Physiotherapy",
+      "Community Health Physiotherapy",
+      "Sports Physiotherapy",
     ]);
-    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(20);
+    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(265);
     expect(Object.isFrozen(result.pack)).toBe(true);
   });
 
@@ -54,7 +60,7 @@ describe("loadBundledPack", () => {
     expect(result.source).toBe("COMPILED_FALLBACK");
     expect(result.warning).toMatch(/active offline/i);
     expect(result.pack.contentKind).toBe("MEDICAL");
-    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(20);
+    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(265);
   });
 
   it("rejects an oversized response before reading its body", async () => {

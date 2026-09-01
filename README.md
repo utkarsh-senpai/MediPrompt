@@ -70,11 +70,18 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.6 public practice beta):** the learner app uses the genuine 20-topic MPT
-cardiovascular/respiratory candidate from
-`content/candidates/mpt-cardiorespiratory-review-candidate.json`, split into Respiratory
-Physiotherapy and Cardiovascular Physiotherapy subjects. The generic interaction fixture remains
-only as a schema/regression-test input and is not copied into the public app.
+**Content status (v0.7 curriculum expansion):** the learner app uses the 265-topic MPT
+competency-based curriculum candidate from
+`content/candidates/mpt-cardiorespiratory-review-candidate.json`, spanning all eight app-subjects
+(Research Methods & Bioethics, Applied Physiotherapeutics, Musculoskeletal, Neuro, Respiratory,
+Cardiovascular, Community Health, Sports). Neuro Physiotherapy is the emphasis: 16 of its 35 topics
+are fully authored with rubrics, cases, follow-ups, and viva questions grounded in verified 2025-26
+sources (AHA/ASA stroke rehabilitation, NICE NG236/NG62/NG71, Cochrane CIMT/mirror/VR/treadmill, GMFM,
+GMFCS, Fugl-Meyer, Berg Balance, MMSE, ASIA ISNCSCI, DMD/SMA care standards). The remaining topics
+across all subjects are scaffolded: playable for speaking practice with a "not verifiable from
+sources" coverage fallback until per-subject authoring with verified sources lands in follow-up PRs.
+The generic interaction fixture remains only as a schema/regression-test input and is not copied
+into the public app.
 
 The medical pack remains `DRAFT`, with no reviewer or review date. Every screen therefore displays
 `Curriculum beta · unreviewed draft` and is for recall/speaking practice only—not diagnosis,

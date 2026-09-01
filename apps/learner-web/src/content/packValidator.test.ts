@@ -122,8 +122,8 @@ describe("validatePack — happy paths", () => {
     expect(() => validatePack(basePack())).not.toThrow();
   });
 
-  it("ships the viva-authored medical candidate as content version 0.2.0", () => {
-    expect(validatePack(medicalCandidateJson).version).toBe("0.2.0");
+  it("ships the viva-authored medical candidate as content version 0.3.0", () => {
+    expect(validatePack(medicalCandidateJson).version).toBe("0.3.0");
   });
 
   it("freezes the validated pack", () => {

@@ -196,6 +196,119 @@ const sources = [
     url: "https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-basic-life-support",
     accessedAt: ACCESSED_AT,
   },
+  // --- v0.7 neuro physiotherapy sources (verified 2026-09-02) ---
+  {
+    sourceId: "nice-ng236-stroke-rehab",
+    citation:
+      "NICE. Stroke rehabilitation in adults. NG236. Published 18 Oct 2023; replaces CG162 (2013).",
+    url: "https://www.nice.org.uk/guidance/ng236",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "nice-ng62-cerebral-palsy",
+    citation:
+      "NICE. Cerebral palsy in under 25s: assessment and management. NG62. Published 25 Jan 2017; last reviewed 19 Sep 2024.",
+    url: "https://www.nice.org.uk/guidance/ng62",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "nice-ng71-parkinsons",
+    citation:
+      "NICE. Parkinson's disease in adults. NG71. Published 19 Jul 2017; last reviewed 19 Dec 2024. Updates and replaces CG35 (2006).",
+    url: "https://www.nice.org.uk/guidance/ng71",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "aha-asa-stroke-rehab-2016",
+    citation:
+      "Winstein CJ et al.; AHA/ASA. Guidelines for Adult Stroke Rehabilitation and Recovery. Stroke. 2016;47(6):e98-e169. doi:10.1161/STR.0000000000000098. PMID:27145936.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/27145936/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "cochrane-mirror-therapy-2018",
+    citation:
+      "Thieme H et al. Mirror therapy for improving motor function after stroke. Cochrane Database Syst Rev. 2018;7:CD008449. doi:10.1002/14651858.CD008449.pub3. PMID:29993119.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/29993119/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "cochrane-cimt-2015",
+    citation:
+      "Corbetta D et al. Constraint-induced movement therapy for upper extremities in people with stroke. Cochrane Database Syst Rev. 2015;(10):CD004433. doi:10.1002/14651858.CD004433.pub3. PMID:26446577.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/26446577/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "cochrane-vr-stroke-2025",
+    citation:
+      "Laver KE et al. Virtual reality for stroke rehabilitation. Cochrane Database Syst Rev. 2025;6:CD008349. doi:10.1002/14651858.CD008349.pub5. PMID:40537150.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/40537150/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "cochrane-treadmill-bws-2017",
+    citation:
+      "Mehrholz J et al. Treadmill training and body weight support for walking after stroke. Cochrane Database Syst Rev. 2017;8:CD002840. doi:10.1002/14651858.CD002840.pub4. PMID:28815562.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/28815562/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "fugl-meyer-1975",
+    citation:
+      "Fugl-Meyer AR et al. The post-stroke hemiplegic patient: a method for evaluation of physical performance. Scand J Rehabil Med. 1975;7(1):13-31. PMID:1135616.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/1135616/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "berg-balance-1992",
+    citation:
+      "Berg KO et al. Measuring balance in the elderly: validation of an instrument. Can J Public Health. 1992;83 Suppl 2:S7-11. PMID:1468055.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/1468055/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "gmfm-russell-1989",
+    citation:
+      "Russell DJ et al. The gross motor function measure: a means to evaluate effects of physical therapy. Dev Med Child Neurol. 1989;31(3):341-52. doi:10.1111/j.1469-8749.1989.tb04003.x. PMID:2753238.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/2753238/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "gmfcs-palisano-1997",
+    citation:
+      "Palisano R et al. Development and reliability of a system to classify gross motor function in children with cerebral palsy. Dev Med Child Neurol. 1997;39(4):214-23. doi:10.1111/j.1469-8749.1997.tb07414.x. PMID:9183258.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/9183258/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "dmd-care-birnkrant-2018",
+    citation:
+      "Birnkrant DJ et al.; DMD Care Considerations Working Group. Diagnosis and management of Duchenne muscular dystrophy, part 1. Lancet Neurol. 2018;17(3):251-267. doi:10.1016/S1474-4422(18)30024-3. PMID:29395989.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/29395989/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "sma-care-mercuri-2018",
+    citation:
+      "Mercuri E et al.; SMA Care Group. Diagnosis and management of spinal muscular atrophy: Part 1. Neuromuscul Disord. 2018;28(2):103-115. doi:10.1016/j.nmd.2017.11.005. PMID:29290580.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/29290580/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "asia-isncsci-9th-2026",
+    citation:
+      "American Spinal Injury Association. International Standards for Neurological Classification of Spinal Cord Injury (ISNCSCI), 9th Edition (2026). Richmond, VA: ASIA.",
+    url: "https://www.asia-spinalinjury.org/",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "mmse-folstein-1975",
+    citation:
+      "Folstein MF, Folstein SE, McHugh PR. Mini-mental state: a practical method for grading the cognitive state of patients. J Psychiatr Res. 1975;12(3):189-98.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/?term=Folstein+mini-mental+state+1975",
+    accessedAt: ACCESSED_AT,
+  },
 ];
 
 const respiratoryTopics: TopicSeed[] = [
@@ -567,7 +680,621 @@ const cardiovascularTopics: TopicSeed[] = [
   },
 ];
 
+// --- v0.7 neuro physiotherapy (authored with verified 2025-26 sources) ---
+// ~16 of 35 neuro topics are source-grounded; the remaining neuro topics and
+// all other subjects are scaffolded (empty rubric -> "not verifiable from
+// sources") pending per-subject authoring. See docs/V0.7_DEVELOPMENT_CONTEXT.md.
+
+const neuroTopics: TopicSeed[] = [
+  {
+    topicId: "stroke-management",
+    title: "Stroke rehabilitation: physiotherapy management",
+    prompt:
+      "Explain physiotherapy management after stroke, from early assessment through intensity, task-oriented practice, impairment-specific adjuncts, and outcome measurement.",
+    concepts: [
+      c("Deliver therapy early and at high intensity with task-oriented, repetitive practice", ["early high-intensity therapy", "task-oriented repetitive practice", "high repetition task practice"], ["aha-asa-stroke-rehab-2016"]),
+      c("Select impairment-specific adjuncts by deficit: CIMT, mirror therapy, treadmill with body-weight support, virtual reality", ["constraint-induced movement therapy", "mirror therapy", "treadmill with body weight support", "virtual reality"], ["aha-asa-stroke-rehab-2016", "cochrane-cimt-2015", "cochrane-mirror-therapy-2018", "cochrane-treadmill-bws-2017", "cochrane-vr-stroke-2025"]),
+      c("Track progress with validated outcome measures and adjust the dose", ["Berg Balance Scale", "Fugl-Meyer Assessment", "track progress with outcome measures"], ["aha-asa-stroke-rehab-2016", "berg-balance-1992", "fugl-meyer-1975"]),
+    ],
+    trio: {
+      caseText:
+        "A fictional 64-year-old has a right middle cerebral artery infarct with left hemiparesis, is medically stable 72 hours after stroke, sits with assistance, and wants to walk independently and use the left arm for dressing.",
+      appliedPrompt:
+        "Using the fictional case, prioritize early physiotherapy goals, choose impairment-specific adjuncts, and outline a monitored progression with the outcome measures you would track.",
+      appliedConcepts: [
+        c("Prioritize early sitting, standing, and walking practice at tolerable intensity", ["early sitting and standing", "walking practice", "tolerable intensity"], ["aha-asa-stroke-rehab-2016"]),
+        c("Match adjuncts to the deficit: CIMT for the arm, treadmill training for gait", ["constraint-induced movement therapy for arm", "treadmill training for gait", "match adjunct to deficit"], ["cochrane-cimt-2015", "cochrane-treadmill-bws-2017"]),
+        c("Track Berg Balance and Fugl-Meyer to justify progression", ["Berg Balance Scale", "Fugl-Meyer Assessment", "track to justify progression"], ["berg-balance-1992", "fugl-meyer-1975"]),
+      ],
+      vivaPrompt:
+        "Defend your early stroke rehabilitation plan for the fictional case, separate what the evidence supports from what is patient-specific, and state the findings that would pause progression and trigger escalation.",
+      vivaConcepts: [
+        c("Defend high-intensity task practice using dose-response evidence", ["dose-response evidence", "high-intensity task practice", "evidence supports intensity"], ["aha-asa-stroke-rehab-2016"]),
+        c("Acknowledge individual tolerance, comorbidity, and response uncertainty", ["individual tolerance", "comorbidity", "response uncertainty"], ["aha-asa-stroke-rehab-2016"]),
+        c("State that new instability, deterioration, or red flags pause progression and trigger escalation", ["pause progression", "clinical escalation", "red flags"], ["nice-ng236-stroke-rehab"]),
+      ],
+      probe: "Which single adjunct would most change arm function for this person, and what limits its applicability?",
+      evidenceUpdate:
+        "The person develops new shoulder pain during active left-arm practice. Explain how this changes your priorities and why forced-use CIMT must pause pending assessment.",
+    },
+    viva: [
+      { level: "RECALL", prompt: "Recall where stroke rehabilitation should begin and why intensity matters.", targetConceptIds: ["stroke-management-guided-recall-c1"] },
+      { level: "APPLY", prompt: "Apply impairment-specific adjuncts to a person with left hemiparesis who wants to walk and use the arm.", targetConceptIds: ["stroke-management-guided-recall-c2"] },
+      { level: "DEFEND", prompt: "Defend your plan and the findings that would pause progression and trigger escalation.", targetConceptIds: ["stroke-management-guided-recall-c3"] },
+    ],
+  },
+  {
+    topicId: "cerebral-palsy-management",
+    title: "Cerebral palsy: assessment and physiotherapy management",
+    prompt:
+      "Explain assessment and physiotherapy management of cerebral palsy, emphasizing MDT care, GMFM/GMFCS, comorbidity surveillance, and goal-based management.",
+    concepts: [
+      c("Use MDT care from diagnosis with surveillance for pain, sleep, feeding, salivation, and mental health", ["multidisciplinary care from diagnosis", "comorbidity surveillance", "pain sleep feeding surveillance"], ["nice-ng62-cerebral-palsy"]),
+      c("Assess gross motor function with GMFM and classify with GMFCS to guide goals", ["Gross Motor Function Measure", "GMFCS classification", "GMFM and GMFCS"], ["gmfm-russell-1989", "gmfcs-palisano-1997", "nice-ng62-cerebral-palsy"]),
+      c("Set functional goals and plan transition to adult services", ["functional goals", "transition to adult services", "goal-based management"], ["nice-ng62-cerebral-palsy"]),
+    ],
+    trio: {
+      caseText:
+        "A fictional 5-year-old with bilateral cerebral palsy, GMFCS level III, walks with a mobility aid, has tight calf muscles, and is due for primary-school entry.",
+      appliedPrompt:
+        "Using the fictional case, outline a GMFCS-stratified management plan, the comorbidity surveillance you would coordinate, and the goals you would set for school participation.",
+      appliedConcepts: [
+        c("Stratify management by GMFCS level and set participation goals", ["GMFCS level III", "stratify by GMFCS", "school participation goals"], ["gmfcs-palisano-1997", "nice-ng62-cerebral-palsy"]),
+        c("Coordinate MDT surveillance beyond motor impairment", ["MDT surveillance", "comorbidity surveillance", "coordinate multidisciplinary care"], ["nice-ng62-cerebral-palsy"]),
+        c("Use GMFM to track gross motor change", ["Gross Motor Function Measure", "track motor change", "GMFM progress"], ["gmfm-russell-1989"]),
+      ],
+      vivaPrompt:
+        "Defend your management plan for the fictional child, distinguish what GMFCS predicts from what is individual, and explain how you would respond if participation goals and motor goals conflict.",
+      vivaConcepts: [
+        c("Defend GMFCS-stratified goals using predicted mobility trajectory", ["GMFCS predicts mobility", "predicted trajectory", "stratified goals"], ["gmfcs-palisano-1997"]),
+        c("Acknowledge individual variation and the limits of classification", ["individual variation", "limits of classification", "child-specific factors"], ["nice-ng62-cerebral-palsy"]),
+        c("Use shared decision making and reassessment to revise goals", ["shared decision making", "reassess goals", "revise the plan"], ["nice-ng62-cerebral-palsy"]),
+      ],
+      probe: "What would change your management more: a one-level change in GMFCS, or a new pain complaint?",
+      evidenceUpdate:
+        "The child reports new hip pain. Explain how this changes surveillance priorities and why motor goals must be revisited before progression.",
+    },
+    viva: [
+      { level: "RECALL", prompt: "Recall how GMFM and GMFCS are used together in cerebral palsy assessment.", targetConceptIds: ["cerebral-palsy-management-guided-recall-c2"] },
+      { level: "APPLY", prompt: "Apply MDT comorbidity surveillance and goal setting for a GMFCS level III child entering school.", targetConceptIds: ["cerebral-palsy-management-guided-recall-c1"] },
+      { level: "DEFEND", prompt: "Defend how you would revise goals if participation and motor goals conflict.", targetConceptIds: ["cerebral-palsy-management-guided-recall-c3"] },
+    ],
+  },
+  {
+    topicId: "pediatric-neuromuscular-dmd-sma",
+    title: "Pediatric neuromuscular disorders: DMD and SMA management",
+    prompt:
+      "Explain physiotherapy management of Duchenne muscular dystrophy and spinal muscular atrophy, including contracture prevention, postural management, and multidisciplinary care.",
+    concepts: [
+      c("Focus PT on contracture prevention, scoliosis surveillance, and staged stretching and orthotic programmes", ["contracture prevention", "scoliosis surveillance", "stretching and orthotic programme"], ["dmd-care-birnkrant-2018", "sma-care-mercuri-2018"]),
+      c("Work within multidisciplinary care that extends ambulation and survival with serial respiratory and cardiac monitoring", ["multidisciplinary care", "extend ambulation", "serial respiratory and cardiac monitoring"], ["dmd-care-birnkrant-2018"]),
+      c("Adjust rehabilitation goals by disease severity and therapy status, with postural and ventilation support", ["postural management", "assisted ventilation", "goals by disease severity"], ["sma-care-mercuri-2018"]),
+    ],
+    trio: {
+      caseText:
+        "A fictional 7-year-old with Duchenne muscular dystrophy is still ambulant but beginning to rise from the floor with hand-to-thigh climbing, and has tight heel cords.",
+      appliedPrompt:
+        "Using the fictional case, outline a PT programme spanning contracture management, ambulation preservation, and the surveillance you would coordinate within the MDT.",
+      appliedConcepts: [
+        c("Design a stretching and night-orthotic programme for contracture prevention", ["stretching programme", "night orthoses", "contracture prevention"], ["dmd-care-birnkrant-2018"]),
+        c("Coordinate serial respiratory and cardiac monitoring with the MDT", ["serial respiratory monitoring", "cardiac monitoring", "coordinate MDT"], ["dmd-care-birnkrant-2018"]),
+        c("Set ambulation-preservation goals aligned to disease stage", ["ambulation preservation", "goals by disease stage", "stage-aligned goals"], ["dmd-care-birnkrant-2018", "sma-care-mercuri-2018"]),
+      ],
+      vivaPrompt:
+        "Defend your DMD management plan, distinguish what is disease-stage specific from what is general, and explain how goals change if ambulation is lost.",
+      vivaConcepts: [
+        c("Defend contracture and scoliosis surveillance using care-consideration evidence", ["contracture and scoliosis surveillance", "care considerations", "evidence-based surveillance"], ["dmd-care-birnkrant-2018", "sma-care-mercuri-2018"]),
+        c("Acknowledge therapy-status uncertainty and individual progression", ["therapy status", "individual progression", "disease progression uncertainty"], ["sma-care-mercuri-2018"]),
+        c("State that loss of ambulation shifts goals to postural care, scoliosis, and ventilation support", ["postural care", "scoliosis management", "ventilation support"], ["sma-care-mercuri-2018"]),
+      ],
+      probe: "Which monitored outcome would most signal the need to shift from ambulation goals to postural management?",
+      evidenceUpdate:
+        "The child loses independent ambulation over six months. Explain how the programme changes and why respiratory surveillance intensity increases.",
+    },
+    viva: [
+      { level: "RECALL", prompt: "Recall the PT focus in DMD and SMA care standards.", targetConceptIds: ["pediatric-neuromuscular-dmd-sma-guided-recall-c1"] },
+      { level: "APPLY", prompt: "Apply contracture and ambulation management for an ambulant boy with DMD and tight heel cords.", targetConceptIds: ["pediatric-neuromuscular-dmd-sma-guided-recall-c2"] },
+      { level: "DEFEND", prompt: "Defend how goals change if ambulation is lost and why respiratory surveillance intensifies.", targetConceptIds: ["pediatric-neuromuscular-dmd-sma-guided-recall-c3"] },
+    ],
+  },
+  {
+    topicId: "parkinsons-disease-management",
+    title: "Parkinson's disease: physiotherapy management",
+    prompt:
+      "Explain physiotherapy management of Parkinson's disease, focusing on gait, balance, transfers, freezing of gait, and falls reduction.",
+    concepts: [
+      c("Offer physiotherapy targeting gait, balance, and transfers", ["gait balance and transfers", "physiotherapy for Parkinson's", "transfers training"], ["nice-ng71-parkinsons"]),
+      c("Address freezing of gait and reduce falls", ["freezing of gait", "reduce falls", "falls reduction"], ["nice-ng71-parkinsons"]),
+      c("Recognise that pharmacological management is levodopa-based and that non-motor symptoms need separate management", ["levodopa-based management", "non-motor symptoms", "depression sleep autonomic"], ["nice-ng71-parkinsons"]),
+    ],
+    trio: {
+      caseText:
+        "A fictional 68-year-old with Parkinson's disease has freezing of gait at doorways, two near-falls in the past month, and is independent in transfers but slow.",
+      appliedPrompt:
+        "Using the fictional case, design a physiotherapy plan targeting freezing of gait and falls, and explain how you would time therapy with medication cycles.",
+      appliedConcepts: [
+        c("Target freezing of gait with cueing and strategy training", ["cueing strategies", "freezing of gait", "strategy training"], ["nice-ng71-parkinsons"]),
+        c("Prioritise falls reduction through balance and transfer training", ["falls reduction", "balance training", "transfer training"], ["nice-ng71-parkinsons"]),
+        c("Time active therapy to 'on' periods where possible", ["on periods", "time therapy with medication", "levodopa cycles"], ["nice-ng71-parkinsons"]),
+      ],
+      vivaPrompt:
+        "Defend your Parkinson's plan, separate what physiotherapy can change from what is medication-driven, and explain how you would respond to worsening falls.",
+      vivaConcepts: [
+        c("Defend gait, balance, and transfer training using guideline evidence", ["gait balance and transfers", "guideline evidence", "physiotherapy benefit"], ["nice-ng71-parkinsons"]),
+        c("Acknowledge that motor symptoms are levodopa-responsive and non-motor symptoms are not", ["levodopa-responsive motor symptoms", "non-motor symptoms", "medication-driven"], ["nice-ng71-parkinsons"]),
+        c("State that worsening falls or new freezing triggers medical review and revised supervision", ["worsening falls", "medical review", "revised supervision"], ["nice-ng71-parkinsons"]),
+      ],
+      probe: "Which outcome would best show whether your falls programme is working, and over what timeframe?",
+      evidenceUpdate:
+        "The person reports more freezing in the afternoon. Explain how this changes your timing of therapy and what medical review you would flag.",
+    },
+    viva: [
+      { level: "RECALL", prompt: "Recall the physiotherapy targets in Parkinson's disease per current guidance.", targetConceptIds: ["parkinsons-disease-management-guided-recall-c1"] },
+      { level: "APPLY", prompt: "Apply a freezing-of-gait and falls plan for a person with doorway freezing and near-falls.", targetConceptIds: ["parkinsons-disease-management-guided-recall-c2"] },
+      { level: "DEFEND", prompt: "Defend how you would respond to worsening falls and what is medication-driven versus therapy-driven.", targetConceptIds: ["parkinsons-disease-management-guided-recall-c3"] },
+    ],
+  },
+  {
+    topicId: "neuro-outcome-measures",
+    title: "Outcome measures in neurological physiotherapy",
+    prompt:
+      "Explain how to select and interpret outcome measures in neuro physiotherapy, including Berg Balance, Fugl-Meyer, MMSE, and the ASIA Impairment Scale.",
+    concepts: [
+      c("Use the Berg Balance Scale to measure static and dynamic balance; a change of about 4 points is the minimal detectable change", ["Berg Balance Scale", "minimal detectable change", "balance assessment"], ["berg-balance-1992"]),
+      c("Use the Fugl-Meyer Assessment to quantify motor, balance, sensation and joint function in hemiplegia", ["Fugl-Meyer Assessment", "motor sensory assessment", "hemiplegia assessment"], ["fugl-meyer-1975"]),
+      c("Use the MMSE as a bedside cognitive screen and the ASIA Impairment Scale for spinal cord injury classification", ["Mini-Mental State Examination", "ASIA Impairment Scale", "cognitive screen", "AIS grade"], ["mmse-folstein-1975", "asia-isncsci-9th-2026"]),
+    ],
+  },
+  {
+    topicId: "neuro-therapeutic-task-oriented",
+    title: "Neuro-therapeutic skills: task-oriented and evidence-based adjuncts",
+    prompt:
+      "Explain the evidence-based neuro-therapeutic approaches after stroke, emphasizing task-oriented practice and adjuncts with trial evidence.",
+    concepts: [
+      c("Prioritise task-oriented, high-intensity repetitive practice as the core approach", ["task-oriented practice", "high-intensity repetition", "repetitive task practice"], ["aha-asa-stroke-rehab-2016"]),
+      c("Apply constraint-induced movement therapy with a transfer package for arm function", ["constraint-induced movement therapy", "transfer package", "shaping and restraint"], ["cochrane-cimt-2015"]),
+      c("Use mirror therapy and virtual reality as adjuncts to increase dose and engagement", ["mirror therapy", "virtual reality adjunct", "increase dose and engagement"], ["cochrane-mirror-therapy-2018", "cochrane-vr-stroke-2025"]),
+      c("Use treadmill training with or without body-weight support for walking", ["treadmill training", "body weight support", "walking speed and endurance"], ["cochrane-treadmill-bws-2017"]),
+    ],
+  },
+  {
+    topicId: "adult-neuro-assessment",
+    title: "Advanced assessment of adult neurological conditions",
+    prompt:
+      "Explain a structured physiotherapy assessment of an adult with a neurological condition, integrating impairment, activity, and participation with validated tools.",
+    concepts: [
+      c("Start early with structured assessment across body structure, activity, and participation", ["early structured assessment", "impairment activity participation", "ICF framework"], ["aha-asa-stroke-rehab-2016"]),
+      c("Use Fugl-Meyer, Berg Balance, and MMSE to objectify motor, balance, and cognitive status", ["Fugl-Meyer Assessment", "Berg Balance Scale", "Mini-Mental State Examination"], ["fugl-meyer-1975", "berg-balance-1992", "mmse-folstein-1975"]),
+      c("Screen for fatigue, mood, vision, hearing, and communication before planning", ["screen fatigue and mood", "vision hearing communication", "routine screening"], ["nice-ng236-stroke-rehab"]),
+    ],
+  },
+  {
+    topicId: "pediatric-gross-motor-assessment",
+    title: "Advanced pediatric assessment: GMFM and GMFCS",
+    prompt:
+      "Explain how the GMFM and GMFCS are used to assess and classify gross motor function in children with cerebral palsy and other paediatric neuro conditions.",
+    concepts: [
+      c("Use GMFM-66/88 as a criterion-referenced, change-sensitive measure of gross motor function", ["Gross Motor Function Measure", "criterion-referenced measure", "change-sensitive"], ["gmfm-russell-1989"]),
+      c("Classify gross motor ability with GMFCS levels I to V to predict mobility and guide goals", ["GMFCS classification", "gross motor function classification", "mobility trajectory"], ["gmfcs-palisano-1997"]),
+    ],
+  },
+  {
+    topicId: "pediatric-posture-gait-cp",
+    title: "Posture and gait management in pediatric neurological conditions",
+    prompt:
+      "Explain assessment and management of posture and gait in children with cerebral palsy, linking GMFCS level to intervention goals.",
+    concepts: [
+      c("Link posture and gait management to GMFCS level and functional goals", ["GMFCS level", "posture and gait management", "functional goals"], ["gmfcs-palisano-1997", "nice-ng62-cerebral-palsy"]),
+      c("Use MDT surveillance and orthotic or surgical options aligned to motor prognosis", ["orthotic management", "MDT surveillance", "motor prognosis"], ["nice-ng62-cerebral-palsy"]),
+    ],
+  },
+  {
+    topicId: "pediatric-progressive-management",
+    title: "Management of progressive and non-progressive pediatric neurological conditions",
+    prompt:
+      "Explain how physiotherapy management differs between progressive (e.g., DMD, SMA) and non-progressive (e.g., cerebral palsy) paediatric conditions.",
+    concepts: [
+      c("For progressive conditions, focus on contracture prevention, postural care, and ambulation preservation within MDT care", ["progressive conditions", "contracture prevention", "ambulation preservation"], ["dmd-care-birnkrant-2018", "sma-care-mercuri-2018"]),
+      c("For non-progressive conditions, emphasise task-oriented motor learning and GMFCS-stratified goals", ["non-progressive conditions", "motor learning", "GMFCS-stratified goals"], ["nice-ng62-cerebral-palsy", "gmfcs-palisano-1997"]),
+    ],
+  },
+  {
+    topicId: "neural-plasticity-dose",
+    title: "Neural plasticity and dose in neurorehabilitation",
+    prompt:
+      "Explain how neural plasticity and movement plasticity inform the dose and design of neurorehabilitation, using evidence of dose-response.",
+    concepts: [
+      c("Apply high-repetition, task-oriented practice to drive experience-dependent plasticity", ["experience-dependent plasticity", "high-repetition practice", "task-oriented practice"], ["aha-asa-stroke-rehab-2016"]),
+      c("Expect a definable recovery sequence, tracked with the Fugl-Meyer Assessment", ["recovery sequence", "proximal to distal", "Fugl-Meyer Assessment"], ["fugl-meyer-1975"]),
+    ],
+  },
+  {
+    topicId: "adult-neuro-ebp",
+    title: "Evidence-based practice in adult neurorehabilitation",
+    prompt:
+      "Explain how evidence-based practice shapes adult neurorehabilitation, including therapy intensity, telerehabilitation, and outcome review.",
+    concepts: [
+      c("Deliver structured, high-repetition task practice at sufficient dose", ["sufficient dose", "structured task practice", "therapy intensity"], ["nice-ng236-stroke-rehab"]),
+      c("Use telerehabilitation as an acceptable delivery mode where appropriate", ["telerehabilitation", "delivery mode", "remote rehabilitation"], ["nice-ng236-stroke-rehab"]),
+    ],
+  },
+  {
+    topicId: "adult-community-integration",
+    title: "Community integration and early supported discharge after neurological injury",
+    prompt:
+      "Explain how early supported discharge and community therapy support participation and continuity after neurological injury.",
+    concepts: [
+      c("Use early supported discharge with community therapy for eligible patients", ["early supported discharge", "community therapy", "community rehabilitation"], ["nice-ng236-stroke-rehab"]),
+      c("Plan continuity and participation-focused goals beyond the acute phase", ["continuity of therapy", "participation goals", "community integration"], ["nice-ng236-stroke-rehab", "aha-asa-stroke-rehab-2016"]),
+    ],
+  },
+  {
+    topicId: "parkinsons-pharmacotherapy",
+    title: "Pharmacotherapeutics in adult neurological conditions: Parkinson's",
+    prompt:
+      "Explain how pharmacotherapy for Parkinson's disease interacts with physiotherapy, including levodopa-based motor management and non-motor symptoms.",
+    concepts: [
+      c("Recognise levodopa-based management of motor symptoms and time therapy with medication cycles", ["levodopa-based management", "motor symptoms", "on off fluctuations"], ["nice-ng71-parkinsons"]),
+      c("Identify non-motor symptoms that require separate management", ["non-motor symptoms", "depression sleep autonomic", "separate management"], ["nice-ng71-parkinsons"]),
+    ],
+  },
+  {
+    topicId: "neuro-tech-vr-fes",
+    title: "Recent advances in technology for neurological physiotherapy",
+    prompt:
+      "Explain the role of technology in neuro physiotherapy, including virtual reality and functional electrical stimulation, and their evidence as adjuncts.",
+    concepts: [
+      c("Use virtual reality and interactive gaming as an adjunct to increase dose and engagement after stroke", ["virtual reality", "interactive gaming", "adjunct to increase dose"], ["cochrane-vr-stroke-2025"]),
+      c("Apply functional electrical stimulation for specific impairments where evidence supports", ["functional electrical stimulation", "FES", "evidence-based adjunct"], ["aha-asa-stroke-rehab-2016"]),
+    ],
+  },
+  {
+    topicId: "spinal-cord-injury-isncsci",
+    title: "Spinal cord injury: ISNCSCI classification and early management",
+    prompt:
+      "Explain how the ISNCSCI examination classifies spinal cord injury and how the AIS grade and neurological level guide early physiotherapy management.",
+    concepts: [
+      c("Perform the ISNCSCI motor and sensory examination to determine the neurological level and AIS grade", ["ISNCSCI examination", "motor and sensory examination", "neurological level of injury", "AIS grade"], ["asia-isncsci-9th-2026"]),
+      c("Use sacral sparing and key muscle levels to define completeness of injury", ["sacral sparing", "ASIA Impairment Scale", "completeness of injury"], ["asia-isncsci-9th-2026"]),
+      c("Guide early management by neurological level within the rehabilitation team", ["early management by level", "rehabilitation team", "neurological level guides management"], ["asia-isncsci-9th-2026"]),
+    ],
+  },
+];
+
+// --- scaffold topics: playable but not yet content-scored ---
+// A scaffold topic has one GUIDED variant and a rubric with zero concepts, so
+// coverage falls back to "not verifiable from sources" until an educator authors
+// sourced concepts. The production (attestation) gate rejects empty rubrics, so
+// scaffolds cannot be promoted to APPROVED unchanged.
+
+function scaffoldTopic(topicId: string, title: string): object {
+  // Compact derived IDs so long curriculum topicIds stay within the 63-char
+  // kebabId limit. Authored topics keep the longer "-guided-recall-v1" form.
+  const vid = `${topicId}-v1`;
+  const rub = `r-${vid}`;
+  return {
+    topicId,
+    title,
+    variants: [
+      {
+        variantId: vid,
+        challengePreset: "GUIDED",
+        difficultyProfileVersion: "difficulty-profile/1.0",
+        blueprint: "explain-concept",
+        promptId: `p-${vid}`,
+        mode: "RECALL_SPRINT",
+        supportLevel: "FULL",
+        wording:
+          "Explain " +
+          title.charAt(0).toLowerCase() + title.slice(1) +
+          " as it applies to physiotherapy practice — key assessment reasoning, management principles, and safety considerations within scope.",
+        answerArc: ["frame", "explain", "apply"],
+        timePolicy: { preparationSeconds: 30, speakingSeconds: 120 },
+        caseRef: null,
+        followUpRefs: [],
+        rubricId: rub,
+      },
+    ],
+    rubrics: [
+      {
+        rubricId: rub,
+        variantId: vid,
+        register: "EXAMINER",
+        concepts: [],
+      },
+    ],
+    cases: [],
+    followUps: [],
+  };
+}
+
+function scaffoldTopics(pairs: ReadonlyArray<readonly [string, string]>): object[] {
+  return pairs.map(([id, title]) => scaffoldTopic(id, title));
+}
+
+// Subject 1 — Research Methods and Bioethics (32 scaffold topics)
+const rmbScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["rmb-helsinki-ethics", "Helsinki Declaration & ethical issues in physiotherapy"],
+  ["rmb-rights-responsibilities-pwd-act", "Rights & responsibilities of physiotherapist and client; PWD Act; rules & regulations"],
+  ["rmb-wcpt-who-roles-standards", "Roles of the physiotherapist per WCPT/WHO; standards for practice"],
+  ["rmb-administration-management", "Administration & management in physiotherapy"],
+  ["rmb-education-curriculum-teaching", "Education, curricular planning, teaching technology & clinical teaching"],
+  ["rmb-icf-documentation-future-challenges", "Documentation using ICF & future challenges in physiotherapy"],
+  ["rmb-introduction-to-research", "Introduction to research"],
+  ["rmb-types-of-research-question", "Types of research & defining a research question"],
+  ["rmb-qualitative-study-designs", "Qualitative study designs (grounded theory, phenomenological methods)"],
+  ["rmb-delphi-process", "Delphi process"],
+  ["rmb-quantitative-study-designs", "Quantitative study designs"],
+  ["rmb-type-i-type-ii-bias", "Type I and Type II bias"],
+  ["rmb-study-design-rct-cohort", "Study design (case study, case series, cohort, pre-post, time series, RCT)"],
+  ["rmb-sampling-sample-size", "Sampling design & minimum sample-size calculation"],
+  ["rmb-measurement-properties-reliability-validity", "Measurement properties (reliability, validity, responsiveness, MCID)"],
+  ["rmb-outcome-measures-rehabilitation-research", "Outcome measures in rehabilitation research"],
+  ["rmb-designing-methodology-reporting", "Research methods — designing methodology & reporting results"],
+  ["rmb-communicating-research", "Communicating research"],
+  ["rmb-scientific-writing", "Scientific writing (paper, review, thesis; APA/MLA; citation & references)"],
+  ["rmb-report-writing-abstract-presentation", "Report writing, abstract preparation, oral & poster presentation"],
+  ["rmb-introduction-to-biostatistics", "Introduction to biostatistics; sources & presentation of data"],
+  ["rmb-measures-location-variability-normal-distribution", "Measures of location & variability; normal distribution & curve"],
+  ["rmb-sampling-probability-significance", "Sampling, probability, sampling variability & significance"],
+  ["rmb-significance-difference-in-means", "Significance of difference in means (small & large sample)"],
+  ["rmb-t-test-statistical-inference", "Statistical inference; T-test (comparison of group means)"],
+  ["rmb-analysis-of-variance", "Analysis of variance"],
+  ["rmb-multiple-comparison-nonparametric-tests", "Multiple comparison tests; non-parametric tests"],
+  ["rmb-correlation-regression", "Correlation & regression"],
+  ["rmb-chi-square-frequencies", "Analysis of frequencies — chi-square"],
+  ["rmb-statistical-measure-reliability", "Statistical measure of reliability"],
+  ["rmb-power-analysis-sample-size", "Power analysis & determining sample size"],
+  ["rmb-measures-of-population-incidence-prevalence", "Measures of population (rate, ratio, proportion, incidence, prevalence, relative risk, odds ratio)"],
+];
+
+// Subject 2 — Applied Physiotherapeutics (35 scaffold topics)
+const papScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["pap-exercise-physiology-nutrition-intro", "Introduction to exercise physiology (body composition, nutrition, caloric balance)"],
+  ["pap-energy-transfer-expenditure", "Sources of energy, energy transfer & energy expenditure at rest and activity"],
+  ["pap-physiologic-support-systems-activity", "Physiologic support systems & physical activity (cardio-pulmonary, neuromuscular, hormonal)"],
+  ["pap-responses-adaptations-exercise", "Responses & adaptations of various systems to exercise and training"],
+  ["pap-endurance-strength-assessment-training", "Assessment & training for endurance and strength (anaerobic & aerobic power)"],
+  ["pap-environmental-influence-performance", "Environmental influence on performance"],
+  ["pap-exercise-prescription-health-fitness", "Exercise prescription for health & fitness; age & sex considerations"],
+  ["pap-fatigue-assessment-management", "Fatigue — assessment & management"],
+  ["pap-radiological-imaging-investigations", "Radiological investigations & imaging (MRI, X-ray) across systems"],
+  ["pap-ecg-pulmonary-function-tests", "ECG & pulmonary function tests"],
+  ["pap-anthropometric-measurements", "Anthropometric measurements"],
+  ["pap-physical-fitness-assessment", "Physical fitness assessment (body composition, ETT, field test, 6MWT, strength, balance)"],
+  ["pap-effect-exercise-muscle-cardiopulmonary", "Effect of aerobic/anaerobic/isometric/isotonic/isokinetic exercise on muscle & cardio-pulmonary function"],
+  ["pap-sdc-emg-ncv-biofeedback", "S-D curve, EMG, NCV interpretation & biofeedback"],
+  ["pap-disability-evaluation-diagnosis", "Physical disability evaluation & disability diagnosis"],
+  ["pap-posture-gait-analysis", "Posture & gait analysis"],
+  ["pap-pain-neurobiology-management", "Pain — neurobiology, theories, assessment, modulation & management"],
+  ["pap-medications-effect-activity", "Effect of medications on activity performance"],
+  ["pap-physiotherapy-health-stress-management", "Physiotherapy for health & stress management"],
+  ["pap-cpr-monitoring-defibrillators-respirators", "CPR, monitoring systems, defibrillators & artificial respirators"],
+  ["pap-physiotherapy-modalities-techniques-approaches", "Physiotherapy modalities, techniques & approaches"],
+  ["pap-aging-changes-management", "Aging — physiological changes & physiotherapy management"],
+  ["pap-aids-appliances-adaptive-devices", "Aids & appliances, adaptive functional devices for movement dysfunction"],
+  ["pap-physiotherapy-disaster-management", "Physiotherapy in disaster management"],
+  ["pap-yoga-integration-health-promotion", "Integration of yoga in physiotherapy for health promotion"],
+  ["pap-aquatic-therapy", "Aquatic therapy (properties of water, hydrodynamics, immersion physiology)"],
+  ["pap-clinical-decision-making-physiotherapeutics", "Clinical decision making in physiotherapeutics"],
+  ["pap-screening-subjective-examination", "Screening & evaluation — subjective examination"],
+  ["pap-pain-evaluation-scales", "Pain evaluation — subjective & objective assessment; pain measurement scales"],
+  ["pap-general-survey-physical-examination", "General survey & physical examination techniques; regional & systems-review screening"],
+  ["pap-screening-cardiovascular-respiratory", "Screening & evaluation for cardiovascular & respiratory disease"],
+  ["pap-screening-cancer", "Screening & evaluation for cancer"],
+  ["pap-screening-head-cervical-thoracic-lumbosacral", "Screening & evaluation of head, cervical, thoracic & lumbosacral region"],
+  ["pap-screening-upper-lower-quadrant", "Screening & evaluation of upper & lower quadrant"],
+  ["pap-icf-rehabilitation-assessment-management", "ICF-based rehabilitation assessment & management"],
+];
+
+// Subject 3 — Musculoskeletal Physiotherapy (50 scaffold topics)
+const mskScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["msk-shoulder-complex-biomechanics", "Shoulder complex biomechanics & pathomechanics"],
+  ["msk-elbow-complex-biomechanics", "Elbow complex biomechanics & pathomechanics"],
+  ["msk-wrist-complex-biomechanics", "Wrist complex biomechanics & pathomechanics"],
+  ["msk-cervical-thoracic-biomechanics", "Cervical & thoracic complex biomechanics & pathomechanics"],
+  ["msk-shoulder-pathophysiology-features", "Shoulder complex pathophysiology & clinical features"],
+  ["msk-elbow-wrist-pathophysiology-features", "Elbow & wrist complex pathophysiology & clinical features"],
+  ["msk-cervical-thoracic-pathophysiology-features", "Cervical & thoracic complex pathophysiology & clinical features"],
+  ["msk-shoulder-assessment-diagnostic", "Shoulder complex assessment & functional diagnostic procedures"],
+  ["msk-elbow-assessment-diagnostic", "Elbow complex assessment & functional diagnostic procedures"],
+  ["msk-wrist-assessment-diagnostic", "Wrist complex assessment & functional diagnostic procedures"],
+  ["msk-cervical-thoracic-assessment-diagnostic", "Cervical & thoracic complex assessment & functional diagnostic procedures"],
+  ["msk-pediatric-upper-quadrant-management", "Pediatric upper-quadrant dysfunctions management"],
+  ["msk-adult-upper-quadrant-management", "Adult upper-quadrant dysfunctions management"],
+  ["msk-geriatric-upper-quadrant-management", "Geriatric upper-quadrant dysfunctions management"],
+  ["msk-traumatic-upper-quadrant-perioperative", "Traumatic upper-quadrant conditions & perioperative physiotherapy"],
+  ["msk-non-traumatic-upper-quadrant-perioperative", "Non-traumatic upper-quadrant conditions & perioperative physiotherapy"],
+  ["msk-manual-therapy-upper-reasoning", "Manual therapy techniques & clinical reasoning (McKenzie, Maitland, Cyriax, Mulligan, Kaltenborn)"],
+  ["msk-myofascial-muscle-energy-neurodynamics-taping-upper", "Myofascial release, muscle energy, neurodynamics, taping (upper quadrant)"],
+  ["msk-assistive-devices-upper", "Assistive devices for stability & mobility (upper quadrant)"],
+  ["msk-ebp-upper-quadrant", "Evidence-based practice in upper quadrant"],
+  ["msk-integumentary-upper-quadrant", "Integumentary impairments in upper quadrant"],
+  ["msk-upper-with-lower-quadrant-decisions", "Clinical decisions for lower-quadrant function with upper-quadrant dysfunction"],
+  ["msk-hand-rehab-soft-tissue", "Hand rehabilitation — soft-tissue injuries; sensory & motor re-education"],
+  ["msk-hand-rehab-deformities-orthotics", "Hand rehabilitation — congenital & acquired deformities; orthotics; recent advances"],
+  ["msk-hip-complex-biomechanics", "Hip complex biomechanics & pathomechanics"],
+  ["msk-knee-complex-biomechanics", "Knee complex biomechanics & pathomechanics"],
+  ["msk-ankle-complex-biomechanics", "Ankle complex biomechanics & pathomechanics"],
+  ["msk-lumbosacral-biomechanics", "Lumbo-sacral complex biomechanics & pathomechanics"],
+  ["msk-hip-pathophysiology-features", "Hip complex pathophysiology & clinical features"],
+  ["msk-knee-ankle-pathophysiology-features", "Knee & ankle complex pathophysiology & clinical features"],
+  ["msk-lumbosacral-pathophysiology-features", "Lumbo-sacral complex pathophysiology & clinical features"],
+  ["msk-hip-assessment-diagnostic", "Hip complex assessment & functional diagnostic procedures"],
+  ["msk-knee-assessment-diagnostic", "Knee complex assessment & functional diagnostic procedures"],
+  ["msk-ankle-assessment-diagnostic", "Ankle complex assessment & functional diagnostic procedures"],
+  ["msk-lumbosacral-assessment-diagnostic", "Lumbo-sacral complex assessment & functional diagnostic procedures"],
+  ["msk-pediatric-lower-quadrant-management", "Pediatric lower-quadrant dysfunctions management"],
+  ["msk-adult-lower-quadrant-management", "Adult lower-quadrant dysfunctions management"],
+  ["msk-geriatric-lower-quadrant-management", "Geriatric lower-quadrant dysfunctions management"],
+  ["msk-traumatic-lower-quadrant-perioperative", "Traumatic lower-quadrant conditions & perioperative physiotherapy"],
+  ["msk-non-traumatic-lower-quadrant-perioperative", "Non-traumatic lower-quadrant conditions & perioperative physiotherapy"],
+  ["msk-manual-therapy-lower-reasoning", "Manual therapy techniques & clinical reasoning (lower quadrant)"],
+  ["msk-myofascial-muscle-energy-neurodynamics-taping-lower", "Myofascial release, muscle energy, neurodynamics, taping (lower quadrant)"],
+  ["msk-assistive-devices-lower", "Assistive devices for stability & mobility (lower quadrant)"],
+  ["msk-ebp-lower-quadrant", "Evidence-based practice in lower quadrant"],
+  ["msk-integumentary-lower-quadrant", "Integumentary impairments in lower quadrant"],
+  ["msk-lower-with-upper-quadrant-decisions", "Clinical decisions for upper-quadrant function with lower-quadrant dysfunction"],
+  ["msk-sports-philosophy-physiology-psychology-pharmacology", "Sports philosophy, physiology, psychology & pharmacology"],
+  ["msk-sports-biomechanics-injuries", "Biomechanics & pathomechanics of common sports & sports injuries"],
+  ["msk-sport-injury-prevention-rehabilitation", "Sport injury — prevention, diagnosis, treatment & rehabilitation"],
+  ["msk-gait-rehabilitation", "Gait rehabilitation"],
+];
+
+// Subject 4 — Neuro Physiotherapy (scaffold-only topics; the 16 authored
+// topics above cover the sourceable core). 19 scaffold topics.
+const neuroScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["neu-embryology-nervous-system", "Embryology of the nervous system; principles of human development"],
+  ["neu-gross-fine-motor-development-assessment", "Gross & fine motor development; assessment & testing of infant and child"],
+  ["neu-developmental-reflexes", "Developmental reflexes (primitive, spinal, brainstem, cortical)"],
+  ["neu-motor-development-control-learning-theories", "Theories of motor development, motor control & motor learning; stages of learning"],
+  ["neu-early-identification-intervention-pediatric", "Early identification & early intervention in pediatric neurological disorders"],
+  ["neu-infant-high-risk-developmental-delay", "Infant at high risk for developmental delay"],
+  ["neu-spina-bifida", "Spina bifida"],
+  ["neu-pediatric-tbi-sci", "Pediatric traumatic brain injury & traumatic/non-traumatic spinal cord injury"],
+  ["neu-down-syndrome-intellectual-disability", "Intellectual disabilities — Down syndrome"],
+  ["neu-autism-spectrum-physical-therapy", "Autism spectrum disorder & physical therapy"],
+  ["neu-parent-education-family-centred-care", "Parent education & counselling; family-centred care"],
+  ["neu-radiology-evoked-potentials", "Pathological & radiological investigations; evoked potentials"],
+  ["neu-neuropediatric-surgical-perioperative", "Surgical procedures in neuropediatric disorders (hydrocephalus, spina bifida) & perioperative PT"],
+  ["neu-classic-approaches-pnf-ndt-rood-vojta-mrp", "Advanced physiotherapy approaches (PNF, NDT, Rood's, Motor Relearning Program, Vojta)"],
+  ["neu-pediatric-clinical-decision-ebp", "Clinical decision making & evidence-based practice (pediatric)"],
+  ["neu-neonatal-pediatric-icu", "Physiotherapy in neonatal & pediatric intensive care units"],
+  ["neu-pediatric-social-integration-orthotics-legislation", "Social integration of children (school/community, assistive technology, legislation, orthotics/prosthetics)"],
+  ["neu-pediatric-pharmacotherapeutics", "Pharmacotherapeutics in pediatric neurological conditions"],
+  ["neu-adult-space-occupying-tbi-vestibular-myopathies", "Space-occupying CNS lesions, TBI, vestibular disorders, myopathies (adult)"],
+];
+
+// Subject 5a — Respiratory Physiotherapy: 2 scaffold topics to reach 13
+const respScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["respiratory-anatomy-physiology-embryology", "Anatomy, physiology, biomechanics, pathomechanics & embryology of respiratory system & thorax"],
+  ["respiratory-perioperative-surgical-procedures", "Surgical procedures (thoracotomy, pleurodesis, lobectomy, pneumonectomy, VATS, transplantation) & perioperative PT"],
+];
+
+// Subject 5b — Cardiovascular Physiotherapy: 4 scaffold topics to reach 13
+const cvScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["cardiovascular-anatomy-physiology-embryology", "Anatomy, physiology & embryology of cardiovascular system"],
+  ["cardiovascular-risk-stratification-health-promotion", "Health & performance principles, risk stratification, prevention & health promotion"],
+  ["cardiovascular-advanced-life-support", "Basic & advanced life support"],
+  ["cardiovascular-iccu-monitoring-hyperbaric", "PT management in ICCU — monitoring, ventilator, hyperbaric oxygen therapy"],
+];
+
+// Subject 6 — Community Health Physiotherapy (53 scaffold topics)
+const comScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["com-legal-issues-rehabilitation-acts", "Legal issues — national & international (WHO) rehabilitation acts & implementation"],
+  ["com-health-delivery-system-india", "Health delivery system in India — health & illness; levels of healthcare"],
+  ["com-fitness-training-health-promotion-community", "Fitness training for health promotion in community"],
+  ["com-basic-concepts-rehabilitation-institute-based", "Basic concepts of rehabilitation; institute-based rehabilitation; multidisciplinary approach"],
+  ["com-community-based-rehabilitation", "Community-based rehabilitation (CBR) — methodology, spectrum, govt/NGO roles"],
+  ["com-role-community-physiotherapist", "Role of community physiotherapist (national/state institutes, district rehabilitation centre, PHC)"],
+  ["com-legislation-laws-disability-un", "Legislation & laws for persons with disability (national & UN); public awareness"],
+  ["com-disability-evaluation-icf-rehabilitation", "Disability evaluation per ICF (MSK, neurological, cardio-respiratory) & rehabilitation of disabled"],
+  ["com-appropriate-technology-assistive-devices", "Appropriate technology & assistive devices for stability & mobility"],
+  ["com-home-exercise-msk", "Home exercise programs — musculoskeletal conditions (arthritis, chronic pain, burn, degenerative)"],
+  ["com-home-exercise-neurological", "Home exercise programs — neurological conditions (SCI, TBI, stroke, Parkinson's)"],
+  ["com-home-exercise-cardiorespiratory", "Home exercise programs — cardiorespiratory conditions (amputation, heart & pulmonary disease)"],
+  ["com-physical-fitness-yoga-stress-management", "Physical fitness, yoga & psychosomatic approaches (meditation) for stress management"],
+  ["com-geriatric-physiology-ageing", "Physiology of ageing; factors affecting ageing"],
+  ["com-geriatric-theories-aging", "Theories of aging"],
+  ["com-geriatric-medicine-surgery", "Geriatric medicine & geriatric surgery"],
+  ["com-geriatric-common-diseases", "Common diseases affecting the elderly"],
+  ["com-geriatric-assessment", "Assessment of geriatric conditions"],
+  ["com-geriatric-rehabilitation-exercise-prescription", "Geriatric rehabilitation — exercise prescription in geriatrics"],
+  ["com-geriatric-nutrition", "Nutrition in geriatric health"],
+  ["com-geriatric-falls-prevention", "Falls in geriatrics & fall-prevention programme; incontinence, balance; home/workplace modification"],
+  ["com-geriatric-psychosocial-safety", "Psychosocial & safety issues in the elderly"],
+  ["com-geriatric-services", "Services for the elderly"],
+  ["com-geriatric-recent-advances", "Recent advances in geriatric physical therapy"],
+  ["com-geriatric-posture-gait", "Posture & gait evaluation & management in the elderly"],
+  ["com-geriatric-successful-aging", "Successful aging"],
+  ["com-geriatric-holistic-physiotherapy", "Holistic physiotherapy for the elderly"],
+  ["com-geriatric-ebp", "Evidence-based practice in geriatrics"],
+  ["com-womens-reproductive-health-pregnancy", "Women's reproductive health care; physiology of pregnancy; assessment of common discomforts"],
+  ["com-womens-antenatal-care-exercise", "Antenatal care & exercise prescription"],
+  ["com-womens-pregnancy-complications", "Pregnancy-induced complications (cardiac, vascular, respiratory, neurologic)"],
+  ["com-womens-labour-pain-relief", "Labour — pain mechanism & relief; physical therapy for pain during labour"],
+  ["com-womens-postpartum-care", "Postpartum care; post-natal exercises"],
+  ["com-womens-caesarean-section-management", "Caesarean section & physiotherapy management"],
+  ["com-womens-neonate-handling-kangaroo-care", "Neonate handling education (kangaroo care)"],
+  ["com-womens-gynaecologic-conditions-pt", "Common gynaecologic conditions & PT management (PID, incontinence, prolapse, PCOD)"],
+  ["com-womens-gynaecologic-surgery-pt", "Common surgical interventions (hysterectomy, laparotomy) & PT management"],
+  ["com-womens-msk-childbearing-year", "Musculoskeletal pain & dysfunction in the childbearing year"],
+  ["com-womens-recent-advances", "Recent advances in women's health"],
+  ["com-womens-menopause-climacteric", "Menopause (climacteric) — anatomical, physiological, psychological & cardiovascular changes"],
+  ["com-womens-cancer-rehab-osteoporosis", "Cancer rehabilitation (breast & reproductive organs); osteoporosis, falls & fractures in postmenopausal women"],
+  ["com-womens-exercise-prescription-postmenopausal", "Exercise prescription for postmenopausal women"],
+  ["com-womens-exercise-testing-female-athletes", "Exercise testing & prescription in female athletes"],
+  ["com-industrial-occupational-health-stress-hazards", "Occupational health, occupational stress, hazards, industrial hygiene, vulnerable worker groups"],
+  ["com-industrial-therapy-worker-assessment", "Industrial therapy — traditional medical model vs worker-care spectrum; assessment of worker"],
+  ["com-industrial-injury-prevention-ergonomics-screening", "Injury prevention — ergonomics, job analysis, pre-employment screening; employee fitness"],
+  ["com-industrial-return-to-work-fce", "Returning to work — functional capacity evaluation, job simulation, work conditioning & hardening"],
+  ["com-industrial-workplace-injuries-cumulative-trauma", "Workplace injuries — design, repetitive motion & cumulative trauma disorders"],
+  ["com-industrial-ergonomics-principles-application", "Ergonomics — principles & application to job/workstation design and redesign"],
+  ["com-industrial-recent-advances", "Recent advances in industrial therapy"],
+  ["com-industrial-pt-role-preventive-rehabilitative", "Physiotherapy role in industry — preventive, intervention, ergonomic & rehabilitative"],
+  ["com-industrial-ergonomics-hand-tools-lifting", "Ergonomics of hand tools, posture, material handling & lifting"],
+  ["com-community-ebp-cross-cutting", "Evidence-based practice in community health (cross-cutting)"],
+];
+
+// Subject 7 — Sports Physiotherapy (34 scaffold topics)
+const sprScaffolds: ReadonlyArray<readonly [string, string]> = [
+  ["spr-introduction-sports-sciences", "Introduction to sports sciences"],
+  ["spr-exercise-physiology-sports-context", "Introduction to exercise physiology (sports context)"],
+  ["spr-cricket-football-basketball-hockey", "Cricket, football, basketball & hockey — terminology, methodology, rules, equipment"],
+  ["spr-tennis-track-field-aquatic", "Tennis, track & field, aquatic sports — terminology, methodology, rules, equipment"],
+  ["spr-assessment-diagnosis-sports-injuries", "Assessment & diagnosis of sports injuries"],
+  ["spr-sports-specific-fitness", "Sports-specific fitness (cricket, football, track & field, aquatic)"],
+  ["spr-sports-biomechanics-injury", "Principles of sports biomechanics & biomechanics of injury"],
+  ["spr-physics-running-throwing-swimming-jumping", "Physics in sports — biomechanics of running, throwing, swimming & jumping"],
+  ["spr-advanced-cardiorespiratory-strength-testing", "Advanced cardio-respiratory exercise physiology; strength training; fitness & strength testing"],
+  ["spr-sports-conditioning-agility-equipment", "Sports-specific conditioning & agility training; sports equipment"],
+  ["spr-psychological-aspects-sports", "Psychological aspects in sports (grief/loss models, cognitive stress & emotional response)"],
+  ["spr-doping-performance-enhancing-drugs", "Doping & performance-enhancing drugs"],
+  ["spr-protective-equipment-orthotics-traumatology", "Protective equipment in sports incl. orthotics; sports traumatology"],
+  ["spr-investigations-imaging-sports-injuries", "Principles of investigations & imaging in sports injuries"],
+  ["spr-soft-tissue-injuries-lower-limb", "Tissue healing & soft-tissue injuries of lower limb (hip, thigh, knee, leg, ankle)"],
+  ["spr-soft-tissue-injuries-upper-limb", "Tissue healing & soft-tissue injuries of upper limb (shoulder, elbow, forearm, wrist, hand)"],
+  ["spr-fractures-dislocations-spinal-injuries", "Common fractures & dislocations; spinal injuries in sports"],
+  ["spr-overuse-injuries-sports", "Overuse injuries in sports"],
+  ["spr-special-populations-female-pediatric-elderly", "Sports-specific problems in female, pediatric & elderly athletes"],
+  ["spr-on-field-assessment-injury-prevention", "On-field assessment & decision making; injury prevention in sports"],
+  ["spr-sports-injury-management-principles", "Principles of sports injury management"],
+  ["spr-sports-psychology-training", "Specific psychology management in sports; sports-specific training"],
+  ["spr-advanced-sports-assessment-acute-management", "Advanced sports assessment skills; initial management of acute sports injuries"],
+  ["spr-surgical-management-rehab-arthroscopy", "Surgical management & rehabilitation (incl. arthroscopic surgery) for sports injuries"],
+  ["spr-injury-specific-overuse-management", "Injury & sports-specific management; management of overuse injuries"],
+  ["spr-electrotherapy-sports-rehabilitation", "Electrotherapy in sports rehabilitation; rehabilitation of sports injuries"],
+  ["spr-manual-therapy-sports-peripheral", "Manual therapy techniques in sports (McKenzie, Maitland, Cyriax, Mulligan, positional release)"],
+  ["spr-manual-therapy-sports-myofascial-neurodynamics", "Manual therapy in sports — myofascial release, muscle energy, neurodynamics"],
+  ["spr-msk-screening-athletes-season", "Musculoskeletal screening of athletes (pre-season, in-season, post-season)"],
+  ["spr-sports-special-populations-challenged", "Sports management of special populations (geriatric, physically challenged athletes)"],
+  ["spr-taping-advances-sports-rehabilitation", "Taping techniques & recent advances in sports rehabilitation"],
+  ["spr-diet-sports-carbohydrate-loading", "Diet & sports (pre-session diet, pre-game meal, carbohydrate loading, high-fat/high-protein diet)"],
+  ["spr-ebp-sports-return-to-sports", "Evidence-based sports rehabilitation & return-to-sports criteria"],
+  ["spr-female-athletes-menstrual-preventive", "Problems in female athletes; menstrual synchrony; preventive strategies"],
+];
+
 const subjects: SubjectSeed[] = [
+  {
+    subjectId: "research-methods-and-bioethics",
+    title: "Research Methods and Bioethics",
+    topics: [],
+  },
+  {
+    subjectId: "applied-physiotherapeutics",
+    title: "Applied Physiotherapeutics",
+    topics: [],
+  },
+  {
+    subjectId: "musculoskeletal-physiotherapy",
+    title: "Musculoskeletal Physiotherapy",
+    topics: [],
+  },
+  {
+    subjectId: "neuro-physiotherapy",
+    title: "Neuro Physiotherapy",
+    topics: neuroTopics,
+  },
   {
     subjectId: "respiratory-physiotherapy",
     title: "Respiratory Physiotherapy",
@@ -577,6 +1304,16 @@ const subjects: SubjectSeed[] = [
     subjectId: "cardiovascular-physiotherapy",
     title: "Cardiovascular Physiotherapy",
     topics: cardiovascularTopics,
+  },
+  {
+    subjectId: "community-health-physiotherapy",
+    title: "Community Health Physiotherapy",
+    topics: [],
+  },
+  {
+    subjectId: "sports-physiotherapy",
+    title: "Sports Physiotherapy",
+    topics: [],
   },
 ];
 
@@ -721,8 +1458,8 @@ const pack = {
   schemaVersion: "1.0",
   contentKind: "MEDICAL",
   packId: "mpt-cardiorespiratory-review-candidate",
-  version: "0.2.0",
-  title: "MPT Cardiovascular and Respiratory — educator review candidate",
+  version: "0.3.0",
+  title: "MPT Competency-Based Curriculum — educator review candidate (neuro authored, others scaffolded)",
   locale: "en-IN",
   licence: {
     id: "LICENCE-DECISION-PENDING",
@@ -735,11 +1472,25 @@ const pack = {
     reviewedAt: null,
   },
   sources,
-  subjects: subjects.map((subject) => ({
-    subjectId: subject.subjectId,
-    title: subject.title,
-    topics: subject.topics.map(buildTopic),
-  })),
+  subjects: subjects.map((subject) => {
+    const scaffoldsBySubject: Record<string, ReadonlyArray<readonly [string, string]>> = {
+      "research-methods-and-bioethics": rmbScaffolds,
+      "applied-physiotherapeutics": papScaffolds,
+      "musculoskeletal-physiotherapy": mskScaffolds,
+      "neuro-physiotherapy": neuroScaffolds,
+      "respiratory-physiotherapy": respScaffolds,
+      "cardiovascular-physiotherapy": cvScaffolds,
+      "community-health-physiotherapy": comScaffolds,
+      "sports-physiotherapy": sprScaffolds,
+    };
+    const authored = subject.topics.map(buildTopic);
+    const scaffolds = scaffoldTopics(scaffoldsBySubject[subject.subjectId] ?? []);
+    return {
+      subjectId: subject.subjectId,
+      title: subject.title,
+      topics: [...authored, ...scaffolds],
+    };
+  }),
 };
 
 const out = resolve(
@@ -747,7 +1498,8 @@ const out = resolve(
   "../../../content/candidates/mpt-cardiorespiratory-review-candidate.json",
 );
 mkdirSync(dirname(out), { recursive: true });
-const serialized = JSON.stringify(pack, null, 2) + "\n";
+// Minified to stay within the 512 KiB pack byte budget (265 topics).
+const serialized = JSON.stringify(pack) + "\n";
 if (process.argv.includes("--check")) {
   if (readFileSync(out, "utf8") !== serialized) {
     throw new Error("medical candidate is stale; run pnpm candidate:medical:generate");

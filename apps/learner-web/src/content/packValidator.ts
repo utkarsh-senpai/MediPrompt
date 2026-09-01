@@ -23,7 +23,7 @@ const validateSchema = generatedSchemaValidator as SchemaValidator;
 
 export const MAX_PACK_BYTES = 512 * 1024;
 const MAX_SCAN_DEPTH = 16;
-const MAX_SCAN_NODES = 10_000;
+const MAX_SCAN_NODES = 50_000;
 
 export class PackValidationError extends Error {
   constructor(
@@ -397,6 +397,11 @@ export function assertV02ProductionPack(pack: RuntimePack): void {
         const rubric = topic.rubrics.find((candidate) => candidate.rubricId === v.rubricId);
         if (rubric?.register !== "EXAMINER") {
           errors.push(`v0.2 variant ${v.variantId} requires an EXAMINER rubric`);
+        }
+        if (rubric && rubric.concepts.length === 0) {
+          errors.push(
+            `v0.2 production variant ${v.variantId} requires at least one sourced rubric concept (empty scaffold rubrics are allowed only in DRAFT)`,
+          );
         }
       }
     }
