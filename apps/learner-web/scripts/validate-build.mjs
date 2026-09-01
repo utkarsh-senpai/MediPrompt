@@ -107,6 +107,30 @@ const publicTopicCount = Array.isArray(publicPack.subjects)
       0,
     )
   : 0;
+const expectedSubjectCounts = {
+  "research-methods-and-bioethics": 32,
+  "applied-physiotherapeutics": 35,
+  "musculoskeletal-physiotherapy": 50,
+  "neuro-physiotherapy": 35,
+  "respiratory-physiotherapy": 13,
+  "cardiovascular-physiotherapy": 13,
+  "community-health-physiotherapy": 53,
+  "sports-physiotherapy": 34,
+};
+const expectedActiveSubjects = new Set([
+  "neuro-physiotherapy",
+  "respiratory-physiotherapy",
+  "cardiovascular-physiotherapy",
+]);
+const subjectContractValid =
+  Array.isArray(publicPack.subjects) &&
+  publicPack.subjects.length === Object.keys(expectedSubjectCounts).length &&
+  publicPack.subjects.every(
+    (subject) =>
+      expectedSubjectCounts[subject.subjectId] === subject.topics?.length &&
+      subject.availability ===
+        (expectedActiveSubjects.has(subject.subjectId) ? "ACTIVE" : "COMING_SOON"),
+  );
 if (
   publicPack.packId !== "mpt-cardiorespiratory-review-candidate" ||
   publicPack.contentKind !== "MEDICAL" ||
@@ -114,9 +138,12 @@ if (
   !Array.isArray(publicPack.review?.reviewers) ||
   publicPack.review.reviewers.length !== 0 ||
   publicPack.review.reviewedAt !== null ||
-  publicTopicCount !== 265
+  publicTopicCount !== 265 ||
+  !subjectContractValid
 ) {
-  errors.push("public physiotherapy pack is not the expected unattested 265-topic DRAFT");
+  errors.push(
+    "public physiotherapy pack is not the expected unattested 265-topic DRAFT with exactly three active subjects",
+  );
 }
 
 const html = readFileSync(resolve(distDir, "index.html"), "utf8");

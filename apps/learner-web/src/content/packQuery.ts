@@ -4,6 +4,7 @@ import type {
   RuntimePack,
   SpeechArcStep,
   Subject,
+  SubjectAvailability,
   TimePolicy,
   Topic,
   TopicRef,
@@ -16,10 +17,19 @@ import type {
 export interface SubjectOption {
   subjectId: string;
   title: string;
+  availability: SubjectAvailability;
 }
 
 export function listSubjects(pack: RuntimePack): SubjectOption[] {
-  return pack.subjects.map((s) => ({ subjectId: s.subjectId, title: s.title }));
+  return pack.subjects.map((s) => ({
+    subjectId: s.subjectId,
+    title: s.title,
+    availability: s.availability ?? "ACTIVE",
+  }));
+}
+
+export function isSubjectActive(subject: Subject | undefined): boolean {
+  return subject !== undefined && subject.availability !== "COMING_SOON";
 }
 
 export function findSubject(
@@ -31,7 +41,7 @@ export function findSubject(
 
 function variantsInSubject(pack: RuntimePack, subjectId: string): Variant[] {
   const subject = findSubject(pack, subjectId);
-  if (!subject) return [];
+  if (!subject || !isSubjectActive(subject)) return [];
   return subject.topics.flatMap((t) => t.variants);
 }
 
@@ -158,6 +168,9 @@ export function toTopicSnapshot(
   subject: Subject,
   defaults: { speakingSeconds: number; researchSeconds: number },
 ): TopicSnapshot {
+  if (!isSubjectActive(subject)) {
+    throw new Error(`inactive subject cannot start practice: ${subject.subjectId}`);
+  }
   if (variant.mode !== "RECALL_SPRINT" && variant.mode !== "DEEP_RESEARCH") {
     throw new Error(`unsupported v0.2 mode: ${variant.mode}`);
   }

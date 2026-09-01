@@ -87,7 +87,7 @@
     "sources": {
       "type": "array",
       "minItems": 1,
-      "maxItems": 50,
+      "maxItems": 60,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -117,6 +117,10 @@
       "properties": {
         "subjectId": { "$ref": "#/$defs/kebabId" },
         "title": { "$ref": "#/$defs/nonEmpty" },
+        "availability": {
+          "type": "string",
+          "enum": ["ACTIVE", "COMING_SOON"]
+        },
         "topics": {
           "type": "array",
           "minItems": 1,
@@ -243,7 +247,7 @@
             "required": ["conceptId", "label", "acceptedPhrases", "weight", "sourceRefs"],
             "properties": {
               "conceptId": { "$ref": "#/$defs/kebabId" },
-              "label": { "type": "string", "minLength": 1, "maxLength": 160 },
+              "label": { "type": "string", "minLength": 1, "maxLength": 240 },
               "acceptedPhrases": {
                 "type": "array",
                 "minItems": 1,

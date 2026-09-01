@@ -6,8 +6,9 @@ import type { ChallengePreset, PracticeSelection } from "@/practice/types";
 import type { SubjectOption } from "@/content/packQuery";
 
 const subjects: SubjectOption[] = [
-  { subjectId: "a", title: "Alpha" },
-  { subjectId: "b", title: "Beta" },
+  { subjectId: "a", title: "Alpha", availability: "ACTIVE" },
+  { subjectId: "b", title: "Beta", availability: "ACTIVE" },
+  { subjectId: "c", title: "Gamma", availability: "COMING_SOON" },
 ];
 
 const selection: PracticeSelection = {
@@ -150,6 +151,23 @@ describe("PracticeSurface", () => {
     );
     await user.selectOptions(screen.getByLabelText("Subject"), "b");
     expect(onChange).toHaveBeenCalledWith({ subjectId: "b" });
+  });
+
+  it("shows unavailable subjects but prevents selecting them", () => {
+    render(
+      <PracticeSurface
+        subjects={subjects}
+        selection={selection}
+        presets={["GUIDED"]}
+        challengeVisible={false}
+        eligibleCount={5}
+        drawing={false}
+        onChange={() => {}}
+        onSpin={() => {}}
+      />,
+    );
+    const option = screen.getByRole("option", { name: /Gamma — coming soon/ });
+    expect(option).toBeDisabled();
   });
 });
 

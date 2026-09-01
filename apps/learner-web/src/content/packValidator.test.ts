@@ -191,6 +191,25 @@ describe("assertV02ProductionPack", () => {
     expect(() => assertPublicDraftPracticePack(candidate)).not.toThrow();
     expect(() => assertV02ProductionPack(candidate)).toThrow();
   });
+
+  it("rejects curriculum availability drift at the public-draft gate", () => {
+    const candidate = JSON.parse(JSON.stringify(medicalCandidateJson)) as RuntimePack;
+    candidate.subjects.find(
+      (subject) => subject.subjectId === "neuro-physiotherapy",
+    )!.availability = "COMING_SOON";
+    expect(() => assertPublicDraftPracticePack(validatePack(candidate))).toThrow(
+      /public draft practice gate failed/,
+    );
+  });
+
+  it("rejects an empty rubric in an active subject during structural validation", () => {
+    const candidate = JSON.parse(JSON.stringify(medicalCandidateJson)) as RuntimePack;
+    const neuro = candidate.subjects.find(
+      (subject) => subject.subjectId === "neuro-physiotherapy",
+    )!;
+    neuro.topics[0]!.rubrics[0]!.concepts = [];
+    expectInvalid(candidate, "active subject neuro-physiotherapy");
+  });
 });
 
 describe("validatePack — schema rejections", () => {

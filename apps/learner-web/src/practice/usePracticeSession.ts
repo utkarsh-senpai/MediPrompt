@@ -8,7 +8,14 @@ import {
   scheduleReview,
   topicFingerprint,
 } from "./spacedRepetition";
-import { listSubjects, presetsFor, eligibleVariantIds, findRubric } from "@/content/packQuery";
+import {
+  listSubjects,
+  presetsFor,
+  eligibleVariantIds,
+  findRubric,
+  findSubject,
+  isSubjectActive,
+} from "@/content/packQuery";
 import { isAudioError } from "@/audio/audioErrors";
 import { scoreCoverage } from "@/scoring/coverage";
 import {
@@ -119,7 +126,8 @@ function newRequestId(): string {
 
 export function initialSelection(pack: RuntimePack): PracticeSelection {
   const subjects = listSubjects(pack);
-  const subjectId = subjects[0]?.subjectId ?? "";
+  const subjectId =
+    subjects.find((subject) => subject.availability === "ACTIVE")?.subjectId ?? "";
   const presets = presetsFor(pack, subjectId, "RECALL_SPRINT");
   return {
     mode: "RECALL_SPRINT",
@@ -724,6 +732,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       const found = findVariant(pack, ref.variantId);
       if (
         !found ||
+        !isSubjectActive(found.subject) ||
         found.subject.subjectId !== ref.subjectId ||
         found.topic.topicId !== ref.topicId ||
         found.variant.promptId !== ref.promptId ||
@@ -773,6 +782,12 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const setSelection = useCallback(
     (partial: Partial<PracticeSelection>) => {
       const current = stateRef.current.selection;
+      if (
+        partial.subjectId !== undefined &&
+        !isSubjectActive(findSubject(pack, partial.subjectId))
+      ) {
+        return;
+      }
       let next: PracticeSelection = { ...current, ...partial };
       // If the subject/mode change makes the current challenge unavailable, fall back.
       const presets = presetsFor(pack, next.subjectId, next.mode);

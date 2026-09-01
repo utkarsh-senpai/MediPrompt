@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { usePracticeSession } from "./usePracticeSession";
+import { initialSelection, usePracticeSession } from "./usePracticeSession";
 import { validatePack } from "@/content/packValidator";
 import { findRubric } from "@/content/packQuery";
 import { seededRandom } from "@/platform/random";
@@ -67,6 +67,10 @@ describe("usePracticeSession", () => {
   });
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  it("defaults to the first active subject, not a coming-soon curriculum shell", () => {
+    expect(initialSelection(pack).subjectId).toBe("neuro-physiotherapy");
   });
 
   it("runs the full Recall Sprint loop: spin → speak → complete", async () => {
@@ -149,7 +153,9 @@ describe("usePracticeSession", () => {
 
   it("opens the exact current-pack topic selected by the resurfacing queue", () => {
     const { hook } = setup();
-    const subject = pack.subjects[0]!;
+    const subject = pack.subjects.find(
+      (candidate) => candidate.subjectId === "neuro-physiotherapy",
+    )!;
     const topic = subject.topics[0]!;
     const variant = topic.variants.find(
       (candidate) =>
@@ -173,6 +179,38 @@ describe("usePracticeSession", () => {
     if (hook.result.current.state.name === "TOPIC_READY") {
       expect(hook.result.current.state.topic.topicRef.variantId).toBe(variant.variantId);
     }
+  });
+
+  it("rejects direct selection and saved-topic launch for a coming-soon subject", () => {
+    const { hook } = setup();
+    const before = hook.result.current.state.selection.subjectId;
+    act(() =>
+      hook.result.current.actions.setSelection({
+        subjectId: "musculoskeletal-physiotherapy",
+      }),
+    );
+    expect(hook.result.current.state.selection.subjectId).toBe(before);
+
+    const subject = pack.subjects.find(
+      (candidate) => candidate.subjectId === "musculoskeletal-physiotherapy",
+    )!;
+    const topic = subject.topics[0]!;
+    const variant = topic.variants[0]!;
+    let opened = true;
+    act(() => {
+      opened = hook.result.current.actions.practiceTopic({
+        packId: pack.packId,
+        packVersion: pack.version,
+        subjectId: subject.subjectId,
+        topicId: topic.topicId,
+        variantId: variant.variantId,
+        difficultyProfileVersion: variant.difficultyProfileVersion,
+        promptId: variant.promptId,
+        rubricId: variant.rubricId,
+      });
+    });
+    expect(opened).toBe(false);
+    expect(hook.result.current.state.name).toBe("IDLE");
   });
 
   it("retries the identical topic and computes Refinement Delta from consecutive attempts", async () => {

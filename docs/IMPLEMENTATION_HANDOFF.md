@@ -13,11 +13,12 @@ Read only these files first:
 3. `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` - normative challenge/depth contract.
 4. The relevant L1-L4 section for the task; do not reload all design files unless needed.
 5. `docs/curriculum/MPT-CBC-topics.md` only for broad curriculum inventory work.
-6. `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md` for the first medical-pack review.
+6. `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md` for the generated current review scope;
+   use the cardiorespiratory source review only for the original 20-topic history.
 
 The current repository includes the v0.7 learner app and a complete source-linked medical review
-candidate. The exact 20-topic candidate is learner-visible as
-a public **practice beta**, but it is still `DRAFT`; do not mistake public availability, the broad
+candidate. Its 61 active topics are learner-visible as a public **practice beta**, but the full
+265-topic candidate is still `DRAFT`; do not mistake public availability, the broad
 MPT inventory, source linkage, or automated coverage for educator approval.
 
 ## Non-negotiable product invariant
@@ -81,16 +82,18 @@ variant, uses local-calendar schedule/exam dates, exports metadata, and verifies
 reloading zero records. Unverifiable attempts never alter spacing, past exams never activate cram
 sorting, and storage failure never blocks practice.
 
-The learner artifact contains only the 20-topic public physiotherapy practice beta, with the same
+The learner artifact contains the 265-topic public physiotherapy curriculum beta, with the same
 snapshot compiled as its offline fallback; generic interaction subjects are regression-test inputs
-only.
+only. All eight subjects are visible. Neuro, Respiratory, and Cardiovascular are `ACTIVE`; the five
+remaining subjects are disabled `COMING_SOON` shells and are rejected below the UI as well.
 
-`content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.2.0` is the first medical publication
-candidate: 20 curriculum-mapped topics, Recall Sprint and Deep Research coverage, 46 source-linked
-rubrics, and three full challenge trios. Its generator, evidence matrix, source-currency decisions,
-and educator checklist are committed. It is `DRAFT`, has no reviewer/date attestation, and fails
-the medical release gate by design. Public build and service-worker gates permit only that exact
-unattested snapshot and keep its warning visible.
+`content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.3.0` has 61 active,
+source-authored topics: all 35 Neuro, 13 Respiratory, and 13 Cardiovascular topics. The original 20
+cardiorespiratory definitions are protected by regression hashes. There are seven full challenge
+trios. Sources were checked in 2026 and mix 2025-26 publications with older still-current or
+foundational material. The candidate remains `DRAFT`, has no reviewer/date attestation, and fails
+the medical release gate by design. Its generated active-subject review worksheet is comprehensive
+but unsigned and therefore is not an attestation.
 
 The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScript 5.9.3, Vite
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
@@ -135,14 +138,17 @@ See `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` for runtime YAML, UI, progression, and
 
 ## Curriculum and medical-content status
 
-- 7 subjects and 265 candidate practice-topic labels are stored under `docs/curriculum/`.
+- 7 curriculum subjects / 8 app subjects and 265 candidate practice-topic labels are stored under
+  `docs/curriculum/`; Cardiovascular and Respiratory remain separate app subjects.
 - IDs are unique lowercase kebab-case; normalized titles are unique.
 - Every candidate maps once to a paper/page-range index.
-- The inventory is `DRAFT`, `REFERENCE_ONLY`, and `runtimeCompatible: false`.
-- One 20-topic cardiovascular/respiratory subset has exact competency/page mapping, current source
-  research, original prompt/rubric/case wording, and an explicit reuse boundary. Its automated
-  candidate checks are complete.
-- Qualified educator review of that exact candidate remains outstanding. Do not infer approval from
+- The reference extraction remains `DRAFT`/`REFERENCE_ONLY`; the generated runtime candidate has an
+  independently validated activation boundary.
+- Neuro (35), Respiratory (13), and Cardiovascular (13) have source-linked prompt/rubric content.
+  Five other subjects remain catalog-only `COMING_SOON` entries with empty rubrics permitted only
+  because every practice and saved-plan entry path rejects them.
+- Qualified educator review of the exact active candidate remains outstanding. Complete
+  `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`; do not infer approval from
   source authority, GitHub Pages availability, or put a placeholder in the reviewer fields.
 - Do not use the candidate count as an official curriculum competency count.
 
@@ -168,7 +174,8 @@ behavior first. Merge feature PRs to `develop`; promote an approved release from
 
 ## Open decisions - discover before asking
 
-- Named medical educator reviewer and their attestation for the committed medical candidate.
+- Named medical educator reviewer and their completed active-subject worksheet for an immutable
+  candidate commit.
 - Software/content licences before public contribution.
 - Target phone/browser benchmark and exam date/preferences.
 - Whether the challenge selector uses text tabs, segmented control, or select at narrow widths.

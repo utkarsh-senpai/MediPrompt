@@ -42,6 +42,12 @@ describe("loadBundledPack", () => {
       "Sports Physiotherapy",
     ]);
     expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(265);
+    expect(
+      result.pack.subjects.filter((subject) => subject.availability === "ACTIVE"),
+    ).toHaveLength(3);
+    expect(
+      result.pack.subjects.filter((subject) => subject.availability === "COMING_SOON"),
+    ).toHaveLength(5);
     expect(Object.isFrozen(result.pack)).toBe(true);
   });
 

@@ -110,8 +110,13 @@ export function PracticeSurface({
           onChange={(e) => onChange({ subjectId: e.target.value })}
         >
           {subjects.map((s) => (
-            <option key={s.subjectId} value={s.subjectId}>
+            <option
+              key={s.subjectId}
+              value={s.subjectId}
+              disabled={s.availability === "COMING_SOON"}
+            >
               {subjectEmoji(s.title)} {s.title}
+              {s.availability === "COMING_SOON" ? " — coming soon" : ""}
             </option>
           ))}
         </select>

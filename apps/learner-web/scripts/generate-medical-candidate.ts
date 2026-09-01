@@ -1,13 +1,15 @@
-// Generates the source-grounded MPT cardiorespiratory educator-review candidate.
+// Generates the source-grounded MPT curriculum educator-review candidate.
 // The artifact is deliberately DRAFT. It powers the explicitly labelled
 // public practice beta and cannot pass the medically approved release gate.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ACCESSED_AT = "2026-08-30";
+const NEURO_RESEARCH_ACCESSED_AT = "2026-09-02";
 
 interface ConceptSeed {
   label: string;
@@ -46,6 +48,7 @@ interface TopicSeed {
 interface SubjectSeed {
   subjectId: string;
   title: string;
+  availability: "ACTIVE" | "COMING_SOON";
   topics: TopicSeed[];
 }
 
@@ -308,6 +311,118 @@ const sources = [
       "Folstein MF, Folstein SE, McHugh PR. Mini-mental state: a practical method for grading the cognitive state of patients. J Psychiatr Res. 1975;12(3):189-98.",
     url: "https://pubmed.ncbi.nlm.nih.gov/?term=Folstein+mini-mental+state+1975",
     accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "umphred-neuro-rehab-2025",
+    citation:
+      "Lazaro RT et al., eds. Umphred's Neurological Rehabilitation. 8th ed. Elsevier; published 17 Nov 2025. ISBN 9780443112928.",
+    url: "https://www.us.elsevierhealth.com/umphreds-neurological-rehabilitation-9780443112928.html",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "campbell-pt-children-2023",
+    citation:
+      "Palisano RJ et al., eds. Campbell's Physical Therapy for Children. 6th ed. Elsevier; 2023. ISBN 9780323797962.",
+    url: "https://www.us.elsevierhealth.com/campbells-physical-therapy-for-children-9780323797962.html",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "shumway-cook-motor-control-2023",
+    citation:
+      "Shumway-Cook A, Woollacott MH. Motor Control: Translating Research into Clinical Practice. 6th ed. Wolters Kluwer; 2023. ISBN 9781975209568.",
+    url: "https://shop.lww.com/Motor-Control/p/9781975209568",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "cdc-developmental-milestones-2026",
+    citation:
+      "US CDC. Developmental Milestones. Learn the Signs. Act Early. Current website reviewed for 2026 use; milestone checklists are not diagnostic or screening tools.",
+    url: "https://www.cdc.gov/act-early/milestones/index.html",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "aacpdm-early-cp-detection",
+    citation:
+      "AACPDM. Early Detection of Cerebral Palsy Care Pathway. Current care pathway reviewed 2 Sep 2026.",
+    url: "https://www.aacpdm.org/publications/care-pathways/early-detection-of-cerebral-palsy",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "morgan-early-cp-intervention-2021",
+    citation:
+      "Morgan C et al. Early Intervention for Children Aged 0 to 2 Years With or at High Risk of Cerebral Palsy: International Clinical Practice Guideline. JAMA Pediatr. 2021;175:846-858.",
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9677545",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "spina-bifida-mobility-guideline",
+    citation:
+      "Spina Bifida Association. Mobility Guideline. Current clinical guidance reviewed 2 Sep 2026.",
+    url: "https://www.spinabifidaassociation.org/blog/mobility",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "btf-pediatric-severe-tbi",
+    citation:
+      "Brain Trauma Foundation. Guidelines for the Management of Pediatric Severe TBI, 3rd edition. Current guideline portal reviewed 2 Sep 2026.",
+    url: "https://braintrauma.org/coma/guidelines/pediatric",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "aap-down-syndrome-2022",
+    citation:
+      "Bull MJ et al. Health Supervision for Children and Adolescents With Down Syndrome. Pediatrics. 2022;149(5):e2022057010.",
+    url: "https://publications.aap.org/pediatrics/article/149/5/e2022057010/186778/Health-Supervision-for-Children-and-Adolescents",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "nice-cg170-autism-under-19",
+    citation:
+      "NICE. Autism spectrum disorder in under 19s: support and management. CG170. Published 2013; current surveillance status reviewed 2 Sep 2026.",
+    url: "https://www.nice.org.uk/guidance/cg170",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "apta-pediatrics-resources-2026",
+    citation:
+      "APTA Pediatrics. Evidence-based resource documents, including neonatal and school-based pediatric physical therapy resources. Current portal reviewed 2 Sep 2026.",
+    url: "https://pediatricapta.org/resource-documents",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "who-wheelchair-provision-2023",
+    citation:
+      "World Health Organization. Wheelchair provision guidelines. Geneva: WHO; 2023. ISBN 9789240074521.",
+    url: "https://www.who.int/publications/i/item/9789240074521",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "apta-vestibular-hypofunction-2022",
+    citation:
+      "Hall CD et al. Vestibular Rehabilitation for Peripheral Vestibular Hypofunction: Updated Clinical Practice Guideline. J Neurol Phys Ther. 2022;46:118-177.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/34864777",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "cns-pediatric-hydrocephalus-2020",
+    citation:
+      "Congress of Neurological Surgeons. Pediatric Hydrocephalus: Systematic Literature Review and Evidence-Based Guidelines. Updated 2020.",
+    url: "https://www.cns.org/guidelines/browse-guidelines-detail/pediatric-hydrocephalus-guideline-1",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "aha-adult-als-2025",
+    citation:
+      "American Heart Association. Part 9: Adult Advanced Life Support. 2025 AHA Guidelines for CPR and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2).",
+    url: "https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-life-support",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "fda-hyperbaric-oxygen-2021",
+    citation:
+      "US Food and Drug Administration. Hyperbaric Oxygen Therapy: Get the Facts. Consumer safety communication; content current as of 26 July 2021.",
+    url: "https://www.fda.gov/consumers/consumer-updates/hyperbaric-oxygen-therapy-get-facts",
+    accessedAt: NEURO_RESEARCH_ACCESSED_AT,
   },
 ];
 
@@ -680,10 +795,10 @@ const cardiovascularTopics: TopicSeed[] = [
   },
 ];
 
-// --- v0.7 neuro physiotherapy (authored with verified 2025-26 sources) ---
-// ~16 of 35 neuro topics are source-grounded; the remaining neuro topics and
-// all other subjects are scaffolded (empty rubric -> "not verifiable from
-// sources") pending per-subject authoring. See docs/V0.7_DEVELOPMENT_CONTEXT.md.
+// --- v0.7 neuro physiotherapy ---
+// All 35 neuro topics are source-grounded. Sources were checked in 2026 and
+// combine 2025-26 material with older current guidelines and foundational
+// standards. Five future subjects retain non-playable curriculum scaffolds.
 
 const neuroTopics: TopicSeed[] = [
   {
@@ -1141,42 +1256,293 @@ const mskScaffolds: ReadonlyArray<readonly [string, string]> = [
   ["msk-gait-rehabilitation", "Gait rehabilitation"],
 ];
 
-// Subject 4 — Neuro Physiotherapy (scaffold-only topics; the 16 authored
-// topics above cover the sourceable core). 19 scaffold topics.
-const neuroScaffolds: ReadonlyArray<readonly [string, string]> = [
-  ["neu-embryology-nervous-system", "Embryology of the nervous system; principles of human development"],
-  ["neu-gross-fine-motor-development-assessment", "Gross & fine motor development; assessment & testing of infant and child"],
-  ["neu-developmental-reflexes", "Developmental reflexes (primitive, spinal, brainstem, cortical)"],
-  ["neu-motor-development-control-learning-theories", "Theories of motor development, motor control & motor learning; stages of learning"],
-  ["neu-early-identification-intervention-pediatric", "Early identification & early intervention in pediatric neurological disorders"],
-  ["neu-infant-high-risk-developmental-delay", "Infant at high risk for developmental delay"],
-  ["neu-spina-bifida", "Spina bifida"],
-  ["neu-pediatric-tbi-sci", "Pediatric traumatic brain injury & traumatic/non-traumatic spinal cord injury"],
-  ["neu-down-syndrome-intellectual-disability", "Intellectual disabilities — Down syndrome"],
-  ["neu-autism-spectrum-physical-therapy", "Autism spectrum disorder & physical therapy"],
-  ["neu-parent-education-family-centred-care", "Parent education & counselling; family-centred care"],
-  ["neu-radiology-evoked-potentials", "Pathological & radiological investigations; evoked potentials"],
-  ["neu-neuropediatric-surgical-perioperative", "Surgical procedures in neuropediatric disorders (hydrocephalus, spina bifida) & perioperative PT"],
-  ["neu-classic-approaches-pnf-ndt-rood-vojta-mrp", "Advanced physiotherapy approaches (PNF, NDT, Rood's, Motor Relearning Program, Vojta)"],
-  ["neu-pediatric-clinical-decision-ebp", "Clinical decision making & evidence-based practice (pediatric)"],
-  ["neu-neonatal-pediatric-icu", "Physiotherapy in neonatal & pediatric intensive care units"],
-  ["neu-pediatric-social-integration-orthotics-legislation", "Social integration of children (school/community, assistive technology, legislation, orthotics/prosthetics)"],
-  ["neu-pediatric-pharmacotherapeutics", "Pharmacotherapeutics in pediatric neurological conditions"],
-  ["neu-adult-space-occupying-tbi-vestibular-myopathies", "Space-occupying CNS lesions, TBI, vestibular disorders, myopathies (adult)"],
+// Subject 4 — Neuro Physiotherapy: the remaining 19 curriculum topics. These
+// criteria stay deliberately conservative and within physiotherapy scope; the
+// educator worksheet must be signed before the pack can become APPROVED.
+const neuroAdditionalTopics: TopicSeed[] = [
+  {
+    topicId: "neu-embryology-nervous-system",
+    title: "Embryology of the nervous system; principles of human development",
+    prompt:
+      "Explain the clinically relevant development of the nervous system and how developmental history informs—but does not replace—a pediatric physiotherapy assessment.",
+    concepts: [
+      c("Relate neurulation and neural-tube formation to development of the central nervous system", ["neurulation", "neural tube", "central nervous system development"], ["campbell-pt-children-2023", "umphred-neuro-rehab-2025"]),
+      c("Distinguish central nervous system development from neural-crest contributions to peripheral structures", ["neural crest", "peripheral nervous system development", "central and peripheral development"], ["campbell-pt-children-2023"]),
+      c("Use prenatal, perinatal, and developmental history alongside current function rather than inferring a diagnosis from history alone", ["prenatal and perinatal history", "developmental history", "not diagnostic alone"], ["campbell-pt-children-2023", "umphred-neuro-rehab-2025"]),
+    ],
+  },
+  {
+    topicId: "neu-gross-fine-motor-development-assessment",
+    title: "Gross & fine motor development; assessment & testing of infant and child",
+    prompt:
+      "Explain how to assess gross and fine motor development using developmental surveillance, standardized measures, observation, and the child's family and functional context.",
+    concepts: [
+      c("Assess the developmental trajectory across motor and related domains, not a single milestone in isolation", ["developmental trajectory", "multiple developmental domains", "not one milestone alone"], ["cdc-developmental-milestones-2026", "campbell-pt-children-2023"]),
+      c("Combine standardized age-appropriate measurement with observation of movement quality, activity, and participation", ["standardized assessment", "movement quality", "activity and participation"], ["campbell-pt-children-2023"]),
+      c("Treat milestone checklists as surveillance aids rather than diagnostic or validated screening instruments and refer concerns for formal assessment", ["surveillance aid", "not diagnostic", "refer for formal screening"], ["cdc-developmental-milestones-2026"]),
+    ],
+  },
+  {
+    topicId: "neu-developmental-reflexes",
+    title: "Developmental reflexes (primitive, spinal, brainstem, cortical)",
+    prompt:
+      "Explain how primitive and postural responses are examined in developmental assessment and why their presence, absence, asymmetry, or persistence must be interpreted in context.",
+    concepts: [
+      c("Describe primitive and postural responses as one part of the developing motor-control system", ["primitive reflexes", "postural reactions", "developing motor control"], ["campbell-pt-children-2023", "shumway-cook-motor-control-2023"]),
+      c("Observe response quality, symmetry, and age-related integration rather than recording presence alone", ["response quality", "symmetry", "age-related integration"], ["campbell-pt-children-2023"]),
+      c("Integrate reflex findings with tone, voluntary movement, function, and standardized assessment; do not diagnose from a reflex in isolation", ["integrate with voluntary movement", "functional assessment", "not diagnostic alone"], ["campbell-pt-children-2023", "umphred-neuro-rehab-2025"]),
+    ],
+  },
+  {
+    topicId: "neu-motor-development-control-learning-theories",
+    title: "Theories of motor development, motor control & motor learning; stages of learning",
+    prompt:
+      "Compare major motor-control and motor-learning perspectives and show how task, learner, environment, practice, and feedback shape a physiotherapy plan.",
+    concepts: [
+      c("Use a systems perspective in which movement emerges from interaction among the person, task, and environment", ["person task environment", "systems perspective", "movement emerges from interaction"], ["shumway-cook-motor-control-2023"]),
+      c("Match practice structure and feedback to the learner's stage, goals, and task demands", ["practice structure", "feedback schedule", "stage of learning"], ["shumway-cook-motor-control-2023"]),
+      c("Prioritize meaningful task-specific repetition and transfer to real contexts while monitoring performance and retention", ["task-specific repetition", "retention and transfer", "meaningful practice"], ["shumway-cook-motor-control-2023", "umphred-neuro-rehab-2025"]),
+    ],
+  },
+  {
+    topicId: "neu-early-identification-intervention-pediatric",
+    title: "Early identification & early intervention in pediatric neurological disorders",
+    prompt:
+      "Explain a pathway for early identification and early intervention when cerebral palsy or another pediatric neurological disorder is suspected.",
+    concepts: [
+      c("Use converging history, standardized neurological or movement assessment, and neuroimaging where clinically indicated rather than a wait-and-see approach", ["standardized neurological assessment", "general movements assessment", "do not wait and see"], ["aacpdm-early-cp-detection"]),
+      c("Communicate risk sensitively and refer promptly to the appropriate diagnostic and multidisciplinary pathway", ["communicate risk sensitively", "prompt referral", "multidisciplinary pathway"], ["aacpdm-early-cp-detection", "morgan-early-cp-intervention-2021"]),
+      c("Begin goal-directed, active, task-specific, family-supported intervention for infants at high risk while monitoring development", ["goal-directed intervention", "active task-specific practice", "family-supported early intervention"], ["morgan-early-cp-intervention-2021"]),
+    ],
+  },
+  {
+    topicId: "neu-infant-high-risk-developmental-delay",
+    title: "Infant at high risk for developmental delay",
+    prompt:
+      "Explain physiotherapy assessment, surveillance, and family-supported intervention for an infant at high risk of developmental delay.",
+    concepts: [
+      c("Identify relevant antenatal, perinatal, neonatal, medical, and environmental risk information", ["antenatal and perinatal risk", "neonatal history", "environmental risk"], ["campbell-pt-children-2023", "apta-pediatrics-resources-2026"]),
+      c("Use repeated standardized assessment and observation of spontaneous movement and function, not milestones alone", ["longitudinal standardized assessment", "spontaneous movement", "not milestones alone"], ["aacpdm-early-cp-detection", "campbell-pt-children-2023"]),
+      c("Coach caregivers in safe, active, goal-directed opportunities embedded in daily routines and coordinate early referral", ["caregiver coaching", "daily routines", "early referral"], ["morgan-early-cp-intervention-2021"]),
+    ],
+  },
+  {
+    topicId: "neu-spina-bifida",
+    title: "Spina bifida",
+    prompt:
+      "Explain physiotherapy assessment and lifespan mobility management for spina bifida, including skin, musculoskeletal, equipment, participation, and escalation concerns.",
+    concepts: [
+      c("Relate neurological level, strength, range, alignment, sensation, and developmental status to functional mobility", ["neurological level", "strength range and alignment", "functional mobility"], ["spina-bifida-mobility-guideline", "campbell-pt-children-2023"]),
+      c("Plan individualized mobility, positioning, skin protection, orthotic, wheelchair, and physical-activity support with regular reassessment", ["skin protection", "orthotic and wheelchair", "individualized mobility"], ["spina-bifida-mobility-guideline", "who-wheelchair-provision-2023"]),
+      c("Coordinate multidisciplinary surveillance and urgently escalate new neurological loss, shunt concerns, skin breakdown, or suspected tethered cord", ["multidisciplinary surveillance", "shunt concern", "tethered cord or skin breakdown"], ["spina-bifida-mobility-guideline", "cns-pediatric-hydrocephalus-2020"]),
+    ],
+  },
+  {
+    topicId: "neu-pediatric-tbi-sci",
+    title: "Pediatric traumatic brain injury & traumatic/non-traumatic spinal cord injury",
+    prompt:
+      "Explain staged physiotherapy management for pediatric brain or spinal cord injury from acute safety through rehabilitation and participation.",
+    concepts: [
+      c("Confirm medical and neurological stability, precautions, and team-defined physiological limits before mobilization in acute severe injury", ["medical stability", "neurological precautions", "team-defined limits"], ["btf-pediatric-severe-tbi", "campbell-pt-children-2023"]),
+      c("Perform serial age-appropriate assessment of motor, sensory, respiratory, cognitive, functional, and participation needs", ["serial assessment", "motor sensory and respiratory", "function and participation"], ["campbell-pt-children-2023", "umphred-neuro-rehab-2025"]),
+      c("Progress positioning, mobility, task practice, equipment, education, and participation goals while preventing secondary complications", ["prevent secondary complications", "progress mobility", "family education and participation"], ["campbell-pt-children-2023", "umphred-neuro-rehab-2025"]),
+    ],
+  },
+  {
+    topicId: "neu-down-syndrome-intellectual-disability",
+    title: "Intellectual disabilities — Down syndrome",
+    prompt:
+      "Explain a strengths-based physiotherapy assessment and management plan for a child or adolescent with Down syndrome.",
+    concepts: [
+      c("Assess motor development, strength, balance, endurance, joint mobility, activity, and participation rather than assuming limitations from diagnosis", ["motor and functional assessment", "strength balance endurance", "individual assessment"], ["aap-down-syndrome-2022", "campbell-pt-children-2023"]),
+      c("Use active, goal-directed practice and physical-activity support adapted to communication, learning, and family priorities", ["active goal-directed practice", "physical activity", "family priorities"], ["aap-down-syndrome-2022", "campbell-pt-children-2023"]),
+      c("Coordinate health surveillance and screen for symptoms or precautions that require medical review before higher-risk activity", ["health surveillance", "medical review before risk", "cervical or cardiac symptoms"], ["aap-down-syndrome-2022"]),
+    ],
+  },
+  {
+    topicId: "neu-autism-spectrum-physical-therapy",
+    title: "Autism spectrum disorder & physical therapy",
+    prompt:
+      "Explain the appropriate role of physiotherapy for an autistic child, focusing on motor function, physical activity, access, participation, and individualized support.",
+    concepts: [
+      c("Assess and address identified movement, coordination, balance, fitness, mobility, or participation needs rather than treating autism itself", ["motor and participation needs", "physical activity access", "not treating autism itself"], ["nice-cg170-autism-under-19", "campbell-pt-children-2023"]),
+      c("Adapt communication, predictability, environment, and sensory demands with the child and family's preferences", ["adapt communication", "predictable environment", "sensory preferences"], ["nice-cg170-autism-under-19"]),
+      c("Set functional multidisciplinary goals and avoid unsupported claims that physiotherapy cures core autistic characteristics", ["functional goals", "multidisciplinary support", "avoid cure claims"], ["nice-cg170-autism-under-19"]),
+    ],
+  },
+  {
+    topicId: "neu-parent-education-family-centred-care",
+    title: "Parent education & counselling; family-centred care",
+    prompt:
+      "Explain family-centred pediatric physiotherapy, including shared decisions, caregiver coaching, daily routines, consent, and sustainable goals.",
+    concepts: [
+      c("Treat the child and family as partners and use shared decisions based on their priorities, culture, resources, and expertise", ["family partnership", "shared decision making", "family priorities and culture"], ["campbell-pt-children-2023", "morgan-early-cp-intervention-2021"]),
+      c("Coach safe, active practice in meaningful daily routines instead of prescribing an unsustainable volume of passive handling", ["caregiver coaching", "meaningful daily routines", "active practice"], ["morgan-early-cp-intervention-2021"]),
+      c("Agree measurable participation goals, check understanding and burden, and revise the plan as the child and context change", ["measurable participation goals", "check family burden", "reassess and revise"], ["campbell-pt-children-2023"]),
+    ],
+  },
+  {
+    topicId: "neu-radiology-evoked-potentials",
+    title: "Pathological & radiological investigations; evoked potentials",
+    prompt:
+      "Explain how a physiotherapist uses reports from neuroimaging, electrodiagnostic studies, and evoked potentials within clinical reasoning and professional scope.",
+    concepts: [
+      c("State the clinical question and understand that imaging describes structure while electrodiagnostic and evoked-potential tests assess aspects of pathway function", ["imaging structure", "evoked potential pathway function", "clinical question"], ["umphred-neuro-rehab-2025", "campbell-pt-children-2023"]),
+      c("Use the formal report and appropriate specialist interpretation; physiotherapists do not independently diagnose from raw investigations outside competence", ["formal report", "specialist interpretation", "within competence"], ["umphred-neuro-rehab-2025"]),
+      c("Integrate investigation findings with history, examination, function, and change over time rather than treating a test as a stand-alone answer", ["integrate with clinical examination", "function over time", "not a stand-alone test"], ["umphred-neuro-rehab-2025", "aacpdm-early-cp-detection"]),
+    ],
+  },
+  {
+    topicId: "neu-neuropediatric-surgical-perioperative",
+    title: "Surgical procedures in neuropediatric disorders (hydrocephalus, spina bifida) & perioperative PT",
+    prompt:
+      "Explain the physiotherapy role around neurosurgical care for pediatric hydrocephalus or spina bifida, including baseline function, precautions, recovery, and escalation.",
+    concepts: [
+      c("Define diagnosis, procedure, medical stability, positioning, wound, device, and activity precautions with the neurosurgical team", ["neurosurgical precautions", "medical stability", "wound and device precautions"], ["cns-pediatric-hydrocephalus-2020", "spina-bifida-mobility-guideline"]),
+      c("Document preoperative function and, when cleared, progress respiratory care, positioning, transfers, mobility, equipment, and family education", ["preoperative baseline", "progress mobility when cleared", "family education"], ["campbell-pt-children-2023", "spina-bifida-mobility-guideline"]),
+      c("Stop and urgently escalate neurological deterioration, suspected shunt malfunction or infection, wound problems, or other acute instability", ["shunt malfunction or infection", "neurological deterioration", "urgent escalation"], ["cns-pediatric-hydrocephalus-2020"]),
+    ],
+  },
+  {
+    topicId: "neu-classic-approaches-pnf-ndt-rood-vojta-mrp",
+    title: "Advanced physiotherapy approaches (PNF, NDT, Rood's, Motor Relearning Program, Vojta)",
+    prompt:
+      "Critically compare PNF, NDT/Bobath, Rood, Vojta, and Motor Relearning approaches with contemporary task-specific motor-learning practice.",
+    concepts: [
+      c("Describe named approaches as historical or clinical frameworks with distinct handling, facilitation, or task-practice assumptions", ["named clinical frameworks", "facilitation and handling", "task-practice assumptions"], ["umphred-neuro-rehab-2025", "shumway-cook-motor-control-2023"]),
+      c("Do not claim that one named approach is universally superior; prioritize active, goal-directed, task-specific, sufficiently dosed practice", ["no universal superiority", "active goal-directed practice", "task-specific sufficient dose"], ["shumway-cook-motor-control-2023", "morgan-early-cp-intervention-2021", "aha-asa-stroke-rehab-2016"]),
+      c("Select components by goal, evidence, child or adult response, preference, feasibility, and measured outcomes while stating uncertainty", ["select components by goal", "measured outcomes", "state evidence uncertainty"], ["umphred-neuro-rehab-2025", "shumway-cook-motor-control-2023"]),
+    ],
+  },
+  {
+    topicId: "neu-pediatric-clinical-decision-ebp",
+    title: "Clinical decision making & evidence-based practice (pediatric)",
+    prompt:
+      "Explain an evidence-based pediatric physiotherapy decision from assessment and goal setting through intervention choice, outcome review, and plan revision.",
+    concepts: [
+      c("Integrate the best available evidence with clinical expertise and the child and family's values and circumstances", ["best available evidence", "clinical expertise", "child and family values"], ["campbell-pt-children-2023"]),
+      c("Form a functional problem list, agree participation-focused goals, and choose valid age- and condition-appropriate outcomes", ["functional problem list", "participation goals", "appropriate outcome measures"], ["campbell-pt-children-2023", "morgan-early-cp-intervention-2021"]),
+      c("Balance benefit, harm, burden, access, and feasibility; measure response and revise or escalate when progress or safety differs from expectation", ["benefit harm and burden", "measure response", "revise or escalate"], ["campbell-pt-children-2023"]),
+    ],
+  },
+  {
+    topicId: "neu-neonatal-pediatric-icu",
+    title: "Physiotherapy in neonatal & pediatric intensive care units",
+    prompt:
+      "Explain safe physiotherapy assessment and intervention in neonatal and pediatric intensive care, including readiness, monitoring, developmental care, family partnership, and stop criteria.",
+    concepts: [
+      c("Confirm indication, medical stability, respiratory and neurological status, lines or devices, precautions, and team-defined readiness before intervention", ["medical stability and readiness", "lines and devices", "team-defined precautions"], ["apta-pediatrics-resources-2026", "campbell-pt-children-2023"]),
+      c("Individualize positioning, handling, respiratory support within scope, developmental activity, and early mobility to tolerance", ["individualized positioning", "developmental care", "early mobility to tolerance"], ["apta-pediatrics-resources-2026", "campbell-pt-children-2023"]),
+      c("Use continuous observation and relevant monitoring, minimize stress, involve caregivers, and stop or escalate for instability or distress", ["monitor physiological response", "minimize stress", "stop for instability"], ["apta-pediatrics-resources-2026"]),
+    ],
+  },
+  {
+    topicId: "neu-pediatric-social-integration-orthotics-legislation",
+    title: "Social integration of children (school/community, assistive technology, legislation, orthotics/prosthetics)",
+    prompt:
+      "Explain a participation-led plan for school and community inclusion using environmental change, assistive technology, mobility equipment, and orthotic or prosthetic services.",
+    concepts: [
+      c("Begin with the child's participation goals and identify personal, task, environmental, access, and attitudinal barriers with the family and school", ["participation goals", "environmental barriers", "family and school collaboration"], ["campbell-pt-children-2023", "apta-pediatrics-resources-2026"]),
+      c("Select assistive technology, seating, mobility, orthotic, or prosthetic options through assessment, shared choice, fitting, training, and follow-up", ["assistive technology assessment", "fitting and training", "follow-up"], ["who-wheelchair-provision-2023", "campbell-pt-children-2023"]),
+      c("Document functional need and reasonable supports, coordinate with relevant local education and disability processes, and review real-world participation", ["document functional need", "education and disability supports", "review participation"], ["apta-pediatrics-resources-2026", "who-wheelchair-provision-2023"]),
+    ],
+  },
+  {
+    topicId: "neu-pediatric-pharmacotherapeutics",
+    title: "Pharmacotherapeutics in pediatric neurological conditions",
+    prompt:
+      "Explain how medication information affects pediatric neurological physiotherapy assessment, timing, monitoring, and multidisciplinary communication without crossing prescribing scope.",
+    concepts: [
+      c("Reconcile the prescribed indication, schedule, recent change, expected functional effect, and relevant adverse effects without independently prescribing or altering medication", ["medication reconciliation", "functional effect and adverse effects", "do not alter medication"], ["campbell-pt-children-2023", "nice-ng62-cerebral-palsy"]),
+      c("Account for medication-related alertness, tone, pain, fatigue, seizure control, cardiovascular response, or therapy timing in assessment and treatment", ["alertness and tone", "seizure control", "therapy timing"], ["campbell-pt-children-2023", "nice-ng62-cerebral-palsy"]),
+      c("Document observed response and promptly communicate suspected adverse effects, deterioration, or safety concerns to the prescribing team", ["document observed response", "communicate adverse effects", "prescribing team"], ["nice-ng62-cerebral-palsy"]),
+    ],
+  },
+  {
+    topicId: "neu-adult-space-occupying-tbi-vestibular-myopathies",
+    title: "Space-occupying CNS lesions, TBI, vestibular disorders, myopathies (adult)",
+    prompt:
+      "Differentiate physiotherapy priorities for adults with a space-occupying CNS lesion, traumatic brain injury, peripheral vestibular hypofunction, or myopathy.",
+    concepts: [
+      c("For a CNS lesion or brain injury, establish medical and neurological stability, precautions, impairments, cognition, function, and red flags before graded rehabilitation", ["neurological stability", "cognitive and functional assessment", "red flags before rehabilitation"], ["umphred-neuro-rehab-2025"]),
+      c("For diagnosed peripheral vestibular hypofunction, use individualized gaze-stability, habituation where indicated, balance, and walking exercise with reassessment", ["gaze stability exercise", "balance and gait exercise", "vestibular reassessment"], ["apta-vestibular-hypofunction-2022"]),
+      c("For myopathy, grade activity to disease, weakness, fatigue, respiratory or cardiac involvement, goals, and recovery while avoiding unsupported one-size-fits-all dosing", ["fatigue-aware graded activity", "respiratory and cardiac involvement", "individualized exercise dose"], ["umphred-neuro-rehab-2025"]),
+    ],
+  },
 ];
 
-// Subject 5a — Respiratory Physiotherapy: 2 scaffold topics to reach 13
-const respScaffolds: ReadonlyArray<readonly [string, string]> = [
-  ["respiratory-anatomy-physiology-embryology", "Anatomy, physiology, biomechanics, pathomechanics & embryology of respiratory system & thorax"],
-  ["respiratory-perioperative-surgical-procedures", "Surgical procedures (thoracotomy, pleurodesis, lobectomy, pneumonectomy, VATS, transplantation) & perioperative PT"],
+// The six newly enumerated cardiorespiratory curriculum entries are authored
+// here; the original 20 topic seeds above remain semantically unchanged.
+const respiratoryAdditionalTopics: TopicSeed[] = [
+  {
+    topicId: "respiratory-anatomy-physiology-embryology",
+    title: "Anatomy, physiology, biomechanics, pathomechanics & embryology of respiratory system & thorax",
+    prompt:
+      "Explain how respiratory anatomy, ventilatory mechanics, gas exchange, and developmental or structural variation inform physiotherapy assessment without replacing diagnosis.",
+    concepts: [
+      c("Relate thoracic, diaphragmatic, airway, and lung mechanics to ventilation and work of breathing", ["diaphragm and thoracic mechanics", "ventilation", "work of breathing"], ["src-ers-ats-pft-2022", "src-gold-2026"]),
+      c("Connect ventilation, perfusion, diffusion, and gas exchange to oxygenation and carbon-dioxide findings in clinical context", ["ventilation perfusion", "diffusion and gas exchange", "oxygenation and carbon dioxide"], ["src-ats-abg", "src-ers-ats-pft-2022"]),
+      c("Integrate developmental or structural history with symptoms, observation, examination, and investigations rather than inferring a diagnosis from anatomy alone", ["developmental and structural history", "integrated assessment", "not anatomy alone"], ["src-curriculum", "src-ers-ats-pft-2022"]),
+    ],
+  },
+  {
+    topicId: "respiratory-perioperative-surgical-procedures",
+    title: "Surgical procedures (thoracotomy, pleurodesis, lobectomy, pneumonectomy, VATS, transplantation) & perioperative PT",
+    prompt:
+      "Explain a safe perioperative physiotherapy pathway for major thoracic surgery from preoperative risk and education through monitored recovery and rehabilitation.",
+    concepts: [
+      c("Establish procedure, baseline function, respiratory risk, goals, and surgeon or team precautions before prescribing intervention", ["procedure and baseline function", "respiratory risk", "team precautions"], ["src-curriculum", "src-ats-pulmonary-rehab-2023"]),
+      c("When medically cleared, use individualized breathing or airway-clearance strategies when indicated, positioning, functional exercise, and early mobility with physiological monitoring", ["airway clearance when indicated", "early mobility", "physiological monitoring"], ["src-sccm-padis-2025", "src-ats-pulmonary-rehab-2023"]),
+      c("Coordinate pain, drains, oxygen, complications, discharge education, and longer-term rehabilitation with the surgical and multidisciplinary team", ["pain and drain precautions", "multidisciplinary coordination", "discharge and rehabilitation"], ["src-curriculum", "src-sccm-padis-2025"]),
+    ],
+  },
 ];
 
-// Subject 5b — Cardiovascular Physiotherapy: 4 scaffold topics to reach 13
-const cvScaffolds: ReadonlyArray<readonly [string, string]> = [
-  ["cardiovascular-anatomy-physiology-embryology", "Anatomy, physiology & embryology of cardiovascular system"],
-  ["cardiovascular-risk-stratification-health-promotion", "Health & performance principles, risk stratification, prevention & health promotion"],
-  ["cardiovascular-advanced-life-support", "Basic & advanced life support"],
-  ["cardiovascular-iccu-monitoring-hyperbaric", "PT management in ICCU — monitoring, ventilator, hyperbaric oxygen therapy"],
+const cardiovascularAdditionalTopics: TopicSeed[] = [
+  {
+    topicId: "cardiovascular-anatomy-physiology-embryology",
+    title: "Anatomy, physiology & embryology of cardiovascular system",
+    prompt:
+      "Explain the cardiovascular anatomy and physiology most relevant to exercise response, monitoring, and physiotherapy clinical reasoning.",
+    concepts: [
+      c("Relate chamber, valve, coronary, and vascular structure to circulation and functional demand", ["cardiac chambers and valves", "coronary and vascular structure", "circulation"], ["src-curriculum", "src-acsm-getp-2025"]),
+      c("Explain cardiac output as heart rate times stroke volume and connect preload, afterload, contractility, and vascular resistance to exercise response", ["cardiac output", "heart rate times stroke volume", "preload afterload contractility"], ["src-acsm-getp-2025"]),
+      c("Use developmental or structural information with diagnosis, symptoms, medication, and measured response rather than as a stand-alone exercise decision", ["developmental or structural information", "clinical context", "measured exercise response"], ["src-curriculum", "src-acsm-getp-2025"]),
+    ],
+  },
+  {
+    topicId: "cardiovascular-risk-stratification-health-promotion",
+    title: "Health & performance principles, risk stratification, prevention & health promotion",
+    prompt:
+      "Explain cardiovascular screening and risk stratification before exercise and how findings shape prevention, health promotion, prescription, supervision, and referral.",
+    concepts: [
+      c("Start with the clinical purpose, symptoms, diagnosis, recent events, medications, comorbidity, activity, and relevant cardiovascular risk factors", ["clinical purpose and symptoms", "medications and comorbidity", "cardiovascular risk factors"], ["src-acsm-getp-2025", "src-bacpr-2023"]),
+      c("Use findings to decide readiness, test selection, monitoring, supervision, and whether medical clarification is needed", ["exercise readiness", "monitoring and supervision", "medical clarification"], ["src-acsm-getp-2025"]),
+      c("Co-produce an individualized physical-activity and risk-factor plan with behavior support, safety-netting, and outcome review", ["individualized physical activity", "risk-factor management", "behavior support and review"], ["src-bacpr-2023", "src-acsm-getp-2025"]),
+    ],
+  },
+  {
+    topicId: "cardiovascular-advanced-life-support",
+    title: "Basic & advanced life support",
+    prompt:
+      "Explain how a physiotherapist responds to adult cardiac arrest, distinguishing universal basic life support actions from credentialed advanced-life-support team roles.",
+    concepts: [
+      c("Recognize cardiac arrest, activate the emergency response, begin high-quality CPR, and use an AED promptly", ["recognize cardiac arrest", "high-quality CPR", "prompt AED"], ["src-aha-bls-2025"]),
+      c("Minimize interruptions and work within a coordinated resuscitation team using current local protocols and certified training", ["minimize interruptions", "resuscitation team", "certified training"], ["src-aha-bls-2025", "aha-adult-als-2025"]),
+      c("Describe advanced airway, rhythm, medication, and reversible-cause decisions as credentialed advanced-life-support responsibilities rather than unsupervised physiotherapy actions", ["advanced life support roles", "reversible causes", "within credentials and protocol"], ["aha-adult-als-2025"]),
+    ],
+  },
+  {
+    topicId: "cardiovascular-iccu-monitoring-hyperbaric",
+    title: "PT management in ICCU — monitoring, ventilator, hyperbaric oxygen therapy",
+    prompt:
+      "Explain physiotherapy decision-making in an intensive cardiac care setting, including readiness, monitoring, ventilator coordination, mobility, and the limited role of hyperbaric oxygen therapy.",
+    concepts: [
+      c("Confirm indication, hemodynamic and respiratory stability, lines or devices, medications, precautions, and team-defined readiness before intervention", ["hemodynamic stability", "lines and devices", "team-defined readiness"], ["src-aha-acs-2025", "src-sccm-padis-2025"]),
+      c("Coordinate ventilator-related care and graded mobility with the critical-care team while monitoring symptoms and physiological response and using explicit stop criteria", ["ventilator coordination", "graded mobility", "monitoring and stop criteria"], ["src-ats-accp-weaning-2017", "src-sccm-padis-2025"]),
+      c("Recognize hyperbaric oxygen as a specialist medical treatment for specific accepted indications, not a routine physiotherapy modality, and follow facility safety procedures", ["specialist medical treatment", "not routine physiotherapy", "accepted indications and safety"], ["fda-hyperbaric-oxygen-2021"]),
+    ],
+  },
 ];
 
 // Subject 6 — Community Health Physiotherapy (53 scaffold topics)
@@ -1278,47 +1644,64 @@ const subjects: SubjectSeed[] = [
   {
     subjectId: "research-methods-and-bioethics",
     title: "Research Methods and Bioethics",
+    availability: "COMING_SOON",
     topics: [],
   },
   {
     subjectId: "applied-physiotherapeutics",
     title: "Applied Physiotherapeutics",
+    availability: "COMING_SOON",
     topics: [],
   },
   {
     subjectId: "musculoskeletal-physiotherapy",
     title: "Musculoskeletal Physiotherapy",
+    availability: "COMING_SOON",
     topics: [],
   },
   {
     subjectId: "neuro-physiotherapy",
     title: "Neuro Physiotherapy",
-    topics: neuroTopics,
+    availability: "ACTIVE",
+    topics: [...neuroTopics, ...neuroAdditionalTopics],
   },
   {
     subjectId: "respiratory-physiotherapy",
     title: "Respiratory Physiotherapy",
-    topics: respiratoryTopics,
+    availability: "ACTIVE",
+    topics: [...respiratoryTopics, ...respiratoryAdditionalTopics],
   },
   {
     subjectId: "cardiovascular-physiotherapy",
     title: "Cardiovascular Physiotherapy",
-    topics: cardiovascularTopics,
+    availability: "ACTIVE",
+    topics: [...cardiovascularTopics, ...cardiovascularAdditionalTopics],
   },
   {
     subjectId: "community-health-physiotherapy",
     title: "Community Health Physiotherapy",
+    availability: "COMING_SOON",
     topics: [],
   },
   {
     subjectId: "sports-physiotherapy",
     title: "Sports Physiotherapy",
+    availability: "COMING_SOON",
     topics: [],
   },
 ];
 
 function variantId(topicId: string, kind: string): string {
-  return topicId + "-" + kind + "-v1";
+  return boundedId(topicId, kind, "v1");
+}
+
+/** Keep stable readable IDs where possible and add a deterministic suffix only
+ * when a derived identifier would exceed the schema's 64-character bound. */
+function boundedId(...parts: string[]): string {
+  const value = parts.join("-");
+  if (value.length <= 64) return value;
+  const digest = createHash("sha256").update(value).digest("hex").slice(0, 10);
+  return `${value.slice(0, 53).replace(/-+$/u, "")}-${digest}`;
 }
 
 function rubric(
@@ -1328,11 +1711,11 @@ function rubric(
 ): object {
   const id = variantId(topicId, kind);
   return {
-    rubricId: "rubric-" + id,
+    rubricId: boundedId("rubric", id),
     variantId: id,
     register: "EXAMINER",
     concepts: concepts.map((concept, index) => ({
-      conceptId: topicId + "-" + kind + "-c" + (index + 1),
+      conceptId: boundedId(topicId, kind, "c" + (index + 1)),
       label: concept.label,
       acceptedPhrases: concept.acceptedPhrases,
       weight: 2,
@@ -1354,7 +1737,7 @@ function guidedVariant(topic: TopicSeed, mode: "RECALL_SPRINT" | "DEEP_RESEARCH"
     challengePreset: "GUIDED",
     difficultyProfileVersion: "difficulty-profile/1.0",
     blueprint: mode === "RECALL_SPRINT" ? "explain-concept" : "defend-evidence",
-    promptId: "prompt-" + variantId(topic.topicId, kind),
+    promptId: boundedId("prompt", variantId(topic.topicId, kind)),
     mode,
     supportLevel: "FULL",
     wording,
@@ -1368,7 +1751,7 @@ function guidedVariant(topic: TopicSeed, mode: "RECALL_SPRINT" | "DEEP_RESEARCH"
         : { researchSeconds: 240, speakingSeconds: 180 },
     caseRef: null,
     followUpRefs: [],
-    rubricId: "rubric-" + variantId(topic.topicId, kind),
+    rubricId: boundedId("rubric", variantId(topic.topicId, kind)),
   };
 }
 
@@ -1385,9 +1768,9 @@ function buildTopic(topic: TopicSeed): object {
   const followUps: object[] = [];
 
   if (topic.trio) {
-    const caseId = topic.topicId + "-case-v1";
-    const probeId = topic.topicId + "-probe-v1";
-    const updateId = topic.topicId + "-evidence-v1";
+    const caseId = boundedId(topic.topicId, "case", "v1");
+    const probeId = boundedId(topic.topicId, "probe", "v1");
+    const updateId = boundedId(topic.topicId, "evidence", "v1");
     const appliedKind = "applied-recall";
     const vivaKind = "viva-recall";
 
@@ -1396,7 +1779,7 @@ function buildTopic(topic: TopicSeed): object {
       challengePreset: "APPLIED",
       difficultyProfileVersion: "difficulty-profile/1.0",
       blueprint: "manage-case",
-      promptId: "prompt-" + variantId(topic.topicId, appliedKind),
+      promptId: boundedId("prompt", variantId(topic.topicId, appliedKind)),
       mode: "RECALL_SPRINT",
       supportLevel: "FULL",
       wording: topic.trio.appliedPrompt,
@@ -1404,14 +1787,14 @@ function buildTopic(topic: TopicSeed): object {
       timePolicy: { preparationSeconds: 60, speakingSeconds: 180 },
       caseRef: caseId,
       followUpRefs: [probeId],
-      rubricId: "rubric-" + variantId(topic.topicId, appliedKind),
+      rubricId: boundedId("rubric", variantId(topic.topicId, appliedKind)),
     });
     variants.push({
       variantId: variantId(topic.topicId, vivaKind),
       challengePreset: "VIVA",
       difficultyProfileVersion: "difficulty-profile/1.0",
       blueprint: "defend-evidence",
-      promptId: "prompt-" + variantId(topic.topicId, vivaKind),
+      promptId: boundedId("prompt", variantId(topic.topicId, vivaKind)),
       mode: "RECALL_SPRINT",
       supportLevel: "FULL",
       wording: topic.trio.vivaPrompt,
@@ -1419,7 +1802,7 @@ function buildTopic(topic: TopicSeed): object {
       timePolicy: { preparationSeconds: 45, speakingSeconds: 210 },
       caseRef: caseId,
       followUpRefs: [probeId, updateId],
-      rubricId: "rubric-" + variantId(topic.topicId, vivaKind),
+      rubricId: boundedId("rubric", variantId(topic.topicId, vivaKind)),
     });
     rubrics.push(rubric(topic.topicId, appliedKind, topic.trio.appliedConcepts));
     rubrics.push(rubric(topic.topicId, vivaKind, topic.trio.vivaConcepts));
@@ -1444,7 +1827,7 @@ function buildTopic(topic: TopicSeed): object {
     ...(topic.viva
       ? {
           vivaQuestions: topic.viva.map((question, index) => ({
-            id: `${topic.topicId}-viva-q${index + 1}`,
+            id: boundedId(topic.topicId, "viva", `q${index + 1}`),
             level: question.level,
             prompt: question.prompt,
             targetConceptIds: question.targetConceptIds,
@@ -1459,7 +1842,7 @@ const pack = {
   contentKind: "MEDICAL",
   packId: "mpt-cardiorespiratory-review-candidate",
   version: "0.3.0",
-  title: "MPT Competency-Based Curriculum — educator review candidate (neuro authored, others scaffolded)",
+  title: "MPT Competency-Based Curriculum — educator review candidate",
   locale: "en-IN",
   licence: {
     id: "LICENCE-DECISION-PENDING",
@@ -1477,9 +1860,6 @@ const pack = {
       "research-methods-and-bioethics": rmbScaffolds,
       "applied-physiotherapeutics": papScaffolds,
       "musculoskeletal-physiotherapy": mskScaffolds,
-      "neuro-physiotherapy": neuroScaffolds,
-      "respiratory-physiotherapy": respScaffolds,
-      "cardiovascular-physiotherapy": cvScaffolds,
       "community-health-physiotherapy": comScaffolds,
       "sports-physiotherapy": sprScaffolds,
     };
@@ -1488,6 +1868,7 @@ const pack = {
     return {
       subjectId: subject.subjectId,
       title: subject.title,
+      availability: subject.availability,
       topics: [...authored, ...scaffolds],
     };
   }),
@@ -1508,7 +1889,7 @@ if (process.argv.includes("--check")) {
   writeFileSync(out, serialized, "utf8");
 }
 
-const topicCount = subjects.reduce((sum, subject) => sum + subject.topics.length, 0);
+const topicCount = pack.subjects.reduce((sum, subject) => sum + subject.topics.length, 0);
 const trioCount = subjects.reduce(
   (sum, subject) => sum + subject.topics.filter((topic) => topic.trio).length,
   0,

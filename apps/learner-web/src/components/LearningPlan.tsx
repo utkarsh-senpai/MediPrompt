@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { findVariant } from "@/content/packQuery";
+import { findVariant, isSubjectActive } from "@/content/packQuery";
 import { daysUntilExam, examTriage } from "@/practice/examCountdown";
 import {
   buildResurfacingQueue,
@@ -26,28 +26,33 @@ interface LearningPlanProps {
 function topicTitle(pack: RuntimePack, ref: TopicRef): string | null {
   if (ref.packId !== pack.packId || ref.packVersion !== pack.version) return null;
   const found = findVariant(pack, ref.variantId);
-  return found?.topic.topicId === ref.topicId ? found.topic.title : null;
+  return found?.topic.topicId === ref.topicId && isSubjectActive(found.subject)
+    ? found.topic.title
+    : null;
 }
 
 function currentTopicRefs(pack: RuntimePack): TopicRef[] {
-  return pack.subjects.flatMap((subject) =>
-    subject.topics.flatMap((topic) =>
+  return pack.subjects.flatMap((subject) => {
+    if (!isSubjectActive(subject)) return [];
+    return subject.topics.flatMap((topic) =>
       topic.variants.flatMap((variant) =>
         variant.mode === "RECALL_SPRINT" || variant.mode === "DEEP_RESEARCH"
-          ? [{
-              packId: pack.packId,
-              packVersion: pack.version,
-              subjectId: subject.subjectId,
-              topicId: topic.topicId,
-              variantId: variant.variantId,
-              difficultyProfileVersion: variant.difficultyProfileVersion,
-              promptId: variant.promptId,
-              rubricId: variant.rubricId,
-            }]
+          ? [
+              {
+                packId: pack.packId,
+                packVersion: pack.version,
+                subjectId: subject.subjectId,
+                topicId: topic.topicId,
+                variantId: variant.variantId,
+                difficultyProfileVersion: variant.difficultyProfileVersion,
+                promptId: variant.promptId,
+                rubricId: variant.rubricId,
+              },
+            ]
           : [],
       ),
-    ),
-  );
+    );
+  });
 }
 
 export function LearningPlan({
