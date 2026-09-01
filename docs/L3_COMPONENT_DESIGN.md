@@ -109,8 +109,10 @@ Accepts approved transcript text and one versioned rubric. The v0.4 baseline nor
 input, matches whole accepted-phrase token sequences or nearby significant tokens, and returns the
 concept identifier plus matched accepted phrase. It rejects partial-word matches, does not combine
 distant evidence, and returns an explicit unavailable reason when the transcript or scorable rubric
-is absent. It does not invent missing content or claim correctness. A v0.5 worker may add calibrated
-sentence embeddings and `possiblyCovered` evidence while retaining this deterministic fallback.
+is absent. It does not invent missing content or claim correctness. v0.5 adds bounded sentence
+embeddings and explicit `POSSIBLY_COVERED` evidence while retaining this deterministic fallback.
+The uncalibrated beta evidence is not counted; numeric promotion requires a new educator-calibrated,
+versioned threshold set.
 
 ### Feedback composer
 

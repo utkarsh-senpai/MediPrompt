@@ -214,7 +214,7 @@ The local semantic engine may report rubric coverage and transcript evidence. It
 a fluent answer is medically correct, score confidence/emotion/accent, or issue a pass/fail grade.
 Defend-preset answers may have lower raw coverage because the task is more complex; cross-preset scores are not
 directly comparable. Refinement Delta is valid only for the same topic, prompt variant, rubric,
-difficulty profile, register, and time policy.
+pack/version, difficulty profile, mode, register, support, time policy, and scoring identity.
 
 Delivery feedback remains separate. Pause placement, pace, repetition, clipping, and audible time
 can produce observable coaching, but they never change the medical-content result.
@@ -334,7 +334,7 @@ Subject        [selected subject]
 | v0.2 | Add `ChallengePreset` and variant identity to contracts; ship reviewed Guided variants and at least three complete Guided/Applied/Viva demonstration trios; keep core usable when only Guided exists |
 | v0.3 | Measure delivery identically across challenges; accessibility time changes do not mutate difficulty |
 | v0.4 | Add deterministic lexical coverage over difficulty-specific source-linked draft rubrics, visible accepted-phrase evidence, and one prescription; educator review remains pending |
-| v0.5 | Add optional semantic evidence, same-variant retry, comparison guards, and Refinement Delta |
+| v0.5 | Add optional non-counting semantic evidence, bounded same-variant retry history, complete comparison guards, and Refinement Delta |
 | v0.6 | Add reviewed follow-ups/evidence updates, Viva challenge flow, per-topic suggestions, and no-penalty support controls |
 | v0.7 | Add authoring schema/compiler validation, coverage reports, lifecycle gates, and fake-escalation detection |
 | v0.8 | Pilot timing, comprehensibility, challenge calibration, and subgroup/device failure modes with the target student and educator |

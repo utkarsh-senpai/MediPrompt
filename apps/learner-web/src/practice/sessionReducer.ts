@@ -13,6 +13,9 @@ import type {
   TopicSnapshot,
 } from "@/practice/types";
 
+/** Bounds session-local transcript/coverage history during repeated practice. */
+const MAX_PRIOR_ATTEMPTS = 19;
+
 export function initialState(selection: PracticeSelection): SessionState {
   return { name: "IDLE", selection };
 }
@@ -54,6 +57,8 @@ function buildAttempt(
     timePolicy: topic.timePolicy,
     challengeIdentity: topic.challengeIdentity,
     createdAt: deps.nowIso,
+    attemptIndex: 1,
+    history: [],
   };
 }
 
@@ -539,6 +544,7 @@ export function reduceSession(
           textMetrics: event.textMetrics,
           transcript: event.transcript,
           coverage: event.coverage,
+          refinementDelta: event.refinementDelta,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
       };
@@ -558,8 +564,64 @@ export function reduceSession(
           textMetrics: event.textMetrics,
           transcript: event.transcript,
           coverage: event.coverage,
+          refinementDelta: event.refinementDelta,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
+      };
+    }
+
+    case "START_SECOND_ATTEMPT": {
+      // Re-attempt the same topic from the review screen. Capture the completed
+      // attempt and release its recording before re-arming the normal pipeline.
+      if (state.name !== "REVIEW") return noChange(state);
+      const completed = {
+        attemptId: state.attempt.attemptId,
+        attemptIndex: state.attempt.attemptIndex,
+        topicRef: state.attempt.topicRef,
+        mode: state.attempt.mode,
+        challenge: state.attempt.challenge,
+        supportLevel: state.attempt.supportLevel,
+        register: state.attempt.register,
+        timePolicy: state.attempt.timePolicy,
+        coverage: state.coverage,
+        transcriptText: state.transcript.text,
+      };
+      const nextAttempt: AttemptDraft = {
+        ...state.attempt,
+        attemptId: `${event.requestId}-attempt`,
+        sessionId: event.requestId,
+        createdAt: deps.nowIso,
+        attemptIndex: state.attempt.attemptIndex + 1,
+        history: [...state.attempt.history, completed].slice(-MAX_PRIOR_ATTEMPTS),
+      };
+      return {
+        state: {
+          name: "TOPIC_READY",
+          selection: state.selection,
+          requestId: event.requestId,
+          topic: state.topic,
+          attempt: nextAttempt,
+        },
+        commands: [
+          { type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId },
+          { type: "FOCUS_VIEW", target: "topic" },
+        ],
+      };
+    }
+
+    case "COVERAGE_REFINED": {
+      // v0.5: replace the lexical baseline with the semantic pass on REVIEW.
+      // Stale drops by attemptId; the learner never sees a failed model state.
+      if (state.name !== "REVIEW" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          ...state,
+          coverage: event.coverage,
+          refinementDelta: event.refinementDelta,
+        },
+        commands: [],
       };
     }
 

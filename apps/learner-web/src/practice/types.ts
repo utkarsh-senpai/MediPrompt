@@ -162,6 +162,12 @@ export interface UserSettings {
   researchSeconds: number;
   /** Sound cues off when true; absent in legacy stored settings (treated as false). */
   soundMuted?: boolean;
+  /**
+   * v0.5: when true and an embedding model is available, refine content coverage
+   * with all-MiniLM-L6-v2 cosine similarity instead of the lexical baseline.
+   * Default false; the lexical engine always runs first as the guaranteed fallback.
+   */
+  semanticCoverage?: boolean;
 }
 
 export interface PracticeSelection {
@@ -285,8 +291,16 @@ export interface ConceptResult {
   label: string;
   weight: number;
   hit: boolean;
-  /** The acceptedPhrase that matched, for evidence; null on miss or no phrases. */
+  /** Rubric phrase/label that matched, for evidence; null on miss. */
   matchedPhrase: string | null;
+  /** Optional sentence-level evidence from the v0.5 semantic enhancer. */
+  semanticEvidence?: {
+    status: "COVERED" | "POSSIBLY_COVERED" | "NOT_FOUND";
+    transcriptSegment: string | null;
+    rubricText: string | null;
+    similarity: number | null;
+    thresholdVersion: string;
+  };
 }
 
 export type CoverageUnavailableReason =
@@ -294,6 +308,11 @@ export type CoverageUnavailableReason =
   | "NO_SCORABLE_RUBRIC";
 
 interface CoverageReportValues {
+  /** Reproducible scoring identity; comparisons require an exact match. */
+  scoring: {
+    method: "LEXICAL" | "LEXICAL_SEMANTIC";
+    version: string;
+  };
   conceptResults: ConceptResult[];
   hitCount: number;
   totalCount: number;
@@ -312,6 +331,29 @@ export type CoverageReport =
       verifiable: false;
       unavailableReason: CoverageUnavailableReason;
     });
+
+/** Direction of a valid same-identity Refinement Delta. */
+export type RefinementDirection = "IMPROVED" | "FLAT" | "REGRESSED";
+
+export type RefinementDeltaUnavailableReason =
+  | "PRIOR_COVERAGE_UNAVAILABLE"
+  | "CURRENT_COVERAGE_UNAVAILABLE"
+  | "ATTEMPT_IDENTITY_MISMATCH"
+  | "SCORING_IDENTITY_MISMATCH";
+
+/** A delta is numeric only when both attempts and their scorers are comparable. */
+export type RefinementDeltaResult =
+  | {
+      available: true;
+      score: number;
+      direction: RefinementDirection;
+      newlyCoveredConceptIds: string[];
+      lostConceptIds: string[];
+    }
+  | {
+      available: false;
+      reason: RefinementDeltaUnavailableReason;
+    };
 
 export type AudioErrorCode =
   | "AUDIO_MIC_PERMISSION_DENIED"
@@ -342,6 +384,24 @@ export interface AttemptDraft {
   timePolicy: TimePolicy;
   challengeIdentity: ChallengeIdentity;
   createdAt: string;
+  /** 1 for the first attempt on a topic; increments on each same-topic re-attempt. */
+  attemptIndex: number;
+  /** Completed prior attempts for the current same-topic retry chain; session-local only. */
+  history: AttemptHistoryEntry[];
+}
+
+/** Immutable, session-local record used for traceability and safe comparison. */
+export interface AttemptHistoryEntry {
+  attemptId: string;
+  attemptIndex: number;
+  topicRef: TopicRef;
+  mode: V02PracticeMode;
+  challenge: ChallengePreset;
+  supportLevel: SupportLevel;
+  register: Register;
+  timePolicy: TimePolicy;
+  coverage: CoverageReport;
+  transcriptText: string;
 }
 
 export type SessionState =
@@ -422,6 +482,8 @@ export type SessionState =
       transcript: ApprovedTranscript;
       /** Content coverage against the variant rubric; computed on approval. */
       coverage: CoverageReport;
+      /** Same-identity coverage change; null on attempt 1. */
+      refinementDelta: RefinementDeltaResult | null;
     };
 
 export type SessionEvent =
@@ -463,6 +525,8 @@ export type SessionEvent =
       transcript: ApprovedTranscript;
       textMetrics: TextMetrics;
       coverage: CoverageReport;
+      /** Same-identity Refinement Delta; null on attempt 1. */
+      refinementDelta: RefinementDeltaResult | null;
       now: number;
     }
   | {
@@ -471,6 +535,23 @@ export type SessionEvent =
       transcript: ApprovedTranscript;
       textMetrics: TextMetrics;
       coverage: CoverageReport;
+      /** Same-identity Refinement Delta; null on attempt 1. */
+      refinementDelta: RefinementDeltaResult | null;
+      now: number;
+    }
+  | {
+      // Begin a same-topic re-attempt from the review screen.
+      type: "START_SECOND_ATTEMPT";
+      requestId: string;
+      now: number;
+    }
+  | {
+      // v0.5: an async semantic pass refined the coverage after the lexical baseline.
+      type: "COVERAGE_REFINED";
+      attemptId: string;
+      coverage: CoverageReport;
+      /** Recomputed delta after a semantic refinement. */
+      refinementDelta: RefinementDeltaResult | null;
       now: number;
     };
 
@@ -524,6 +605,7 @@ export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   speakingSeconds: 90,
   researchSeconds: 120,
   soundMuted: false,
+  semanticCoverage: false,
 });
 
 /** Documented bounds for durations; clamped by the settings store and reducer. */

@@ -6,6 +6,7 @@ import { InfoTip } from "./InfoTip";
 interface SettingsDialogProps {
   store: SettingsStore;
   settings: UserSettings;
+  semanticCoverageAvailable: boolean;
   onClose: () => void;
   onSaved: (next: UserSettings) => void;
 }
@@ -13,6 +14,7 @@ interface SettingsDialogProps {
 export function SettingsDialog({
   store,
   settings,
+  semanticCoverageAvailable,
   onClose,
   onSaved,
 }: SettingsDialogProps) {
@@ -23,6 +25,9 @@ export function SettingsDialog({
     String(settings.researchSeconds),
   );
   const [soundMuted, setSoundMuted] = useState(settings.soundMuted ?? false);
+  const [semanticCoverage, setSemanticCoverage] = useState(
+    settings.semanticCoverage ?? false,
+  );
   const dialogRef = useRef<HTMLDialogElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,6 +60,7 @@ export function SettingsDialog({
         TIME_BOUNDS.researchSeconds,
       ),
       soundMuted,
+      semanticCoverage,
     };
     store.save(next);
     onSaved(next);
@@ -135,6 +141,23 @@ export function SettingsDialog({
             Sound effects
             <span className="settings-hint">
               Soft cues for spins and the timer, synthesized on this device.
+            </span>
+          </label>
+        </div>
+        <div className="settings-sound">
+          <input
+            id="semantic-coverage"
+            type="checkbox"
+            checked={semanticCoverage}
+            disabled={!semanticCoverageAvailable}
+            onChange={(e) => setSemanticCoverage(e.target.checked)}
+          />
+          <label htmlFor="semantic-coverage">
+            Meaning-match evidence (beta)
+            <span className="settings-hint">
+              {semanticCoverageAvailable
+                ? "Refine content coverage with on-device meaning matching (downloads a small model on first use). The lexical baseline runs first, so this never blocks practice."
+                : "Meaning matching needs WebAssembly and Web Worker support on this browser; lexical coverage remains available."}
             </span>
           </label>
         </div>

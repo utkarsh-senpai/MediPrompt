@@ -5,6 +5,10 @@ import { isElapsed } from "./deadlineTimer";
 import { listSubjects, presetsFor, eligibleVariantIds, findRubric } from "@/content/packQuery";
 import { isAudioError } from "@/audio/audioErrors";
 import { scoreCoverage } from "@/scoring/coverage";
+import {
+  refinementDelta,
+  toAttemptHistoryEntry,
+} from "@/scoring/refinementDelta";
 import type { AudioDecoder } from "@/audio/pcmDecode";
 import type { AttemptRecorder } from "@/audio/recorder";
 import { computeAudioMetrics, computeTextMetrics } from "@/audio/deliveryMetrics";
@@ -12,12 +16,25 @@ import type {
   TranscriptionClient,
   TranscriptionSession,
 } from "@/speech/transcriptionClient";
+import {
+  EMBEDDING_MODEL,
+  type EmbeddingClient,
+  type EmbeddingSession,
+} from "@/scoring/embeddingClient";
+import {
+  segmentTranscript,
+  semanticCoverage,
+  type ConceptEmbeddings,
+  type TextEmbedding,
+} from "@/scoring/semanticCoverage";
 import type {
   ApprovedTranscript,
   AudioErrorCode,
   BagStore,
   ChallengePreset,
   Command,
+  Concept,
+  CoverageReport,
   PracticeSelection,
   ReducerDeps,
   RuntimePack,
@@ -49,6 +66,8 @@ export interface OrchestratorDeps {
   random: RandomSource;
   bagStore: BagStore;
   audio?: AudioDeps;
+  /** v0.5: optional semantic embedding client; used only when settings.semanticCoverage is true. */
+  embedding?: EmbeddingClient;
   /** Test-only timing seam; production defaults to the motion-aware draw delay. */
   drawDelayMs?: number;
 }
@@ -92,7 +111,7 @@ export function initialSelection(pack: RuntimePack): PracticeSelection {
 }
 
 export function usePracticeSession(deps: OrchestratorDeps) {
-  const { pack, settings, monotonic, wall, random, bagStore, audio, drawDelayMs } = deps;
+  const { pack, settings, monotonic, wall, random, bagStore, audio, embedding, drawDelayMs } = deps;
 
   const [state, setState] = useState<SessionState>(() =>
     initialState(initialSelection(pack)),
@@ -116,12 +135,15 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const [transcriptionProgress, setTranscriptionProgress] = useState<number | null>(
     null,
   );
+  const [semanticRefining, setSemanticRefining] = useState(false);
   const pcmCacheRef = useRef<{
     attemptId: string;
     pcm: Float32Array;
     sampleRate: number;
   } | null>(null);
   const transcriptionSessionRef = useRef<TranscriptionSession | null>(null);
+  const embeddingSessionRef = useRef<EmbeddingSession | null>(null);
+  const rubricEmbeddingCacheRef = useRef<Map<string, ConceptEmbeddings[]>>(new Map());
   const audioStartPendingRef = useRef(false);
 
   // Latest reducer deps for use inside the dispatch updater.
@@ -515,16 +537,29 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   // unmount only. The deps object may be rebuilt each render by the caller, so
   // this must not key off `audio` identity or every render would release the mic.
   const audioRef = useRef(audio);
+  const embeddingRef = useRef(embedding);
   useEffect(() => {
     audioRef.current = audio;
   }, [audio]);
+  useEffect(() => {
+    embeddingRef.current = embedding;
+  }, [embedding]);
   useEffect(
     () => () => {
       audioRef.current?.recorder.release();
       audioRef.current?.transcription.dispose();
+      embeddingRef.current?.dispose();
     },
     [],
   );
+
+  // Cancel any in-flight semantic refinement when the learner leaves review or opts out.
+  useEffect(() => {
+    if (state.name !== "REVIEW" || !settings.semanticCoverage) {
+      embeddingSessionRef.current?.cancel();
+      embeddingSessionRef.current = null;
+    }
+  }, [state.name, settings.semanticCoverage]);
 
   // --- Actions ---
 
@@ -691,6 +726,86 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     dispatch({ type: "START_TYPED_REVIEW", attemptId, now: now() });
   }, [currentAttemptId, dispatch, now]);
 
+  // v0.5: supplement lexical coverage with possible meaning-match evidence. The
+  // lexical score remains authoritative; an unavailable semantic pass is a no-op.
+  const requestSemanticRefinement = useCallback(
+    (
+      attemptId: string,
+      text: string,
+      concepts: readonly Concept[],
+      baseline: CoverageReport,
+      rubricCacheKey: string,
+    ) => {
+      if (!embedding || !settings.semanticCoverage) return;
+      const segmentTexts = segmentTranscript(text);
+      if (segmentTexts.length === 0 || concepts.length === 0) return;
+      const rubricTexts = concepts.map((concept) => ({
+        conceptId: concept.conceptId,
+        texts: [...new Set([concept.label, ...concept.acceptedPhrases])],
+      }));
+      const cachedRubricEmbeddings = rubricEmbeddingCacheRef.current.get(rubricCacheKey);
+      const texts = [
+        ...segmentTexts,
+        ...(cachedRubricEmbeddings ? [] : rubricTexts.flatMap((entry) => entry.texts)),
+      ];
+      setSemanticRefining(true);
+      const session = embedding.embed({ attemptId, texts }, (event) => {
+        if (event.type !== "done") {
+          if (event.type === "unavailable" && embeddingSessionRef.current === session) {
+            embeddingSessionRef.current = null;
+            setSemanticRefining(false);
+          }
+          return;
+        }
+        if (embeddingSessionRef.current === session) embeddingSessionRef.current = null;
+        setSemanticRefining(false);
+        const segments: TextEmbedding[] = segmentTexts.map((segmentText, index) => ({
+          text: segmentText,
+          embedding: event.embeddings[index] ?? [],
+        }));
+        let offset = segmentTexts.length;
+        const conceptEmbeddings: ConceptEmbeddings[] =
+          cachedRubricEmbeddings ??
+          rubricTexts.map((entry) => {
+            const rubricEmbeddings = entry.texts.map((rubricText, index) => ({
+              text: rubricText,
+              embedding: event.embeddings[offset + index] ?? [],
+            }));
+            offset += entry.texts.length;
+            return { conceptId: entry.conceptId, rubricEmbeddings };
+          });
+        if (!cachedRubricEmbeddings) {
+          const cache = rubricEmbeddingCacheRef.current;
+          cache.set(rubricCacheKey, conceptEmbeddings);
+          if (cache.size > 8) cache.delete(cache.keys().next().value as string);
+        }
+        const refined = semanticCoverage({
+          baseline,
+          segments,
+          concepts,
+          embeddings: conceptEmbeddings,
+        });
+        const current = stateRef.current;
+        if (current.name !== "REVIEW" || current.attempt.attemptId !== attemptId) return;
+        const prior = current.attempt.history.at(-1);
+        const currentEntry = toAttemptHistoryEntry(
+          current.attempt,
+          refined,
+          current.transcript.text,
+        );
+        dispatch({
+          type: "COVERAGE_REFINED",
+          attemptId,
+          coverage: refined,
+          refinementDelta: prior ? refinementDelta(prior, currentEntry) : null,
+          now: now(),
+        });
+      });
+      embeddingSessionRef.current = session;
+    },
+    [embedding, settings.semanticCoverage, dispatch, now],
+  );
+
   const approveTranscript = useCallback(
     (text: string) => {
       const s = stateRef.current;
@@ -708,16 +823,29 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         spokenMs: s.metrics.spokenMs,
       });
       const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
+      const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
+      const attemptId = s.attempt.attemptId;
+      const rubricCacheKey = [
+        pack.packId,
+        pack.version,
+        s.topic.topicRef.variantId,
+        s.topic.topicRef.rubricId,
+        EMBEDDING_MODEL.version,
+      ].join(":");
+      const prior = s.attempt.history.at(-1);
+      const currentEntry = toAttemptHistoryEntry(s.attempt, coverage, text);
       dispatch({
         type: "TRANSCRIPT_APPROVED",
-        attemptId: s.attempt.attemptId,
+        attemptId,
         transcript,
         textMetrics,
         coverage,
+        refinementDelta: prior ? refinementDelta(prior, currentEntry) : null,
         now: now(),
       });
+      requestSemanticRefinement(attemptId, text, concepts, coverage, rubricCacheKey);
     },
-    [wall, pack, dispatch, now],
+    [wall, pack, dispatch, now, requestSemanticRefinement],
   );
 
   const submitSelfReview = useCallback(
@@ -734,17 +862,36 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         spokenMs: s.metrics?.spokenMs,
       });
       const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
+      const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
+      const attemptId = s.attempt.attemptId;
+      const rubricCacheKey = [
+        pack.packId,
+        pack.version,
+        s.topic.topicRef.variantId,
+        s.topic.topicRef.rubricId,
+        EMBEDDING_MODEL.version,
+      ].join(":");
+      const prior = s.attempt.history.at(-1);
+      const currentEntry = toAttemptHistoryEntry(s.attempt, coverage, text);
       dispatch({
         type: "SELF_REVIEW_DONE",
-        attemptId: s.attempt.attemptId,
+        attemptId,
         transcript,
         textMetrics,
         coverage,
+        refinementDelta: prior ? refinementDelta(prior, currentEntry) : null,
         now: now(),
       });
+      requestSemanticRefinement(attemptId, text, concepts, coverage, rubricCacheKey);
     },
-    [wall, pack, dispatch, now],
+    [wall, pack, dispatch, now, requestSemanticRefinement],
   );
+
+  const startSecondAttempt = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "REVIEW") return;
+    dispatch({ type: "START_SECOND_ATTEMPT", requestId: newRequestId(), now: now() });
+  }, [dispatch, now]);
 
   // --- Derived UI data ---
 
@@ -766,7 +913,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     playback,
     transcriptionProgress,
   };
-
   return {
     state,
     now: renderNow,
@@ -775,6 +921,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     challengeVisible,
     eligibleCount,
     audio: audioUi,
+    semanticRefining,
     actions: {
       spin,
       spinAgain,
@@ -792,6 +939,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       startTypedReview,
       approveTranscript,
       submitSelfReview,
+      startSecondAttempt,
     },
   };
 }

@@ -17,6 +17,7 @@
   "include": [
     "src/speech/transcribe.worker.ts",
     "src/speech/protocol.ts",
+    "src/scoring/embeddingClient.ts",
     "src/audio/pcmDecode.ts",
     "src/audio/audioErrors.ts",
     "src/practice/types.ts"

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MicPrimer } from "./MicPrimer";
 import { MicControl } from "./MicControl";
@@ -18,6 +18,7 @@ import type { AudioUiState } from "@/practice/usePracticeSession";
 import { MAX_TRANSCRIPT_CHARACTERS } from "@/practice/transcriptPolicy";
 import type {
   ApprovedTranscript,
+  AttemptHistoryEntry,
   AudioErrorCode,
   CoverageReport,
   DeliveryMetrics,
@@ -58,6 +59,7 @@ const TEXT_METRICS: TextMetrics = {
 const COVERAGE_FULL: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
@@ -71,6 +73,7 @@ const COVERAGE_FULL: CoverageReport = {
 const COVERAGE_PARTIAL: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
@@ -108,6 +111,22 @@ function audioUi(overrides: Partial<AudioUiState> = {}): AudioUiState {
     playback: { attemptId: "a1", url: "blob:fake-0", durationMs: 90_000 },
     transcriptionProgress: null,
     ...overrides,
+  };
+}
+
+function historyEntry(coverage = COVERAGE_PARTIAL): AttemptHistoryEntry {
+  const topic = topicSnapshot();
+  return {
+    attemptId: "a1",
+    attemptIndex: 1,
+    topicRef: topic.topicRef,
+    mode: topic.mode,
+    challenge: topic.challenge,
+    supportLevel: topic.supportLevel,
+    register: topic.register,
+    timePolicy: topic.timePolicy,
+    coverage,
+    transcriptText: APPROVED.text,
   };
 }
 
@@ -461,8 +480,12 @@ describe("AttemptReview", () => {
         textMetrics={TEXT_METRICS}
         transcript={APPROVED}
         coverage={COVERAGE_PARTIAL}
+        history={[]}
+        refinementDelta={null}
+        attemptIndex={1}
         audio={audioUi()}
         onSpinAgain={onSpinAgain}
+        onTryAgain={() => {}}
       />,
     );
     expect(screen.getByText("Zippers interlock teeth.")).toBeInTheDocument();
@@ -491,8 +514,12 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={adversarial}
         coverage={COVERAGE_FULL}
+        history={[]}
+        refinementDelta={null}
+        attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
+        onTryAgain={() => {}}
       />,
     );
     expect(screen.getByText(/<img src=x onerror=alert\(1\)>/)).toBeInTheDocument();
@@ -507,13 +534,73 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={{ ...APPROVED, wasEdited: false, rawText: undefined }}
         coverage={COVERAGE_FULL}
+        history={[]}
+        refinementDelta={null}
+        attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
+        onTryAgain={() => {}}
       />,
     );
     expect(
       screen.queryByText("Original machine transcript (before your edits)"),
     ).toBeNull();
+  });
+
+  it("shows Refinement Delta, changed concepts, history, and the retry action", () => {
+    const onTryAgain = vi.fn();
+    render(
+      <AttemptReview
+        topic={topicSnapshot()}
+        metrics={null}
+        textMetrics={null}
+        transcript={APPROVED}
+        coverage={COVERAGE_PARTIAL}
+        history={[historyEntry()]}
+        refinementDelta={{
+          available: true,
+          score: 0.3,
+          direction: "IMPROVED",
+          newlyCoveredConceptIds: ["c1"],
+          lostConceptIds: [],
+        }}
+        attemptIndex={2}
+        audio={audioUi({ playback: null })}
+        onSpinAgain={() => {}}
+        onTryAgain={onTryAgain}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Refinement Delta" })).toBeInTheDocument();
+    expect(screen.getByText("+30%")).toBeInTheDocument();
+    expect(screen.getByText(/coverage improved on this attempt/i)).toBeInTheDocument();
+    expect(screen.getByText(/Newly covered: Names the slider role/)).toBeInTheDocument();
+    expect(screen.getByText("Attempts (2)")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Attempt review \(attempt 2\)/i })).toBeInTheDocument();
+    const tryAgain = screen.getByRole("button", { name: "Try again on this topic" });
+    expect(tryAgain).toBeInTheDocument();
+    fireEvent.click(tryAgain);
+    expect(onTryAgain).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides Refinement Delta on the first attempt but offers the retry entry", () => {
+    render(
+      <AttemptReview
+        topic={topicSnapshot()}
+        metrics={null}
+        textMetrics={null}
+        transcript={APPROVED}
+        coverage={COVERAGE_PARTIAL}
+        history={[]}
+        refinementDelta={null}
+        attemptIndex={1}
+        audio={audioUi({ playback: null })}
+        onSpinAgain={() => {}}
+        onTryAgain={() => {}}
+      />,
+    );
+    expect(screen.queryByRole("heading", { name: "Refinement Delta" })).toBeNull();
+    // The try-again action is the loop entry and is always available from review.
+    expect(screen.getByRole("button", { name: "Try again on this topic" })).toBeInTheDocument();
   });
 });
 

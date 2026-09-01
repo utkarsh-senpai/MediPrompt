@@ -6,6 +6,7 @@ import type { CoverageReport } from "@/practice/types";
 const PARTIAL: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
@@ -19,6 +20,7 @@ const PARTIAL: CoverageReport = {
 const FULL: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
@@ -32,6 +34,7 @@ const FULL: CoverageReport = {
 const NOT_VERIFIABLE: CoverageReport = {
   verifiable: false,
   unavailableReason: "NO_SCORABLE_RUBRIC",
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [],
   hitCount: 0,
   totalCount: 0,
@@ -58,7 +61,7 @@ describe("CoveragePanel", () => {
     expect(screen.getByText(/You touched 2 of 2 listed concepts/)).toBeInTheDocument();
     expect(screen.queryByText(/Concepts not yet touched/)).toBeNull();
     expect(screen.getByText(/explain the same concepts more concisely/)).toBeInTheDocument();
-    expect(screen.getByText(/Matched rubric phrase: “slider”/)).toBeInTheDocument();
+    expect(screen.getByText(/Matched rubric wording: “slider”/)).toBeInTheDocument();
   });
 
   it("explains when no transcript was provided instead of reporting zero coverage", () => {
@@ -99,5 +102,35 @@ describe("CoveragePanel", () => {
     expect(screen.getByText(/<script>alert\(2\)<\/script>/)).toBeInTheDocument();
     expect(document.querySelector('img[src="x"]')).toBeNull();
     expect(document.querySelector("script")).toBeNull();
+  });
+
+  it("shows possible semantic evidence separately without counting it", () => {
+    const possible: CoverageReport = {
+      ...PARTIAL,
+      hitCount: 0,
+      weightedFraction: 0,
+      fraction: 0,
+      conceptResults: [
+        {
+          conceptId: "possible",
+          label: "Connect exercise with function",
+          weight: 1,
+          hit: false,
+          matchedPhrase: null,
+          semanticEvidence: {
+            status: "POSSIBLY_COVERED",
+            transcriptSegment: "Training may help daily activity",
+            rubricText: "exercise and function",
+            similarity: 0.5,
+            thresholdVersion: "test-v1",
+          },
+        },
+      ],
+      totalCount: 1,
+    };
+    render(<CoveragePanel coverage={possible} />);
+    expect(screen.getByRole("heading", { name: /Possibly present/ })).toBeInTheDocument();
+    expect(screen.getByText(/Training may help daily activity/)).toBeInTheDocument();
+    expect(screen.getByText(/not counted/i)).toBeInTheDocument();
   });
 });
