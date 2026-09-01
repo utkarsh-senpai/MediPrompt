@@ -275,6 +275,44 @@ export type TextMetrics = Pick<
   "wordsPerMinute" | "fillerCount" | "repeatedPhraseCount"
 >;
 
+// --- v0.4 content-coverage contracts ---
+// Coverage is "did the expected idea appear in the approved transcript", not a
+// correctness grade. The lexical engine lives in src/scoring/coverage.ts; these
+// domain shapes live here so practice/ does not depend on the scoring module.
+
+export interface ConceptResult {
+  conceptId: string;
+  label: string;
+  weight: number;
+  hit: boolean;
+  /** The acceptedPhrase that matched, for evidence; null on miss or no phrases. */
+  matchedPhrase: string | null;
+}
+
+export type CoverageUnavailableReason =
+  | "NO_TRANSCRIPT"
+  | "NO_SCORABLE_RUBRIC";
+
+interface CoverageReportValues {
+  conceptResults: ConceptResult[];
+  hitCount: number;
+  totalCount: number;
+  /** Weighted hit / weighted total, 0..1. 0 when not verifiable. */
+  weightedFraction: number;
+  /** Flat-fraction echo (hitCount/totalCount) for copy that ignores weight. */
+  fraction: number;
+}
+
+export type CoverageReport =
+  | (CoverageReportValues & {
+      verifiable: true;
+      unavailableReason: null;
+    })
+  | (CoverageReportValues & {
+      verifiable: false;
+      unavailableReason: CoverageUnavailableReason;
+    });
+
 export type AudioErrorCode =
   | "AUDIO_MIC_PERMISSION_DENIED"
   | "AUDIO_MIC_UNAVAILABLE"
@@ -382,6 +420,8 @@ export type SessionState =
       metrics: DeliveryMetrics | null;
       textMetrics: TextMetrics | null;
       transcript: ApprovedTranscript;
+      /** Content coverage against the variant rubric; computed on approval. */
+      coverage: CoverageReport;
     };
 
 export type SessionEvent =
@@ -422,6 +462,7 @@ export type SessionEvent =
       attemptId: string;
       transcript: ApprovedTranscript;
       textMetrics: TextMetrics;
+      coverage: CoverageReport;
       now: number;
     }
   | {
@@ -429,6 +470,7 @@ export type SessionEvent =
       attemptId: string;
       transcript: ApprovedTranscript;
       textMetrics: TextMetrics;
+      coverage: CoverageReport;
       now: number;
     };
 

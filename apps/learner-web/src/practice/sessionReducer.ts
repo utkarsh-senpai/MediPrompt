@@ -538,6 +538,7 @@ export function reduceSession(
           metrics: state.metrics,
           textMetrics: event.textMetrics,
           transcript: event.transcript,
+          coverage: event.coverage,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
       };
@@ -556,6 +557,7 @@ export function reduceSession(
           metrics: state.metrics,
           textMetrics: event.textMetrics,
           transcript: event.transcript,
+          coverage: event.coverage,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
       };

@@ -787,7 +787,8 @@ progress {
 /* --- Cards & panels --- */
 
 .topic-card,
-.delivery-panel {
+.delivery-panel,
+.coverage-panel {
   background: var(--surface);
   border: none;
   border-radius: 1.25rem;
@@ -796,6 +797,60 @@ progress {
   box-shadow:
     inset 0 0 0 1px var(--hairline-soft),
     0 18px 44px #00000059;
+}
+
+.coverage-score {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-block: 0.4rem 0.6rem;
+}
+
+.prescription {
+  margin-block: 0.6rem 0.8rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.8rem;
+  background: #c75d3c14;
+  box-shadow: inset 0 0 0 1px #c75d3c40;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.prescription-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+  margin-bottom: 0.2rem;
+}
+
+.coverage-missed h4,
+.coverage-touched summary {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.coverage-missed ul,
+.coverage-touched ul {
+  margin: 0 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.coverage-missed li,
+.coverage-touched li {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.coverage-evidence {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 .draft-notice {

@@ -276,6 +276,22 @@ Every optional metric can be absent with a limitation. Absence never becomes zer
 
 ### Coverage matching
 
+v0.4 always runs a bounded, deterministic lexical baseline first:
+
+```text
+tokens = normalizeUnicode(approvedTranscript, maxCharacters = 20_000)
+if tokens are empty: NOT_VERIFIABLE(NO_TRANSCRIPT)
+for each rubric concept:
+    require at least one accepted phrase
+    match an accepted phrase as a whole token sequence, or
+    match all significant phrase tokens inside a bounded local window
+    never match a partial word or tokens scattered across the full answer
+```
+
+The matched accepted phrase is retained as visible evidence. This baseline can establish that a
+listed idea was mentioned; it does not infer correctness, contradiction, or clinical safety.
+v0.5 may add the semantic enhancer below without removing the lexical fallback:
+
 ```text
 sentences = segment(normalize(approvedTranscript))
 for each rubric concept:
@@ -332,7 +348,7 @@ EASY and HIGH      => advance one additional interval, capped at 14
 dueDate            => learner local date + selected days
 ```
 
-The exact matrix is fixture-defined before v0.5. No streak loss or escalating penalty is applied.
+The exact matrix is fixture-defined before v0.6. No streak loss or escalating penalty is applied.
 Changing timezone preserves the intended local due date unless the learner chooses rebasing.
 
 ## 5. Runtime topic-pack schema
@@ -343,7 +359,7 @@ Curriculum extraction produces an authoring inventory, not the runtime schema sh
 current MPT file under `docs/curriculum/` is deliberately `runtimeCompatible: false`; empty prompt
 and rubric arrays are evidence that content has not been authored, not valid learner content.
 
-Minimum candidate shape for the v0.6 authoring schema:
+Minimum candidate shape for the v0.7 authoring schema:
 
 ```yaml
 schemaVersion: authoring-inventory/1.0
@@ -630,10 +646,11 @@ CI performance on hosted runners is not presented as phone performance.
 | v0.1 | Markdown links valid; diagrams render; architecture/privacy/content decisions reviewed |
 | v0.2 | Independent mode/challenge/subject controls, challenge hiding for single-level content, three reviewed prompt trios, drawing state, timer disabled before draw, Spin/Spin again, Recall direct-to-speech path, Deep Research research -> ready -> speech path, duration settings, challenge-specific arc, complete/exit/repeat, full-fingerprint random bag, background timer, responsive/a11y/offline shell, and operation with mic/storage/models/network disabled |
 | v0.3 | Permission paths, record/playback, deterministic audio fixtures, local STT progress/cancel/failure, device benchmark, zero audio requests |
-| v0.4 | Difficulty-specific golden coverage evidence, `NOT_VERIFIABLE`, one prescription, same-identity retry, mismatch rejection and valid Refinement Delta |
-| v0.5 | Reviewed Viva follow-ups/evidence updates, register rubrics, learner-controlled challenge suggestions, deterministic due queue, timezone cases, export/delete-all |
-| v0.6 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
-| v0.7 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
+| v0.4 | Difficulty-specific golden lexical evidence, whole-token/local-window false-positive guards, distinct transcript/rubric `NOT_VERIFIABLE` outcomes, one prescription, offline typed-review E2E |
+| v0.5 | Optional semantic evidence with calibrated thresholds and lexical fallback, same-identity retry, mismatch rejection and valid Refinement Delta |
+| v0.6 | Reviewed Viva follow-ups/evidence updates, register rubrics, learner-controlled challenge suggestions, deterministic due queue, timezone cases, export/delete-all |
+| v0.7 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
+| v0.8 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
 | v1.0 | Clean-device release journey, offline full loop, three approved packs, licence/privacy/security/recovery checklist |
 | v1.1+ | Consent/authz/sync/provider contracts, retention/deletion, source-grounded results and local-mode regression |
 

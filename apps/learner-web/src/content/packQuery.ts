@@ -1,5 +1,6 @@
 import type {
   ChallengePreset,
+  Rubric,
   RuntimePack,
   SpeechArcStep,
   Subject,
@@ -79,6 +80,20 @@ export function findVariant(
     }
   }
   return undefined;
+}
+
+/**
+ * Resolve the rubric for a drawn topic ref. Returns the rubric whose id matches
+ * the variant's rubricId, or undefined when the pack has no such rubric (the
+ * not-verifiable coverage fallback handles that case).
+ */
+export function findRubric(
+  pack: RuntimePack,
+  topicRef: Pick<TopicRef, "variantId" | "rubricId">,
+): Rubric | undefined {
+  const found = findVariant(pack, topicRef.variantId);
+  if (!found) return undefined;
+  return found.topic.rubrics.find((r) => r.rubricId === topicRef.rubricId);
 }
 
 const PRESET_EXPECTATION: Record<ChallengePreset, string> = {
