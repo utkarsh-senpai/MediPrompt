@@ -11,6 +11,7 @@ import type {
   TranscriptionClient,
   TranscriptionEvent,
 } from "@/speech/transcriptionClient";
+import type { EmbeddingClient, EmbeddingEvent } from "@/scoring/embeddingClient";
 import { FIXTURE_RATE, concat, silence, sineBurst } from "@/test/pcmFixtures";
 import {
   DEFAULT_SETTINGS,
@@ -131,6 +132,125 @@ describe("usePracticeSession", () => {
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
     act(() => result.current.actions.spinAgain());
     expect(result.current.state.name).toBe("TOPIC_READY");
+  });
+});
+
+// --- v0.5 semantic refinement (stub embedding client; lexical baseline still runs) ---
+
+describe("usePracticeSession — v0.5 semantic refinement", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("refines lexical coverage via the embedding client when semanticCoverage is enabled", async () => {
+    const nowRef = { value: 0 };
+    const monotonic = { now: () => nowRef.value };
+    const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
+    const random = seededRandom(123);
+    const bagStore = new InMemoryBagStore();
+    let lastEmbed: (event: EmbeddingEvent) => void = () => {};
+    const embedding: EmbeddingClient = {
+      embed(input, onEvent) {
+        lastEmbed = onEvent;
+        return { attemptId: input.attemptId, cancel: () => undefined };
+      },
+      dispose() {},
+    };
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: { ...DEFAULT_SETTINGS, semanticCoverage: true },
+        monotonic,
+        wall,
+        random,
+        bagStore,
+        drawDelayMs: 0,
+        embedding,
+      }),
+    );
+    const advance = (ms: number) =>
+      act(() => {
+        nowRef.value += ms;
+        vi.advanceTimersByTime(ms);
+      });
+    const { result } = hook;
+
+    act(() => result.current.actions.spin());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
+
+    act(() => result.current.actions.startTypedReview());
+    expect(result.current.state.name).toBe("SELF_REVIEW");
+
+    // Gibberish transcript: lexical coverage is verifiable with 0 hits.
+    act(() => result.current.actions.submitSelfReview("zzz qqq xxx nonword"));
+    expect(result.current.state.name).toBe("REVIEW");
+    if (result.current.state.name === "REVIEW") {
+      expect(result.current.state.coverage.verifiable).toBe(true);
+      expect(result.current.state.coverage.hitCount).toBe(0);
+    }
+
+    // Embedding completion: every phrase embedding identical to the transcript
+    // embedding → cosine 1 → every concept hits. This must replace the 0-hit
+    // lexical coverage via COVERAGE_REFINED.
+    act(() => {
+      lastEmbed({
+        type: "done",
+        embeddings: [[1, 0], ...Array.from({ length: 300 }, () => [1, 0])],
+      });
+    });
+    if (result.current.state.name === "REVIEW") {
+      expect(result.current.state.coverage.verifiable).toBe(true);
+      expect(result.current.state.coverage.hitCount).toBe(
+        result.current.state.coverage.totalCount,
+      );
+      expect(result.current.state.coverage.totalCount).toBeGreaterThan(0);
+      expect(result.current.state.coverage.weightedFraction).toBeCloseTo(1, 5);
+    }
+  });
+
+  it("keeps lexical coverage when semantic is disabled (no embedding dep)", async () => {
+    const nowRef = { value: 0 };
+    const monotonic = { now: () => nowRef.value };
+    const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
+    const random = seededRandom(123);
+    const bagStore = new InMemoryBagStore();
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: { ...DEFAULT_SETTINGS, semanticCoverage: false },
+        monotonic,
+        wall,
+        random,
+        bagStore,
+        drawDelayMs: 0,
+      }),
+    );
+    const advance = (ms: number) =>
+      act(() => {
+        nowRef.value += ms;
+        vi.advanceTimersByTime(ms);
+      });
+    const { result } = hook;
+    act(() => result.current.actions.spin());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    act(() => result.current.actions.startTypedReview());
+    act(() => result.current.actions.submitSelfReview("zzz qqq xxx nonword"));
+    expect(result.current.state.name).toBe("REVIEW");
+    if (result.current.state.name === "REVIEW") {
+      expect(result.current.state.coverage.hitCount).toBe(0);
+      expect(result.current.state.gapScore).toBeNull();
+      expect(result.current.state.priorCoverage).toBeNull();
+    }
   });
 });
 

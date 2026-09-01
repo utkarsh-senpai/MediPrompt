@@ -54,6 +54,8 @@ function buildAttempt(
     timePolicy: topic.timePolicy,
     challengeIdentity: topic.challengeIdentity,
     createdAt: deps.nowIso,
+    attemptIndex: 1,
+    priorCoverage: null,
   };
 }
 
@@ -539,6 +541,9 @@ export function reduceSession(
           textMetrics: event.textMetrics,
           transcript: event.transcript,
           coverage: event.coverage,
+          priorCoverage: event.priorCoverage,
+          gapScore: event.gapScore?.score ?? null,
+          gapDirection: event.gapScore?.direction ?? null,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
       };
@@ -558,8 +563,54 @@ export function reduceSession(
           textMetrics: event.textMetrics,
           transcript: event.transcript,
           coverage: event.coverage,
+          priorCoverage: event.priorCoverage,
+          gapScore: event.gapScore?.score ?? null,
+          gapDirection: event.gapScore?.direction ?? null,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
+      };
+    }
+
+    case "START_SECOND_ATTEMPT": {
+      // Re-attempt the same topic from the review screen. The prior attempt's
+      // coverage rides along on the new AttemptDraft so Gap Score can be computed
+      // when attempt 2 is approved. Recording/transcription are re-armed by the
+      // normal START_TIMER/CONFIRM_READY flow.
+      if (state.name !== "REVIEW") return noChange(state);
+      const nextAttempt: AttemptDraft = {
+        ...state.attempt,
+        attemptId: `${event.requestId}-attempt`,
+        sessionId: event.requestId,
+        createdAt: deps.nowIso,
+        attemptIndex: state.attempt.attemptIndex + 1,
+        priorCoverage: state.coverage,
+      };
+      return {
+        state: {
+          name: "TOPIC_READY",
+          selection: state.selection,
+          requestId: event.requestId,
+          topic: state.topic,
+          attempt: nextAttempt,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "topic" }],
+      };
+    }
+
+    case "COVERAGE_REFINED": {
+      // v0.5: replace the lexical baseline with the semantic pass on REVIEW.
+      // Stale drops by attemptId; the learner never sees a failed model state.
+      if (state.name !== "REVIEW" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          ...state,
+          coverage: event.coverage,
+          gapScore: event.gapScore?.score ?? null,
+          gapDirection: event.gapScore?.direction ?? null,
+        },
+        commands: [],
       };
     }
 

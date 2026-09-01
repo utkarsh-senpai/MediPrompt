@@ -24,6 +24,7 @@ import { subjectEmoji } from "@/app/subjectEmoji";
 import { AttemptRecorder } from "@/audio/recorder";
 import { createWebAudioDecoder } from "@/audio/pcmDecode";
 import { createDefaultTranscriptionClient } from "@/speech/transcriptionClient";
+import { createDefaultEmbeddingClient } from "@/scoring/embeddingClient";
 import { systemMonotonicClock, systemWallClock } from "@/platform/clock";
 import { CryptoRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
@@ -155,6 +156,13 @@ function PracticeApp({
     };
   }, [caps, monotonic]);
 
+  // v0.5: semantic embedding client, constructed only where workers + wasm exist.
+  // Used only when the learner enables semantic coverage in settings.
+  const embeddingClient = useMemo(
+    () => (speechFeedbackAvailable(caps) ? createDefaultEmbeddingClient() : undefined),
+    [caps],
+  );
+
   const session = usePracticeSession({
     pack,
     settings,
@@ -163,6 +171,7 @@ function PracticeApp({
     random,
     bagStore,
     audio: audioDeps,
+    embedding: embeddingClient,
   });
 
   const { state, now, subjects, presets, challengeVisible, eligibleCount, actions } =
@@ -432,8 +441,13 @@ function PracticeApp({
           textMetrics={s.textMetrics}
           transcript={s.transcript}
           coverage={s.coverage}
+          priorCoverage={s.priorCoverage}
+          gapScore={s.gapScore}
+          gapDirection={s.gapDirection}
+          attemptIndex={s.attempt.attemptIndex}
           audio={session.audio}
           onSpinAgain={spinAgain}
+          onTryAgain={actions.startSecondAttempt}
         />
       ) : null}
 

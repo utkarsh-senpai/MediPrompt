@@ -172,7 +172,11 @@ const shellBytes = files
 // v0.3: the shell now carries the pinned transformers.js worker graph (~0.9 MB)
 // so the service worker can precache it for offline transcription. Initial load
 // is still bounded by the entry budget above; the wasm runtime is separate.
-const MAX_SHELL_BYTES = 1536 * 1024;
+// v0.5: a second lazy transformers.js worker (all-MiniLM-L6-v2 embeddings) adds
+// another ~0.9 MB to the lazy, SW-cached graph. Initial load is still bounded by
+// the entry budget; both workers load only on explicit activation. v0.6 should
+// dedupe the transformers.js library across the two workers to reclaim this.
+const MAX_SHELL_BYTES = 2560 * 1024;
 if (shellBytes > MAX_SHELL_BYTES) errors.push(`shell budget exceeded: ${shellBytes} bytes`);
 
 if (errors.length > 0) {

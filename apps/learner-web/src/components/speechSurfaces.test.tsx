@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MicPrimer } from "./MicPrimer";
 import { MicControl } from "./MicControl";
@@ -461,8 +461,13 @@ describe("AttemptReview", () => {
         textMetrics={TEXT_METRICS}
         transcript={APPROVED}
         coverage={COVERAGE_PARTIAL}
+        priorCoverage={null}
+        gapScore={null}
+        gapDirection={null}
+        attemptIndex={1}
         audio={audioUi()}
         onSpinAgain={onSpinAgain}
+        onTryAgain={() => {}}
       />,
     );
     expect(screen.getByText("Zippers interlock teeth.")).toBeInTheDocument();
@@ -491,8 +496,13 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={adversarial}
         coverage={COVERAGE_FULL}
+        priorCoverage={null}
+        gapScore={null}
+        gapDirection={null}
+        attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
+        onTryAgain={() => {}}
       />,
     );
     expect(screen.getByText(/<img src=x onerror=alert\(1\)>/)).toBeInTheDocument();
@@ -507,13 +517,68 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={{ ...APPROVED, wasEdited: false, rawText: undefined }}
         coverage={COVERAGE_FULL}
+        priorCoverage={null}
+        gapScore={null}
+        gapDirection={null}
+        attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
+        onTryAgain={() => {}}
       />,
     );
     expect(
       screen.queryByText("Original machine transcript (before your edits)"),
     ).toBeNull();
+  });
+
+  it("shows the Gap Score block and try-again action on a second attempt", () => {
+    const onTryAgain = vi.fn();
+    render(
+      <AttemptReview
+        topic={topicSnapshot()}
+        metrics={null}
+        textMetrics={null}
+        transcript={APPROVED}
+        coverage={COVERAGE_PARTIAL}
+        priorCoverage={COVERAGE_PARTIAL}
+        gapScore={0.3}
+        gapDirection="IMPROVED"
+        attemptIndex={2}
+        audio={audioUi({ playback: null })}
+        onSpinAgain={() => {}}
+        onTryAgain={onTryAgain}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Gap Score" })).toBeInTheDocument();
+    expect(screen.getByText("+30%")).toBeInTheDocument();
+    expect(screen.getByText(/coverage improved on this attempt/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Attempt review \(attempt 2\)/i })).toBeInTheDocument();
+    const tryAgain = screen.getByRole("button", { name: "Try again on this topic" });
+    expect(tryAgain).toBeInTheDocument();
+    fireEvent.click(tryAgain);
+    expect(onTryAgain).toHaveBeenCalledTimes(1);
+  });
+
+  it("hides the Gap Score block on the first attempt but offers the try-again entry", () => {
+    render(
+      <AttemptReview
+        topic={topicSnapshot()}
+        metrics={null}
+        textMetrics={null}
+        transcript={APPROVED}
+        coverage={COVERAGE_PARTIAL}
+        priorCoverage={null}
+        gapScore={null}
+        gapDirection={null}
+        attemptIndex={1}
+        audio={audioUi({ playback: null })}
+        onSpinAgain={() => {}}
+        onTryAgain={() => {}}
+      />,
+    );
+    expect(screen.queryByRole("heading", { name: "Gap Score" })).toBeNull();
+    // The try-again action is the loop entry and is always available from review.
+    expect(screen.getByRole("button", { name: "Try again on this topic" })).toBeInTheDocument();
   });
 });
 

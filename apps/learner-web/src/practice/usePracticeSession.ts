@@ -5,6 +5,7 @@ import { isElapsed } from "./deadlineTimer";
 import { listSubjects, presetsFor, eligibleVariantIds, findRubric } from "@/content/packQuery";
 import { isAudioError } from "@/audio/audioErrors";
 import { scoreCoverage } from "@/scoring/coverage";
+import { gapScore } from "@/scoring/gapScore";
 import type { AudioDecoder } from "@/audio/pcmDecode";
 import type { AttemptRecorder } from "@/audio/recorder";
 import { computeAudioMetrics, computeTextMetrics } from "@/audio/deliveryMetrics";
@@ -12,12 +13,16 @@ import type {
   TranscriptionClient,
   TranscriptionSession,
 } from "@/speech/transcriptionClient";
+import type { EmbeddingClient, EmbeddingSession } from "@/scoring/embeddingClient";
+import { semanticCoverage, type ConceptEmbeddings } from "@/scoring/semanticCoverage";
 import type {
   ApprovedTranscript,
   AudioErrorCode,
   BagStore,
   ChallengePreset,
   Command,
+  Concept,
+  CoverageReport,
   PracticeSelection,
   ReducerDeps,
   RuntimePack,
@@ -49,6 +54,8 @@ export interface OrchestratorDeps {
   random: RandomSource;
   bagStore: BagStore;
   audio?: AudioDeps;
+  /** v0.5: optional semantic embedding client; used only when settings.semanticCoverage is true. */
+  embedding?: EmbeddingClient;
   /** Test-only timing seam; production defaults to the motion-aware draw delay. */
   drawDelayMs?: number;
 }
@@ -92,7 +99,7 @@ export function initialSelection(pack: RuntimePack): PracticeSelection {
 }
 
 export function usePracticeSession(deps: OrchestratorDeps) {
-  const { pack, settings, monotonic, wall, random, bagStore, audio, drawDelayMs } = deps;
+  const { pack, settings, monotonic, wall, random, bagStore, audio, embedding, drawDelayMs } = deps;
 
   const [state, setState] = useState<SessionState>(() =>
     initialState(initialSelection(pack)),
@@ -122,6 +129,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     sampleRate: number;
   } | null>(null);
   const transcriptionSessionRef = useRef<TranscriptionSession | null>(null);
+  const embeddingSessionRef = useRef<EmbeddingSession | null>(null);
   const audioStartPendingRef = useRef(false);
 
   // Latest reducer deps for use inside the dispatch updater.
@@ -515,16 +523,29 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   // unmount only. The deps object may be rebuilt each render by the caller, so
   // this must not key off `audio` identity or every render would release the mic.
   const audioRef = useRef(audio);
+  const embeddingRef = useRef(embedding);
   useEffect(() => {
     audioRef.current = audio;
   }, [audio]);
+  useEffect(() => {
+    embeddingRef.current = embedding;
+  }, [embedding]);
   useEffect(
     () => () => {
       audioRef.current?.recorder.release();
       audioRef.current?.transcription.dispose();
+      embeddingRef.current?.dispose();
     },
     [],
   );
+
+  // Cancel any in-flight semantic refinement when the learner leaves the review screen.
+  useEffect(() => {
+    if (state.name !== "REVIEW") {
+      embeddingSessionRef.current?.cancel();
+      embeddingSessionRef.current = null;
+    }
+  }, [state.name]);
 
   // --- Actions ---
 
@@ -691,6 +712,56 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     dispatch({ type: "START_TYPED_REVIEW", attemptId, now: now() });
   }, [currentAttemptId, dispatch, now]);
 
+  // v0.5: refine the lexical coverage with a semantic pass. The lexical score is
+  // already shown; this silently replaces it when the embedding model succeeds.
+  // Any unavailable/timeout/cancel path is a no-op — the learner keeps the lexical score.
+  const requestSemanticRefinement = useCallback(
+    (
+      attemptId: string,
+      text: string,
+      concepts: readonly Concept[],
+      priorCoverage: CoverageReport | null,
+    ) => {
+      if (!embedding || !settings.semanticCoverage) return;
+      if (text.trim().length === 0 || concepts.length === 0) return;
+      const texts = [text, ...concepts.flatMap((c) => c.acceptedPhrases)];
+      const session = embedding.embed({ attemptId, texts }, (event) => {
+        if (event.type !== "done") {
+          if (event.type === "unavailable" && embeddingSessionRef.current === session) {
+            embeddingSessionRef.current = null;
+          }
+          return;
+        }
+        if (embeddingSessionRef.current === session) embeddingSessionRef.current = null;
+        let offset = 1;
+        const conceptEmbeddings: ConceptEmbeddings[] = concepts.map((c) => {
+          const phraseEmbeddings = c.acceptedPhrases.map(
+            (_, i) => event.embeddings[offset + i] ?? [],
+          );
+          offset += c.acceptedPhrases.length;
+          return { conceptId: c.conceptId, phraseEmbeddings };
+        });
+        const refined = semanticCoverage({
+          transcriptEmbedding: event.embeddings[0] ?? [],
+          concepts,
+          embeddings: conceptEmbeddings,
+        });
+        const current = stateRef.current;
+        if (current.name !== "REVIEW" || current.attempt.attemptId !== attemptId) return;
+        const gap = gapScore(priorCoverage, refined);
+        dispatch({
+          type: "COVERAGE_REFINED",
+          attemptId,
+          coverage: refined,
+          gapScore: priorCoverage !== null ? gap : null,
+          now: now(),
+        });
+      });
+      embeddingSessionRef.current = session;
+    },
+    [embedding, settings.semanticCoverage, dispatch, now],
+  );
+
   const approveTranscript = useCallback(
     (text: string) => {
       const s = stateRef.current;
@@ -708,16 +779,23 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         spokenMs: s.metrics.spokenMs,
       });
       const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
+      const gap = gapScore(s.attempt.priorCoverage, coverage);
+      const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
+      const prior = s.attempt.priorCoverage;
+      const attemptId = s.attempt.attemptId;
       dispatch({
         type: "TRANSCRIPT_APPROVED",
-        attemptId: s.attempt.attemptId,
+        attemptId,
         transcript,
         textMetrics,
         coverage,
+        priorCoverage: prior,
+        gapScore: prior !== null ? gap : null,
         now: now(),
       });
+      requestSemanticRefinement(attemptId, text, concepts, prior);
     },
-    [wall, pack, dispatch, now],
+    [wall, pack, dispatch, now, requestSemanticRefinement],
   );
 
   const submitSelfReview = useCallback(
@@ -734,17 +812,30 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         spokenMs: s.metrics?.spokenMs,
       });
       const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
+      const gap = gapScore(s.attempt.priorCoverage, coverage);
+      const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
+      const prior = s.attempt.priorCoverage;
+      const attemptId = s.attempt.attemptId;
       dispatch({
         type: "SELF_REVIEW_DONE",
-        attemptId: s.attempt.attemptId,
+        attemptId,
         transcript,
         textMetrics,
         coverage,
+        priorCoverage: prior,
+        gapScore: prior !== null ? gap : null,
         now: now(),
       });
+      requestSemanticRefinement(attemptId, text, concepts, prior);
     },
-    [wall, pack, dispatch, now],
+    [wall, pack, dispatch, now, requestSemanticRefinement],
   );
+
+  const startSecondAttempt = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "REVIEW") return;
+    dispatch({ type: "START_SECOND_ATTEMPT", requestId: newRequestId(), now: now() });
+  }, [dispatch, now]);
 
   // --- Derived UI data ---
 
@@ -792,6 +883,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       startTypedReview,
       approveTranscript,
       submitSelfReview,
+      startSecondAttempt,
     },
   };
 }
