@@ -4,7 +4,8 @@
 
 **Updated:** 2026-09-01
 
-**Current work:** v0.3 on `docs/v0.3-development-context`, PR #12 targeting `develop`
+**Current work:** v0.3 public physiotherapy practice beta on
+`feature/v0.3-physio-public-beta`, targeting `develop`
 
 ## Product invariant
 
@@ -40,7 +41,8 @@ content, copy, or visual identity.
 - The topic draw is mandatory before timer start and uses a smooth 650 ms rotating compass state;
   reduced-motion users get a short non-animated transition.
 - Long topic expectation/scenario copy lives behind the accessible `?` control.
-- A three-beat **What? → How? → So what?** speaking compass advances with elapsed time.
+- A three-beat **What? → So what? → Now what?** speaking compass advances with elapsed time and
+  matches the Unprompted interaction reference while retaining MediPrompt's own visual identity.
 - The microphone is an icon control with an explicit text state. It can be enabled before speaking
   but becomes active only with the timer; timer-only practice is always equal and available.
 - The “clinical aurora” identity uses deep teal `#07171a`, apricot `#ffb86b`, and sea-glass
@@ -59,13 +61,16 @@ content, copy, or visual identity.
   GINA 2026, the 2025 ERS bronchiectasis guideline, 2025 SCCM PADIS focused update, 2025 ACC/AHA
   ACS guideline, and 2025 AHA adult BLS guideline. Currency and provenance support review; they do
   not substitute for review.
-- The public pack is the approved **non-medical interaction fixture**
-  `content/packs/demo-interaction-fixture.json`. Normal dev and production load only this pack.
-- Genuine medical topics are testable only through the explicit local command
-  `pnpm --filter @mediprompt/learner-web dev:medical`. Every such screen displays
-  `Curriculum beta · unreviewed draft` and `not for diagnosis, treatment, or clinical decisions`.
-- Production build validation rejects candidate identifiers, draft markers, fabricated reviewer
-  identifiers, and any `beta-packs/` path. Never weaken this gate to publish test data.
+- Normal development and GitHub Pages load that exact 20-topic candidate as an explicitly labelled
+  **public practice beta**. The only selectable subjects are Respiratory Physiotherapy and
+  Cardiovascular Physiotherapy; generic Everyday/Science/Reasoning topics are not copied into the
+  learner artifact.
+- Every beta screen displays `Curriculum beta · unreviewed draft` and `not for diagnosis,
+  treatment, or clinical decisions`. The approved non-medical interaction fixture remains only for
+  schema/regression tests.
+- Build and service-worker validation require the exact `MEDICAL`, `DRAFT`, unattested 20-topic
+  snapshot, reject fabricated reviewer identifiers and legacy `beta-packs/`, and reject the generic
+  interaction fixture from the public artifact.
 
 ## Review and release policy
 
@@ -78,11 +83,12 @@ Automated merge readiness and public medical release readiness are different dec
   and model benchmarks, and a qualified educator's traceable review of the exact medical prompts,
   fictional cases, rubrics, accepted phrases, curriculum mappings, and source scope.
 
-Per the owner's decision, educator attestation is planned after real-user feedback when preparing
-v1.x. Until then, genuine medical content may support controlled local testing but must stay
-`DRAFT` and must not enter GitHub Pages. A curriculum document or its provenance is not an
-attestation of derivative app content. Never use a pseudonym, organization, AI system, repository
-owner, or placeholder as a `MEDICAL_REVIEWER`.
+Per the owner's updated decision, educator attestation is planned after real-user feedback when
+preparing v1.x. Until then, genuine medical content may be exposed on GitHub Pages only as the
+conspicuously labelled public practice beta; it must stay `DRAFT`, unattested, and separate from a
+medical release. A curriculum document or its provenance is not an attestation of derivative app
+content. Never use a pseudonym, organization, AI system, repository owner, or placeholder as a
+`MEDICAL_REVIEWER`.
 
 For this policy, **real data** means curriculum-grounded draft topics plus consented,
 de-identified learner attempts, recordings, and corrected transcripts. It never means patient
@@ -113,14 +119,15 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 
 ## Current pickup state
 
-PR #12 is the v0.3 code-review branch and targets `develop`. Preserve its original four commits;
-all review corrections should land as one additional fix commit. After PR checks pass, merge to
-`develop`, then promote `develop` to `main` through a separate checked PR. GitHub operations must
-use `utkarsh-senpai`.
+The deployed v0.3 baseline is on `main`; deployment is CI-gated through GitHub Pages. The current
+feature corrects the answer compass, fixes native select contrast, and replaces generic learner
+topics with the public physiotherapy practice beta. Merge it to `develop` through review, then
+promote `develop` to `main` through a separate checked PR. GitHub operations must use
+`utkarsh-senpai`.
 
-The medical content stays blocked from public release, but that is not a blocker to merging the
-software when the production artifact contains only the non-medical fixture. The next release work
-is target-device/model benchmarking and a v1.x educator-review/release plan.
+The beta may be publicly testable, but medical approval remains blocked pending educator
+attestation. The next release work is target-device/model benchmarking and a v1.x
+educator-review/release plan.
 
 ## Source of truth
 

@@ -1,24 +1,22 @@
 import type { RuntimePack } from "@/practice/types";
+import medicalPracticeBetaJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 import {
   MAX_PACK_BYTES,
-  assertControlledDraftPack,
-  assertV02DemoMinimums,
-  assertV02ProductionPack,
+  assertPublicDraftPracticePack,
   validatePack,
 } from "./packValidator";
-import { FALLBACK_PACK } from "./fallbackPack";
 
 /** The pack precached by the service worker and fetched at activation. */
-export const PRODUCTION_PACK_ID = "demo-interaction-fixture";
+export const PUBLIC_PRACTICE_PACK_ID = "mpt-cardiorespiratory-review-candidate";
 
 /**
- * Fetch, validate, and production-gate the bundled runtime pack.
+ * Fetch, validate, and public-draft-gate the bundled runtime pack.
  * A failed fetch or an invalid/newer pack throws; the caller falls back to the
  * previous cached pack or the empty-capability message. The pack is frozen.
  */
 export interface PackLoadResult {
   pack: RuntimePack;
-  source: "BUNDLED" | "CONTROLLED_DRAFT" | "COMPILED_FALLBACK";
+  source: "PUBLIC_DRAFT" | "COMPILED_FALLBACK";
   warning?: string;
 }
 
@@ -42,8 +40,8 @@ async function parseBoundedResponse(response: Response): Promise<unknown> {
 }
 
 function compiledFallback(): RuntimePack {
-  const pack = validatePack(FALLBACK_PACK);
-  assertV02ProductionPack(pack);
+  const pack = validatePack(medicalPracticeBetaJson);
+  assertPublicDraftPracticePack(pack);
   return pack;
 }
 
@@ -60,39 +58,21 @@ async function fetchPack(path: string): Promise<RuntimePack> {
   return validatePack(await parseBoundedResponse(res));
 }
 
-async function loadProductionPack(warning?: string): Promise<PackLoadResult> {
+async function loadPublicPracticePack(): Promise<PackLoadResult> {
   try {
-    const pack = await fetchPack(`packs/${PRODUCTION_PACK_ID}.json`);
-    assertV02ProductionPack(pack);
-    assertV02DemoMinimums(pack);
-    return { pack, source: "BUNDLED", ...(warning ? { warning } : {}) };
+    const pack = await fetchPack(`packs/${PUBLIC_PRACTICE_PACK_ID}.json`);
+    assertPublicDraftPracticePack(pack);
+    return { pack, source: "PUBLIC_DRAFT" };
   } catch {
     return {
       pack: compiledFallback(),
       source: "COMPILED_FALLBACK",
-      warning: warning ??
-        "The full practice pack was unavailable or invalid. A small reviewed offline fallback is active.",
+      warning:
+        "The downloaded physiotherapy pack was unavailable or invalid. The same bundled curriculum-beta snapshot is active offline.",
     };
   }
 }
 
-export async function loadPackForMode(mode: string): Promise<PackLoadResult> {
-  if (mode === "medical-beta") {
-    try {
-      const pack = await fetchPack(
-        "beta-packs/mpt-cardiorespiratory-review-candidate.json",
-      );
-      assertControlledDraftPack(pack);
-      return { pack, source: "CONTROLLED_DRAFT" };
-    } catch {
-      return loadProductionPack(
-        "The controlled medical draft could not be loaded safely. The reviewed interaction fixture is active instead.",
-      );
-    }
-  }
-  return loadProductionPack();
-}
-
 export async function loadBundledPack(): Promise<PackLoadResult> {
-  return loadPackForMode(import.meta.env.MODE);
+  return loadPublicPracticePack();
 }

@@ -1,4 +1,5 @@
-// Generates the public non-medical interaction fixture.
+// Generates the non-medical schema/regression fixture. It is never copied into
+// the learner-facing public artifact.
 // Genuine medical curriculum content stays in the explicit local beta lane
 // until its exact prompts and rubrics receive educator attestation.
 

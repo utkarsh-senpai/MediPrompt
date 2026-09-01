@@ -39,21 +39,17 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.3, PR #12):** the public production artifact ships the approved non-medical
-interaction fixture `content/packs/demo-interaction-fixture.json`. The genuine 20-topic MPT
-cardiovascular/respiratory pack is retained as the unreviewed `DRAFT`
-`content/candidates/mpt-cardiorespiratory-review-candidate.json`. It is mapped to the supplied
-curriculum and current primary sources, but source grounding is not medical approval. It may be
-used only in the explicitly labelled local curriculum beta and is excluded from normal dev,
-production builds, and GitHub Pages:
+**Content status (v0.3 public practice beta):** the learner app uses the genuine 20-topic MPT
+cardiovascular/respiratory candidate from
+`content/candidates/mpt-cardiorespiratory-review-candidate.json`, split into Respiratory
+Physiotherapy and Cardiovascular Physiotherapy subjects. The generic interaction fixture remains
+only as a schema/regression-test input and is not copied into the public app.
 
-```bash
-pnpm --filter @mediprompt/learner-web dev:medical
-```
-
-The beta displays `Curriculum beta · unreviewed draft` and is for practice only—not clinical use.
-Public medical release remains gated on a qualified educator reviewing the exact prompts, cases,
-rubrics, mappings, and cited-source scope. See the
+The medical pack remains `DRAFT`, with no reviewer or review date. Every screen therefore displays
+`Curriculum beta · unreviewed draft` and is for recall/speaking practice only—not diagnosis,
+treatment, clinical decisions, or a claim of medical approval. Source grounding makes the beta
+useful for feedback; a public **medical release** remains gated on a qualified educator reviewing
+the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 [source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
 
 | Document | Purpose |
@@ -81,8 +77,8 @@ The first playable must work without an account, microphone, model, transcript, 
    drawn.
 4. In Recall Sprint, press **Start timer**. In Deep Research, run or finish the research timer,
    confirm **Ready to speak**, then enter the same speaking view.
-5. Keep the topic, a three-part medical answer arc, a large circular countdown, and an exit action
-   visible throughout the attempt.
+5. Keep the topic, the **What? → So what? → Now what?** answer compass, a large circular
+   countdown, and an exit action visible throughout the attempt.
 6. Finish, spin again, or optionally continue into enhanced review when that feature is available.
 
 This compact mode/topic → spin → timed speech flow remains available even after advanced features
@@ -181,9 +177,9 @@ would make later versions drift from decisions and code merged in earlier versio
 The first useful beta should serve one real medical student and let her complete the full prompt →
 speak → review → retry loop on a phone. The broad inventory contains 265
 [reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset of
-20 cardiovascular/respiratory topics is available in the controlled local beta while it awaits
-qualified educator review. Automated software checks can make v0.3 merge-ready; they cannot make
-unreviewed medical content public-release-ready.
+20 cardiovascular/respiratory topics is available in the explicitly labelled public practice beta
+while it awaits qualified educator review. Automated checks can make the software and beta
+delivery test-ready; they cannot make unreviewed medical content medically release-ready.
 
 ## Contributing
 

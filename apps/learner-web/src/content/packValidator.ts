@@ -360,40 +360,41 @@ export function assertV02ProductionPack(pack: RuntimePack): void {
 }
 
 /**
- * Narrow gate for the explicit local/private medical beta. It never converts a
- * draft into approved content; it proves both useful depth and production
- * rejection before the learner can see it.
+ * Narrow gate for the explicitly labelled public medical practice beta. It
+ * never converts a draft into approved content: the pack must remain
+ * unattested, useful enough for practice, and unable to pass the medical
+ * release gate.
  */
-export function assertControlledDraftPack(pack: RuntimePack): void {
+export function assertPublicDraftPracticePack(pack: RuntimePack): void {
   const errors: string[] = [];
   if (pack.contentKind !== "MEDICAL") {
-    errors.push(`controlled draft must be MEDICAL, got ${pack.contentKind}`);
+    errors.push(`public practice draft must be MEDICAL, got ${pack.contentKind}`);
   }
   if (pack.review.status !== "DRAFT") {
-    errors.push(`controlled draft must remain DRAFT, got ${pack.review.status}`);
+    errors.push(`public practice draft must remain DRAFT, got ${pack.review.status}`);
   }
   if (pack.review.reviewers.length !== 0 || pack.review.reviewedAt !== null) {
     errors.push("unattested draft must have no reviewers or review date");
   }
   try {
-    assertV02DemoMinimums(pack);
+    assertV02PracticeMinimums(pack);
   } catch (error) {
     if (error instanceof PackValidationError) errors.push(...error.errors);
     else errors.push((error as Error).message);
   }
   try {
     assertV02ProductionPack(pack);
-    errors.push("controlled draft unexpectedly passed the production gate");
+    errors.push("public practice draft unexpectedly passed the medical release gate");
   } catch {
-    // Required: a draft beta must remain impossible to activate as production.
+    // Required: public beta access must never imply educator attestation.
   }
   if (errors.length > 0) {
-    throw new PackValidationError("controlled draft gate failed", errors);
+    throw new PackValidationError("public draft practice gate failed", errors);
   }
 }
 
-/** Release-content gate for the primary v0.2 demonstration pack. */
-export function assertV02DemoMinimums(pack: RuntimePack): void {
+/** Minimum useful breadth/depth shared by the regression and public-beta packs. */
+export function assertV02PracticeMinimums(pack: RuntimePack): void {
   const topics = pack.subjects.flatMap((subject) => subject.topics);
   const trioCount = topics.filter((topic) => {
     const byMode = new Map<string, Set<ChallengePreset>>();
@@ -409,10 +410,16 @@ export function assertV02DemoMinimums(pack: RuntimePack): void {
   }).length;
 
   const errors: string[] = [];
-  if (topics.length < 20) errors.push(`production pack requires at least 20 topics, got ${topics.length}`);
-  if (trioCount < 3) errors.push(`production pack requires at least 3 complete challenge trios, got ${trioCount}`);
+  if (topics.length < 20) {
+    errors.push(`practice pack requires at least 20 topics, got ${topics.length}`);
+  }
+  if (trioCount < 3) {
+    errors.push(
+      `practice pack requires at least 3 complete challenge trios, got ${trioCount}`,
+    );
+  }
   if (errors.length > 0) {
-    throw new PackValidationError("demo content gate failed", errors);
+    throw new PackValidationError("practice content gate failed", errors);
   }
 }
 
