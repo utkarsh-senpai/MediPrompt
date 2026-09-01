@@ -1,7 +1,7 @@
 // Validates content packs against the runtime schema + custom cross-reference checks.
-// - content/packs/*.json : production packs; must also pass the v0.2 production gate.
-// - content/candidates/*.json: medical review candidates; they must meet beta
-//   depth and fail the public-production gate.
+// - content/packs/*.json: approved non-medical regression fixtures.
+// - content/candidates/*.json: public medical practice-beta candidates; they
+//   must meet useful depth, stay explicitly DRAFT, and fail the medical release gate.
 // - content/fixtures/*.json: test fixtures; structural validation only (may be DRAFT /
 //   NOT_FOR_PUBLICATION and must NOT pass the production gate by accident).
 //
@@ -13,8 +13,8 @@ import { fileURLToPath } from "node:url";
 import {
   validatePack,
   assertV02ProductionPack,
-  assertControlledDraftPack,
-  assertV02DemoMinimums,
+  assertPublicDraftPracticePack,
+  assertV02PracticeMinimums,
   PackValidationError,
   MAX_PACK_BYTES,
 } from "../src/content/packValidator";
@@ -72,7 +72,7 @@ for (const file of packFiles) {
   try {
     const pack = validatePack(readJson(file));
     assertV02ProductionPack(pack);
-    assertV02DemoMinimums(pack);
+    assertV02PracticeMinimums(pack);
     if (basename(file) !== `${pack.packId}.json`) {
       throw new Error(`filename must match packId (${pack.packId}.json)`);
     }
@@ -86,7 +86,7 @@ for (const file of candidateFiles) {
   const label = `candidate:${file.split("/").pop()}`;
   try {
     const pack = validatePack(readJson(file));
-    assertControlledDraftPack(pack);
+    assertPublicDraftPracticePack(pack);
     if (basename(file) !== `${pack.packId}.json`) {
       throw new Error(`filename must match packId (${pack.packId}.json)`);
     }

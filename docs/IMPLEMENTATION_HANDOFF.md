@@ -15,9 +15,10 @@ Read only these files first:
 5. `docs/curriculum/MPT-CBC-topics.md` only for broad curriculum inventory work.
 6. `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md` for the first medical-pack review.
 
-The current repository includes the reviewed v0.2 first-playable implementation and a complete
-source-grounded medical review candidate. Do not mistake either the broad MPT inventory or the
-unattested medical candidate for published runtime content.
+The current repository includes the v0.3 learner app and a complete source-grounded medical review
+candidate. The exact 20-topic candidate is learner-visible as a public **practice beta**, but it is
+still `DRAFT`; do not mistake public availability, the broad MPT inventory, or source grounding for
+educator approval.
 
 ## Non-negotiable product invariant
 
@@ -53,17 +54,18 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ### Current baseline: v0.2 first playable
 
-The React/TypeScript PWA now implements the compact two-mode practice loop, strict topic-pack
+The React/TypeScript PWA implements the compact two-mode practice loop, strict topic-pack
 validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
-surfaces, and an atomic allowlisted offline cache. It uses a reviewed non-medical interaction pack
-until medical content has an identified medical reviewer. A compiled two-mode non-medical fallback
-keeps the practice loop usable when the full pack is missing or rejected.
+surfaces, and an atomic allowlisted offline cache. The learner artifact now contains only the
+20-topic public physiotherapy practice beta, with the same snapshot compiled as its offline
+fallback; generic interaction subjects are regression-test inputs only.
 
 `content/candidates/mpt-cardiorespiratory-review-candidate.json` is the first medical publication
 candidate: 20 curriculum-mapped topics, Recall Sprint and Deep Research coverage, 46 source-linked
 rubrics, and three full challenge trios. Its generator, evidence matrix, source-currency decisions,
-and educator checklist are committed. It is `DRAFT`, has no reviewer/date attestation, fails the
-production gate by design, and is excluded from build copying.
+and educator checklist are committed. It is `DRAFT`, has no reviewer/date attestation, and fails
+the medical release gate by design. Public build and service-worker gates permit only that exact
+unattested snapshot and keep its warning visible.
 
 The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScript 5.9.3, Vite
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
@@ -127,7 +129,7 @@ See `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` for runtime YAML, UI, progression, and
   research, original prompt/rubric/case wording, and an explicit reuse boundary. Its automated
   candidate checks are complete.
 - Qualified educator review of that exact candidate remains outstanding. Do not infer approval from
-  source authority or put a placeholder in the reviewer fields.
+  source authority, GitHub Pages availability, or put a placeholder in the reviewer fields.
 - Do not use the candidate count as an official curriculum competency count.
 
 ## PR review checklist

@@ -1,6 +1,6 @@
 # MPT Cardiovascular and Respiratory Medical-Content Review
 
-**Status:** CONTROLLED BETA CANDIDATE — `DRAFT`, unreviewed, and excluded from public builds
+**Status:** PUBLIC PRACTICE BETA — `DRAFT`, unreviewed, and not medically approved
 
 **Evidence checked:** 2026-08-30
 
@@ -16,9 +16,10 @@ use original wording, and three topics have distinct Guided, Applied, and Viva v
 
 The pack remains `DRAFT` because a guideline, textbook, or curriculum can support a claim but
 cannot attest that a qualified educator reviewed MediPrompt's exact selection, phrasing,
-fictional cases, rubrics, accepted phrases, scope, and exam relevance. It is testable only through
-the explicitly labelled local curriculum beta. Public production continues to use the approved
-non-medical interaction fixture.
+fictional cases, rubrics, accepted phrases, scope, and exam relevance. The owner has chosen to make
+this exact snapshot publicly testable before attestation, so GitHub Pages presents it only as a
+conspicuously labelled practice beta. Public availability does not convert it into a reviewed
+medical release.
 
 ## What was validated
 
@@ -126,16 +127,18 @@ locate or corroborate primary sources. They are not used as ground truth in the 
   a spoken answer is medically correct.
 - The generator emits `review.status: DRAFT`, `reviewers: []`, and `reviewedAt: null`.
 - Candidate validation checks generator/artifact drift, 20 topics, three challenge trios, valid
-  references, controlled-beta restrictions, and explicit failure of the production gate.
-- Build validation forbids draft/candidate markers and `beta-packs/` in production output. Only
-  `content/packs/` is copied to the public PWA.
+  references, public-beta restrictions, and explicit failure of the medical release gate.
+- Build and service-worker validation require the exact `MEDICAL`, `DRAFT`, reviewer-empty
+  snapshot, forbid fabricated review claims and the legacy `beta-packs/` path, and reject the
+  generic interaction fixture from the learner artifact.
 
 ## Required educator review
 
 **Pending:** educator review is intentionally deferred until the application has real-user beta
-feedback and a v1.x release plan. This does not block local curriculum-beta testing or software
-merge, but it blocks publishing the medical pack. The checklist below applies to the exact
-candidate commit proposed for release.
+feedback and a v1.x release plan. This does not block an explicitly warned public practice beta or
+software merge, but it blocks describing the pack as reviewed, approved, clinically authoritative,
+or release-ready. The checklist below applies to the exact candidate commit proposed for medical
+release.
 
 The medical reviewer must review the generated JSON and this evidence matrix, not just the source
 list.
@@ -177,17 +180,16 @@ guideline author, AI system, repository owner, or placeholder as MEDICAL_REVIEWE
 
 ## Promotion procedure after genuine approval
 
-Not yet executed. PR #12 deliberately restores the pack to the candidate lane and keeps the
-non-medical demo fixture in public production. Complete all steps below in a later, dedicated
-medical-content promotion PR.
+Not yet executed. The public practice beta deliberately retains candidate status and empty
+attestation. Complete all steps below in a later, dedicated medical-content promotion PR.
 
 1. Apply every reviewer correction in the generator and regenerate the candidate.
 2. Record the completed attestation in the promotion PR.
 3. Change the reviewed artifact to APPROVED, add the identified MEDICAL_REVIEWER, and set the
    actual review date.
-4. Replace the one published JSON under content/packs/; do not copy the draft directory.
-5. Generate a reviewed medical fallback or explicitly retain and label the non-medical emergency
-   fallback; the UI must never imply that fallback prompts are medical.
+4. Move the approved artifact into the published-content lane and update the public-beta loader and
+   cache contract without losing provenance.
+5. Regenerate the compiled fallback from the exact reviewed artifact.
 6. Update the required production artifact name and tests.
 7. Run content, unit, accessibility, build, offline/E2E, dependency, secret, and link gates.
 8. Merge only after the medical reviewer approves the exact final diff and CI commit.

@@ -86,8 +86,9 @@ No learner code is included. Design review changes stay on this branch until app
 **Implementation status:** application complete; automated, accessibility, offline, responsive,
 content, and dependency-security gates are part of the promotion review. Medical-content
 preparation now includes a validated 20-topic cardiovascular/respiratory candidate with 46
-source-linked rubrics and three full challenge trios. It remains excluded from runtime pending
-qualified educator attestation; the approved non-medical interaction fixture remains active.
+source-linked rubrics and three full challenge trios. The exact candidate is active as a
+conspicuously labelled public practice beta while qualified educator attestation remains pending;
+the approved non-medical interaction fixture is retained only for regression tests.
 
 Deliver a static TypeScript PWA with:
 
@@ -103,8 +104,8 @@ Deliver a static TypeScript PWA with:
   ready-to-speak confirmation and the same speaking timer.
 - A settings surface for speech and research durations; settings persist locally when storage is
   available and fall back to defaults when it is not.
-- A distraction-free speaking view containing the topic, a three-step medical answer arc, large
-  circular countdown, current instruction, and close/end action.
+- A distraction-free speaking view containing the topic, the **What? → So what? → Now what?**
+  answer compass, large circular countdown, current instruction, and close/end action.
 - A return path to spin again when the timer completes or is closed.
 - One hand-authored demonstration topic pack with at least 20 Guided topics and at least three
   complete Guided/Applied/Viva prompt trios. Applied/Viva examples require educator-reviewed
@@ -112,8 +113,9 @@ Deliver a static TypeScript PWA with:
 - Speaking and Deep Research timers that survive background/foreground transitions.
 - No account and no model download.
 - Responsive layout, keyboard navigation, reduced motion, and basic offline application shell.
-- A separate medical-candidate lane that validates source links, minimum topic/depth coverage, empty
-  pre-review attestation, production-gate rejection, and exclusion from the static artifact.
+- A separate medical-candidate lane that validates source links, minimum topic/depth coverage,
+  empty pre-review attestation, medical-release-gate rejection, explicit public-beta labelling, and
+  exclusion of generic interaction content from the static learner artifact.
 
 **Exit gate:** a first-time phone user can infer the mode/challenge/subject → Spin → Start timer
 flow, reaches a topic in under five seconds, and completes or exits a timed attempt without

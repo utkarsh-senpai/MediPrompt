@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { App } from "./App";
 import { validatePack } from "@/content/packValidator";
 import type { RuntimePack } from "@/practice/types";
-import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalPracticeBetaJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 
-const demoPack = validatePack(demoPackJson) as RuntimePack;
+const medicalPracticeBeta = validatePack(medicalPracticeBetaJson) as RuntimePack;
 
 function mockFetch(pack: unknown): void {
   const body = JSON.stringify(pack);
@@ -70,7 +70,7 @@ function stubSpeechCaps(getUserMedia: () => Promise<unknown>): void {
 describe("App accessibility + capability + security", () => {
   beforeEach(() => {
     setMatchMedia(false);
-    mockFetch(demoPack);
+    mockFetch(medicalPracticeBeta);
   });
   afterEach(() => {
     cleanup();
@@ -93,7 +93,7 @@ describe("App accessibility + capability + security", () => {
     // Select a subject that has multiple challenge presets for Recall Sprint.
     await user.selectOptions(
       screen.getByLabelText("Subject"),
-      "reasoning-and-tradeoffs",
+      "respiratory-physiotherapy",
     );
     const challengeGroup = screen.getByRole("group", { name: "Challenge" });
     const pressedButtons = within(challengeGroup).getAllByRole("button");
@@ -216,7 +216,7 @@ describe("App accessibility + capability + security", () => {
 
   it("renders pack wording containing HTML as inert text, not as elements", async () => {
     const htmlWording = "<img src=x onerror=alert(1)><script>alert(2)</script>";
-    const adversarialPack = JSON.parse(JSON.stringify(demoPack)) as RuntimePack;
+    const adversarialPack = JSON.parse(JSON.stringify(medicalPracticeBeta)) as RuntimePack;
     for (const subject of adversarialPack.subjects) {
       for (const topic of subject.topics) {
         for (const variant of topic.variants) variant.wording = htmlWording;

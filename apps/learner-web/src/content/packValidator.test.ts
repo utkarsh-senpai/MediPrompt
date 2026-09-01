@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   assertV02ProductionPack,
-  assertControlledDraftPack,
-  assertV02DemoMinimums,
+  assertPublicDraftPracticePack,
+  assertV02PracticeMinimums,
   PackValidationError,
   validatePack,
 } from "./packValidator";
@@ -131,7 +131,7 @@ describe("validatePack — happy paths", () => {
 describe("assertV02ProductionPack", () => {
   it("accepts the production pack", () => {
     expect(() => assertV02ProductionPack(validatePack(demoPackJson))).not.toThrow();
-    expect(() => assertV02DemoMinimums(validatePack(demoPackJson))).not.toThrow();
+    expect(() => assertV02PracticeMinimums(validatePack(demoPackJson))).not.toThrow();
   });
 
   it("rejects the NOT_FOR_PUBLICATION fixture", () => {
@@ -178,12 +178,12 @@ describe("assertV02ProductionPack", () => {
   });
 
   it("enforces the demo topic and challenge-trio minimums separately", () => {
-    expect(() => assertV02DemoMinimums(validatePack(basePack()))).toThrow();
+    expect(() => assertV02PracticeMinimums(validatePack(basePack()))).toThrow();
   });
 
-  it("permits the medical candidate only through the controlled draft gate", () => {
+  it("permits the medical candidate only through the public draft-practice gate", () => {
     const candidate = validatePack(medicalCandidateJson);
-    expect(() => assertControlledDraftPack(candidate)).not.toThrow();
+    expect(() => assertPublicDraftPracticePack(candidate)).not.toThrow();
     expect(() => assertV02ProductionPack(candidate)).toThrow();
   });
 });

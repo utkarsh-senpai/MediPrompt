@@ -437,8 +437,9 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
 
 Schema restrictions include `additionalProperties: false`, semantic pack versions, valid locale,
 unique stable IDs, versioned challenge profiles, bounded timer values, non-empty original wording,
-resolvable source references, allowed review statuses, and no runtime publication when status is
-not `APPROVED`. `contentKind` is required; an approved `MEDICAL` pack requires at least one
+resolvable source references, and allowed review statuses. The normal medical release gate rejects
+anything not `APPROVED`; the separate public-practice-beta gate accepts only one allowlisted,
+source-grounded `MEDICAL`/`DRAFT` snapshot with empty attestation. `contentKind` is required; an approved `MEDICAL` pack requires at least one
 `MEDICAL_REVIEWER`, while `CONTENT_EDITOR` approval is limited to
 `NON_MEDICAL_INTERACTION` fixtures. Applied variants require a reviewed fictional case. Viva
 variants additionally require plausible alternatives and a reviewed follow-up or evidence update.
@@ -447,10 +448,10 @@ shorter timer.
 
 Review metadata models absence honestly: an unattested `DRAFT` has `reviewers: []` and
 `reviewedAt: null`. The schema condition requires at least one reviewer and a non-null ISO date for
-`APPROVED`; production validation then enforces the role/content-kind rule. Medical review
+`APPROVED`; medical release validation then enforces the role/content-kind rule. Medical review
 candidates live under `content/candidates/`, must meet the v0.2 topic/trio minimums, and must fail
-the production gate. The copy step reads only `content/packs/`, and artifact validation scans for
-candidate identifiers.
+the medical release gate. The v0.3 beta copy step allowlists the exact 20-topic candidate; artifact
+and service-worker validation require `DRAFT`, no reviewers/date, and exclude generic packs.
 
 ## 6. Java compiler contracts
 

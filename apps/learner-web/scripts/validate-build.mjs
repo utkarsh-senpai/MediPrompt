@@ -22,6 +22,7 @@ const MAX_RUNTIME_BYTES = 32 * 1024 * 1024;
 // Lazy transcription worker graph (pinned transformers.js), loaded only on
 // explicit learner activation and then cached.
 const MAX_TOTAL_JS_BYTES = 3 * 1024 * 1024;
+const PUBLIC_PRACTICE_PACK = "packs/mpt-cardiorespiratory-review-candidate.json";
 
 function filesUnder(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -36,7 +37,7 @@ const required = [
   "index.html",
   "manifest.webmanifest",
   "sw.js",
-  "packs/demo-interaction-fixture.json",
+  PUBLIC_PRACTICE_PACK,
   ...ORT_RUNTIME_FILES,
 ];
 for (const name of required) {
@@ -46,7 +47,10 @@ for (const name of required) {
 for (const name of names) {
   if (name.endsWith(".map")) errors.push(`production source map is forbidden: ${name}`);
   if (name === "beta-packs" || name.startsWith("beta-packs/")) {
-    errors.push(`local beta content leaked into the production artifact: ${name}`);
+    errors.push(`legacy beta-packs path leaked into the public artifact: ${name}`);
+  }
+  if (name === "packs/demo-interaction-fixture.json") {
+    errors.push("generic interaction fixture must not ship to learners");
   }
   if (/not-for-publication|mpt-competency-draft|medical-candidate/i.test(name)) {
     errors.push(`draft/reference content leaked into the artifact: ${name}`);
@@ -60,8 +64,11 @@ const textExtensions = new Set([".html", ".js", ".css", ".json", ".webmanifest",
 const forbiddenText = [
   ["synthetic-not-for-publication", "draft fixture identifier"],
   ["mpt-competency-draft", "reference curriculum marker"],
-  ["mpt-cardiorespiratory-review-candidate", "unapproved medical candidate identifier"],
   ["mpt-clinical-reviewer", "fabricated medical reviewer identifier"],
+  ["demo-interaction-fixture", "generic interaction fixture identifier"],
+  ["Everyday Explanations", "generic Everyday subject"],
+  ["Science and Nature", "generic Science subject"],
+  ["Reasoning and Trade-offs", "generic Reasoning subject"],
   ["-----BEGIN PRIVATE KEY-----", "private key"],
 ];
 const credentialPatterns = [
@@ -88,6 +95,28 @@ for (const file of files.filter((candidate) => textExtensions.has(extname(candid
       errors.push(`dynamic eval found in ${name}; strict CSP forbids it`);
     }
   }
+}
+
+// Public testing deliberately uses the exact source-grounded medical candidate,
+// but it must remain an unattested DRAFT. These assertions prevent a build from
+// silently relabelling it as reviewed or switching back to generic topics.
+const publicPack = JSON.parse(readFileSync(resolve(distDir, PUBLIC_PRACTICE_PACK), "utf8"));
+const publicTopicCount = Array.isArray(publicPack.subjects)
+  ? publicPack.subjects.reduce(
+      (total, subject) => total + (Array.isArray(subject.topics) ? subject.topics.length : 0),
+      0,
+    )
+  : 0;
+if (
+  publicPack.packId !== "mpt-cardiorespiratory-review-candidate" ||
+  publicPack.contentKind !== "MEDICAL" ||
+  publicPack.review?.status !== "DRAFT" ||
+  !Array.isArray(publicPack.review?.reviewers) ||
+  publicPack.review.reviewers.length !== 0 ||
+  publicPack.review.reviewedAt !== null ||
+  publicTopicCount !== 20
+) {
+  errors.push("public physiotherapy pack is not the expected unattested 20-topic DRAFT");
 }
 
 const html = readFileSync(resolve(distDir, "index.html"), "utf8");

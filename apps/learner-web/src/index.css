@@ -756,11 +756,20 @@ textarea:focus-visible {
 
 select {
   appearance: none;
+  color-scheme: dark;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c6d4d1' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.85rem center;
   padding-right: 2.2rem;
   cursor: pointer;
+}
+
+/* Chromium/macOS paints an opened native select menu on a light system
+   surface even when the page uses a dark color scheme. Give every option an
+   explicit high-contrast palette so unselected subject names remain legible. */
+select option {
+  color: #14201d;
+  background-color: #f7f0e4;
 }
 
 textarea {

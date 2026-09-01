@@ -136,12 +136,12 @@ describe("AnswerCompass", () => {
     { id: "apply", label: "Apply" },
   ];
 
-  it("uses What, How, and So what and advances with elapsed time", () => {
+  it("uses What, So what, and Now what and advances with elapsed time", () => {
     const { rerender } = render(
       <AnswerCompass steps={steps} remainingMs={90_000} totalMs={90_000} active />,
     );
     expect(screen.getByRole("list", { name: "Speaking path" })).toHaveTextContent(
-      "What?How?So what?",
+      "What?So what?Now what?",
     );
     expect(screen.getByRole("listitem", { name: /What.*current phase/i })).toHaveAttribute(
       "aria-current",
@@ -151,7 +151,7 @@ describe("AnswerCompass", () => {
     rerender(
       <AnswerCompass steps={steps} remainingMs={20_000} totalMs={90_000} active />,
     );
-    expect(screen.getByRole("listitem", { name: /So what.*current phase/i })).toHaveAttribute(
+    expect(screen.getByRole("listitem", { name: /Now what.*current phase/i })).toHaveAttribute(
       "aria-current",
       "step",
     );
