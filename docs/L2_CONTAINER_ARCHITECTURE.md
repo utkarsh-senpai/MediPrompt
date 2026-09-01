@@ -60,16 +60,16 @@ flowchart TB
 | Container | Responsibility | Data held | Versions |
 | --- | --- | --- | --- |
 | Basic practice core | Mode/subject selection, topic draw, focused timer, answer arc, finish and repeat | In-memory current topic/timer | v0.2+ |
-| Learner enhancements | Recording, review, retry, scheduling and history UI | In-memory active session | v0.3+ |
-| Browser workers | Transcription and semantic coverage off the main thread | Temporary audio/features/model state | v0.3–v0.4+ |
+| Learner enhancements | Recording, review, coverage, retry, scheduling and history UI | In-memory active session | v0.3+ |
+| Browser workers | Transcription, then optional semantic coverage off the main thread | Temporary audio/features/model state | v0.3 and v0.5+ |
 | localStorage | Accessibility and timer settings | Learner-owned settings | v0.2+ |
-| IndexedDB | Attempts, pack metadata, model metadata, due queue | Learner-owned local data | v0.5+ |
+| IndexedDB | Attempts, pack metadata, model metadata, due queue | Learner-owned local data | v0.6+ |
 | Service worker/cache | Offline shell, content and optional pinned model assets | Public immutable assets | v0.2+ |
 | Topic packs | Prompts, reviewed rubrics, follow-ups and source metadata | No learner data | v0.2+ |
-| Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | v0.6+ |
+| Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | v0.7+ |
 | GitHub Actions/Pages | Validation, static build and publication | Public build artifacts | v0.2+ |
 
-Model files should be fetched only after the learner enables speech or coverage intelligence. The
+Model files should be fetched only after the learner enables speech or optional semantic coverage. The
 first prompt must not wait for a model download. Cached application and pack versions must continue
 to work if the network disappears.
 
@@ -183,7 +183,7 @@ from production secrets. Its deployment target remains undecided until v1.1 plan
 | Static host | GitHub Pages | No recurring infrastructure cost | Availability, policy, or scale limitation |
 | Recording | MediaRecorder + Web Audio | Native browser primitives | Unsupported target browser |
 | Local STT | Transformers.js + candidate `whisper-base.en` | Local privacy and acceptable candidate quality | v0.3 device benchmark |
-| Coverage | Quantized `all-MiniLM-L6-v2` + reviewed rubric | Inspectable semantic coverage | Human disagreement or device budget |
+| Coverage | v0.4 lexical baseline; optional quantized `all-MiniLM-L6-v2` from v0.5 | Inspectable local coverage with deterministic fallback | Human disagreement or device budget |
 | Local storage | IndexedDB | Structured, asynchronous, offline | Data-volume or compatibility evidence |
 | Content authoring | Versioned YAML | Reviewable diffs | Reviewer usability evidence |
 | Content runtime | Validated JSON | Fast deterministic browser consumption | None expected |

@@ -4,8 +4,8 @@
 
 **Updated:** 2026-09-01
 
-**Current work:** v0.3 public physiotherapy practice beta on
-`feature/v0.3-physio-public-beta`, targeting `develop`
+**Current work:** v0.4 content coverage on `feature/v0.4-content-coverage` (PR #18), targeting
+`develop`; keep the PR open for owner review
 
 ## Product invariant
 
@@ -30,6 +30,10 @@ content, copy, or visual identity.
   validation, no remote scripts/fonts/analytics, and an offline fallback.
 - v0.3 optional local recording, playback, deterministic delivery observations, cancellable
   browser-local `whisper-base.en` transcription, transcript correction, and typed self-review.
+- v0.4 deterministic coverage over learner-approved text: whole accepted-phrase tokens or nearby
+  significant tokens, visible matched-phrase evidence, and exactly one prioritized next action.
+  Missing text or a non-scorable rubric produces an explicit unavailable outcome, never zero
+  coverage. Semantic matching and same-identity retry remain v0.5 work.
 - Microphone consent does not acquire a stream. Permission is requested only when the speaking
   timer starts; recording stops with the timer and every stream/object URL is released.
 
@@ -78,7 +82,7 @@ Automated merge readiness and public medical release readiness are different dec
 
 - **Code merge readiness:** lint, typecheck, content validation, unit/component/a11y tests,
   production build and artifact validation, E2E/offline checks, dependency audits, responsive and
-  reduced-motion inspection, and clean diff checks may allow v0.3 code to merge.
+  reduced-motion inspection, and clean diff checks may allow a version PR to merge.
 - **Public medical release readiness:** additionally requires a release plan, representative-device
   and model benchmarks, and a qualified educator's traceable review of the exact medical prompts,
   fictional cases, rubrics, accepted phrases, curriculum mappings, and source scope.
@@ -98,8 +102,8 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 
 - No identifiable patient information; fictional cases only.
 - No audio or transcript upload in the zero-cost path.
-- Medical feedback may later report coverage against reviewed rubric concepts; it must never claim
-  independent correctness.
+- The public beta may report lexical coverage against its source-linked draft rubric only while the
+  unreviewed-draft warning remains conspicuous. It must never claim correctness or medical approval.
 - Never score emotion, anxiety, confidence, personality, intelligence, competence, accent, or
   native-speaker likeness.
 - Do not ship user/provider API keys in the static client. Future connected/BYOK integrations need
@@ -119,11 +123,10 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 
 ## Current pickup state
 
-The deployed v0.3 baseline is on `main`; deployment is CI-gated through GitHub Pages. The current
-feature corrects the answer compass, fixes native select contrast, and replaces generic learner
-topics with the public physiotherapy practice beta. Merge it to `develop` through review, then
-promote `develop` to `main` through a separate checked PR. GitHub operations must use
-`utkarsh-senpai`.
+The deployed v0.3 baseline is on `main`; deployment is CI-gated through GitHub Pages. PR #18 adds
+the bounded v0.4 lexical coverage baseline, matched-phrase disclosure, and one prescription. Its
+review-fix work must remain one commit on the feature branch and the PR must stay open for the
+owner's final review. GitHub operations must use `utkarsh-senpai`.
 
 The beta may be publicly testable, but medical approval remains blocked pending educator
 attestation. The next release work is target-device/model benchmarking and a v1.x
@@ -135,6 +138,7 @@ educator-review/release plan.
 - `docs/EXECUTION_PLAN.md`: version scope and exit gates.
 - `docs/DIFFICULTY_AND_DEPTH_DESIGN.md`: challenge-depth contract.
 - `docs/V0.3_DEVELOPMENT_CONTEXT.md`: v0.3 implementation and review decisions.
+- `docs/V0.4_DEVELOPMENT_CONTEXT.md`: v0.4 lexical-coverage contract and v0.5 deferrals.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.

@@ -431,6 +431,7 @@ function PracticeApp({
           metrics={s.metrics}
           textMetrics={s.textMetrics}
           transcript={s.transcript}
+          coverage={s.coverage}
           audio={session.audio}
           onSpinAgain={spinAgain}
         />

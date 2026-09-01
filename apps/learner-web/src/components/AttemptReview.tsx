@@ -1,10 +1,12 @@
 import type { AudioUiState } from "@/practice/usePracticeSession";
 import type {
   ApprovedTranscript,
+  CoverageReport,
   DeliveryMetrics,
   TextMetrics,
   TopicSnapshot,
 } from "@/practice/types";
+import { CoveragePanel } from "./CoveragePanel";
 import { DeliveryPanel } from "./DeliveryPanel";
 import { PlaybackBar } from "./PlaybackBar";
 
@@ -13,16 +15,18 @@ interface AttemptReviewProps {
   metrics: DeliveryMetrics | null;
   textMetrics: TextMetrics | null;
   transcript: ApprovedTranscript;
+  coverage: CoverageReport;
   audio: AudioUiState;
   onSpinAgain: () => void;
 }
 
-/** Final review screen: approved transcript (inert text) + delivery panel. */
+/** Final review screen: approved transcript, content coverage, and delivery. */
 export function AttemptReview({
   topic,
   metrics,
   textMetrics,
   transcript,
+  coverage,
   audio,
   onSpinAgain,
 }: AttemptReviewProps) {
@@ -47,6 +51,8 @@ export function AttemptReview({
           </details>
         ) : null}
       </section>
+
+      <CoveragePanel coverage={coverage} />
 
       {metrics ? <DeliveryPanel metrics={metrics} textMetrics={textMetrics} /> : null}
 

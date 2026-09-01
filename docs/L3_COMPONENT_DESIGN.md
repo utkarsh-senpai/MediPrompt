@@ -105,11 +105,12 @@ meaning. Editing never changes delivery metrics derived from audio.
 
 ### Coverage engine
 
-Accepts approved transcript text and one versioned rubric. It embeds normalized sentences and
-concept phrases in a worker, calculates similarity, applies calibrated per-pack/default thresholds,
-and returns matches with the exact transcript sentence, concept identifier, score, and threshold.
-It labels ambiguous ranges `possiblyCovered`; it does not invent missing content or claim
-correctness.
+Accepts approved transcript text and one versioned rubric. The v0.4 baseline normalizes a bounded
+input, matches whole accepted-phrase token sequences or nearby significant tokens, and returns the
+concept identifier plus matched accepted phrase. It rejects partial-word matches, does not combine
+distant evidence, and returns an explicit unavailable reason when the transcript or scorable rubric
+is absent. It does not invent missing content or claim correctness. A v0.5 worker may add calibrated
+sentence embeddings and `possiblyCovered` evidence while retaining this deterministic fallback.
 
 ### Feedback composer
 
@@ -272,7 +273,7 @@ group, population, body region, and system are multi-valued secondary facets.
 Settings use `localStorage` from v0.2 because they are small and synchronous, with in-memory
 defaults when storage is unavailable. The value is a versioned, schema-validated JSON object;
 invalid or newer unsupported data falls back safely instead of blocking practice. IndexedDB is
-introduced at v0.5 for the learning-record and metadata stores below.
+introduced at v0.6 for the learning-record and metadata stores below.
 
 | Store | Key | Purpose | Sensitive content |
 | --- | --- | --- | --- |

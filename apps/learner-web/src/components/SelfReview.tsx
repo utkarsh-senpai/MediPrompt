@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { AudioUiState } from "@/practice/usePracticeSession";
+import { MAX_TRANSCRIPT_CHARACTERS } from "@/practice/transcriptPolicy";
 import type { DeliveryMetrics, TranscriptionUnavailableReason } from "@/practice/types";
 import { audioIssueCopy, transcriptionIssueCopy } from "@/app/audioCopy";
 import { DeliveryPanel } from "./DeliveryPanel";
@@ -66,6 +67,7 @@ export function SelfReview({
           id="self-review-text"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          maxLength={MAX_TRANSCRIPT_CHARACTERS}
           rows={5}
         />
       </div>

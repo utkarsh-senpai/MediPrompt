@@ -15,10 +15,10 @@ Read only these files first:
 5. `docs/curriculum/MPT-CBC-topics.md` only for broad curriculum inventory work.
 6. `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md` for the first medical-pack review.
 
-The current repository includes the v0.3 learner app and a complete source-grounded medical review
-candidate. The exact 20-topic candidate is learner-visible as a public **practice beta**, but it is
-still `DRAFT`; do not mistake public availability, the broad MPT inventory, or source grounding for
-educator approval.
+The current repository includes the deployed v0.3 learner app, the v0.4 lexical-coverage PR, and a
+complete source-linked medical review candidate. The exact 20-topic candidate is learner-visible as
+a public **practice beta**, but it is still `DRAFT`; do not mistake public availability, the broad
+MPT inventory, source linkage, or automated coverage for educator approval.
 
 ## Non-negotiable product invariant
 
@@ -36,7 +36,7 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 - Product name: MediPrompt.
 - Hosting baseline: static PWA on GitHub Pages; zero recurring app cost.
 - Front end: React + TypeScript; pure reducer/domain logic and browser adapters.
-- Java: Java 21/Spring Boot command-line content compiler at v0.6, then an optional modular monolith
+- Java: Java 21/Spring Boot command-line content compiler at v0.7, then an optional modular monolith
   for connected features at v1.1+.
 - Medical ground truth: human-reviewed, source-linked rubrics. Local semantic matching reports
   coverage, not correctness.
@@ -52,13 +52,18 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ## Version pickup map
 
-### Current baseline: v0.2 first playable
+### Current baseline: v0.4 content coverage
 
-The React/TypeScript PWA implements the compact two-mode practice loop, strict topic-pack
+The React/TypeScript PWA retains the compact v0.2 two-mode practice loop, strict topic-pack
 validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
-surfaces, and an atomic allowlisted offline cache. The learner artifact now contains only the
-20-topic public physiotherapy practice beta, with the same snapshot compiled as its offline
-fallback; generic interaction subjects are regression-test inputs only.
+surfaces, and an atomic allowlisted offline cache. v0.3 adds opt-in local recording, delivery
+observations, transcription, correction, and typed self-review. PR #18 adds v0.4's bounded lexical
+coverage and one prescription after the learner approves or types text. Missing text/rubric evidence
+is unavailable rather than zero; matching remains coverage, never correctness.
+
+The learner artifact contains only the 20-topic public physiotherapy practice beta, with the same
+snapshot compiled as its offline fallback; generic interaction subjects are regression-test inputs
+only.
 
 `content/candidates/mpt-cardiorespiratory-review-candidate.json` is the first medical publication
 candidate: 20 curriculum-mapped topics, Recall Sprint and Deep Research coverage, 46 source-linked
@@ -71,33 +76,22 @@ The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScrip
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
 checklist** below and in the root README.
 
-### Next implementation branch: `feature/v0.3-private-speech`
+### Current review branch: `feature/v0.4-content-coverage`
 
-Add only the private speech-intelligence slice:
-
-1. Preserve the complete v0.2 no-microphone path as the default and regression baseline.
-2. Add explicit microphone permission, denial, unsupported-device, cancellation, and recovery
-   paths.
-3. Record locally with playback and deterministic Web Audio delivery measurements.
-4. Benchmark a lazy, cancellable browser-local transcription worker on representative
-   Indian-English medical speech and low/mid-range devices before selecting a default model tier.
-5. Let the learner correct the transcript before later content evaluation; keep audio and text
-   private to the browser.
-6. Report only observable delivery features—duration, pace, fillers, repetition, silence, pause
-   placement, loudness stability, and clipping—with documented limitations.
-7. Add deterministic audio fixtures, worker failure tests, UI-freeze/performance evidence, and
-   proof that no raw audio request leaves the browser.
-
-Do not add embeddings/rubric scoring, prescriptions, scheduling, login, a database, provider API
-calls, or Spring Boot to v0.3; those belong to later exit gates.
+PR #18 must keep the v0.2 timer-only path and v0.3 privacy guarantees unchanged. Its v0.4 matcher
+uses whole normalized phrase tokens or nearby significant tokens, exposes the matched rubric phrase,
+bounds synchronous input, and distinguishes `NO_TRANSCRIPT` from `NO_SCORABLE_RUBRIC`. Quantized
+semantic matching, same-identity retry, and Refinement Delta are deliberately moved to v0.5. Do not
+merge PR #18 until its owner completes final review.
 
 ### Later versions
 
-- v0.3: local recording/transcription and observable delivery metrics.
-- v0.4: reviewed rubric coverage, one prescription, same-variant retry, Refinement Delta.
-- v0.5: Viva follow-ups/evidence updates, scheduling, local history/export/delete.
-- v0.6: Spring Boot content compiler and authoring/publication validation.
-- v0.7: target-user beta hardening.
+- v0.3: local recording/transcription and observable delivery metrics (deployed).
+- v0.4: deterministic lexical rubric coverage, visible accepted-phrase evidence, one prescription.
+- v0.5: optional semantic enhancer, same-identity retry, Refinement Delta.
+- v0.6: Viva follow-ups/evidence updates, scheduling, local history/export/delete.
+- v0.7: Spring Boot content compiler and authoring/publication validation.
+- v0.8: target-user beta hardening.
 - v1.1+: optional connected service and provider-backed coaching.
 
 The detailed exit gate for each version is authoritative in `docs/EXECUTION_PLAN.md`.

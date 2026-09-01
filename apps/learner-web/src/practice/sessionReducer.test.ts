@@ -4,6 +4,7 @@ import { findVariant, toTopicSnapshot } from "@/content/packQuery";
 import { validatePack } from "@/content/packValidator";
 import type {
   ApprovedTranscript,
+  CoverageReport,
   DeliveryMetrics,
   PracticeSelection,
   ReducerDeps,
@@ -83,6 +84,19 @@ const TEXT_METRICS: TextMetrics = {
   wordsPerMinute: 58.5,
   fillerCount: 1,
   repeatedPhraseCount: 0,
+};
+
+const COVERAGE_REPORT: CoverageReport = {
+  verifiable: true,
+  unavailableReason: null,
+  conceptResults: [
+    { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
+    { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
+  ],
+  hitCount: 1,
+  totalCount: 2,
+  weightedFraction: 0.4,
+  fraction: 0.5,
 };
 
 describe("reduceSession — IDLE / DRAWING", () => {
@@ -588,6 +602,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         attemptId: "r1-attempt",
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
+        coverage: COVERAGE_REPORT,
         now: 96_000,
       },
       armed,
@@ -597,6 +612,7 @@ describe("reduceSession — v0.3 review and exits", () => {
       expect(state.metrics).toEqual(METRICS);
       expect(state.textMetrics).toEqual(TEXT_METRICS);
       expect(state.transcript).toEqual(APPROVED);
+      expect(state.coverage).toEqual(COVERAGE_REPORT);
     }
     expect(commands).toContainEqual({ type: "FOCUS_VIEW", target: "review" });
   });
@@ -669,6 +685,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         attemptId: "r1-attempt",
         transcript: typed,
         textMetrics: { fillerCount: 0, repeatedPhraseCount: 0 },
+        coverage: COVERAGE_REPORT,
         now: 97_000,
       },
       deps,
@@ -678,6 +695,7 @@ describe("reduceSession — v0.3 review and exits", () => {
       expect(state.metrics).toBeNull();
       expect(state.textMetrics?.wordsPerMinute).toBeUndefined();
       expect(state.transcript.text).toBe("what I said, from memory");
+      expect(state.coverage).toEqual(COVERAGE_REPORT);
     }
   });
 
@@ -690,6 +708,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         attemptId: "r1-attempt",
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
+        coverage: COVERAGE_REPORT,
         now: 96_000,
       },
       armed,

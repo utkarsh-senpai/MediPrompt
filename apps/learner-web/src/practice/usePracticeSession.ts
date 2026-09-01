@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { reduceSession, initialState, findVariant, toTopicSnapshot } from "./sessionReducer";
 import { draw } from "./shuffledBag";
 import { isElapsed } from "./deadlineTimer";
-import { listSubjects, presetsFor, eligibleVariantIds } from "@/content/packQuery";
+import { listSubjects, presetsFor, eligibleVariantIds, findRubric } from "@/content/packQuery";
 import { isAudioError } from "@/audio/audioErrors";
+import { scoreCoverage } from "@/scoring/coverage";
 import type { AudioDecoder } from "@/audio/pcmDecode";
 import type { AttemptRecorder } from "@/audio/recorder";
 import { computeAudioMetrics, computeTextMetrics } from "@/audio/deliveryMetrics";
@@ -706,15 +707,17 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         text,
         spokenMs: s.metrics.spokenMs,
       });
+      const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
       dispatch({
         type: "TRANSCRIPT_APPROVED",
         attemptId: s.attempt.attemptId,
         transcript,
         textMetrics,
+        coverage,
         now: now(),
       });
     },
-    [wall, dispatch, now],
+    [wall, pack, dispatch, now],
   );
 
   const submitSelfReview = useCallback(
@@ -730,15 +733,17 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         text,
         spokenMs: s.metrics?.spokenMs,
       });
+      const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
       dispatch({
         type: "SELF_REVIEW_DONE",
         attemptId: s.attempt.attemptId,
         transcript,
         textMetrics,
+        coverage,
         now: now(),
       });
     },
-    [wall, dispatch, now],
+    [wall, pack, dispatch, now],
   );
 
   // --- Derived UI data ---
