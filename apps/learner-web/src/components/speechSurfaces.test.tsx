@@ -18,6 +18,7 @@ import type { AudioUiState } from "@/practice/usePracticeSession";
 import type {
   ApprovedTranscript,
   AudioErrorCode,
+  CoverageReport,
   DeliveryMetrics,
   RuntimePack,
   TextMetrics,
@@ -51,6 +52,30 @@ const TEXT_METRICS: TextMetrics = {
   wordsPerMinute: 58.5,
   fillerCount: 1,
   repeatedPhraseCount: 0,
+};
+
+const COVERAGE_FULL: CoverageReport = {
+  verifiable: true,
+  conceptResults: [
+    { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
+    { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
+  ],
+  hitCount: 2,
+  totalCount: 2,
+  weightedFraction: 1,
+  fraction: 1,
+};
+
+const COVERAGE_PARTIAL: CoverageReport = {
+  verifiable: true,
+  conceptResults: [
+    { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
+    { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
+  ],
+  hitCount: 1,
+  totalCount: 2,
+  weightedFraction: 0.4,
+  fraction: 0.5,
 };
 
 const DRAFT: TranscriptDraft = {
@@ -415,6 +440,7 @@ describe("AttemptReview", () => {
         metrics={METRICS}
         textMetrics={TEXT_METRICS}
         transcript={APPROVED}
+        coverage={COVERAGE_PARTIAL}
         audio={audioUi()}
         onSpinAgain={onSpinAgain}
       />,
@@ -424,6 +450,9 @@ describe("AttemptReview", () => {
     const disclosure = screen.getByText("Original machine transcript (before your edits)");
     expect(disclosure.closest("details")).not.toBeNull();
     expect(screen.getByText("58.5 words per minute")).toBeInTheDocument();
+    // Content coverage is shown and names the missed concept as the next action.
+    expect(screen.getByText(/Concepts not yet touched/)).toBeInTheDocument();
+    expect(screen.getByText("Explains interlocking teeth")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Spin again" }));
     expect(onSpinAgain).toHaveBeenCalledTimes(1);
@@ -441,6 +470,7 @@ describe("AttemptReview", () => {
         metrics={null}
         textMetrics={null}
         transcript={adversarial}
+        coverage={COVERAGE_FULL}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
       />,
@@ -456,6 +486,7 @@ describe("AttemptReview", () => {
         metrics={null}
         textMetrics={null}
         transcript={{ ...APPROVED, wasEdited: false, rawText: undefined }}
+        coverage={COVERAGE_FULL}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
       />,

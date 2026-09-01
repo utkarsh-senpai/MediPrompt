@@ -14,18 +14,26 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.3 — Private speech intelligence** (current)
+**v0.4 — Content coverage** (current)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
 mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
-storage), v0.3 adds optional on-device speech feedback: a plain-language mic primer,
+storage), v0.3 added optional on-device speech feedback: a plain-language mic primer,
 session-local recording during the speaking window, in-app playback, Web Audio delivery
 observations (time speaking, pauses, clipping, loudness variation), and — on explicit request —
 pinned whisper-base.en transcription that downloads once and runs entirely in the browser.
 Audio and transcripts never leave the device, and the timer-only loop is unchanged when the
-mic is unsupported or declined. Decision resolutions are recorded in
-[docs/V0.3_DEVELOPMENT_CONTEXT.md](docs/V0.3_DEVELOPMENT_CONTEXT.md) §16. Scheduling, feedback
-quality scoring, and the connected platform remain progressive enhancements for later versions.
+mic is unsupported or declined.
+
+v0.4 turns the approved transcript into deterministic, on-device **content feedback**: each rubric
+concept is tested against the transcript's accepted phrases, a weighted coverage fraction is shown,
+and a **single actionable prescription** names the highest-weight missed concept to address next.
+Topics without a source-grounded rubric get a "not verifiable from sources" fallback instead of a
+fabricated grade. Coverage is shown visually and verbally separate from delivery — content and
+delivery never collapse into one score. The lexical engine is zero-cost, offline, and needs no model
+download; semantic cosine (`all-MiniLM-L6-v2`) is a planned v0.5 enhancer on top of it. Decision
+resolutions are recorded in [docs/V0.4_DEVELOPMENT_CONTEXT.md](docs/V0.4_DEVELOPMENT_CONTEXT.md).
+Scheduling, Gap Score, and the connected platform remain progressive enhancements for later versions.
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -39,7 +47,7 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.3 public practice beta):** the learner app uses the genuine 20-topic MPT
+**Content status (v0.4 public practice beta):** the learner app uses the genuine 20-topic MPT
 cardiovascular/respiratory candidate from
 `content/candidates/mpt-cardiorespiratory-review-candidate.json`, split into Respiratory
 Physiotherapy and Cardiovascular Physiotherapy subjects. The generic interaction fixture remains
@@ -64,6 +72,7 @@ the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 | [Project memory](docs/PROJECT_MEMORY.md) | Current decisions, evidence, risks, and next-version pickup |
 | [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
 | [v0.3 development context](docs/V0.3_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for private speech intelligence |
+| [v0.4 development context](docs/V0.4_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for content coverage |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
