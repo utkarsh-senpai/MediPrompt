@@ -239,7 +239,9 @@ test("v0.6 viva defense ladder scores three answers and returns to review", asyn
   }
 
   await expect(page.getByRole("heading", { name: /Viva complete:/ })).toBeVisible();
-  await expect(page.getByText(/100% defense coverage across 3 answers/i)).toBeVisible();
+  await expect(
+    page.getByText(/100% target-concept coverage across 3 scored answers/i),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Back to attempt review" }).click();
   await expect(page.getByRole("heading", { name: "Attempt review" })).toBeVisible();
 });

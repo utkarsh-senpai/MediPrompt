@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "contentKind": "MEDICAL",
   "packId": "mpt-cardiorespiratory-review-candidate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "MPT Cardiovascular and Respiratory — educator review candidate",
   "locale": "en-IN",
   "licence": {
@@ -287,8 +287,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "spirometry-pft-interpretation",
@@ -434,8 +433,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "arterial-blood-gas-interpretation",
@@ -583,8 +581,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "copd-assessment-planning",
@@ -1398,8 +1395,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "bronchiectasis-airway-clearance",
@@ -1547,8 +1543,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "oxygen-therapy-principles",
@@ -1696,8 +1691,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "icu-mobilization-safety",
@@ -1843,8 +1837,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "ventilator-liberation",
@@ -1992,8 +1985,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "six-minute-walk-test",
@@ -2139,8 +2131,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         }
       ]
     },
@@ -2801,8 +2792,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "acute-coronary-syndrome-recovery",
@@ -2950,8 +2940,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "heart-failure-rehabilitation",
@@ -3097,8 +3086,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "peripheral-artery-disease-walking",
@@ -3244,8 +3232,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "cabg-perioperative-rehabilitation",
@@ -3393,8 +3380,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "exercise-testing-risk-stratification",
@@ -3542,8 +3528,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         },
         {
           "topicId": "adult-basic-life-support",
@@ -3689,8 +3674,7 @@
             }
           ],
           "cases": [],
-          "followUps": [],
-          "vivaQuestions": []
+          "followUps": []
         }
       ]
     }

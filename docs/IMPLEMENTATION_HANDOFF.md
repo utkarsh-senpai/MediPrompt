@@ -2,7 +2,7 @@
 
 **Purpose:** minimum-context entry point for the next coding or PR-review agent
 
-**Design baseline date:** 2026-08-30
+**Design baseline date:** 2026-09-02
 
 ## Start here
 
@@ -15,8 +15,8 @@ Read only these files first:
 5. `docs/curriculum/MPT-CBC-topics.md` only for broad curriculum inventory work.
 6. `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md` for the first medical-pack review.
 
-The current repository includes the deployed v0.3 learner app, the v0.4 lexical-coverage PR, and a
-complete source-linked medical review candidate. The exact 20-topic candidate is learner-visible as
+The current repository includes the v0.6 learner app and a complete source-linked medical review
+candidate. The exact 20-topic candidate is learner-visible as
 a public **practice beta**, but it is still `DRAFT`; do not mistake public availability, the broad
 MPT inventory, source linkage, or automated coverage for educator approval.
 
@@ -52,7 +52,7 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ## Version pickup map
 
-### Current baseline: v0.5 grounded refinement
+### Current baseline: v0.6 viva defense ladder
 
 The React/TypeScript PWA retains the compact v0.2 two-mode practice loop, strict topic-pack
 validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
@@ -67,11 +67,17 @@ segments and displays `POSSIBLY_COVERED` matches without counting them. Whisper 
 one bundled model-worker asset. Semantic score promotion remains disabled pending educator-labelled
 calibration.
 
+v0.6 adds an opt-in post-review viva ladder. Examiner prompts are disclosed one at a time; every
+answer has an independent 60-second timer and attempt identity and reuses the optional local audio,
+transcription, typed self-review, lexical, and semantic-evidence paths. Active exit cancels the
+deadline and in-flight resources. Ladders must increase strictly and resolve completely to one
+drawn rubric. Deep Research defaults to 600 seconds and main speaking defaults to 60 seconds.
+
 The learner artifact contains only the 20-topic public physiotherapy practice beta, with the same
 snapshot compiled as its offline fallback; generic interaction subjects are regression-test inputs
 only.
 
-`content/candidates/mpt-cardiorespiratory-review-candidate.json` is the first medical publication
+`content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.2.0` is the first medical publication
 candidate: 20 curriculum-mapped topics, Recall Sprint and Deep Research coverage, 46 source-linked
 rubrics, and three full challenge trios. Its generator, evidence matrix, source-currency decisions,
 and educator checklist are committed. It is `DRAFT`, has no reviewer/date attestation, and fails
@@ -82,19 +88,18 @@ The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScrip
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
 checklist** below and in the root README.
 
-### v0.5 release source: `feature/v0.5-gap-score-and-semantic`
+### v0.6 release source: `feature/v0.6-viva-round`
 
-PR #20 carries v0.5. Despite the historical branch name, user-facing and normative copy must say
-**Refinement Delta**, because “Gap Score” remains reserved for a future independently grounded
-construct. A delta must reject mismatched topic, variant, prompt, rubric, pack, difficulty, mode,
-register, support, time, or scoring identity. Missing coverage is unavailable, never flat zero.
+PR #22 carries v0.6. The release includes the viva ladder only; it does not implement scheduling,
+persistent history, export/delete, extra registers, challenge suggestions, or extra packs. Those
+items were removed from the v0.6 gate and require a future replan after v0.7.
 
 ### Later versions
 
 - v0.3: local recording/transcription and observable delivery metrics (deployed).
 - v0.4: deterministic lexical rubric coverage, visible accepted-phrase evidence, one prescription.
-- v0.5: same-identity retry, Refinement Delta, and non-counting semantic evidence (current).
-- v0.6: Viva follow-ups/evidence updates, scheduling, local history/export/delete.
+- v0.5: same-identity retry, Refinement Delta, and non-counting semantic evidence.
+- v0.6: opt-in, source-grounded viva defense ladder with lifecycle hardening (current).
 - v0.7: Spring Boot content compiler and authoring/publication validation.
 - v0.8: target-user beta hardening.
 - v1.1+: optional connected service and provider-backed coaching.

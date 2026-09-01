@@ -21,9 +21,8 @@ import { MAX_VIVA_ANSWERS } from "@/practice/types";
 /** Bounds session-local transcript/coverage history during repeated practice. */
 const MAX_PRIOR_ATTEMPTS = 19;
 
-/** Per-defense speaking window. Shorter than the main attempt: a viva answer is
- * a bounded defense, not a full monologue. */
-export const VIVA_SPEAKING_SECONDS = 120;
+/** Focused per-defense speaking window; matches the default main speaking timer. */
+export const VIVA_SPEAKING_SECONDS = 60;
 
 export function initialState(selection: PracticeSelection): SessionState {
   return { name: "IDLE", selection };
@@ -113,7 +112,7 @@ function vivaAttempt(
     challenge: topic.challenge,
     supportLevel: topic.supportLevel,
     register: topic.register,
-    timePolicy: topic.timePolicy,
+    timePolicy: { speakingSeconds: VIVA_SPEAKING_SECONDS },
     challengeIdentity: topic.challengeIdentity,
     createdAt: deps.nowIso,
     attemptIndex: baseAttemptIndex + index + 1,
@@ -122,9 +121,16 @@ function vivaAttempt(
 }
 
 /** Commands to release the in-flight viva recording/transcription on exit. */
-function vivaCleanup(state: SessionState): Command[] {
+function vivaCleanup(state: SessionState, audioArmed: boolean): Command[] {
   if (!isVivaState(state) || !("attempt" in state)) return [];
   const commands: Command[] = [];
+  if (state.name === "VIVA_SPEAKING") {
+    commands.push({ type: "STOP_DEADLINE" });
+    if (audioArmed) {
+      commands.push({ type: "STOP_RECORDING", attemptId: state.attempt.attemptId });
+    }
+    return commands;
+  }
   if (
     state.name === "VIVA_PROCESSING" &&
     state.transcription === "RUNNING"
@@ -154,7 +160,7 @@ export function reduceSession(
       if (isVivaState(state)) {
         return {
           state: { name: "IDLE", selection: event.selection },
-          commands: vivaCleanup(state),
+          commands: vivaCleanup(state, deps.audioArmed),
         };
       }
       if (
@@ -214,7 +220,7 @@ export function reduceSession(
           break;
         default:
           if (isVivaState(state)) {
-            cleanup.push(...vivaCleanup(state));
+            cleanup.push(...vivaCleanup(state, deps.audioArmed));
             break;
           }
           return noChange(state);
@@ -349,7 +355,7 @@ export function reduceSession(
 
     case "TIMER_ELAPSED": {
       if (state.name === "VIVA_SPEAKING") {
-        if (state.viva.requestId !== event.requestId) return noChange(state);
+        if (state.attempt.attemptId !== event.requestId) return noChange(state);
         const commands: Command[] = [
           { type: "STOP_DEADLINE" },
           { type: "FOCUS_VIEW", target: "complete" },
@@ -1036,7 +1042,10 @@ export function reduceSession(
             viva: { ...state.viva, answers },
             summary: summarizeViva(answers),
           },
-          commands: [{ type: "FOCUS_VIEW", target: "viva-complete" }],
+          commands: [
+            { type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId },
+            { type: "FOCUS_VIEW", target: "viva-complete" },
+          ],
         };
       }
       const nextAttempt = vivaAttempt(
@@ -1065,7 +1074,7 @@ export function reduceSession(
     case "EXIT_VIVA": {
       if (!isVivaState(state)) return noChange(state);
       const base = (state as { viva: VivaRuntime }).viva.base;
-      return { state: base, commands: vivaCleanup(state) };
+      return { state: base, commands: vivaCleanup(state, deps.audioArmed) };
     }
 
     default:

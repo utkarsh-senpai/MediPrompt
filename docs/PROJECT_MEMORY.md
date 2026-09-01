@@ -2,9 +2,9 @@
 
 **Owner:** Utkarsh Meshram (`utkarsh-senpai`)
 
-**Updated:** 2026-09-01
+**Updated:** 2026-09-02
 
-**Current version:** v0.5 grounded refinement from PR #20, promoted through `develop` to `main`
+**Current version:** v0.6 viva defense ladder from PR #22, promoted through `develop` to `main`
 
 ## Product invariant
 
@@ -41,6 +41,14 @@ content, copy, or visual identity.
   timeout, offline, cancellation, or low memory retains lexical coverage. Until educator-labelled
   calibration, semantic results are “possibly present — not counted” and cannot change coverage or
   Refinement Delta.
+- v0.6 opt-in viva defense after review: future prompts remain hidden until their turn; each answer
+  has a unique 60-second timer/attempt identity; the microphone, transcript, typed-review, lexical,
+  and optional semantic paths reuse the hardened local pipeline. Active exit stops and releases all
+  in-flight resources. Ladders are strictly increasing and all-or-nothing for one drawn rubric.
+  Numeric summary copy uses only `scoredCount`; unverifiable answers remain visible but excluded.
+- Default timers are 60 seconds for main/viva speaking and 600 seconds (10 minutes) for Deep
+  Research. Learner settings may still change the main speaking/research durations within bounds;
+  a viva answer remains the fixed 60-second defense contract.
 - Microphone consent does not acquire a stream. Permission is requested only when the speaking
   timer starts; recording stops with the timer and every stream/object URL is released.
 
@@ -65,7 +73,7 @@ content, copy, or visual identity.
 - The 265 labels under `docs/curriculum/` are `DRAFT`, `REFERENCE_ONLY`, and never runtime learner
   content.
 - The genuine curriculum-grounded first subset is
-  `content/candidates/mpt-cardiorespiratory-review-candidate.json`: 20 cardiovascular/respiratory
+  `content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.2.0`: 20 cardiovascular/respiratory
   topics with three challenge variants. It remains `MEDICAL`, `DRAFT`, `reviewers: []`, and
   `reviewedAt: null`.
 - Source research includes the supplied curriculum and current primary sources such as GOLD 2026,
@@ -132,10 +140,13 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 
 ## Current pickup state
 
-The v0.5 release line adds bounded retry history, identity-checked Refinement Delta, and optional
-non-counting semantic evidence. Whisper and MiniLM use one shared bundled worker asset, while their
-model instances and explicit activation paths remain separate. GitHub operations must use
-`utkarsh-senpai`; release changes flow through `develop` before `main` and Pages.
+The v0.6 release line adds the bounded viva defense ladder without persistence. Scheduling,
+exam countdown, local history, export/delete, extra registers, challenge suggestions, and two
+additional packs were explicitly removed from the v0.6 exit gate; they are unimplemented and must
+be replanned after v0.7 rather than inferred from older architecture prose. Whisper and MiniLM use
+one shared bundled worker asset, while their model instances and explicit activation paths remain
+separate. GitHub operations must use `utkarsh-senpai`; release changes flow through `develop`
+before `main` and Pages.
 
 The beta may be publicly testable, but medical approval remains blocked pending educator
 attestation. The next release work is target-device/model benchmarking and a v1.x
@@ -149,6 +160,7 @@ educator-review/release plan.
 - `docs/V0.3_DEVELOPMENT_CONTEXT.md`: v0.3 implementation and review decisions.
 - `docs/V0.4_DEVELOPMENT_CONTEXT.md`: v0.4 lexical-coverage contract and v0.5 deferrals.
 - `docs/V0.5_DEVELOPMENT_CONTEXT.md`: reviewed retry, delta, semantic, and safety contract.
+- `docs/V0.6_DEVELOPMENT_CONTEXT.md`: reviewed viva ladder, cleanup, content, and timer contract.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.

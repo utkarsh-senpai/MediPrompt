@@ -236,7 +236,9 @@ visibility restored   => recompute; emit deadline event once when remaining == 0
 ```
 
 Wall-clock ISO timestamps are used for persistence; a monotonic clock is used within an active
-timer. Tests inject both clocks.
+timer. Tests inject both clocks. Main speaking defaults to 60 seconds and Deep Research to 600
+seconds. Every v0.6 viva answer uses a fixed 60-second window and its unique attempt ID as the
+deadline request ID; a late timer event from an earlier answer is ignored.
 
 ### Non-repeating random draw
 
@@ -429,7 +431,7 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
             "supportLevel": "FULL",
             "wording": "Explain the cardiac cycle in a structured sequence.",
             "answerArc": ["define", "explain", "apply"],
-            "timePolicy": { "speakingSeconds": 90 },
+            "timePolicy": { "speakingSeconds": 60 },
             "rubricId": "examiner-core"
           }],
           "rubrics": [{
@@ -443,8 +445,7 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
               "weight": 2,
               "sourceRefs": ["src-1"]
             }]
-          }],
-          "vivaQuestions": []
+          }]
         }
       ]
     }
@@ -462,6 +463,9 @@ source-grounded `MEDICAL`/`DRAFT` snapshot with empty attestation. `contentKind`
 variants additionally require plausible alternatives and a reviewed follow-up or evidence update.
 Validator rules reject identical prompt variants that claim greater difficulty only through a
 shorter timer.
+Viva-question IDs are unique, ladder levels increase strictly, and every target concept in a
+non-empty ladder must resolve together to one variant rubric. Runtime lookup repeats this as an
+all-or-nothing check against the drawn rubric; malformed partial ladders are never exposed.
 
 Review metadata models absence honestly: an unattested `DRAFT` has `reviewers: []` and
 `reviewedAt: null`. The schema condition requires at least one reviewer and a non-null ISO date for
@@ -649,7 +653,7 @@ CI performance on hosted runners is not presented as phone performance.
 | v0.3 | Permission paths, record/playback, deterministic audio fixtures, local STT progress/cancel/failure, device benchmark, zero audio requests |
 | v0.4 | Difficulty-specific golden lexical evidence, whole-token/local-window false-positive guards, distinct transcript/rubric `NOT_VERIFIABLE` outcomes, one prescription, offline typed-review E2E |
 | v0.5 | Optional non-counting semantic evidence with pinned model/versioned thresholds and lexical fallback, bounded same-identity retry history, mismatch rejection and valid Refinement Delta |
-| v0.6 | Reviewed Viva follow-ups/evidence updates, register rubrics, learner-controlled challenge suggestions, deterministic due queue, timezone cases, export/delete-all |
+| v0.6 | Opt-in post-review viva ladder; independent 60-second answer identities; hidden future prompts; typed/local-audio parity; strict one-rubric all-or-nothing validation; honest scored/unverifiable aggregate; active exit and stale-result cleanup; offline/a11y/budget/audit evidence |
 | v0.7 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
 | v0.8 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
 | v1.0 | Clean-device release journey, offline full loop, three approved packs, licence/privacy/security/recovery checklist |

@@ -43,7 +43,7 @@ export function VivaQuestionCard({
           type="button"
           className="primary"
           onClick={onStartSpeaking}
-          disabled={audio.status === "STARTING"}
+          disabled={audio.status === "STARTING" || audio.status === "PRIMER"}
         >
           {audio.status === "STARTING" ? "Starting mic…" : "Start speaking"}
         </button>

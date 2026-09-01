@@ -95,7 +95,7 @@ describe("AttemptReview viva entry", () => {
       />,
     );
     expect(screen.getByRole("button", { name: "Begin viva" })).toBeInTheDocument();
-    expect(screen.getByText(/3 follow-ups/i)).toBeInTheDocument();
+    expect(screen.getByText(/3 timed follow-ups/i)).toBeInTheDocument();
   });
 
   it("shows an explicit unavailable note when the topic has no viva questions", () => {
@@ -133,6 +133,7 @@ describe("VivaOverview", () => {
     expect(screen.getByText("Recall")).toBeInTheDocument();
     expect(screen.getByText("Apply")).toBeInTheDocument();
     expect(screen.getByText("Defend")).toBeInTheDocument();
+    expect(screen.queryByText(topic.vivaQuestions[0]!.prompt)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Begin viva" }));
     expect(onBegin).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByRole("button", { name: "Back to attempt review" }));
@@ -219,6 +220,7 @@ describe("VivaSummary", () => {
     const topic = vivaSnapshot();
     const summary: VivaSummaryType = {
       answeredCount: 3,
+      scoredCount: 3,
       notVerifiableCount: 0,
       weightedFraction: 1,
       perFollowUp: topic.vivaQuestions.map((q) => ({
@@ -229,7 +231,7 @@ describe("VivaSummary", () => {
     };
     const onExit = vi.fn();
     render(<VivaSummary topic={topic} summary={summary} onExit={onExit} />);
-    expect(screen.getByText(/100% defense coverage across 3 answers/i)).toBeInTheDocument();
+    expect(screen.getByText(/100% target-concept coverage across 3 scored answers/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Back to attempt review" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Back to attempt review" }));
     expect(onExit).toHaveBeenCalledTimes(1);
@@ -239,6 +241,7 @@ describe("VivaSummary", () => {
     const topic = vivaSnapshot();
     const summary: VivaSummaryType = {
       answeredCount: 1,
+      scoredCount: 0,
       notVerifiableCount: 1,
       weightedFraction: 0,
       perFollowUp: [

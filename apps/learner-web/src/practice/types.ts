@@ -412,6 +412,8 @@ export interface VivaFollowUpSummary {
 
 export interface VivaSummary {
   answeredCount: number;
+  /** Answers included in the numeric aggregate. */
+  scoredCount: number;
   notVerifiableCount: number;
   /** Weighted fraction across verifiable answers; 0 when none are verifiable. */
   weightedFraction: number;
@@ -791,8 +793,8 @@ export interface ReducerResult {
 
 export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   schemaVersion: 1,
-  speakingSeconds: 90,
-  researchSeconds: 120,
+  speakingSeconds: 60,
+  researchSeconds: 600,
   soundMuted: false,
   semanticCoverage: false,
 });

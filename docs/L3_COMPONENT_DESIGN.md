@@ -147,9 +147,9 @@ and recovery from quota or corruption errors.
 
 ### Topic-pack repository
 
-Loads the bundled demonstration pack first, verifies schema/version/checksum, and activates a newly
-cached pack atomically. Session records retain the exact pack/rubric version so later content
-updates do not rewrite history.
+Loads the allowlisted public-practice pack, verifies schema/version/checksum, and activates a newly
+cached pack atomically. Future session records must retain the exact pack/rubric version so later
+content updates do not rewrite history.
 
 ### Service worker
 
@@ -177,6 +177,19 @@ stateDiagram-v2
     TranscriptReview --> Review: APPROVE_TRANSCRIPT
     SelfReview --> Review: COMPLETE_SELF_REVIEW
     Review --> TopicReady: START_RETRY
+    Review --> VivaReady: START_VIVA
+    VivaReady --> VivaAsking: BEGIN_VIVA_QUESTION
+    VivaAsking --> VivaSpeaking: START_VIVA_SPEAKING
+    VivaSpeaking --> VivaAttemptComplete: TIMER_ELAPSED / CLOSE_TIMER
+    VivaAttemptComplete --> VivaProcessing: RECORDING_READY
+    VivaAttemptComplete --> VivaSelfReview: START_TYPED_REVIEW
+    VivaProcessing --> VivaTranscriptReview: TRANSCRIPT_READY
+    VivaProcessing --> VivaSelfReview: TRANSCRIPTION_UNAVAILABLE
+    VivaTranscriptReview --> VivaAnswerReview: APPROVE_VIVA_TRANSCRIPT
+    VivaSelfReview --> VivaAnswerReview: COMPLETE_SELF_REVIEW
+    VivaAnswerReview --> VivaAsking: NEXT_VIVA_QUESTION
+    VivaAnswerReview --> VivaComplete: FINAL_QUESTION
+    VivaComplete --> Review: EXIT_VIVA
     Review --> Scheduling: SAVE
     Scheduling --> Complete: SAVED
     Complete --> Drawing: SPIN_AGAIN
@@ -190,7 +203,9 @@ where safe. A fatal storage error still permits an unsaved session.
 
 `Idle → Drawing → TopicReady → Speaking → AttemptComplete → Drawing` is the v0.2 Recall Sprint
 path. Deep Research inserts `Researching → ReadyToSpeak` before `Speaking`. States after
-`AttemptComplete` are optional extensions and must be removable without breaking either basic path.
+`AttemptComplete` are optional extensions and must be removable without breaking either basic
+path. In v0.6, each viva answer owns a unique attempt/timer identity; exiting an active answer
+stops the deadline and microphone before restoring the base review.
 
 ## 3. Primary data flow
 
@@ -201,8 +216,9 @@ path. Deep Research inserts `Researching → ReadyToSpeak` before `Speaking`. St
 5. Coverage engine returns `CoverageEvidence` for the immutable rubric snapshot.
 6. Feedback composer returns `Review` and one `Prescription`.
 7. Retry repeats steps 2–6 with `attemptNumber = 2`.
-8. Comparator creates `AttemptComparison`; scheduler creates `ScheduleDecision`.
-9. Repository saves the serializable summary in one transaction; raw audio is revoked/discarded.
+8. Comparator creates `AttemptComparison`; v0.6 may then run a session-local viva ladder.
+9. Scheduling and durable save are future flows; v0.6 revokes/discards raw audio and retains no
+   learner attempt history after the page session.
 
 ## 4. Topic-pack domain
 
@@ -221,7 +237,7 @@ TopicPack
          │              supportLevel, wording, answerArc, timePolicy, caseRef, followUpRefs
          ├─ rubrics[]: rubricId, variantId, register, concepts[], reasoning/safety criteria
          │   └─ concept: conceptId, label, accepted phrases, importance, sourceRefs
-         ├─ vivaQuestions[]: stage, wording, rubricId
+         ├─ vivaQuestions[]?: id, level, prompt, targetConceptIds[]
          ├─ commonErrors[]: reviewed wording and sourceRefs
          └─ contraindications/limitations metadata when applicable
 ```
@@ -247,6 +263,8 @@ Rules:
   sufficient authoring metadata.
 - Applied variants require a bounded fictional case. Viva variants additionally require plausible
   alternatives and a reviewed follow-up/evidence update. Real patient details are prohibited.
+- A viva ladder has unique IDs, strictly increasing levels, and targets that all resolve to one
+  complete variant rubric. Runtime resolution is all-or-nothing for the drawn rubric.
 - Additional time and visible rescue scaffolds are accessibility/support choices, not lower
   challenge levels.
 - A breaking semantic change increments the pack major version; history keeps its snapshot reference.
@@ -275,7 +293,7 @@ group, population, body region, and system are multi-valued secondary facets.
 Settings use `localStorage` from v0.2 because they are small and synchronous, with in-memory
 defaults when storage is unavailable. The value is a versioned, schema-validated JSON object;
 invalid or newer unsupported data falls back safely instead of blocking practice. IndexedDB is
-introduced at v0.6 for the learning-record and metadata stores below.
+planned after v0.7 for the learning-record and metadata stores below; it is not present in v0.6.
 
 | Store | Key | Purpose | Sensitive content |
 | --- | --- | --- | --- |

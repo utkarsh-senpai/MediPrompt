@@ -290,7 +290,9 @@ function PracticeApp({
                 type="button"
                 className="primary"
                 onClick={startTimer}
-                disabled={session.audio.status === "STARTING"}
+                disabled={
+                  session.audio.status === "STARTING" || session.audio.status === "PRIMER"
+                }
               >
                 {session.audio.status === "STARTING" ? "Starting mic…" : "Start timer"}
               </button>
@@ -315,7 +317,9 @@ function PracticeApp({
               type="button"
               className="primary"
               onClick={confirmReady}
-              disabled={session.audio.status === "STARTING"}
+              disabled={
+                session.audio.status === "STARTING" || session.audio.status === "PRIMER"
+              }
             >
               {session.audio.status === "STARTING" ? "Starting mic…" : "Start speaking"}
             </button>

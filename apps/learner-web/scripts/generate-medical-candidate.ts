@@ -704,14 +704,16 @@ function buildTopic(topic: TopicSeed): object {
     rubrics,
     cases,
     followUps,
-    vivaQuestions: topic.viva
-      ? topic.viva.map((question, index) => ({
-          id: `${topic.topicId}-viva-q${index + 1}`,
-          level: question.level,
-          prompt: question.prompt,
-          targetConceptIds: question.targetConceptIds,
-        }))
-      : [],
+    ...(topic.viva
+      ? {
+          vivaQuestions: topic.viva.map((question, index) => ({
+            id: `${topic.topicId}-viva-q${index + 1}`,
+            level: question.level,
+            prompt: question.prompt,
+            targetConceptIds: question.targetConceptIds,
+          })),
+        }
+      : {}),
   };
 }
 
@@ -719,7 +721,7 @@ const pack = {
   schemaVersion: "1.0",
   contentKind: "MEDICAL",
   packId: "mpt-cardiorespiratory-review-candidate",
-  version: "0.1.0",
+  version: "0.2.0",
   title: "MPT Cardiovascular and Respiratory — educator review candidate",
   locale: "en-IN",
   licence: {

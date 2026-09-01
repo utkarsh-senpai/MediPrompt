@@ -39,18 +39,21 @@ export function summarizeViva(answers: readonly VivaAnswer[]): VivaSummary {
 
   let weightedTotal = 0;
   let weightedHit = 0;
+  let scoredCount = 0;
   let notVerifiableCount = 0;
   for (const answer of answers) {
     if (!answer.coverage.verifiable) {
       notVerifiableCount += 1;
       continue;
     }
+    scoredCount += 1;
     weightedTotal += followUpWeight(answer.coverage);
     weightedHit += followUpHitWeight(answer.coverage);
   }
 
   return {
     answeredCount: answers.length,
+    scoredCount,
     notVerifiableCount,
     weightedFraction: weightedTotal > 0 ? weightedHit / weightedTotal : 0,
     perFollowUp,
@@ -60,10 +63,10 @@ export function summarizeViva(answers: readonly VivaAnswer[]): VivaSummary {
 /** Format the aggregate as a percentage; an empty ladder is "no answers yet". */
 export function formatVivaSummary(summary: VivaSummary): string {
   if (summary.answeredCount === 0) return "No answers yet.";
-  if (summary.weightedFraction === 0 && summary.notVerifiableCount === summary.answeredCount) {
+  if (summary.scoredCount === 0) {
     return "Coverage not verifiable across the viva.";
   }
-  return `${Math.round(summary.weightedFraction * 100)}% defense coverage across ${summary.answeredCount} answer${
-    summary.answeredCount === 1 ? "" : "s"
+  return `${Math.round(summary.weightedFraction * 100)}% target-concept coverage across ${summary.scoredCount} scored answer${
+    summary.scoredCount === 1 ? "" : "s"
   }.`;
 }

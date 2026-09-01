@@ -19,7 +19,7 @@ export function VivaSummary({ topic, summary, onExit }: VivaSummaryProps) {
         {formatVivaSummary(summary)}
       </p>
       <p className="status">
-        Defense coverage measures whether each question’s target ideas appeared in
+        Target-concept coverage measures whether each question’s target ideas appeared in
         your approved answer. It does not grade medical correctness, confidence, or
         competence.
       </p>

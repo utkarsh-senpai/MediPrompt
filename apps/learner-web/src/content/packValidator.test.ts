@@ -6,6 +6,7 @@ import {
   PackValidationError,
   validatePack,
 } from "./packValidator";
+import { vivaQuestionsFor } from "./packQuery";
 import type { RuntimePack } from "@/practice/types";
 import demoPackJson from "@content/packs/demo-interaction-fixture.json";
 import medicalCandidateJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
@@ -119,6 +120,10 @@ describe("validatePack — happy paths", () => {
 
   it("validates a minimal base pack", () => {
     expect(() => validatePack(basePack())).not.toThrow();
+  });
+
+  it("ships the viva-authored medical candidate as content version 0.2.0", () => {
+    expect(validatePack(medicalCandidateJson).version).toBe("0.2.0");
   });
 
   it("freezes the validated pack", () => {
@@ -361,5 +366,46 @@ describe("validatePack — custom cross-reference rejections", () => {
       { id: "topic-viva-q1", level: "EXPLAIN", prompt: "Explain.", targetConceptIds: ["c1"] },
     ];
     expectInvalid(p, "viva question id");
+  });
+
+  it.each([
+    ["descending", ["APPLY", "EXPLAIN"]],
+    ["repeated", ["RECALL", "RECALL"]],
+  ] as const)("rejects %s viva ladder levels", (_label, levels) => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.vivaQuestions = [
+      { id: "topic-viva-q1", level: levels[0], prompt: "First.", targetConceptIds: ["c1"] },
+      { id: "topic-viva-q2", level: levels[1], prompt: "Second.", targetConceptIds: ["c1"] },
+    ];
+    expectInvalid(p, "strictly increasing order");
+  });
+
+  it("rejects a viva ladder split across different variant rubrics", () => {
+    const p = JSON.parse(JSON.stringify(medicalCandidateJson)) as RuntimePack;
+    const topic = p.subjects
+      .flatMap((subject) => subject.topics)
+      .find((candidate) => candidate.topicId === "copd-assessment-planning");
+    if (!topic?.vivaQuestions) throw new Error("candidate viva fixture missing");
+    topic.vivaQuestions[2]!.targetConceptIds = [
+      "copd-assessment-planning-guided-deep-c3",
+    ];
+    expectInvalid(p, "one complete variant rubric");
+  });
+
+  it("returns no partial runtime ladder when one question misses the drawn rubric", () => {
+    const p = JSON.parse(JSON.stringify(medicalCandidateJson)) as RuntimePack;
+    const topic = p.subjects
+      .flatMap((subject) => subject.topics)
+      .find((candidate) => candidate.topicId === "copd-assessment-planning");
+    if (!topic?.vivaQuestions) throw new Error("candidate viva fixture missing");
+    topic.vivaQuestions[2]!.targetConceptIds = [
+      "copd-assessment-planning-guided-deep-c3",
+    ];
+    expect(
+      vivaQuestionsFor(p, {
+        variantId: "copd-assessment-planning-guided-recall-v1",
+        rubricId: "rubric-copd-assessment-planning-guided-recall-v1",
+      }),
+    ).toEqual([]);
   });
 });

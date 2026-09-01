@@ -1,13 +1,5 @@
-import type { TopicSnapshot, VivaLevel, VivaQuestion } from "@/practice/types";
+import type { TopicSnapshot, VivaQuestion } from "@/practice/types";
 import { vivaLevelLabel } from "./vivaLevel";
-
-const LEVEL_ORDER: VivaLevel[] = [
-  "RECALL",
-  "EXPLAIN",
-  "APPLY",
-  "DIFFERENTIATE",
-  "DEFEND",
-];
 
 interface VivaOverviewProps {
   topic: TopicSnapshot;
@@ -18,9 +10,6 @@ interface VivaOverviewProps {
 
 /** Pre-start overview of the defense ladder. Viva is opt-in and always escapable. */
 export function VivaOverview({ topic, questions, onBegin, onExit }: VivaOverviewProps) {
-  const ordered = [...questions].sort(
-    (a, b) => LEVEL_ORDER.indexOf(a.level) - LEVEL_ORDER.indexOf(b.level),
-  );
   return (
     <section aria-labelledby="viva-asking-heading">
       <h2 id="viva-asking-heading" tabIndex={-1}>
@@ -29,16 +18,15 @@ export function VivaOverview({ topic, questions, onBegin, onExit }: VivaOverview
       <p className="status">
         The examiner asks {questions.length} follow-up
         {questions.length === 1 ? "" : "s"}, climbing from Recall toward Defend.
-        You answer each one aloud, transcribed on this device, and see coverage
-        against that question’s target concepts. Viva coverage is not a grade.
+        You receive one question at a time and answer against a focused clock.
+        Recording and on-device transcription are optional. Target-concept coverage
+        is not a grade.
       </p>
       <ol className="viva-ladder">
-        {ordered.map((question) => (
+        {questions.map((question, index) => (
           <li key={question.id} className="viva-ladder-step">
-            <span className="eyebrow" aria-hidden="true">
-              {vivaLevelLabel(question.level)}
-            </span>
-            <span>{question.prompt}</span>
+            <span className="eyebrow">Question {index + 1}</span>
+            <span>{vivaLevelLabel(question.level)}</span>
           </li>
         ))}
       </ol>

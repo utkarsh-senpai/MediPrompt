@@ -172,12 +172,18 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   }, [pack, settings, monotonic, wall, audioArmed]);
 
   const dispatch = useCallback((event: SessionEvent) => {
+    const latestDeps: ReducerDeps = {
+      ...reducerDepsRef.current,
+      now: monotonic.now(),
+      nowIso: wall.isoNow(),
+    };
+    reducerDepsRef.current = latestDeps;
     setState((prev) => {
-      const result = reduceSession(prev, event, reducerDepsRef.current);
+      const result = reduceSession(prev, event, latestDeps);
       if (result.commands.length > 0) pendingCommands.current.push(...result.commands);
       return result.state;
     });
-  }, []);
+  }, [monotonic, wall]);
 
   const stopDeadline = useCallback(() => {
     if (timerRef.current != null) {
@@ -211,7 +217,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         s.name === "SPEAKING" || s.name === "RESEARCHING"
           ? s.requestId
           : s.name === "VIVA_SPEAKING"
-            ? s.viva.requestId
+            ? s.attempt.attemptId
             : "";
       deadlineRef.current = { deadlineAt, requestId };
       const tick = () => {
@@ -243,22 +249,23 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         | "viva-review"
         | "viva-complete",
     ) => {
-      const ids: Record<typeof target, string> = {
-        topic: "topic-heading",
-        speaking: "speaking-heading",
-        complete: "complete-heading",
-        processing: "processing-heading",
-        review: "review-heading",
-        "viva-asking": "viva-asking-heading",
-        "viva-processing": "viva-processing-heading",
-        "viva-review": "viva-review-heading",
-        "viva-complete": "viva-complete-heading",
+      const ids: Record<typeof target, readonly string[]> = {
+        topic: ["topic-heading"],
+        speaking: ["speaking-heading"],
+        complete: ["complete-heading"],
+        processing: ["processing-heading"],
+        review: ["review-heading"],
+        "viva-asking": ["viva-asking-heading"],
+        "viva-processing": ["processing-heading"],
+        "viva-review": ["viva-review-heading", "review-heading"],
+        "viva-complete": ["viva-complete-heading"],
       };
-      const id = ids[target];
       // Commands are drained from an effect after React commits the target view,
       // so the heading already exists. Focusing here avoids an extra-frame race
       // on slower devices and CI while preserving the visible transition.
-      const heading = document.getElementById(id);
+      const heading = ids[target]
+        .map((id) => document.getElementById(id))
+        .find((candidate): candidate is HTMLElement => candidate !== null);
       heading?.focus();
       if (target === "topic") {
         const reduceMotion =
@@ -472,6 +479,12 @@ export function usePracticeSession(deps: OrchestratorDeps) {
               });
               return;
             }
+            const current = stateRef.current;
+            const stillRequested =
+              (current.name === "PROCESSING" || current.name === "VIVA_PROCESSING") &&
+              current.attempt.attemptId === cmd.attemptId &&
+              current.transcription === "RUNNING";
+            if (!stillRequested) return;
             const session = audio.transcription.transcribe(input, (event) => {
               if (event.type === "progress") {
                 setTranscriptionProgress(event.progress);
@@ -632,7 +645,13 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const beginAudioOptIn = useCallback(() => {
     if (!audio || audioStatus !== "OFF") return;
     const current = stateRef.current;
-    if (current.name !== "TOPIC_READY" && current.name !== "READY_TO_SPEAK") return;
+    if (
+      current.name !== "TOPIC_READY" &&
+      current.name !== "READY_TO_SPEAK" &&
+      current.name !== "VIVA_ASKING"
+    ) {
+      return;
+    }
     setAudioStatus("PRIMER");
   }, [audio, audioStatus]);
 
@@ -657,6 +676,9 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         (eventType === "START_TIMER" && before.name === "TOPIC_READY") ||
         (eventType === "CONFIRM_READY" && before.name === "READY_TO_SPEAK");
       if (!canStart || audioStartPendingRef.current) return false;
+      if (audio && (audioStatus === "PRIMER" || audioStatus === "STARTING")) {
+        return false;
+      }
 
       const attemptId = before.attempt.attemptId;
       const sendStartEvent = () => {
@@ -960,6 +982,9 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const startVivaSpeaking = useCallback(async (): Promise<boolean> => {
     const before = stateRef.current;
     if (before.name !== "VIVA_ASKING" || audioStartPendingRef.current) return false;
+    if (audio && (audioStatus === "PRIMER" || audioStatus === "STARTING")) {
+      return false;
+    }
     const attemptId = before.attempt.attemptId;
     if (!audio || audioStatus !== "READY") {
       dispatch({ type: "START_VIVA_SPEAKING", now: now() });

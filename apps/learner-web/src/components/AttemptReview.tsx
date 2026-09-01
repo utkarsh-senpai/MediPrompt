@@ -149,9 +149,9 @@ export function AttemptReview({
         <section className="viva-entry" aria-labelledby="viva-entry-heading">
           <h3 id="viva-entry-heading">Defend this topic</h3>
           <p className="status">
-            Answer {topic.vivaQuestions.length} follow-up
-            {topic.vivaQuestions.length === 1 ? "" : "s"} aloud, climbing from Recall
-            toward Defend. Viva coverage is not a grade.
+            Take {topic.vivaQuestions.length} timed follow-up
+            {topic.vivaQuestions.length === 1 ? "" : "s"}, climbing from Recall
+            toward Defend. The microphone is optional; target-concept coverage is not a grade.
           </p>
           <button type="button" className="primary" onClick={onBeginViva}>
             Begin viva

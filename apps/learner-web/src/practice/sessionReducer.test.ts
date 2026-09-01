@@ -203,7 +203,10 @@ describe("reduceSession — Recall Sprint path", () => {
     expect(started.commands).toContainEqual({ type: "FOCUS_VIEW", target: "speaking" });
     s = started.state;
     expect(s.name).toBe("SPEAKING");
-    if (s.name === "SPEAKING") expect(s.deadlineAt).toBe(90_000);
+    if (s.name === "SPEAKING") {
+      expect(s.deadlineAt).toBe(90_000);
+      expect(s.attempt.timePolicy).toEqual(s.topic.timePolicy);
+    }
     s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "r1", now: 90_000 }, deps).state;
     expect(s.name).toBe("ATTEMPT_COMPLETE");
   });
@@ -990,6 +993,7 @@ describe("reduceSession — v0.6 viva", () => {
       expect(state.viva.base.name).toBe("REVIEW");
       expect(state.attempt.attemptId).toBe("vv-viva-q0");
       expect(state.attempt.attemptIndex).toBe(review.attempt.attemptIndex + 1);
+      expect(state.attempt.timePolicy).toEqual({ speakingSeconds: 60 });
     }
     expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "rv-attempt" });
   });
@@ -1007,7 +1011,7 @@ describe("reduceSession — v0.6 viva", () => {
     expect(s.name).toBe("VIVA_ASKING");
     s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
     expect(s.name).toBe("VIVA_SPEAKING");
-    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv-viva-q0", now: 93_200 }, deps).state;
     expect(s.name).toBe("VIVA_ATTEMPT_COMPLETE");
     s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "vv-viva-q0", now: 93_300 }, deps).state;
     expect(s.name).toBe("VIVA_SELF_REVIEW");
@@ -1036,7 +1040,17 @@ describe("reduceSession — v0.6 viva", () => {
     for (let q = 1; q < 3; q += 1) {
       const attemptId = `vv-viva-q${q}`;
       s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 94_200 + q * 1000 }, deps).state;
-      s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 94_300 + q * 1000 }, deps).state;
+      if (q === 1) {
+        const stale = reduceSession(
+          s,
+          { type: "TIMER_ELAPSED", requestId: "vv-viva-q0", now: 94_250 + q * 1000 },
+          deps,
+        );
+        expect(stale.state.name).toBe("VIVA_SPEAKING");
+        expect(stale.commands).toEqual([]);
+        s = stale.state;
+      }
+      s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: attemptId, now: 94_300 + q * 1000 }, deps).state;
       s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId, now: 94_400 + q * 1000 }, deps).state;
       s = reduceSession(
         s,
@@ -1051,7 +1065,18 @@ describe("reduceSession — v0.6 viva", () => {
         deps,
       ).state;
       expect(s.name).toBe("VIVA_ANSWER_REVIEW");
-      s = reduceSession(s, { type: "NEXT_VIVA_QUESTION", attemptId, now: 94_600 + q * 1000 }, deps).state;
+      const next = reduceSession(
+        s,
+        { type: "NEXT_VIVA_QUESTION", attemptId, now: 94_600 + q * 1000 },
+        deps,
+      );
+      if (q === 2) {
+        expect(next.commands).toContainEqual({
+          type: "REVOKE_RECORDING",
+          attemptId: "vv-viva-q2",
+        });
+      }
+      s = next.state;
     }
     expect(s.name).toBe("VIVA_COMPLETE");
     if (s.name === "VIVA_COMPLETE") {
@@ -1067,7 +1092,7 @@ describe("reduceSession — v0.6 viva", () => {
     s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
     s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
     s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
-    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv-viva-q0", now: 93_200 }, deps).state;
     s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "vv-viva-q0", now: 93_300 }, deps).state;
     s = reduceSession(
       s,
@@ -1096,7 +1121,7 @@ describe("reduceSession — v0.6 viva", () => {
     }
   });
 
-  it("EXIT_VIVA from VIVA_SPEAKING (armed) stops the deadline and revokes the recording", () => {
+  it("EXIT_VIVA from VIVA_SPEAKING stops the deadline and active recording", () => {
     const armedLocal: ReducerDeps = { ...deps, audioArmed: true };
     let s = reviewState();
     s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, armedLocal).state;
@@ -1104,7 +1129,10 @@ describe("reduceSession — v0.6 viva", () => {
     s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, armedLocal).state;
     const { state, commands } = reduceSession(s, { type: "EXIT_VIVA", now: 92_500 }, armedLocal);
     expect(state.name).toBe("REVIEW");
-    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "vv-viva-q0" });
+    expect(commands).toEqual([
+      { type: "STOP_DEADLINE" },
+      { type: "STOP_RECORDING", attemptId: "vv-viva-q0" },
+    ]);
   });
 
   it("APPROVE_VIVA_TRANSCRIPT stale-drops a mismatched attemptId", () => {
@@ -1112,7 +1140,7 @@ describe("reduceSession — v0.6 viva", () => {
     s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
     s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
     s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
-    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv-viva-q0", now: 93_200 }, deps).state;
     // Place into VIVA_TRANSCRIPT_REVIEW via RECORDING_READY then TRANSCRIPT_READY.
     s = reduceSession(s, { type: "RECORDING_READY", attemptId: "vv-viva-q0", now: 93_300 }, armed).state;
     expect(s.name).toBe("VIVA_PROCESSING");
@@ -1144,7 +1172,7 @@ describe("reduceSession — v0.6 viva", () => {
     s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
     s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
     s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
-    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv-viva-q0", now: 93_200 }, deps).state;
     s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "vv-viva-q0", now: 93_300 }, deps).state;
     s = reduceSession(
       s,

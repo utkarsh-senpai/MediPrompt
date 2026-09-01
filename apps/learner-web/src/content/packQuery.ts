@@ -99,10 +99,10 @@ export function findRubric(
 
 /**
  * v0.6: resolve the viva defense ladder for a drawn topic ref. Only questions
- * whose targetConceptIds all exist in the variant's rubric are exposed; the
- * rest are dropped so coverage against targetConceptIds never references a
- * concept the scorer cannot find. Returns an empty array when the topic has no
- * usable viva ladder (the UI shows an explicit "viva unavailable" outcome).
+ * whose targetConceptIds all exist in the variant's rubric are exposed. The
+ * ladder is all-or-nothing so a partially mismatched pack cannot silently skip
+ * a question or change the authored progression. Returns an empty array when
+ * the topic has no usable ladder.
  */
 export function vivaQuestionsFor(
   pack: RuntimePack,
@@ -114,7 +114,11 @@ export function vivaQuestionsFor(
   if (!found) return [];
   const conceptIds = new Set(rubric.concepts.map((c) => c.conceptId));
   const questions = found.topic.vivaQuestions ?? [];
-  return questions.filter((q) => q.targetConceptIds.every((id) => conceptIds.has(id)));
+  return questions.every((question) =>
+    question.targetConceptIds.every((id) => conceptIds.has(id)),
+  )
+    ? questions
+    : [];
 }
 
 const PRESET_EXPECTATION: Record<ChallengePreset, string> = {
@@ -190,12 +194,6 @@ export function toTopicSnapshot(
       variantId: variant.variantId,
       supportLevel: variant.supportLevel,
     },
-    vivaQuestions: topic.vivaQuestions?.filter((q) =>
-      q.targetConceptIds.every((id) =>
-        topic.rubrics
-          .find((r) => r.rubricId === variant.rubricId)
-          ?.concepts.some((c) => c.conceptId === id),
-      ),
-    ) ?? [],
+    vivaQuestions: vivaQuestionsFor(pack, topicRef),
   };
 }

@@ -64,6 +64,7 @@ describe("summarizeViva", () => {
   it("returns a zeroed summary for no answers", () => {
     const summary = summarizeViva([]);
     expect(summary.answeredCount).toBe(0);
+    expect(summary.scoredCount).toBe(0);
     expect(summary.weightedFraction).toBe(0);
     expect(summary.notVerifiableCount).toBe(0);
     expect(summary.perFollowUp).toEqual([]);
@@ -76,6 +77,7 @@ describe("summarizeViva", () => {
       answer("DEFEND", "q2", coverage(false, 3)),
     ]);
     expect(summary.answeredCount).toBe(2);
+    expect(summary.scoredCount).toBe(2);
     expect(summary.notVerifiableCount).toBe(0);
     expect(summary.weightedFraction).toBeCloseTo(2 / 5, 5);
     expect(summary.perFollowUp).toHaveLength(2);
@@ -87,6 +89,7 @@ describe("summarizeViva", () => {
       answer("APPLY", "q2", UNVERIFIABLE),
     ]);
     expect(summary.answeredCount).toBe(2);
+    expect(summary.scoredCount).toBe(1);
     expect(summary.notVerifiableCount).toBe(1);
     expect(summary.weightedFraction).toBe(1);
   });
@@ -104,7 +107,9 @@ describe("summarizeViva", () => {
 describe("formatVivaSummary", () => {
   it("formats a percentage across answers", () => {
     const summary = summarizeViva([answer("RECALL", "q1", coverage(true, 2))]);
-    expect(formatVivaSummary(summary)).toBe("100% defense coverage across 1 answer.");
+    expect(formatVivaSummary(summary)).toBe(
+      "100% target-concept coverage across 1 scored answer.",
+    );
   });
 
   it("pluralizes answers", () => {
@@ -112,7 +117,7 @@ describe("formatVivaSummary", () => {
       answer("RECALL", "q1", coverage(true, 2)),
       answer("DEFEND", "q2", coverage(false, 3)),
     ]);
-    expect(formatVivaSummary(summary)).toMatch(/across 2 answers\.$/);
+    expect(formatVivaSummary(summary)).toMatch(/across 2 scored answers\.$/);
   });
 
   it("says not verifiable when no answer could be scored", () => {
