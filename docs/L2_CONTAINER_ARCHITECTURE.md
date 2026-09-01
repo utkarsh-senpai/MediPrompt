@@ -9,8 +9,8 @@
 MediPrompt begins as two independently useful systems:
 
 1. A static, offline-capable learner PWA that runs practice, audio analysis, transcription,
-   rubric coverage, retry comparison, and the v0.6 viva ladder in the browser. Scheduling and
-   durable learner history remain planned.
+   rubric coverage, retry comparison, the v0.6 viva ladder, and the v0.7 private learning plan in
+   the browser.
 2. A Java 21/Spring Boot command-line content compiler that turns human-reviewed source packs into
    deterministic runtime assets.
 
@@ -61,13 +61,13 @@ flowchart TB
 | Container | Responsibility | Data held | Versions |
 | --- | --- | --- | --- |
 | Basic practice core | Mode/subject selection, topic draw, focused timer, answer arc, finish and repeat | In-memory current topic/timer | v0.2+ |
-| Learner enhancements | Recording, review, coverage, retry, and viva UI; scheduling/history planned | In-memory active session | v0.3+; viva v0.6 |
+| Learner enhancements | Recording, review, coverage, retry, viva, and due-topic UI | In-memory active session; optional transcript-free plan metadata | v0.3+; viva v0.6; plan v0.7 |
 | Browser workers | Separate transcription/embedding instances backed by one shared bundled worker asset | Temporary audio/features/model state | v0.3 and v0.5+ |
-| localStorage | Accessibility and timer settings | Learner-owned settings | v0.2+ |
-| IndexedDB | Planned attempts, pack metadata, model metadata, and due queue | Learner-owned local data | Replan after v0.7; absent in v0.6 |
+| localStorage | Accessibility/timer settings and optional exam calendar date | Learner-owned settings | v0.2+; exam v0.7 |
+| IndexedDB | Opt-in bounded attempt/schedule metadata; no audio or transcript content | Learner-owned local data | v0.7+ |
 | Service worker/cache | Offline shell, content, and same-origin ORT runtime; Transformers.js separately caches opt-in model files | Public immutable assets | v0.2+ |
 | Topic packs | Prompts, reviewed rubrics, follow-ups and source metadata | No learner data | v0.2+ |
-| Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | v0.7+ |
+| Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | planned v0.8+ |
 | GitHub Actions/Pages | Validation, static build and publication | Public build artifacts | v0.2+ |
 
 Model files should be fetched only after the learner enables speech or optional semantic coverage. The
@@ -107,9 +107,10 @@ retrieval evaluation demonstrates that relational search and curated identifiers
 4. Coverage and delivery feedback use the corrected transcript and local measurements.
 5. Raw audio is discarded when the attempt ends by default. A future “save recording locally”
    option must be explicit and reversible.
-6. v0.6 persists no attempt summary; settings alone use local storage. A future learner-controlled
-   history requires export/delete and migration contracts. No analytics SDK receives transcript,
-   audio, rubric response, or voice-derived features.
+6. v0.7 may persist bounded topic/practice identity, review date, aggregate coverage, scoring
+   identity, and schedule only after explicit opt-in. Audio, transcript text, concept evidence,
+   semantic excerpts, and embeddings remain session-local. Export and verified delete-all use the
+   same minimal schema. No analytics SDK receives learner content or voice-derived features.
 
 The service worker, model host, and GitHub Pages serve public immutable files. They must never be
 sent learner content through query strings, telemetry, error reports, or cache keys.

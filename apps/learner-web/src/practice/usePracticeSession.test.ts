@@ -5,6 +5,7 @@ import { validatePack } from "@/content/packValidator";
 import { findRubric } from "@/content/packQuery";
 import { seededRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
+import { InMemoryHistoryStore } from "@/platform/historyStore";
 import { AudioError } from "@/audio/audioErrors";
 import type { AudioDecoder } from "@/audio/pcmDecode";
 import { AttemptRecorder, type RecorderDeps } from "@/audio/recorder";
@@ -136,6 +137,34 @@ describe("usePracticeSession", () => {
     expect(result.current.state.name).toBe("TOPIC_READY");
   });
 
+  it("opens the exact current-pack topic selected by the resurfacing queue", () => {
+    const { hook } = setup();
+    const subject = pack.subjects[0]!;
+    const topic = subject.topics[0]!;
+    const variant = topic.variants.find(
+      (candidate) =>
+        candidate.mode === "RECALL_SPRINT" || candidate.mode === "DEEP_RESEARCH",
+    )!;
+    let opened = false;
+    act(() => {
+      opened = hook.result.current.actions.practiceTopic({
+        packId: pack.packId,
+        packVersion: pack.version,
+        subjectId: subject.subjectId,
+        topicId: topic.topicId,
+        variantId: variant.variantId,
+        difficultyProfileVersion: variant.difficultyProfileVersion,
+        promptId: variant.promptId,
+        rubricId: variant.rubricId,
+      });
+    });
+    expect(opened).toBe(true);
+    expect(hook.result.current.state.name).toBe("TOPIC_READY");
+    if (hook.result.current.state.name === "TOPIC_READY") {
+      expect(hook.result.current.state.topic.topicRef.variantId).toBe(variant.variantId);
+    }
+  });
+
   it("retries the identical topic and computes Refinement Delta from consecutive attempts", async () => {
     const { hook, advance } = setup();
     const { result } = hook;
@@ -188,6 +217,54 @@ describe("usePracticeSession", () => {
         expect(secondReview.refinementDelta.newlyCoveredConceptIds.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("persists only minimal metadata after explicit learning-plan opt-in", async () => {
+    const nowRef = { value: 0 };
+    const historyStore = new InMemoryHistoryStore();
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: { ...DEFAULT_SETTINGS, practiceHistory: true },
+        monotonic: { now: () => nowRef.value },
+        wall: { isoNow: () => "2026-09-02T09:30:00.000Z" },
+        random: seededRandom(123),
+        bagStore: new InMemoryBagStore(),
+        historyStore,
+        drawDelayMs: 0,
+      }),
+    );
+
+    act(() => hook.result.current.actions.spin());
+    const ready = hook.result.current.state;
+    if (ready.name !== "TOPIC_READY") throw new Error("topic missing");
+    const rubric = findRubric(pack, ready.topic.topicRef);
+    if (!rubric) throw new Error("rubric missing");
+    await act(async () => {
+      await hook.result.current.actions.startTimer();
+    });
+    act(() => {
+      nowRef.value += DEFAULT_SETTINGS.speakingSeconds * 1000;
+      vi.advanceTimersByTime(DEFAULT_SETTINGS.speakingSeconds * 1000);
+    });
+    act(() => hook.result.current.actions.startTypedReview());
+    act(() =>
+      hook.result.current.actions.submitSelfReview(
+        rubric.concepts.map((concept) => concept.acceptedPhrases[0]).join(". "),
+      ),
+    );
+    await act(async () => {
+      for (let turn = 0; turn < 6; turn += 1) await Promise.resolve();
+    });
+
+    const records = await historyStore.loadAll();
+    expect(records).toHaveLength(1);
+    expect(records[0]!.schedule).not.toBeNull();
+    expect(hook.result.current.historySaveState).toBe("SAVED_SESSION");
+    const serialized = JSON.stringify(records[0]);
+    expect(serialized).not.toContain("transcript");
+    expect(serialized).not.toContain("conceptResults");
+    expect(serialized).not.toContain("semanticEvidence");
   });
 });
 

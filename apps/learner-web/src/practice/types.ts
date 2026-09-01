@@ -185,6 +185,11 @@ export interface UserSettings {
    * Default false; the lexical engine always runs first as the guaranteed fallback.
    */
   semanticCoverage?: boolean;
+  /**
+   * v0.7: explicitly opt into saving minimal practice metadata on this device.
+   * Audio, transcripts, and transcript excerpts are never part of this record.
+   */
+  practiceHistory?: boolean;
 }
 
 export interface PracticeSelection {
@@ -640,9 +645,136 @@ export type ReviewState = Extract<SessionState, { name: "REVIEW" }>;
 /** Bounds the session-local viva answer trace. */
 export const MAX_VIVA_ANSWERS = 19;
 
+// --- v0.7 private learning-plan contracts ---
+// Persistence is learner-controlled and metadata-only. In particular, neither
+// transcript text nor semantic transcript excerpts may enter AttemptRecord.
+
+/** Privacy-minimized coverage snapshot; sufficient for scheduling and export. */
+export interface PersistedCoverage {
+  verifiable: boolean;
+  unavailableReason: CoverageUnavailableReason | null;
+  scoring: CoverageReport["scoring"];
+  hitCount: number;
+  totalCount: number;
+  weightedFraction: number;
+  fraction: number;
+}
+
+/** Persisted summary of one completed, reviewed attempt. Local-only. */
+export interface AttemptRecord {
+  schemaVersion: 1;
+  /** Matches the in-memory AttemptDraft.attemptId; stable per attempt. */
+  attemptId: string;
+  /** Materialized IndexedDB index; must equal topicFingerprint(topicRef). */
+  topicFingerprint: string;
+  topicRef: TopicRef;
+  mode: V02PracticeMode;
+  challenge: ChallengePreset;
+  attemptIndex: number;
+  /** ISO wall-clock timestamp the attempt was reviewed. */
+  reviewedAt: string;
+  /** Frozen, transcript-free coverage summary from review time. */
+  coverage: PersistedCoverage;
+  /** Null when the attempt was not verifiable and cannot advance scheduling. */
+  schedule: SpacedSchedule | null;
+}
+
+/** SM-2-style per-topic scheduling state. */
+export interface SpacedSchedule {
+  /** Successful-review repetition count (n). */
+  repetitions: number;
+  /** Easiness factor (EF). */
+  easiness: number;
+  /** Interval in days until the next due review. */
+  intervalDays: number;
+  /** Learner-local calendar date (YYYY-MM-DD) the next review is due. */
+  nextDueOn: string;
+}
+
+/** SM-2 recall quality, 0 (blackout) .. 5 (perfect). */
+export type RecallQuality = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface SpacedRepetitionConfig {
+  /** Minimum easiness factor (SM-2 floor). */
+  minEasiness: number;
+  /** Initial easiness factor for a new topic. */
+  initialEasiness: number;
+  /** First interval in days after a successful first review. */
+  firstIntervalDays: number;
+  /** Second interval in days. */
+  secondIntervalDays: number;
+}
+
+export const DEFAULT_SR_CONFIG: Readonly<SpacedRepetitionConfig> = Object.freeze({
+  minEasiness: 1.3,
+  initialEasiness: 2.5,
+  firstIntervalDays: 1,
+  secondIntervalDays: 3,
+});
+
+/** One item in the resurfacing queue, derived from persisted history. */
+export interface ResurfacingItem {
+  topicRef: TopicRef;
+  /** Most recent record for the topic. */
+  lastRecord: AttemptRecord;
+  /** Days until the next due review; negative = overdue. */
+  daysUntilDue: number;
+  /** Whether the next review is due now (daysUntilDue <= 0). */
+  due: boolean;
+}
+
+export interface ResurfacingQueue {
+  /** Due/overdue items, most overdue first. */
+  due: ResurfacingItem[];
+  /** Upcoming (not yet due), soonest first. */
+  upcoming: ResurfacingItem[];
+  /** Topics never attempted, when the caller provided them. */
+  neverAttempted: TopicRef[];
+}
+
+/** Optional exam-date schedule, persisted in localStorage (v0.7). */
+export interface ExamSchedule {
+  schemaVersion: 1;
+  /** Learner-local calendar date (YYYY-MM-DD), or null when unset. */
+  examOn: string | null;
+}
+
+export const DEFAULT_EXAM_SCHEDULE: Readonly<ExamSchedule> = Object.freeze({
+  schemaVersion: 1,
+  examOn: null,
+});
+
+/**
+ * Persisted-history port. IndexedDB is async, so the interface is async. Records
+ * are keyed by attemptId and indexed by a topic fingerprint (see
+ * spacedRepetition.topicFingerprint). Implementations must treat stored data as
+ * untrusted and drop malformed records.
+ */
+export interface HistoryStore {
+  storageMode(): Promise<"DEVICE" | "SESSION">;
+  loadTopic(topicFingerprint: string): Promise<AttemptRecord[]>;
+  loadAll(): Promise<AttemptRecord[]>;
+  append(record: AttemptRecord): Promise<AttemptRecord>;
+  clearTopic(topicFingerprint: string): Promise<void>;
+  clear(): Promise<void>;
+}
+
+export interface ExamScheduleStore {
+  load(): ExamSchedule;
+  save(schedule: ExamSchedule): void;
+  clear(): void;
+}
+
 export type SessionEvent =
   | { type: "CHANGE_SELECTION"; selection: PracticeSelection }
   | { type: "SPIN"; requestId: string; now: number }
+  | {
+      type: "RESURFACE_TOPIC";
+      requestId: string;
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      now: number;
+    }
   | { type: "TOPIC_DRAWN"; requestId: string; topic: TopicSnapshot; now: number }
   | { type: "START_RESEARCH"; now: number }
   | { type: "DONE_RESEARCHING"; requestId: string; now: number }
@@ -797,6 +929,7 @@ export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   researchSeconds: 600,
   soundMuted: false,
   semanticCoverage: false,
+  practiceHistory: false,
 });
 
 /** Documented bounds for durations; clamped by the settings store and reducer. */

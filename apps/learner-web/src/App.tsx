@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   type RuntimePack,
+  type ExamScheduleStore,
+  type HistoryStore,
   type SettingsStore,
   type TopicSnapshot,
   type UserSettings,
@@ -30,6 +32,8 @@ import { systemMonotonicClock, systemWallClock } from "@/platform/clock";
 import { CryptoRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
 import { LocalStorageSettingsStore } from "@/platform/settingsStore";
+import { IndexedDbHistoryStore } from "@/platform/historyStore";
+import { LocalStorageExamScheduleStore } from "@/platform/examScheduleStore";
 import { PracticeSurface } from "@/components/PracticeSurface";
 import { CountdownRing } from "@/components/CountdownRing";
 import { SettingsDialog } from "@/components/SettingsDialog";
@@ -46,6 +50,7 @@ import { VivaQuestionCard } from "@/components/VivaQuestionCard";
 import { VivaAnswerReview } from "@/components/VivaAnswerReview";
 import { VivaSummary } from "@/components/VivaSummary";
 import { VIVA_SPEAKING_SECONDS } from "@/practice/sessionReducer";
+import { LearningPlan } from "@/components/LearningPlan";
 
 interface PracticeAppProps {
   pack: RuntimePack;
@@ -54,6 +59,10 @@ interface PracticeAppProps {
   caps: Capabilities;
   onSettingsChange: (next: UserSettings) => void;
   onFocusModeChange: (active: boolean) => void;
+  historyStore: HistoryStore;
+  examStore: ExamScheduleStore;
+  historyRevision: number;
+  onHistoryChanged: () => void;
 }
 
 function useMilestones(remainingMsValue: number | null): string {
@@ -137,6 +146,10 @@ function PracticeApp({
   caps,
   onSettingsChange,
   onFocusModeChange,
+  historyStore,
+  examStore,
+  historyRevision,
+  onHistoryChanged,
 }: PracticeAppProps) {
   const monotonic = useMemo(() => systemMonotonicClock(), []);
   const wall = useMemo(() => systemWallClock(), []);
@@ -178,6 +191,8 @@ function PracticeApp({
     bagStore,
     audio: audioDeps,
     embedding: embeddingClient,
+    historyStore,
+    onHistoryChanged,
   });
 
   const { state, now, subjects, presets, challengeVisible, eligibleCount, actions } =
@@ -263,6 +278,18 @@ function PracticeApp({
           <strong>Curriculum beta · unreviewed draft</strong>
           <span>Practice only — not for diagnosis, treatment, or clinical decisions.</span>
         </aside>
+      ) : null}
+
+      {s.name === "IDLE" ? (
+        <LearningPlan
+          pack={pack}
+          store={historyStore}
+          examStore={examStore}
+          enabled={settings.practiceHistory ?? false}
+          revision={historyRevision}
+          onPractice={actions.practiceTopic}
+          onChanged={onHistoryChanged}
+        />
       ) : null}
 
       {showSurface ? (
@@ -466,6 +493,7 @@ function PracticeApp({
           refinementDelta={s.refinementDelta}
           attemptIndex={s.attempt.attemptIndex}
           semanticRefining={session.semanticRefining}
+          historySaveState={session.historySaveState}
           audio={session.audio}
           onSpinAgain={spinAgain}
           onTryAgain={actions.startSecondAttempt}
@@ -650,6 +678,12 @@ function PracticeApp({
 
 export function App() {
   const settingsStore = useMemo(() => new LocalStorageSettingsStore(), []);
+  const historyStore = useMemo(() => new IndexedDbHistoryStore(), []);
+  const examStore = useMemo(() => new LocalStorageExamScheduleStore(), []);
+  const [historyRevision, setHistoryRevision] = useState(0);
+  const handleHistoryChanged = useCallback(() => {
+    setHistoryRevision((current) => current + 1);
+  }, []);
   const [settings, setSettings] = useState<UserSettings>(() => ({
     ...(settingsStore.load() ?? DEFAULT_SETTINGS),
   }));
@@ -773,6 +807,10 @@ export function App() {
           caps={caps}
           onSettingsChange={setSettings}
           onFocusModeChange={handleFocusModeChange}
+          historyStore={historyStore}
+          examStore={examStore}
+          historyRevision={historyRevision}
+          onHistoryChanged={handleHistoryChanged}
         />
       ) : null}
 

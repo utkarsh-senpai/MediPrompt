@@ -174,7 +174,10 @@ const shellBytes = files
 // is still bounded by the entry budget above; the wasm runtime is separate.
 // v0.5 reuses one shared model-worker asset for Whisper and MiniLM, so adding
 // meaning matching must not double the bundled transformers.js graph.
-const MAX_SHELL_BYTES = 1536 * 1024;
+// v0.7 adds the opt-in IndexedDB validator, scheduling, export/delete, and
+// learning-plan UI under a bounded 64 KiB offline-shell allowance. The stricter
+// 512 KiB initial-entry budget above remains unchanged.
+const MAX_SHELL_BYTES = 1600 * 1024;
 if (shellBytes > MAX_SHELL_BYTES) errors.push(`shell budget exceeded: ${shellBytes} bytes`);
 
 if (errors.length > 0) {

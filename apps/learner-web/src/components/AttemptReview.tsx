@@ -1,4 +1,7 @@
-import type { AudioUiState } from "@/practice/usePracticeSession";
+import type {
+  AudioUiState,
+  HistorySaveState,
+} from "@/practice/usePracticeSession";
 import type {
   ApprovedTranscript,
   AttemptHistoryEntry,
@@ -27,6 +30,7 @@ interface AttemptReviewProps {
   refinementDelta: RefinementDeltaResult | null;
   attemptIndex: number;
   semanticRefining?: boolean;
+  historySaveState?: HistorySaveState;
   audio: AudioUiState;
   onSpinAgain: () => void;
   onTryAgain: () => void;
@@ -50,6 +54,7 @@ export function AttemptReview({
   refinementDelta,
   attemptIndex,
   semanticRefining = false,
+  historySaveState = "OFF",
   audio,
   onSpinAgain,
   onTryAgain,
@@ -68,6 +73,18 @@ export function AttemptReview({
         Attempt review{attemptIndex > 1 ? ` (attempt ${attemptIndex})` : ""}
       </h2>
       <p className="status">{topic.title}</p>
+
+      {historySaveState !== "OFF" && historySaveState !== "IDLE" ? (
+        <p className="status" role="status">
+          {historySaveState === "SAVING"
+            ? "Saving learning-plan metadata on this device…"
+            : historySaveState === "SAVED"
+              ? "Saved to your private learning plan. No transcript was stored."
+              : historySaveState === "SAVED_SESSION"
+                ? "Browser storage is unavailable. Learning-plan metadata lasts only for this tab; no transcript was stored."
+              : "This attempt could not be saved; your review is still available in this session."}
+        </p>
+      ) : null}
 
       {semanticRefining ? (
         <p className="status" role="status">

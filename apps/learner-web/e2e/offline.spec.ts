@@ -245,3 +245,49 @@ test("v0.6 viva defense ladder scores three answers and returns to review", asyn
   await page.getByRole("button", { name: "Back to attempt review" }).click();
   await expect(page.getByRole("heading", { name: "Attempt review" })).toBeVisible();
 });
+
+test("v0.7 learning plan is opt-in, persists metadata, and verifies deletion", async ({ page }) => {
+  await page.goto("./");
+  await expect(page.getByText("Learning plan · paused")).toBeVisible();
+
+  await page.getByRole("button", { name: "Settings" }).click();
+  const planOptIn = page.getByLabel(/Private learning plan/i);
+  await expect(planOptIn).not.toBeChecked();
+  await planOptIn.check();
+  await page.getByRole("button", { name: "Save" }).click();
+
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await page.getByRole("button", { name: "Start timer" }).click();
+  await page.getByRole("button", { name: "Finish now" }).click();
+  await page.getByRole("button", { name: "Review this attempt" }).click();
+  await page.getByLabel(/Type what you said/i).fill("A structured physiotherapy answer.");
+  await page.getByRole("button", { name: "Save review" }).click();
+  await expect(page.getByText(/Saved to your private learning plan/i)).toBeVisible();
+
+  const storedShape = await page.evaluate(async () => {
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open("mediprompt-history", 2);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const records = await new Promise<unknown[]>((resolve, reject) => {
+      const request = database.transaction("records", "readonly").objectStore("records").getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    database.close();
+    return JSON.stringify(records);
+  });
+  expect(storedShape).not.toContain("transcript");
+  expect(storedShape).not.toContain("conceptResults");
+
+  await page.reload();
+  await page.getByText(/Learning plan · 0 due/i).click();
+  await expect(page.getByText("1 saved attempt; maximum 500.")).toBeVisible();
+  await page.getByRole("button", { name: "Delete saved data" }).click();
+  await page.getByRole("button", { name: "Delete all plan data" }).click();
+  await expect(
+    page.getByText("All saved learning-plan data was deleted from this browser."),
+  ).toBeVisible();
+  await expect(page.getByText("0 saved attempts; maximum 500.")).toBeVisible();
+});
