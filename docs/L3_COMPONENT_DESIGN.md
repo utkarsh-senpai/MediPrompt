@@ -134,16 +134,17 @@ Refinement Delta. If comparison inputs differ, the comparator explains why a del
 
 ### Scheduler
 
-Maintains a bounded due queue using deterministic intervals of 1, 3, 7, and 14 days. Coverage and
-learner self-rating select an interval; missed days move an item to due without compounding a
-penalty. The scheduler explains the chosen next date and remains timezone-safe through local-date
-semantics.
+Maintains a bounded due queue using a deterministic SM-2-style recurrence with one- and three-day
+starting intervals. Verifiable aggregate coverage maps to recall quality; unverifiable attempts do
+not change the schedule. Missed days move an item to due without compounding a penalty. Dates use
+strict learner-local calendar semantics.
 
 ### Local repository
 
 Provides typed, transaction-based access to IndexedDB. Domain services never call IndexedDB
-directly. The repository handles schema migrations, import/export, delete-all, pack references,
-and recovery from quota or corruption errors.
+directly. In v0.7 the repository handles one privacy-minimized schema, export, verified delete-all,
+pack references, bounded retention, and explicit quota/corruption failure. Import and broader
+migration/recovery workflows remain future scope.
 
 ### Topic-pack repository
 
@@ -217,8 +218,9 @@ stops the deadline and microphone before restoring the base review.
 6. Feedback composer returns `Review` and one `Prescription`.
 7. Retry repeats steps 2–6 with `attemptNumber = 2`.
 8. Comparator creates `AttemptComparison`; v0.6 may then run a session-local viva ladder.
-9. Scheduling and durable save are future flows; v0.6 revokes/discards raw audio and retains no
-   learner attempt history after the page session.
+9. In v0.7, explicit opt-in saves only the main review's privacy-minimized aggregate metadata and
+   schedule. Raw audio, approved transcripts, concept evidence, and viva answers remain
+   session-local and are revoked/discarded on exit.
 
 ## 4. Topic-pack domain
 
@@ -292,25 +294,28 @@ group, population, body region, and system are multi-valued secondary facets.
 
 Settings use `localStorage` from v0.2 because they are small and synchronous, with in-memory
 defaults when storage is unavailable. The value is a versioned, schema-validated JSON object;
-invalid or newer unsupported data falls back safely instead of blocking practice. IndexedDB is
-planned after v0.7 for the learning-record and metadata stores below; it is not present in v0.6.
+invalid or newer unsupported data falls back safely instead of blocking practice. v0.7 adds an
+off-by-default IndexedDB learning plan with one privacy-minimized store. The broader stores below
+remain future architecture, not shipped behavior.
 
 | Store | Key | Purpose | Sensitive content |
 | --- | --- | --- | --- |
 | `packMetadata` | pack id + version | Checksums, activation and provenance | None |
-| `sessions` | session UUID | Mode/topic/version and completion metadata | Learning record |
-| `attempts` | attempt UUID | Approved transcript, metrics, evidence, prescription | Personal data |
-| `schedule` | topic identity | Due date, interval and self-rating | Learning record |
+| `records` (v0.7) | attempt UUID | Topic/practice identity, date, aggregate coverage and schedule only | Bounded learning metadata; no transcript/audio |
+| `sessions` (future) | session UUID | Mode/topic/version and completion metadata | Learning record |
+| `attempts` (future connected) | attempt UUID | Consent-scoped review artifacts | Personal data |
+| `schedule` (future sync) | topic identity | Due date, interval and self-rating | Learning record |
 | `modelMetadata` | model id + version | Cache/readiness/benchmark information | None |
 
 Raw audio is not a normal store. If local recording retention is later added, it requires a
 separate opt-in store, visible storage use, individual deletion, and migration policy.
 
-Migrations are forward-only, idempotent, fixture-tested, and transaction-scoped. Before a risky
-migration the app offers export. Unknown newer schemas open read-only rather than overwriting data.
-Delete-all removes the settings key from `localStorage`, IndexedDB data, caches that can identify
-user choices, and any retained local recordings while preserving only public application assets
-needed to show confirmation.
+The v0.7 database is version 2. It deletes the unreleased v1 object store instead of migrating it
+because v1 could contain transcript text and lacked the indexed field it declared. Future
+migrations are forward-only, fixture-tested, and transaction-scoped. The v0.7 learning-plan
+delete-all clears its IndexedDB records and exam-date key, then verifies a zero-record reload; it
+does not misleadingly claim to clear public application/model caches or ordinary accessibility
+settings. A future account-wide deletion control must enumerate every additional store explicitly.
 
 ## 6. Java content compiler components
 
@@ -393,7 +398,8 @@ required uncertainty fields are missing.
 - Coverage: educator-labelled positive, ambiguous, negated, and irrelevant transcript fixtures.
 - Challenge: educator-ordered prompt trios, vector/preset validation, scaffold independence,
   evidence-update paths, and rejection of timer-only fake escalation.
-- Repository: real IndexedDB adapter tests, migrations, quota errors, export/import and delete-all.
+- Repository: real IndexedDB adapter/index tests, migrations, quota errors, export and verified
+  delete-all. Import remains deferred after v0.7.
 - Service worker: offline shell, update activation, old-pack fallback and cache isolation.
 - Compiler: synthetic golden PDFs, deterministic output, policy rejection and schema compatibility.
 - Connected modules: port contract, authorization, consent, retention and provider-schema tests.

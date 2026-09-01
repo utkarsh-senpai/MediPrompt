@@ -14,7 +14,7 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.7 — Persisted history & spaced resurfacing** (in development)
+**v0.7 — Private learning plan & spaced resurfacing** (release candidate)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
 mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
@@ -48,15 +48,15 @@ transcription, and clip lifecycle. The full reviewed contract is in
 [docs/V0.6_DEVELOPMENT_CONTEXT.md](docs/V0.6_DEVELOPMENT_CONTEXT.md). Scheduling and persistence
 remain later enhancements.
 
-v0.7 adds the first **persisted-history** layer. Reviewed attempts are summarized
-into a local `AttemptRecord` and appended to an on-device `HistoryStore` (IndexedDB,
-with an in-memory fallback; nothing is uploaded). A pure SM-2-style spaced-resurfacing
-scheduler derives a due/upcoming review queue from that history, and an optional exam
-countdown reorders the due set — most-overdue-first when the exam is far away,
-weakest-coverage-first inside a 14-day cram window. Coverage drives scheduling; not-
-verifiable attempts do not advance it. The v0.2–v0.6 practice loop and scoring are
-unchanged; the resurfacing UI surface is deferred to a v0.7 follow-up. The reviewed
-contract is in [docs/V0.7_DEVELOPMENT_CONTEXT.md](docs/V0.7_DEVELOPMENT_CONTEXT.md).
+v0.7 adds an opt-in **private learning plan**. After explicit consent, a reviewed
+attempt saves only bounded topic identity, date, aggregate coverage, and scheduling metadata in
+IndexedDB; audio, transcripts, concept-by-concept evidence, and transcript excerpts remain
+session-local. The learner can open the next due topic directly, add an optional local-calendar
+exam date, export the metadata, pause future saves, or perform a verified delete-all. An SM-2-style
+scheduler orders due/upcoming reviews; inside the 14 days before a future exam, due topics are
+triaged weakest-coverage-first. Past exams never activate urgency sorting. IndexedDB failure is
+visible and never blocks the original practice loop. The reviewed contract is in
+[docs/V0.7_DEVELOPMENT_CONTEXT.md](docs/V0.7_DEVELOPMENT_CONTEXT.md).
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -98,7 +98,7 @@ the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 | [v0.4 development context](docs/V0.4_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for content coverage |
 | [v0.5 development context](docs/V0.5_DEVELOPMENT_CONTEXT.md) | Reviewed contract for retries, Refinement Delta, and semantic evidence |
 | [v0.6 development context](docs/V0.6_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the oral-defense ladder and release hardening |
-| [v0.7 development context](docs/V0.7_DEVELOPMENT_CONTEXT.md) | Reviewed contract for persisted history and spaced resurfacing |
+| [v0.7 development context](docs/V0.7_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the private learning plan and spaced resurfacing |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
@@ -178,7 +178,7 @@ The zero-cost learner experience is an offline-capable static PWA:
   candidate default subject to representative-device and Indian-English medical-speech tests.
 - A deterministic browser-local lexical rubric baseline, with optional pinned q8
   `all-MiniLM-L6-v2` sentence/rubric evidence that remains non-counting until educator calibration.
-- IndexedDB for future private progress, a service worker for application/runtime caching, and the
+- Learner-controlled IndexedDB for bounded private progress metadata, a service worker for application/runtime caching, and the
   Transformers.js browser cache for opt-in model files.
 - Versioned, human-reviewed YAML topic packs compiled to static JSON.
 
@@ -209,6 +209,8 @@ would make later versions drift from decisions and code merged in earlier versio
 - No official grades, diagnosis, treatment advice, or replacement for educators.
 - Connected features require explicit consent, clear retention rules, server-side secrets, and
   deletion controls.
+- The local learning plan is off by default and never stores audio, transcript text, or transcript
+  excerpts; export and verified deletion are first-class controls.
 
 ## Near-term target
 

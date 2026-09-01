@@ -185,6 +185,11 @@ export interface UserSettings {
    * Default false; the lexical engine always runs first as the guaranteed fallback.
    */
   semanticCoverage?: boolean;
+  /**
+   * v0.7: explicitly opt into saving minimal practice metadata on this device.
+   * Audio, transcripts, and transcript excerpts are never part of this record.
+   */
+  practiceHistory?: boolean;
 }
 
 export interface PracticeSelection {
@@ -640,32 +645,38 @@ export type ReviewState = Extract<SessionState, { name: "REVIEW" }>;
 /** Bounds the session-local viva answer trace. */
 export const MAX_VIVA_ANSWERS = 19;
 
-// --- v0.7 persisted history & spaced-resurfacing contracts ---
-// v0.7 introduces the first persisted-history layer: completed, reviewed
-// attempts are summarized and stored locally (IndexedDB, with an in-memory
-// fallback). Records never leave the device — the privacy model from v0.2–v0.6
-// (transcripts session-local, never uploaded) is preserved. A pure SM-2-style
-// scheduler derives a resurfacing queue from the history; an exam-countdown
-// triage reorders it as an exam approaches. The v0.2–v0.6 state machine is
-// untouched in v0.7; UI consumption is deferred to a follow-up.
+// --- v0.7 private learning-plan contracts ---
+// Persistence is learner-controlled and metadata-only. In particular, neither
+// transcript text nor semantic transcript excerpts may enter AttemptRecord.
+
+/** Privacy-minimized coverage snapshot; sufficient for scheduling and export. */
+export interface PersistedCoverage {
+  verifiable: boolean;
+  unavailableReason: CoverageUnavailableReason | null;
+  scoring: CoverageReport["scoring"];
+  hitCount: number;
+  totalCount: number;
+  weightedFraction: number;
+  fraction: number;
+}
 
 /** Persisted summary of one completed, reviewed attempt. Local-only. */
 export interface AttemptRecord {
   schemaVersion: 1;
   /** Matches the in-memory AttemptDraft.attemptId; stable per attempt. */
   attemptId: string;
+  /** Materialized IndexedDB index; must equal topicFingerprint(topicRef). */
+  topicFingerprint: string;
   topicRef: TopicRef;
   mode: V02PracticeMode;
   challenge: ChallengePreset;
   attemptIndex: number;
   /** ISO wall-clock timestamp the attempt was reviewed. */
   reviewedAt: string;
-  /** Frozen coverage snapshot from review time. */
-  coverage: CoverageReport;
-  /** Approved transcript text, persisted locally only. */
-  transcriptText: string;
-  /** SM-2-style scheduling state for this topic's review chain. */
-  schedule: SpacedSchedule;
+  /** Frozen, transcript-free coverage summary from review time. */
+  coverage: PersistedCoverage;
+  /** Null when the attempt was not verifiable and cannot advance scheduling. */
+  schedule: SpacedSchedule | null;
 }
 
 /** SM-2-style per-topic scheduling state. */
@@ -676,8 +687,8 @@ export interface SpacedSchedule {
   easiness: number;
   /** Interval in days until the next due review. */
   intervalDays: number;
-  /** ISO day-granularity date the next review is due. */
-  nextDueAt: string;
+  /** Learner-local calendar date (YYYY-MM-DD) the next review is due. */
+  nextDueOn: string;
 }
 
 /** SM-2 recall quality, 0 (blackout) .. 5 (perfect). */
@@ -724,13 +735,13 @@ export interface ResurfacingQueue {
 /** Optional exam-date schedule, persisted in localStorage (v0.7). */
 export interface ExamSchedule {
   schemaVersion: 1;
-  /** ISO day-granularity date of the exam, or null when unset. */
-  examAt: string | null;
+  /** Learner-local calendar date (YYYY-MM-DD), or null when unset. */
+  examOn: string | null;
 }
 
 export const DEFAULT_EXAM_SCHEDULE: Readonly<ExamSchedule> = Object.freeze({
   schemaVersion: 1,
-  examAt: null,
+  examOn: null,
 });
 
 /**
@@ -740,6 +751,7 @@ export const DEFAULT_EXAM_SCHEDULE: Readonly<ExamSchedule> = Object.freeze({
  * untrusted and drop malformed records.
  */
 export interface HistoryStore {
+  storageMode(): Promise<"DEVICE" | "SESSION">;
   loadTopic(topicFingerprint: string): Promise<AttemptRecord[]>;
   loadAll(): Promise<AttemptRecord[]>;
   append(record: AttemptRecord): Promise<AttemptRecord>;
@@ -747,9 +759,22 @@ export interface HistoryStore {
   clear(): Promise<void>;
 }
 
+export interface ExamScheduleStore {
+  load(): ExamSchedule;
+  save(schedule: ExamSchedule): void;
+  clear(): void;
+}
+
 export type SessionEvent =
   | { type: "CHANGE_SELECTION"; selection: PracticeSelection }
   | { type: "SPIN"; requestId: string; now: number }
+  | {
+      type: "RESURFACE_TOPIC";
+      requestId: string;
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      now: number;
+    }
   | { type: "TOPIC_DRAWN"; requestId: string; topic: TopicSnapshot; now: number }
   | { type: "START_RESEARCH"; now: number }
   | { type: "DONE_RESEARCHING"; requestId: string; now: number }
@@ -904,6 +929,7 @@ export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   researchSeconds: 600,
   soundMuted: false,
   semanticCoverage: false,
+  practiceHistory: false,
 });
 
 /** Documented bounds for durations; clamped by the settings store and reducer. */

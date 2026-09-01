@@ -146,6 +146,20 @@ describe("App accessibility + capability + security", () => {
     expect(screen.getByLabelText(/Meaning-match evidence/)).toBeChecked();
   });
 
+  it("requires explicit opt-in before saving a private learning plan", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Settings" })).toBeEnabled());
+    expect(screen.getByText(/Learning plan · paused/i)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Settings" }));
+    const history = screen.getByLabelText(/Private learning plan/);
+    expect(history).not.toBeChecked();
+    await user.click(history);
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Settings" }));
+    expect(screen.getByLabelText(/Private learning plan/)).toBeChecked();
+  });
+
   it("renders at a 320px viewport without throwing", async () => {
     Object.defineProperty(window, "innerWidth", {
       configurable: true,

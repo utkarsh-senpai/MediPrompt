@@ -6,28 +6,20 @@
 // likely to cost marks.
 
 import type { ExamSchedule, ResurfacingItem, ResurfacingQueue } from "@/practice/types";
+import { calendarDayNumber, localCalendarDate } from "@/practice/spacedRepetition";
 
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
 /** Days before the exam at which triage switches to cram mode. */
 export const CRAM_WINDOW_DAYS = 14;
-
-function startOfUtcDay(date: Date): Date {
-  return new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
-  );
-}
 
 /**
  * Whole days until the exam (negative if past). Returns null when no exam is
  * set or the stored date is unparseable.
  */
-export function daysUntilExam(examAt: string | null, now: Date): number | null {
-  if (!examAt) return null;
-  const exam = new Date(examAt);
-  if (Number.isNaN(exam.getTime())) return null;
-  return Math.floor(
-    (startOfUtcDay(exam).getTime() - startOfUtcDay(now).getTime()) / MS_PER_DAY,
-  );
+export function daysUntilExam(examOn: string | null, now: Date): number | null {
+  if (!examOn) return null;
+  const examDay = calendarDayNumber(examOn);
+  const today = calendarDayNumber(localCalendarDate(now));
+  return examDay === null || today === null ? null : examDay - today;
 }
 
 function verifiableFraction(item: ResurfacingItem): number {
@@ -42,11 +34,11 @@ function verifiableFraction(item: ResurfacingItem): number {
  */
 export function examTriage(
   queue: ResurfacingQueue,
-  examAt: string | null,
+  examOn: string | null,
   now: Date,
 ): ResurfacingQueue {
-  const days = daysUntilExam(examAt, now);
-  const cramming = days !== null && days <= CRAM_WINDOW_DAYS;
+  const days = daysUntilExam(examOn, now);
+  const cramming = days !== null && days >= 0 && days <= CRAM_WINDOW_DAYS;
 
   const due = [...queue.due].sort((a, b) => {
     if (cramming) {
@@ -71,10 +63,11 @@ export function parseExamSchedule(raw: unknown): ExamSchedule | null {
     if (Object.prototype.hasOwnProperty.call(obj, dangerous)) return null;
   }
   if (obj["schemaVersion"] !== 1) return null;
-  const examAt = obj["examAt"];
-  if (examAt === null) return { schemaVersion: 1, examAt: null };
-  if (typeof examAt !== "string") return null;
-  const parsed = new Date(examAt);
-  if (Number.isNaN(parsed.getTime())) return null;
-  return { schemaVersion: 1, examAt };
+  const keys = Object.keys(obj);
+  if (keys.some((key) => key !== "schemaVersion" && key !== "examOn")) return null;
+  if (!Object.prototype.hasOwnProperty.call(obj, "examOn")) return null;
+  const examOn = obj["examOn"];
+  if (examOn === null) return { schemaVersion: 1, examOn: null };
+  if (typeof examOn !== "string" || calendarDayNumber(examOn) === null) return null;
+  return { schemaVersion: 1, examOn };
 }

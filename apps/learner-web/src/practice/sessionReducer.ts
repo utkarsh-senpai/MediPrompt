@@ -194,6 +194,29 @@ export function reduceSession(
         commands: [requestDraw(state.selection, event.requestId, deps)],
       };
 
+    case "RESURFACE_TOPIC": {
+      if (
+        state.name !== "IDLE" ||
+        event.topic.topicRef.packId !== deps.pack.packId ||
+        event.topic.topicRef.packVersion !== deps.pack.version ||
+        event.topic.topicRef.subjectId !== event.selection.subjectId ||
+        event.topic.mode !== event.selection.mode ||
+        event.topic.challenge !== event.selection.challenge
+      ) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          name: "TOPIC_READY",
+          selection: event.selection,
+          requestId: event.requestId,
+          topic: event.topic,
+          attempt: buildAttempt(event.topic, event.requestId, deps),
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "topic" }],
+      };
+    }
+
     case "SPIN_AGAIN": {
       // Spinning again discards the attempt: any recording is revoked and any
       // running transcription cancelled before the next draw.

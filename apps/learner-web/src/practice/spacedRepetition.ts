@@ -17,6 +17,7 @@ import {
 } from "@/practice/types";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const CALENDAR_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 /** Stable identity for a topic across attempts. JSON preserves field order. */
 export function topicFingerprint(ref: TopicRef): string {
@@ -34,7 +35,9 @@ export function topicFingerprint(ref: TopicRef): string {
  * not-verifiable reports — those attempts carry no scorable signal and must not
  * drive scheduling.
  */
-export function coverageToQuality(report: CoverageReport): RecallQuality | null {
+export function coverageToQuality(
+  report: Pick<CoverageReport, "verifiable" | "weightedFraction">,
+): RecallQuality | null {
   if (!report.verifiable) return null;
   const f = report.weightedFraction;
   if (f >= 0.9) return 5;
@@ -50,10 +53,37 @@ function clampEasiness(value: number, min: number): number {
   return Math.max(min, Math.round(value * 1000) / 1000);
 }
 
-function startOfUtcDay(date: Date): Date {
-  return new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
-  );
+/** Strict learner-local calendar date parser. Returns a UTC day number. */
+export function calendarDayNumber(value: string): number | null {
+  const match = CALENDAR_DATE.exec(value);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const time = Date.UTC(year, month - 1, day);
+  const parsed = new Date(time);
+  if (
+    parsed.getUTCFullYear() !== year ||
+    parsed.getUTCMonth() !== month - 1 ||
+    parsed.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return Math.floor(time / MS_PER_DAY);
+}
+
+/** Calendar date in the learner's current timezone, without an implicit UTC shift. */
+export function localCalendarDate(date: Date): string {
+  const year = String(date.getFullYear()).padStart(4, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function addCalendarDays(date: Date, intervalDays: number): string {
+  const base = calendarDayNumber(localCalendarDate(date));
+  if (base === null) throw new RangeError("invalid review date");
+  return new Date((base + intervalDays) * MS_PER_DAY).toISOString().slice(0, 10);
 }
 
 /**
@@ -65,7 +95,8 @@ function startOfUtcDay(date: Date): Date {
  *   minEasiness; repetitions += 1; interval = first | second | round(prev * EF).
  *
  * `prev` is null for a topic's first scheduled review. `reviewedAtDate` is the
- * wall-clock day the review happened; the next due date is that day + interval.
+ * learner-local calendar day the review happened; the next due date is that day
+ * plus the interval. Calendar dates avoid UTC shifts around local midnight.
  */
 export function scheduleReview(
   prev: SpacedSchedule | null,
@@ -77,13 +108,11 @@ export function scheduleReview(
 
   if (quality < 3) {
     const intervalDays = config.firstIntervalDays;
-    const base = startOfUtcDay(reviewedAtDate);
-    const nextDueAt = new Date(base.getTime() + intervalDays * MS_PER_DAY);
     return {
       repetitions: 0,
       easiness: clampEasiness(easiness, config.minEasiness),
       intervalDays,
-      nextDueAt: nextDueAt.toISOString(),
+      nextDueOn: addCalendarDays(reviewedAtDate, intervalDays),
     };
   }
 
@@ -104,18 +133,18 @@ export function scheduleReview(
     intervalDays = Math.max(1, Math.round(prevInterval * nextEasiness));
   }
 
-  const base = startOfUtcDay(reviewedAtDate);
-  const nextDueAt = new Date(base.getTime() + intervalDays * MS_PER_DAY);
   return {
     repetitions,
     easiness: nextEasiness,
     intervalDays,
-    nextDueAt: nextDueAt.toISOString(),
+    nextDueOn: addCalendarDays(reviewedAtDate, intervalDays),
   };
 }
 
-function daysBetween(from: Date, to: Date): number {
-  return Math.floor((startOfUtcDay(to).getTime() - startOfUtcDay(from).getTime()) / MS_PER_DAY);
+function daysBetween(from: Date, toOn: string): number | null {
+  const fromDay = calendarDayNumber(localCalendarDate(from));
+  const toDay = calendarDayNumber(toOn);
+  return fromDay === null || toDay === null ? null : toDay - fromDay;
 }
 
 /** The most recent record for a topic (by reviewedAt), or undefined. */
@@ -146,9 +175,13 @@ export function buildResurfacingQueue(
 
   const items: ResurfacingItem[] = [];
   for (const list of byTopic.values()) {
-    const last = latestRecord(list);
+    // An unverifiable attempt has no schedule and must not erase the prior due
+    // state for the same topic.
+    const last = latestRecord(list.filter((record) => record.schedule !== null));
     if (!last) continue;
-    const daysUntilDue = daysBetween(now, new Date(last.schedule.nextDueAt));
+    if (!last.schedule) continue;
+    const daysUntilDue = daysBetween(now, last.schedule.nextDueOn);
+    if (daysUntilDue === null) continue;
     items.push({
       topicRef: last.topicRef,
       lastRecord: last,

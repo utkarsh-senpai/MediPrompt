@@ -1,172 +1,291 @@
-// v0.7 persisted-history store (docs/V0.7_DEVELOPMENT_CONTEXT.md §3).
-// IndexedDB-backed with an in-memory fallback when IndexedDB is unavailable
-// (private mode, SSR, tests). Stored records are untrusted: malformed JSON,
-// unknown schema versions, or structurally invalid coverage are dropped. The
-// store never uploads anything — records are local-only.
+// v0.7 learner-controlled practice metadata store.
+//
+// Privacy invariant: AttemptRecord contains scheduling and aggregate coverage
+// metadata only. Audio, transcript text, and semantic transcript excerpts are
+// session-local and must never reach this module.
 
-import {
-  type AttemptRecord,
-  type CoverageReport,
-  type CoverageUnavailableReason,
-  type HistoryStore,
-  type SpacedSchedule,
-  type TopicRef,
+import type {
+  AttemptRecord,
+  CoverageReport,
+  CoverageUnavailableReason,
+  HistoryStore,
+  PersistedCoverage,
+  SpacedSchedule,
+  TopicRef,
 } from "@/practice/types";
-import { topicFingerprint } from "@/practice/spacedRepetition";
+import {
+  calendarDayNumber,
+  topicFingerprint,
+} from "@/practice/spacedRepetition";
 
-const DB_NAME = "mediprompt-history";
-const DB_VERSION = 1;
+export const HISTORY_DB_NAME = "mediprompt-history";
+const DB_VERSION = 2;
 const STORE = "records";
-const INDEX = "topicFingerprint";
+const TOPIC_INDEX = "topicFingerprint";
+export const MAX_HISTORY_RECORDS = 500;
 
+const MAX_ID_LENGTH = 200;
+const MAX_VERSION_LENGTH = 80;
+const MAX_SCORING_ITEMS = 2_000;
+const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 const UNAVAILABLE_REASONS: readonly CoverageUnavailableReason[] = [
   "NO_TRANSCRIPT",
   "NO_SCORABLE_RUBRIC",
 ];
 
+function hasDangerousKey(obj: Record<string, unknown>): boolean {
+  return ["__proto__", "prototype", "constructor"].some((key) =>
+    Object.prototype.hasOwnProperty.call(obj, key),
+  );
+}
+
+function hasOnlyKeys(
+  obj: Record<string, unknown>,
+  required: readonly string[],
+): boolean {
+  const allowed = new Set(required);
+  const keys = Object.keys(obj);
+  return (
+    !hasDangerousKey(obj) &&
+    keys.length === required.length &&
+    required.every((key) => Object.prototype.hasOwnProperty.call(obj, key)) &&
+    keys.every((key) => allowed.has(key))
+  );
+}
+
+function boundedString(raw: unknown, max = MAX_ID_LENGTH): raw is string {
+  return typeof raw === "string" && raw.length > 0 && raw.length <= max;
+}
+
+function finiteInteger(raw: unknown, min: number, max: number): raw is number {
+  return (
+    typeof raw === "number" &&
+    Number.isFinite(raw) &&
+    Number.isInteger(raw) &&
+    raw >= min &&
+    raw <= max
+  );
+}
+
+function unitFraction(raw: unknown): raw is number {
+  return typeof raw === "number" && Number.isFinite(raw) && raw >= 0 && raw <= 1;
+}
+
 function parseTopicRef(raw: unknown): TopicRef | null {
   if (typeof raw !== "object" || raw === null) return null;
-  const o = raw as Record<string, unknown>;
+  const obj = raw as Record<string, unknown>;
+  const keys = [
+    "packId",
+    "packVersion",
+    "subjectId",
+    "topicId",
+    "variantId",
+    "difficultyProfileVersion",
+    "promptId",
+    "rubricId",
+  ] as const;
+  if (!hasOnlyKeys(obj, keys)) return null;
   if (
-    typeof o["packId"] !== "string" ||
-    typeof o["packVersion"] !== "string" ||
-    typeof o["subjectId"] !== "string" ||
-    typeof o["topicId"] !== "string" ||
-    typeof o["variantId"] !== "string" ||
-    typeof o["difficultyProfileVersion"] !== "string" ||
-    typeof o["promptId"] !== "string" ||
-    typeof o["rubricId"] !== "string"
+    !boundedString(obj["packId"]) ||
+    !boundedString(obj["packVersion"], MAX_VERSION_LENGTH) ||
+    !boundedString(obj["subjectId"]) ||
+    !boundedString(obj["topicId"]) ||
+    !boundedString(obj["variantId"]) ||
+    !boundedString(obj["difficultyProfileVersion"], MAX_VERSION_LENGTH) ||
+    !boundedString(obj["promptId"]) ||
+    !boundedString(obj["rubricId"])
   ) {
     return null;
   }
   return {
-    packId: o["packId"],
-    packVersion: o["packVersion"],
-    subjectId: o["subjectId"],
-    topicId: o["topicId"],
-    variantId: o["variantId"],
-    difficultyProfileVersion: o["difficultyProfileVersion"],
-    promptId: o["promptId"],
-    rubricId: o["rubricId"],
+    packId: obj["packId"],
+    packVersion: obj["packVersion"],
+    subjectId: obj["subjectId"],
+    topicId: obj["topicId"],
+    variantId: obj["variantId"],
+    difficultyProfileVersion: obj["difficultyProfileVersion"],
+    promptId: obj["promptId"],
+    rubricId: obj["rubricId"],
   };
 }
 
 function parseSchedule(raw: unknown): SpacedSchedule | null {
   if (typeof raw !== "object" || raw === null) return null;
-  const o = raw as Record<string, unknown>;
-  const repetitions = o["repetitions"];
-  const easiness = o["easiness"];
-  const intervalDays = o["intervalDays"];
-  const nextDueAt = o["nextDueAt"];
+  const obj = raw as Record<string, unknown>;
+  if (!hasOnlyKeys(obj, ["repetitions", "easiness", "intervalDays", "nextDueOn"])) {
+    return null;
+  }
   if (
-    typeof repetitions !== "number" || !Number.isFinite(repetitions) ||
-    repetitions < 0 ||
-    typeof easiness !== "number" || !Number.isFinite(easiness) ||
-    easiness < 1 ||
-    typeof intervalDays !== "number" || !Number.isFinite(intervalDays) ||
-    intervalDays < 0 ||
-    typeof nextDueAt !== "string"
+    !finiteInteger(obj["repetitions"], 0, 10_000) ||
+    typeof obj["easiness"] !== "number" ||
+    !Number.isFinite(obj["easiness"]) ||
+    obj["easiness"] < 1 ||
+    obj["easiness"] > 10 ||
+    !finiteInteger(obj["intervalDays"], 1, 36_500) ||
+    typeof obj["nextDueOn"] !== "string" ||
+    calendarDayNumber(obj["nextDueOn"]) === null
   ) {
     return null;
   }
-  const due = new Date(nextDueAt);
-  if (Number.isNaN(due.getTime())) return null;
   return {
-    repetitions: Math.floor(repetitions),
-    easiness,
-    intervalDays: Math.floor(intervalDays),
-    nextDueAt,
+    repetitions: obj["repetitions"],
+    easiness: obj["easiness"],
+    intervalDays: obj["intervalDays"],
+    nextDueOn: obj["nextDueOn"],
   };
 }
 
-function parseCoverage(raw: unknown): CoverageReport | null {
+function parseCoverage(raw: unknown): PersistedCoverage | null {
   if (typeof raw !== "object" || raw === null) return null;
-  const o = raw as Record<string, unknown>;
-  if (typeof o["verifiable"] !== "boolean") return null;
-  const scoring = o["scoring"];
-  if (typeof scoring !== "object" || scoring === null) return null;
-  const s = scoring as Record<string, unknown>;
-  if (s["method"] !== "LEXICAL" && s["method"] !== "LEXICAL_SEMANTIC") return null;
-  if (typeof s["version"] !== "string") return null;
-  if (!Array.isArray(o["conceptResults"])) return null;
-  if (typeof o["hitCount"] !== "number" || !Number.isFinite(o["hitCount"])) return null;
-  if (typeof o["totalCount"] !== "number" || !Number.isFinite(o["totalCount"])) return null;
-  if (typeof o["weightedFraction"] !== "number" || !Number.isFinite(o["weightedFraction"])) return null;
-  if (typeof o["fraction"] !== "number" || !Number.isFinite(o["fraction"])) return null;
-  const weightedFraction = Math.max(0, Math.min(1, o["weightedFraction"]));
-  const fraction = Math.max(0, Math.min(1, o["fraction"]));
-  if (o["verifiable"]) {
-    if (o["unavailableReason"] !== null) return null;
-    return {
-      verifiable: true,
-      unavailableReason: null,
-      scoring: { method: s["method"], version: s["version"] },
-      conceptResults: o["conceptResults"],
-      hitCount: Math.floor(o["hitCount"]),
-      totalCount: Math.floor(o["totalCount"]),
-      weightedFraction,
-      fraction,
-    } as CoverageReport;
-  }
-  const reason = o["unavailableReason"];
-  if (typeof reason !== "string" || !UNAVAILABLE_REASONS.includes(reason as CoverageUnavailableReason)) {
-    return null;
-  }
-  return {
-    verifiable: false,
-    unavailableReason: reason as CoverageUnavailableReason,
-    scoring: { method: s["method"], version: s["version"] },
-    conceptResults: o["conceptResults"],
-    hitCount: Math.floor(o["hitCount"]),
-    totalCount: Math.floor(o["totalCount"]),
-    weightedFraction,
-    fraction,
-  } as CoverageReport;
-}
-
-function parseAttemptRecord(raw: unknown): AttemptRecord | null {
-  if (typeof raw !== "object" || raw === null) return null;
-  const o = raw as Record<string, unknown>;
-  for (const dangerous of ["__proto__", "prototype", "constructor"]) {
-    if (Object.prototype.hasOwnProperty.call(o, dangerous)) return null;
-  }
-  if (o["schemaVersion"] !== 1) return null;
-  if (typeof o["attemptId"] !== "string") return null;
-  const topicRef = parseTopicRef(o["topicRef"]);
-  if (!topicRef) return null;
-  if (o["mode"] !== "RECALL_SPRINT" && o["mode"] !== "DEEP_RESEARCH") return null;
+  const obj = raw as Record<string, unknown>;
   if (
-    o["challenge"] !== "GUIDED" &&
-    o["challenge"] !== "APPLIED" &&
-    o["challenge"] !== "VIVA"
+    !hasOnlyKeys(obj, [
+      "verifiable",
+      "unavailableReason",
+      "scoring",
+      "hitCount",
+      "totalCount",
+      "weightedFraction",
+      "fraction",
+    ]) ||
+    typeof obj["verifiable"] !== "boolean"
   ) {
     return null;
   }
-  if (typeof o["attemptIndex"] !== "number" || !Number.isFinite(o["attemptIndex"]) || o["attemptIndex"] < 1) {
+  const scoring = obj["scoring"];
+  if (typeof scoring !== "object" || scoring === null) return null;
+  const scoringObj = scoring as Record<string, unknown>;
+  if (
+    !hasOnlyKeys(scoringObj, ["method", "version"]) ||
+    (scoringObj["method"] !== "LEXICAL" && scoringObj["method"] !== "LEXICAL_SEMANTIC") ||
+    !boundedString(scoringObj["version"], MAX_VERSION_LENGTH)
+  ) {
     return null;
   }
-  if (typeof o["reviewedAt"] !== "string") return null;
-  if (Number.isNaN(new Date(o["reviewedAt"]).getTime())) return null;
-  const coverage = parseCoverage(o["coverage"]);
+  if (
+    !finiteInteger(obj["hitCount"], 0, MAX_SCORING_ITEMS) ||
+    !finiteInteger(obj["totalCount"], 0, MAX_SCORING_ITEMS) ||
+    obj["hitCount"] > obj["totalCount"] ||
+    !unitFraction(obj["weightedFraction"]) ||
+    !unitFraction(obj["fraction"])
+  ) {
+    return null;
+  }
+  const expectedFraction =
+    obj["totalCount"] === 0 ? 0 : obj["hitCount"] / obj["totalCount"];
+  if (Math.abs(obj["fraction"] - expectedFraction) > 1e-9) return null;
+
+  if (obj["verifiable"]) {
+    if (obj["unavailableReason"] !== null || obj["totalCount"] === 0) return null;
+  } else if (
+    typeof obj["unavailableReason"] !== "string" ||
+    !UNAVAILABLE_REASONS.includes(obj["unavailableReason"] as CoverageUnavailableReason) ||
+    obj["hitCount"] !== 0 ||
+    obj["weightedFraction"] !== 0 ||
+    obj["fraction"] !== 0
+  ) {
+    return null;
+  }
+
+  return {
+    verifiable: obj["verifiable"],
+    unavailableReason: obj["unavailableReason"] as CoverageUnavailableReason | null,
+    scoring: {
+      method: scoringObj["method"],
+      version: scoringObj["version"],
+    },
+    hitCount: obj["hitCount"],
+    totalCount: obj["totalCount"],
+    weightedFraction: obj["weightedFraction"],
+    fraction: obj["fraction"],
+  };
+}
+
+export function toPersistedCoverage(report: CoverageReport): PersistedCoverage {
+  return {
+    verifiable: report.verifiable,
+    unavailableReason: report.unavailableReason,
+    scoring: { ...report.scoring },
+    hitCount: report.hitCount,
+    totalCount: report.totalCount,
+    weightedFraction: report.weightedFraction,
+    fraction: report.fraction,
+  };
+}
+
+export function parseAttemptRecord(raw: unknown): AttemptRecord | null {
+  if (typeof raw !== "object" || raw === null) return null;
+  const obj = raw as Record<string, unknown>;
+  if (
+    !hasOnlyKeys(obj, [
+      "schemaVersion",
+      "attemptId",
+      "topicFingerprint",
+      "topicRef",
+      "mode",
+      "challenge",
+      "attemptIndex",
+      "reviewedAt",
+      "coverage",
+      "schedule",
+    ]) ||
+    obj["schemaVersion"] !== 1 ||
+    !boundedString(obj["attemptId"]) ||
+    !boundedString(obj["topicFingerprint"], 1_000)
+  ) {
+    return null;
+  }
+  const topicRef = parseTopicRef(obj["topicRef"]);
+  if (!topicRef || obj["topicFingerprint"] !== topicFingerprint(topicRef)) return null;
+  if (obj["mode"] !== "RECALL_SPRINT" && obj["mode"] !== "DEEP_RESEARCH") return null;
+  if (
+    obj["challenge"] !== "GUIDED" &&
+    obj["challenge"] !== "APPLIED" &&
+    obj["challenge"] !== "VIVA"
+  ) {
+    return null;
+  }
+  if (!finiteInteger(obj["attemptIndex"], 1, 10_000)) return null;
+  if (
+    typeof obj["reviewedAt"] !== "string" ||
+    !ISO_INSTANT.test(obj["reviewedAt"]) ||
+    Number.isNaN(Date.parse(obj["reviewedAt"])) ||
+    new Date(obj["reviewedAt"]).toISOString() !== obj["reviewedAt"]
+  ) {
+    return null;
+  }
+  const coverage = parseCoverage(obj["coverage"]);
   if (!coverage) return null;
-  if (typeof o["transcriptText"] !== "string") return null;
-  const schedule = parseSchedule(o["schedule"]);
-  if (!schedule) return null;
+  const schedule = obj["schedule"] === null ? null : parseSchedule(obj["schedule"]);
+  if (obj["schedule"] !== null && !schedule) return null;
+  if (coverage.verifiable !== (schedule !== null)) return null;
+
   return {
     schemaVersion: 1,
-    attemptId: o["attemptId"],
+    attemptId: obj["attemptId"],
+    topicFingerprint: obj["topicFingerprint"],
     topicRef,
-    mode: o["mode"],
-    challenge: o["challenge"],
-    attemptIndex: Math.floor(o["attemptIndex"]),
-    reviewedAt: o["reviewedAt"],
+    mode: obj["mode"],
+    challenge: obj["challenge"],
+    attemptIndex: obj["attemptIndex"],
+    reviewedAt: obj["reviewedAt"],
     coverage,
-    transcriptText: o["transcriptText"],
     schedule,
   };
 }
 
-/** Open the IndexedDB database, or null when unavailable/blocked. */
+function cloneRecord(record: AttemptRecord): AttemptRecord {
+  return structuredClone(record);
+}
+
+function sortRecords(records: AttemptRecord[]): AttemptRecord[] {
+  return records.sort((a, b) =>
+    a.reviewedAt === b.reviewedAt
+      ? a.attemptId.localeCompare(b.attemptId)
+      : a.reviewedAt.localeCompare(b.reviewedAt),
+  );
+}
+
 function openDb(): Promise<IDBDatabase | null> {
   return new Promise((resolve) => {
     const factory = globalThis.indexedDB;
@@ -174,172 +293,184 @@ function openDb(): Promise<IDBDatabase | null> {
       resolve(null);
       return;
     }
-    let db: IDBDatabase | null = null;
     try {
-      const req = factory.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = () => {
-        db = req.result;
-        if (!db.objectStoreNames.contains(STORE)) {
-          const store = db.createObjectStore(STORE, { keyPath: "attemptId" });
-          store.createIndex(INDEX, "topicFingerprint", { unique: false });
-        }
+      const request = factory.open(HISTORY_DB_NAME, DB_VERSION);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        // v1 could contain transcript text and had an unusable index. Remove it
+        // rather than migrating sensitive or structurally invalid records.
+        if (db.objectStoreNames.contains(STORE)) db.deleteObjectStore(STORE);
+        const store = db.createObjectStore(STORE, { keyPath: "attemptId" });
+        store.createIndex(TOPIC_INDEX, "topicFingerprint", { unique: false });
       };
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => resolve(null);
-      req.onblocked = () => resolve(null);
+      request.onsuccess = () => {
+        request.result.onversionchange = () => request.result.close();
+        resolve(request.result);
+      };
+      request.onerror = () => resolve(null);
+      request.onblocked = () => resolve(null);
     } catch {
       resolve(null);
     }
   });
 }
 
-function reqToPromise<T>(req: IDBRequest<T>): Promise<T> {
+function reqToPromise<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error ?? new Error("IndexedDB request failed"));
   });
 }
 
 function txDone(tx: IDBTransaction): Promise<void> {
   return new Promise((resolve, reject) => {
     tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error);
+    tx.onerror = () => reject(tx.error ?? new Error("IndexedDB transaction failed"));
+    tx.onabort = () => reject(tx.error ?? new Error("IndexedDB transaction aborted"));
   });
 }
 
-/** In-memory fallback used when IndexedDB is unavailable and in tests. */
+/** In-memory fallback used when IndexedDB cannot be opened. */
 export class InMemoryHistoryStore implements HistoryStore {
-  private readonly map = new Map<string, AttemptRecord[]>();
+  private readonly records = new Map<string, AttemptRecord>();
+
+  async storageMode(): Promise<"SESSION"> {
+    return "SESSION";
+  }
 
   async loadTopic(fp: string): Promise<AttemptRecord[]> {
-    const list = this.map.get(fp);
-    return list ? list.map((r) => ({ ...r })) : [];
+    return sortRecords(
+      [...this.records.values()]
+        .filter((record) => record.topicFingerprint === fp)
+        .map(cloneRecord),
+    );
   }
 
   async loadAll(): Promise<AttemptRecord[]> {
-    const all: AttemptRecord[] = [];
-    for (const list of this.map.values()) all.push(...list);
-    return all.map((r) => ({ ...r }));
+    return sortRecords([...this.records.values()].map(cloneRecord));
   }
 
   async append(record: AttemptRecord): Promise<AttemptRecord> {
-    const parsed = parseAttemptRecord(record) ?? record;
-    const fp = topicFingerprint(parsed.topicRef);
-    const list = this.map.get(fp) ?? [];
-    list.push({ ...parsed });
-    this.map.set(fp, list);
-    return { ...parsed };
+    const parsed = parseAttemptRecord(record);
+    if (!parsed) throw new TypeError("Invalid practice-history record");
+    this.records.set(parsed.attemptId, cloneRecord(parsed));
+    const ordered = sortRecords([...this.records.values()]);
+    for (const oldest of ordered.slice(0, -MAX_HISTORY_RECORDS)) {
+      this.records.delete(oldest.attemptId);
+    }
+    return cloneRecord(parsed);
   }
 
   async clearTopic(fp: string): Promise<void> {
-    this.map.delete(fp);
+    for (const [attemptId, record] of this.records) {
+      if (record.topicFingerprint === fp) this.records.delete(attemptId);
+    }
   }
 
   async clear(): Promise<void> {
-    this.map.clear();
+    this.records.clear();
   }
 }
 
-/**
- * IndexedDB-backed history store. Degrades to an in-memory store when IndexedDB
- * cannot be opened, so the practice loop never hard-fails on persistence.
- */
+/** IndexedDB store with an in-memory fallback only when IndexedDB cannot open. */
 export class IndexedDbHistoryStore implements HistoryStore {
-  private readonly mem = new InMemoryHistoryStore();
+  private readonly memory = new InMemoryHistoryStore();
   private dbPromise: Promise<IDBDatabase | null> | null = null;
 
   private db(): Promise<IDBDatabase | null> {
-    if (!this.dbPromise) this.dbPromise = openDb();
+    this.dbPromise ??= openDb();
     return this.dbPromise;
+  }
+
+  async storageMode(): Promise<"DEVICE" | "SESSION"> {
+    return (await this.db()) ? "DEVICE" : "SESSION";
   }
 
   async loadTopic(fp: string): Promise<AttemptRecord[]> {
     const db = await this.db();
-    if (!db) return this.mem.loadTopic(fp);
-    try {
-      const tx = db.transaction(STORE, "readonly");
-      const index = tx.objectStore(STORE).index(INDEX);
-      const raw = await reqToPromise(index.getAll(IDBKeyRange.only(fp)));
-      await txDone(tx);
-      const records: AttemptRecord[] = [];
-      for (const item of raw as unknown[]) {
-        const parsed = parseAttemptRecord(item);
-        if (parsed) records.push(parsed);
-      }
-      return records;
-    } catch {
-      return this.mem.loadTopic(fp);
-    }
+    if (!db) return this.memory.loadTopic(fp);
+    const tx = db.transaction(STORE, "readonly");
+    const done = txDone(tx);
+    const raw = await reqToPromise(
+      tx.objectStore(STORE).index(TOPIC_INDEX).getAll(IDBKeyRange.only(fp)),
+    );
+    await done;
+    return sortRecords(
+      (raw as unknown[])
+        .map(parseAttemptRecord)
+        .filter((record): record is AttemptRecord => record !== null),
+    );
   }
 
   async loadAll(): Promise<AttemptRecord[]> {
     const db = await this.db();
-    if (!db) return this.mem.loadAll();
-    try {
-      const tx = db.transaction(STORE, "readonly");
-      const raw = await reqToPromise(tx.objectStore(STORE).getAll());
-      await txDone(tx);
-      const records: AttemptRecord[] = [];
-      for (const item of raw as unknown[]) {
-        const parsed = parseAttemptRecord(item);
-        if (parsed) records.push(parsed);
-      }
-      return records;
-    } catch {
-      return this.mem.loadAll();
-    }
+    if (!db) return this.memory.loadAll();
+    const tx = db.transaction(STORE, "readonly");
+    const done = txDone(tx);
+    const raw = await reqToPromise(tx.objectStore(STORE).getAll());
+    await done;
+    return sortRecords(
+      (raw as unknown[])
+        .map(parseAttemptRecord)
+        .filter((record): record is AttemptRecord => record !== null),
+    );
   }
 
   async append(record: AttemptRecord): Promise<AttemptRecord> {
-    const parsed = parseAttemptRecord(record) ?? record;
-    // Mirror into the memory fallback so a later failed read still sees it.
-    await this.mem.append(parsed);
+    const parsed = parseAttemptRecord(record);
+    if (!parsed) throw new TypeError("Invalid practice-history record");
     const db = await this.db();
-    if (!db) return parsed;
-    try {
-      const tx = db.transaction(STORE, "readwrite");
-      tx.objectStore(STORE).put(parsed);
-      await txDone(tx);
-      return parsed;
-    } catch {
-      return parsed;
+    if (!db) return this.memory.append(parsed);
+
+    const tx = db.transaction(STORE, "readwrite");
+    const done = txDone(tx);
+    const store = tx.objectStore(STORE);
+    const putRequest = store.put(parsed);
+    const allRequest = store.getAll();
+    const keysRequest = store.getAllKeys();
+    await reqToPromise(putRequest);
+    const raw = (await reqToPromise(allRequest)) as unknown[];
+    const keys = await reqToPromise(keysRequest);
+    const valid: AttemptRecord[] = [];
+    raw.forEach((item, index) => {
+      const validItem = parseAttemptRecord(item);
+      if (validItem) valid.push(validItem);
+      else if (keys[index] !== undefined) store.delete(keys[index]!);
+    });
+    sortRecords(valid);
+    for (const oldest of valid.slice(0, -MAX_HISTORY_RECORDS)) {
+      store.delete(oldest.attemptId);
     }
+    await done;
+    await this.memory.append(parsed);
+    return cloneRecord(parsed);
   }
 
   async clearTopic(fp: string): Promise<void> {
-    await this.mem.clearTopic(fp);
     const db = await this.db();
-    if (!db) return;
-    try {
-      const tx = db.transaction(STORE, "readwrite");
-      const index = tx.objectStore(STORE).index(INDEX);
-      const keys = await reqToPromise(index.getAllKeys(IDBKeyRange.only(fp)));
-      const store = tx.objectStore(STORE);
-      for (const key of keys as IDBValidKey[]) store.delete(key);
-      await txDone(tx);
-    } catch {
-      /* best-effort; memory fallback already cleared */
-    }
+    if (!db) return this.memory.clearTopic(fp);
+    const tx = db.transaction(STORE, "readwrite");
+    const done = txDone(tx);
+    const store = tx.objectStore(STORE);
+    const keys = await reqToPromise(
+      store.index(TOPIC_INDEX).getAllKeys(IDBKeyRange.only(fp)),
+    );
+    for (const key of keys) store.delete(key);
+    await done;
+    await this.memory.clearTopic(fp);
   }
 
   async clear(): Promise<void> {
-    await this.mem.clear();
     const db = await this.db();
-    if (!db) return;
-    try {
-      const tx = db.transaction(STORE, "readwrite");
-      tx.objectStore(STORE).clear();
-      await txDone(tx);
-    } catch {
-      /* best-effort */
-    }
+    if (!db) return this.memory.clear();
+    const tx = db.transaction(STORE, "readwrite");
+    const done = txDone(tx);
+    tx.objectStore(STORE).clear();
+    await done;
+    await this.memory.clear();
   }
 }
 
-/** True when the runtime exposes a usable IndexedDB factory. */
 export function historyStoreAvailable(): boolean {
   return typeof globalThis !== "undefined" && !!globalThis.indexedDB;
 }
-
-export { parseAttemptRecord };

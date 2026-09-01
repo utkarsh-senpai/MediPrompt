@@ -54,13 +54,13 @@ const record = (
 ): AttemptRecord => ({
   schemaVersion: 1,
   attemptId: `${topicId}-${reviewedAt}`,
+  topicFingerprint: topicFingerprint(ref(topicId)),
   topicRef: ref(topicId),
   mode: "RECALL_SPRINT",
   challenge: "GUIDED",
   attemptIndex: 1,
   reviewedAt,
   coverage,
-  transcriptText: "text",
   schedule,
 });
 
@@ -87,13 +87,13 @@ describe("coverageToQuality", () => {
 });
 
 describe("scheduleReview", () => {
-  const reviewed = new Date("2026-09-02T10:00:00Z");
+  const reviewed = new Date(2026, 8, 2, 10);
 
   it("schedules the first successful review one day out", () => {
     const s = scheduleReview(null, 4, reviewed);
     expect(s.repetitions).toBe(1);
     expect(s.intervalDays).toBe(1);
-    expect(s.nextDueAt).toBe("2026-09-03T00:00:00.000Z");
+    expect(s.nextDueOn).toBe("2026-09-03");
   });
 
   it("uses the second interval on the second successful review", () => {
@@ -125,28 +125,28 @@ describe("scheduleReview", () => {
   });
 
   it("anchors the due date to the review day, not the prior due date", () => {
-    const late = new Date("2026-09-10T22:00:00Z");
+    const late = new Date(2026, 8, 10, 22);
     const s = scheduleReview(null, 4, late);
-    expect(s.nextDueAt).toBe("2026-09-11T00:00:00.000Z");
+    expect(s.nextDueOn).toBe("2026-09-11");
   });
 });
 
 describe("buildResurfacingQueue", () => {
-  const now = new Date("2026-09-02T00:00:00Z");
-  const due = (topicId: string, nextDueAt: string): AttemptRecord =>
+  const now = new Date(2026, 8, 2, 12);
+  const due = (topicId: string, nextDueOn: string): AttemptRecord =>
     record(topicId, "2026-08-30T00:00:00Z", {
       repetitions: 1,
       easiness: 2.5,
       intervalDays: 1,
-      nextDueAt,
+      nextDueOn,
     });
 
   it("splits due and upcoming, most overdue / soonest first", () => {
     const records = [
-      due("a", "2026-09-01T00:00:00Z"), // 1 day overdue
-      due("b", "2026-08-31T00:00:00Z"), // 2 days overdue
-      due("c", "2026-09-03T00:00:00Z"), // upcoming in 1 day
-      due("d", "2026-09-05T00:00:00Z"), // upcoming in 3 days
+      due("a", "2026-09-01"), // 1 day overdue
+      due("b", "2026-08-31"), // 2 days overdue
+      due("c", "2026-09-03"), // upcoming in 1 day
+      due("d", "2026-09-05"), // upcoming in 3 days
     ];
     const q = buildResurfacingQueue(records, now);
     expect(q.due.map((i) => i.topicRef.topicId)).toEqual(["b", "a"]);
@@ -160,14 +160,14 @@ describe("buildResurfacingQueue", () => {
         repetitions: 1,
         easiness: 2.5,
         intervalDays: 1,
-        nextDueAt: "2026-09-10T00:00:00Z",
+        nextDueOn: "2026-09-10",
       }),
       // Latest record: overdue by 2 days as of now (2026-09-02).
       record("a", "2026-09-01T00:00:00Z", {
         repetitions: 2,
         easiness: 2.5,
         intervalDays: 3,
-        nextDueAt: "2026-08-31T00:00:00Z",
+        nextDueOn: "2026-08-31",
       }),
     ];
     const q = buildResurfacingQueue(records, now);
@@ -177,7 +177,7 @@ describe("buildResurfacingQueue", () => {
   });
 
   it("passes never-attempted topics through, minus attempted ones", () => {
-    const q = buildResurfacingQueue([due("a", "2026-09-01T00:00:00Z")], now, [
+    const q = buildResurfacingQueue([due("a", "2026-09-01")], now, [
       ref("a"),
       ref("x"),
       ref("y"),
@@ -190,13 +190,30 @@ describe("buildResurfacingQueue", () => {
     expect(q.due).toEqual([]);
     expect(q.upcoming).toEqual([]);
   });
+
+  it("keeps the prior schedule when the latest attempt is unverifiable", () => {
+    const scheduled = due("a", "2026-09-01");
+    const unverifiable = {
+      ...record(
+        "a",
+        "2026-09-02T10:00:00Z",
+        scheduled.schedule!,
+        notVerifiable(),
+      ),
+      attemptId: "a-unverifiable",
+      schedule: null,
+    };
+    const q = buildResurfacingQueue([scheduled, unverifiable], now);
+    expect(q.due).toHaveLength(1);
+    expect(q.due[0]!.lastRecord.attemptId).toBe(scheduled.attemptId);
+  });
 });
 
 describe("latestRecord", () => {
   it("picks the record with the greatest reviewedAt", () => {
     const records = [
-      record("a", "2026-08-01T00:00:00Z", { repetitions: 1, easiness: 2.5, intervalDays: 1, nextDueAt: "2026-08-02T00:00:00Z" }),
-      record("a", "2026-09-01T00:00:00Z", { repetitions: 2, easiness: 2.5, intervalDays: 3, nextDueAt: "2026-09-04T00:00:00Z" }),
+      record("a", "2026-08-01T00:00:00Z", { repetitions: 1, easiness: 2.5, intervalDays: 1, nextDueOn: "2026-08-02" }),
+      record("a", "2026-09-01T00:00:00Z", { repetitions: 2, easiness: 2.5, intervalDays: 3, nextDueOn: "2026-09-04" }),
     ];
     expect(latestRecord(records)?.reviewedAt).toBe("2026-09-01T00:00:00Z");
   });

@@ -4,7 +4,7 @@
 
 **Updated:** 2026-09-02
 
-**Current version:** v0.6 viva defense ladder from PR #22, promoted through `develop` to `main`
+**Current version:** v0.7 private learning plan in PR #24, pending promotion through `develop` to `main`
 
 ## Product invariant
 
@@ -46,6 +46,13 @@ content, copy, or visual identity.
   and optional semantic paths reuse the hardened local pipeline. Active exit stops and releases all
   in-flight resources. Ladders are strictly increasing and all-or-nothing for one drawn rubric.
   Numeric summary copy uses only `scoredCount`; unverifiable answers remain visible but excluded.
+- v0.7 opt-in private learning plan: reviewed attempts save only bounded topic/practice identity,
+  timestamp, aggregate coverage, scoring identity, and schedule. IndexedDB and JSON export never
+  contain audio, transcript text, concept-level evidence, semantic transcript excerpts, or
+  embeddings. Retention is capped at 500 records; two-step delete-all verifies an empty reload.
+- Due dates and the optional exam date use strict learner-local `YYYY-MM-DD` values. Past exams do
+  not activate urgency sorting. The idle Learning plan opens the exact revalidated current-pack
+  due variant; storage failure never blocks ordinary practice.
 - Default timers are 60 seconds for main/viva speaking and 600 seconds (10 minutes) for Deep
   Research. Learner settings may still change the main speaking/research durations within bounds;
   a viva answer remains the fixed 60-second defense contract.
@@ -111,7 +118,8 @@ content. Never use a pseudonym, organization, AI system, repository owner, or pl
 
 For this policy, **real data** means curriculum-grounded draft topics plus consented,
 de-identified learner attempts, recordings, and corrected transcripts. It never means patient
-data. v0.3 keeps learner audio/transcripts session-local and export-free.
+data. Learner audio/transcripts remain session-local and export-free. v0.7 exports only the
+privacy-minimized learning-plan metadata after learner action.
 
 ## Safety, privacy, and feedback
 
@@ -127,6 +135,9 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
   an explicit threat model and server-side secret handling where appropriate.
 - Transcript uncertainty ranges render as escaped text highlights; pack and transcript strings are
   always untrusted content.
+- Practice-history persistence is off by default. Pausing saves does not imply deletion; export and
+  verified delete-all remain reachable. The unreleased IndexedDB v1 store is purged on migration
+  because it could contain transcript text and had a broken topic index.
 
 ## Toolchain and verification
 
@@ -140,13 +151,14 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 
 ## Current pickup state
 
-The v0.6 release line adds the bounded viva defense ladder without persistence. Scheduling,
-exam countdown, local history, export/delete, extra registers, challenge suggestions, and two
-additional packs were explicitly removed from the v0.6 exit gate; they are unimplemented and must
-be replanned after v0.7 rather than inferred from older architecture prose. Whisper and MiniLM use
-one shared bundled worker asset, while their model instances and explicit activation paths remain
-separate. GitHub operations must use `utkarsh-senpai`; release changes flow through `develop`
-before `main` and Pages.
+PR #24 rebaselines v0.7 from the previously planned Java compiler to the private learning plan and
+spaced-resurfacing outcome. It includes explicit consent, transcript-free records, working
+IndexedDB v2 indexing, strict validation, bounded retention, local-calendar scheduling, exam
+triage, exact due-topic launch, export, and verified deletion. The Java 21/Spring Boot content
+compiler is now v0.8; target-user hardening is v0.9. Extra registers, challenge suggestions, and
+additional packs remain unplanned. Whisper and MiniLM still use one shared bundled worker asset,
+while model instances and activation paths remain separate. GitHub operations must use
+`utkarsh-senpai`; release changes flow through `develop` before `main` and Pages.
 
 The beta may be publicly testable, but medical approval remains blocked pending educator
 attestation. The next release work is target-device/model benchmarking and a v1.x
@@ -161,6 +173,7 @@ educator-review/release plan.
 - `docs/V0.4_DEVELOPMENT_CONTEXT.md`: v0.4 lexical-coverage contract and v0.5 deferrals.
 - `docs/V0.5_DEVELOPMENT_CONTEXT.md`: reviewed retry, delta, semantic, and safety contract.
 - `docs/V0.6_DEVELOPMENT_CONTEXT.md`: reviewed viva ladder, cleanup, content, and timer contract.
+- `docs/V0.7_DEVELOPMENT_CONTEXT.md`: private learning-plan privacy, storage, scheduling, and UI contract.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.

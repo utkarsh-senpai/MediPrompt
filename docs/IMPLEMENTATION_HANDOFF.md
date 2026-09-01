@@ -15,7 +15,7 @@ Read only these files first:
 5. `docs/curriculum/MPT-CBC-topics.md` only for broad curriculum inventory work.
 6. `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md` for the first medical-pack review.
 
-The current repository includes the v0.6 learner app and a complete source-linked medical review
+The current repository includes the v0.7 learner app and a complete source-linked medical review
 candidate. The exact 20-topic candidate is learner-visible as
 a public **practice beta**, but it is still `DRAFT`; do not mistake public availability, the broad
 MPT inventory, source linkage, or automated coverage for educator approval.
@@ -36,7 +36,7 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 - Product name: MediPrompt.
 - Hosting baseline: static PWA on GitHub Pages; zero recurring app cost.
 - Front end: React + TypeScript; pure reducer/domain logic and browser adapters.
-- Java: Java 21/Spring Boot command-line content compiler at v0.7, then an optional modular monolith
+- Java: Java 21/Spring Boot command-line content compiler at v0.8, then an optional modular monolith
   for connected features at v1.1+.
 - Medical ground truth: human-reviewed, source-linked rubrics. Local semantic matching reports
   coverage, not correctness.
@@ -52,7 +52,7 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ## Version pickup map
 
-### Current baseline: v0.6 viva defense ladder
+### Current baseline: v0.7 private learning plan
 
 The React/TypeScript PWA retains the compact v0.2 two-mode practice loop, strict topic-pack
 validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
@@ -73,6 +73,14 @@ transcription, typed self-review, lexical, and semantic-evidence paths. Active e
 deadline and in-flight resources. Ladders must increase strictly and resolve completely to one
 drawn rubric. Deep Research defaults to 600 seconds and main speaking defaults to 60 seconds.
 
+v0.7 adds an off-by-default private learning plan. Only topic/practice identity, review timestamp,
+aggregate coverage, scoring identity, and schedule are persisted; audio, transcripts, concept
+results, and transcript excerpts remain session-local. IndexedDB version 2 has a materialized,
+validated topic index and newest-500 record limit. The idle plan opens the exact revalidated due
+variant, uses local-calendar schedule/exam dates, exports metadata, and verifies delete-all by
+reloading zero records. Unverifiable attempts never alter spacing, past exams never activate cram
+sorting, and storage failure never blocks practice.
+
 The learner artifact contains only the 20-topic public physiotherapy practice beta, with the same
 snapshot compiled as its offline fallback; generic interaction subjects are regression-test inputs
 only.
@@ -88,20 +96,21 @@ The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScrip
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
 checklist** below and in the root README.
 
-### v0.6 release source: `feature/v0.6-viva-round`
+### v0.7 release source: `feature/v0.7-spaced-resurfacing`
 
-PR #22 carries v0.6. The release includes the viva ladder only; it does not implement scheduling,
-persistent history, export/delete, extra registers, challenge suggestions, or extra packs. Those
-items were removed from the v0.6 gate and require a future replan after v0.7.
+PR #24 carries v0.7. The release includes only the local learning plan and scheduling outcome; it
+does not add accounts, synchronization, transcript/audio persistence, import, extra registers,
+challenge suggestions, extra packs, or the Java compiler.
 
 ### Later versions
 
 - v0.3: local recording/transcription and observable delivery metrics (deployed).
 - v0.4: deterministic lexical rubric coverage, visible accepted-phrase evidence, one prescription.
 - v0.5: same-identity retry, Refinement Delta, and non-counting semantic evidence.
-- v0.6: opt-in, source-grounded viva defense ladder with lifecycle hardening (current).
-- v0.7: Spring Boot content compiler and authoring/publication validation.
-- v0.8: target-user beta hardening.
+- v0.6: opt-in, source-grounded viva defense ladder with lifecycle hardening.
+- v0.7: private learning plan, local spaced resurfacing, exam triage, and data controls (current).
+- v0.8: Spring Boot content compiler and authoring/publication validation.
+- v0.9: target-user beta hardening.
 - v1.1+: optional connected service and provider-backed coaching.
 
 The detailed exit gate for each version is authoritative in `docs/EXECUTION_PLAN.md`.
@@ -117,8 +126,9 @@ type Register = "EXAMINER" | "JUNIOR" | "PATIENT";
 ```
 
 Carry `variantId`, `difficultyProfileVersion`, `ChallengePreset`, support level, time policy,
-prompt/rubric identity, pack/version, and mode in attempt identity. Persistence begins only in the
-version that introduces attempt history. Retry comparison must reject mismatched identities.
+prompt/rubric identity, pack/version, and mode in attempt identity. v0.7 persistence is explicit
+opt-in and metadata-only; full transcripts and audio remain session-local. Retry comparison must
+reject mismatched identities.
 Accessibility time adjustments must not change challenge.
 
 See `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` for runtime YAML, UI, progression, and tests.
