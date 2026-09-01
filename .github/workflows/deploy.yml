@@ -1,9 +1,13 @@
 name: deploy
 
 on:
-  push:
+  # Publish only after the full CI workflow succeeds for a push to main. This
+  # keeps the Pages write token out of CI and prevents a failing commit from
+  # racing its way into production before the checks finish.
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
     branches: [main]
-  workflow_dispatch:
 
 # Unlike ci.yml, this workflow publishes: it needs Pages/id-token write, and the
 # token stays scoped to this file only.
@@ -20,12 +24,18 @@ concurrency:
 jobs:
   build:
     name: build PWA artifact
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       # Pinned to immutable commit SHAs per docs/V0.2_DEVELOPMENT_CONTEXT.md §12.
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
       - name: Set up Node
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
@@ -53,6 +63,7 @@ jobs:
     name: deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
