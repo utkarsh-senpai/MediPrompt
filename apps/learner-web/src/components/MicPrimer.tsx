@@ -13,9 +13,9 @@ export function MicPrimer({ onConfirm, onDecline }: MicPrimerProps) {
     <section className="topic-card primer" aria-labelledby="mic-primer-heading">
       <h3 id="mic-primer-heading">Enable microphone feedback?</h3>
       <p>
-        If you allow it, MediPrompt records your voice during the speaking window so it
-        can measure pace, pauses, and fillers — and, on your request, transcribe the
-        attempt on this device.
+        Choose the mic now and your browser will ask for access only when you start the
+        speaking timer. Recording stops with the timer. MediPrompt can then measure
+        pace and pauses and, on your request, transcribe on this device.
       </p>
       <p>
         <strong>Your audio never leaves this device.</strong> There is no account, no
@@ -27,7 +27,7 @@ export function MicPrimer({ onConfirm, onDecline }: MicPrimerProps) {
       </p>
       <div className="toolbar">
         <button type="button" className="primary" onClick={onConfirm}>
-          Allow microphone
+          Use mic with timer
         </button>
         <button type="button" onClick={onDecline}>
           Not now

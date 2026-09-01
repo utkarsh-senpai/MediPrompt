@@ -17,7 +17,7 @@ import {
   type RuntimePack,
   type TranscriptDraft,
 } from "./types";
-import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
+import medicalPackJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 
 const pack = validatePack(medicalPackJson) as RuntimePack;
 
@@ -28,7 +28,15 @@ function setup() {
   const random = seededRandom(123);
   const bagStore = new InMemoryBagStore();
   const hook = renderHook(() =>
-    usePracticeSession({ pack, settings: DEFAULT_SETTINGS, monotonic, wall, random, bagStore }),
+    usePracticeSession({
+      pack,
+      settings: DEFAULT_SETTINGS,
+      monotonic,
+      wall,
+      random,
+      bagStore,
+      drawDelayMs: 0,
+    }),
   );
   // Advance both the fake clock (to flush interval ticks) and the injected monotonic value.
   const advance = (ms: number) =>
@@ -47,7 +55,7 @@ describe("usePracticeSession", () => {
     vi.useRealTimers();
   });
 
-  it("runs the full Recall Sprint loop: spin → speak → complete", () => {
+  it("runs the full Recall Sprint loop: spin → speak → complete", async () => {
     const { hook, advance } = setup();
     const { result } = hook;
     expect(result.current.state.name).toBe("IDLE");
@@ -55,18 +63,22 @@ describe("usePracticeSession", () => {
     act(() => result.current.actions.spin());
     expect(result.current.state.name).toBe("TOPIC_READY");
 
-    act(() => result.current.actions.startTimer());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
     expect(result.current.state.name).toBe("SPEAKING");
 
     advance(90_000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
   });
 
-  it("a visibility event mid-deadline is a no-op and completion fires once", () => {
+  it("a visibility event mid-deadline is a no-op and completion fires once", async () => {
     const { hook, advance } = setup();
     const { result } = hook;
     act(() => result.current.actions.spin());
-    act(() => result.current.actions.startTimer());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
     expect(result.current.state.name).toBe("SPEAKING");
 
     advance(40_000);
@@ -79,7 +91,7 @@ describe("usePracticeSession", () => {
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
   });
 
-  it("runs the Deep Research loop: research → ready → speak → complete", () => {
+  it("runs the Deep Research loop: research → ready → speak → complete", async () => {
     const { hook, advance } = setup();
     const { result } = hook;
     act(() =>
@@ -99,18 +111,22 @@ describe("usePracticeSession", () => {
     advance(120_000);
     expect(result.current.state.name).toBe("READY_TO_SPEAK");
 
-    act(() => result.current.actions.confirmReady());
+    await act(async () => {
+      await result.current.actions.confirmReady();
+    });
     expect(result.current.state.name).toBe("SPEAKING");
 
     advance(90_000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
   });
 
-  it("spin again repeats without error after completion", () => {
+  it("spin again repeats without error after completion", async () => {
     const { hook, advance } = setup();
     const { result } = hook;
     act(() => result.current.actions.spin());
-    act(() => result.current.actions.startTimer());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
     advance(90_000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
     act(() => result.current.actions.spinAgain());
@@ -151,14 +167,17 @@ function fakeTranscriptionClient() {
 function fakeRecorderDeps(options: { denyMic?: boolean } = {}) {
   const urls: string[] = [];
   const revoked: string[] = [];
+  const stopTrack = vi.fn();
   let clock = 1000;
+  const getUserMedia = vi.fn(() =>
+    options.denyMic
+      ? Promise.reject(new DOMException("denied", "NotAllowedError"))
+      : Promise.resolve({
+          getTracks: () => [{ stop: stopTrack }],
+        } as unknown as MediaStream),
+  );
   const deps: RecorderDeps = {
-    getUserMedia: () =>
-      options.denyMic
-        ? Promise.reject(new DOMException("denied", "NotAllowedError"))
-        : Promise.resolve({
-            getTracks: () => [{ stop: () => {} }],
-          } as unknown as MediaStream),
+    getUserMedia,
     createMediaRecorder: () => {
       const handlers: Record<string, ((e?: unknown) => void) | null> = {};
       return {
@@ -191,7 +210,7 @@ function fakeRecorderDeps(options: { denyMic?: boolean } = {}) {
     },
     now: () => clock,
   };
-  return { deps, urls, revoked };
+  return { deps, urls, revoked, getUserMedia, stopTrack };
 }
 
 /** Pump microtasks + effects until the async audio chain settles. */
@@ -232,6 +251,7 @@ function setupAudio(options: { denyMic?: boolean; decodeFails?: boolean } = {}) 
       random,
       bagStore,
       audio: { recorder, decoder, transcription: transcription.client },
+      drawDelayMs: 0,
     }),
   );
   const advance = (ms: number) =>
@@ -244,16 +264,17 @@ function setupAudio(options: { denyMic?: boolean; decodeFails?: boolean } = {}) 
 
 type AudioHook = ReturnType<typeof setupAudio>;
 
-/** Drive an armed session to PROCESSING with metrics landed. */
+/** Drive an opted-in session to PROCESSING with metrics landed. */
 async function toProcessing(ctx: AudioHook) {
   const { hook, advance } = ctx;
-  act(() => hook.result.current.actions.beginAudioOptIn());
-  await act(async () => {
-    hook.result.current.actions.confirmAudioOptIn();
-    await Promise.resolve();
-  });
   act(() => hook.result.current.actions.spin());
-  act(() => hook.result.current.actions.startTimer());
+  act(() => hook.result.current.actions.beginAudioOptIn());
+  act(() => {
+    hook.result.current.actions.confirmAudioOptIn();
+  });
+  await act(async () => {
+    await hook.result.current.actions.startTimer();
+  });
   advance(90_000);
   await flushAsync();
 }
@@ -266,23 +287,25 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     vi.useRealTimers();
   });
 
-  it("runs the full audio path: primer → armed → record → process → transcribe → review", async () => {
+  it("runs the full audio path: primer → ready → record → process → transcribe → review", async () => {
     const ctx = setupAudio();
     const { hook, advance, transcription } = ctx;
     const { result } = hook;
 
+    act(() => result.current.actions.spin());
     act(() => result.current.actions.beginAudioOptIn());
     expect(result.current.audio.status).toBe("PRIMER");
 
-    await act(async () => {
+    act(() => {
       result.current.actions.confirmAudioOptIn();
-      await Promise.resolve();
     });
-    expect(result.current.audio.status).toBe("ARMED");
-    expect(result.current.audio.armed).toBe(true);
+    expect(result.current.audio.status).toBe("READY");
+    expect(result.current.audio.armed).toBe(false);
+    expect(ctx.rec.getUserMedia).not.toHaveBeenCalled();
 
-    act(() => result.current.actions.spin());
-    act(() => result.current.actions.startTimer());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
     expect(result.current.state.name).toBe("SPEAKING");
     expect(ctx.recorder.getState()).toBe("RECORDING");
 
@@ -290,6 +313,9 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     await flushAsync();
     expect(result.current.state.name).toBe("PROCESSING");
     expect(result.current.audio.playback?.url).toBe("blob:fake-0");
+    expect(result.current.audio.status).toBe("READY");
+    expect(result.current.audio.armed).toBe(false);
+    expect(ctx.rec.stopTrack).toHaveBeenCalledTimes(1);
     if (result.current.state.name === "PROCESSING") {
       expect(result.current.state.metrics?.spokenMs).toBeGreaterThan(0);
       expect(result.current.state.metrics?.pauses).toHaveLength(1);
@@ -333,17 +359,20 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     const { hook, advance } = ctx;
     const { result } = hook;
 
+    act(() => result.current.actions.spin());
     act(() => result.current.actions.beginAudioOptIn());
-    await act(async () => {
+    act(() => {
       result.current.actions.confirmAudioOptIn();
-      await Promise.resolve();
+    });
+    expect(result.current.audio.status).toBe("READY");
+    expect(result.current.audio.armed).toBe(false);
+    expect(ctx.rec.getUserMedia).not.toHaveBeenCalled();
+
+    await act(async () => {
+      await result.current.actions.startTimer();
     });
     expect(result.current.audio.status).toBe("UNAVAILABLE");
     expect(result.current.audio.issue).toBe("AUDIO_MIC_PERMISSION_DENIED");
-    expect(result.current.audio.armed).toBe(false);
-
-    act(() => result.current.actions.spin());
-    act(() => result.current.actions.startTimer());
     expect(ctx.recorder.getState()).toBe("FAILED");
     advance(90_000);
     await flushAsync();
@@ -409,13 +438,14 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     const { hook, advance } = ctx;
     const { result } = hook;
 
-    act(() => result.current.actions.beginAudioOptIn());
-    await act(async () => {
-      result.current.actions.confirmAudioOptIn();
-      await Promise.resolve();
-    });
     act(() => result.current.actions.spin());
-    act(() => result.current.actions.startTimer());
+    act(() => result.current.actions.beginAudioOptIn());
+    act(() => {
+      result.current.actions.confirmAudioOptIn();
+    });
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
     advance(90_000);
     await flushAsync();
 
@@ -467,13 +497,14 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     const { hook, advance, rec } = ctx;
     const { result } = hook;
 
-    act(() => result.current.actions.beginAudioOptIn());
-    await act(async () => {
-      result.current.actions.confirmAudioOptIn();
-      await Promise.resolve();
-    });
     act(() => result.current.actions.spin());
-    act(() => result.current.actions.startTimer());
+    act(() => result.current.actions.beginAudioOptIn());
+    act(() => {
+      result.current.actions.confirmAudioOptIn();
+    });
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
     advance(90_000);
     // The stop finalization is async; spin before it resolves.
     act(() => result.current.actions.spinAgain());

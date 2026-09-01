@@ -1,32 +1,24 @@
 {
   "schemaVersion": "1.0",
   "contentKind": "MEDICAL",
-  "packId": "mpt-cardiorespiratory-v1",
-  "version": "1.0.0",
-  "title": "MPT Cardiovascular & Respiratory Physiotherapy",
+  "packId": "mpt-cardiorespiratory-review-candidate",
+  "version": "0.1.0",
+  "title": "MPT Cardiovascular and Respiratory — educator review candidate",
   "locale": "en-IN",
   "licence": {
-    "id": "CC-BY-4.0",
-    "attribution": "Original MediPrompt prompt, case, and rubric wording; guideline sources are cited as provenance and their text and figures are not redistributed."
+    "id": "LICENCE-DECISION-PENDING",
+    "attribution": "Original MediPrompt prompt, case, and rubric wording. Publication/reuse licence awaits owner and medical review; cited source text and figures are not redistributed."
   },
   "review": {
-    "status": "APPROVED",
-    "reviewers": [
-      {
-        "id": "utkarsh-senpai",
-        "role": "CONTENT_EDITOR"
-      },
-      {
-        "id": "mpt-clinical-reviewer",
-        "role": "MEDICAL_REVIEWER"
-      }
-    ],
-    "reviewedAt": "2026-08-31"
+    "status": "DRAFT",
+    "reviewers": [],
+    "reviewedAt": null
   },
   "sources": [
     {
       "sourceId": "src-curriculum",
-      "citation": "Competency-based postgraduate curriculum, Cardiovascular & Respiratory Physiotherapy (2022-2027), pp. 119-127. Privately shared doctor-attested copy; institutional details withheld for privacy.",
+      "citation": "DMIHER, Competency-Based Post Graduate Curriculum for Indian Physiotherapy PG, Cardiovascular & Respiratory Physiotherapy, 2022-2027, PDF pp. 119-127.",
+      "url": "https://dmiher.edu.in/lp/Educlass",
       "accessedAt": "2026-08-30"
     },
     {

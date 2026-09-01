@@ -36,7 +36,7 @@ const required = [
   "index.html",
   "manifest.webmanifest",
   "sw.js",
-  "packs/mpt-cardiorespiratory-v1.json",
+  "packs/demo-interaction-fixture.json",
   ...ORT_RUNTIME_FILES,
 ];
 for (const name of required) {
@@ -45,6 +45,9 @@ for (const name of required) {
 
 for (const name of names) {
   if (name.endsWith(".map")) errors.push(`production source map is forbidden: ${name}`);
+  if (name === "beta-packs" || name.startsWith("beta-packs/")) {
+    errors.push(`local beta content leaked into the production artifact: ${name}`);
+  }
   if (/not-for-publication|mpt-competency-draft|medical-candidate/i.test(name)) {
     errors.push(`draft/reference content leaked into the artifact: ${name}`);
   }
@@ -58,6 +61,7 @@ const forbiddenText = [
   ["synthetic-not-for-publication", "draft fixture identifier"],
   ["mpt-competency-draft", "reference curriculum marker"],
   ["mpt-cardiorespiratory-review-candidate", "unapproved medical candidate identifier"],
+  ["mpt-clinical-reviewer", "fabricated medical reviewer identifier"],
   ["-----BEGIN PRIVATE KEY-----", "private key"],
 ];
 const credentialPatterns = [

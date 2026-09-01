@@ -24,9 +24,9 @@ const MODES: { id: V02PracticeMode; label: string; hint: string; emoji: string }
 ];
 
 const PRESET_LABEL: Record<ChallengePreset, string> = {
-  GUIDED: "Easy · Guided",
-  APPLIED: "Medium · Applied",
-  VIVA: "Hard · Viva",
+  GUIDED: "Explain",
+  APPLIED: "Apply",
+  VIVA: "Defend",
 };
 
 export function PracticeSurface({
@@ -83,9 +83,8 @@ export function PracticeSurface({
           <span className="label-row">
             <span id="challenge-label">Challenge</span>
             <InfoTip label="About challenge levels">
-              Guided asks you to explain the concept. Applied drops you into a
-              fictional scenario. Viva changes a constraint mid-answer and adds an
-              evidence update to defend against.
+              Explain builds a clear concept map. Apply adds a fictional scenario.
+              Defend changes a constraint and asks you to respond to new evidence.
             </InfoTip>
           </span>
           <div className="chips" role="group" aria-labelledby="challenge-label">
@@ -124,8 +123,15 @@ export function PracticeSurface({
         onClick={onSpin}
         disabled={spinDisabled}
         aria-label="Spin for a topic"
+        aria-busy={drawing}
+        data-drawing={drawing ? "true" : undefined}
       >
-        {drawing ? "Drawing…" : "Spin"}
+        <svg className="spin-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="10" />
+          <path d="M16 3v5M16 24v5M3 16h5M24 16h5" />
+          <path className="spin-needle" d="m12 20 2.6-6.1L20 12l-2.6 6.1L12 20Z" />
+        </svg>
+        <span>{drawing ? "Finding a topic…" : "Spin a topic"}</span>
       </button>
 
       <p className="status" role="status">

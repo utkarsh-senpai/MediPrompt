@@ -1,6 +1,7 @@
 import type { RuntimePack } from "@/practice/types";
 import {
   MAX_PACK_BYTES,
+  assertControlledDraftPack,
   assertV02DemoMinimums,
   assertV02ProductionPack,
   validatePack,
@@ -8,7 +9,7 @@ import {
 import { FALLBACK_PACK } from "./fallbackPack";
 
 /** The pack precached by the service worker and fetched at activation. */
-export const PRODUCTION_PACK_ID = "mpt-cardiorespiratory-v1";
+export const PRODUCTION_PACK_ID = "demo-interaction-fixture";
 
 /**
  * Fetch, validate, and production-gate the bundled runtime pack.
@@ -17,7 +18,7 @@ export const PRODUCTION_PACK_ID = "mpt-cardiorespiratory-v1";
  */
 export interface PackLoadResult {
   pack: RuntimePack;
-  source: "BUNDLED" | "COMPILED_FALLBACK";
+  source: "BUNDLED" | "CONTROLLED_DRAFT" | "COMPILED_FALLBACK";
   warning?: string;
 }
 
@@ -46,27 +47,52 @@ function compiledFallback(): RuntimePack {
   return pack;
 }
 
-export async function loadBundledPack(): Promise<PackLoadResult> {
+async function fetchPack(path: string): Promise<RuntimePack> {
   const base = import.meta.env.BASE_URL;
-  const url = `${base}packs/${PRODUCTION_PACK_ID}.json`;
+  const url = `${base}${path}`;
+  const res = await fetch(url, { cache: "no-cache", credentials: "same-origin" });
+  if (!res.ok || res.redirected || res.type === "opaque") {
+    throw new Error(`pack fetch failed with status ${res.status}`);
+  }
+  if (res.url && new URL(res.url).origin !== globalThis.location.origin) {
+    throw new Error("practice pack redirected across origins");
+  }
+  return validatePack(await parseBoundedResponse(res));
+}
+
+async function loadProductionPack(warning?: string): Promise<PackLoadResult> {
   try {
-    const res = await fetch(url, { cache: "no-cache", credentials: "same-origin" });
-    if (!res.ok || res.redirected || res.type === "opaque") {
-      throw new Error(`pack fetch failed with status ${res.status}`);
-    }
-    if (res.url && new URL(res.url).origin !== globalThis.location.origin) {
-      throw new Error("practice pack redirected across origins");
-    }
-    const pack = validatePack(await parseBoundedResponse(res));
+    const pack = await fetchPack(`packs/${PRODUCTION_PACK_ID}.json`);
     assertV02ProductionPack(pack);
     assertV02DemoMinimums(pack);
-    return { pack, source: "BUNDLED" };
+    return { pack, source: "BUNDLED", ...(warning ? { warning } : {}) };
   } catch {
     return {
       pack: compiledFallback(),
       source: "COMPILED_FALLBACK",
-      warning:
+      warning: warning ??
         "The full practice pack was unavailable or invalid. A small reviewed offline fallback is active.",
     };
   }
+}
+
+export async function loadPackForMode(mode: string): Promise<PackLoadResult> {
+  if (mode === "medical-beta") {
+    try {
+      const pack = await fetchPack(
+        "beta-packs/mpt-cardiorespiratory-review-candidate.json",
+      );
+      assertControlledDraftPack(pack);
+      return { pack, source: "CONTROLLED_DRAFT" };
+    } catch {
+      return loadProductionPack(
+        "The controlled medical draft could not be loaded safely. The reviewed interaction fixture is active instead.",
+      );
+    }
+  }
+  return loadProductionPack();
+}
+
+export async function loadBundledPack(): Promise<PackLoadResult> {
+  return loadPackForMode(import.meta.env.MODE);
 }

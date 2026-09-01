@@ -96,10 +96,12 @@ export function reduceSession(
         commands.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
         return { state: { name: "IDLE", selection: event.selection }, commands };
       }
-      if (state.name === "ATTEMPT_COMPLETE" && deps.audioArmed) {
+      if (state.name === "ATTEMPT_COMPLETE") {
         return {
           state: { name: "IDLE", selection: event.selection },
-          commands: [{ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId }],
+          commands: deps.audioArmed
+            ? [{ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId }]
+            : [],
         };
       }
       return { state: { name: "IDLE", selection: event.selection }, commands: [] };

@@ -68,8 +68,9 @@ describe("PracticeSurface", () => {
       />,
     );
     expect(screen.getByText(/^Challenge$/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Easy · Guided" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Hard · Viva" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Explain" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Defend" })).toBeInTheDocument();
+    expect(screen.queryByText(/easy|medium|hard/i)).not.toBeInTheDocument();
   });
 
   it("disables Spin when there are no eligible topics", () => {
@@ -85,7 +86,10 @@ describe("PracticeSurface", () => {
         onSpin={() => {}}
       />,
     );
-    expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeDisabled();
+    const spin = screen.getByRole("button", { name: "Spin for a topic" });
+    expect(spin).toBeDisabled();
+    expect(spin).toHaveAttribute("aria-busy", "false");
+    expect(spin).not.toHaveAttribute("data-drawing");
   });
 
   it("disables Spin while drawing", () => {
@@ -101,7 +105,10 @@ describe("PracticeSurface", () => {
         onSpin={() => {}}
       />,
     );
-    expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeDisabled();
+    const spin = screen.getByRole("button", { name: "Spin for a topic" });
+    expect(spin).toBeDisabled();
+    expect(spin).toHaveAttribute("aria-busy", "true");
+    expect(spin).toHaveAttribute("data-drawing", "true");
   });
 
   it("mode and challenge are independent controls (changing mode does not change challenge)", () => {
@@ -119,7 +126,7 @@ describe("PracticeSurface", () => {
       />,
     );
     // Pressing a challenge button reports only the challenge change.
-    fireEvent.click(screen.getByRole("button", { name: "Medium · Applied" }));
+    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
     expect(onChange).toHaveBeenCalledWith({ challenge: "APPLIED" });
     // Pressing a mode button reports only the mode change.
     fireEvent.click(screen.getByRole("button", { name: "Deep Research" }));

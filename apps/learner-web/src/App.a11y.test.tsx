@@ -4,9 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { App } from "./App";
 import { validatePack } from "@/content/packValidator";
 import type { RuntimePack } from "@/practice/types";
-import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
+import demoPackJson from "@content/packs/demo-interaction-fixture.json";
 
-const demoPack = validatePack(medicalPackJson) as RuntimePack;
+const demoPack = validatePack(demoPackJson) as RuntimePack;
 
 function mockFetch(pack: unknown): void {
   const body = JSON.stringify(pack);
@@ -93,7 +93,7 @@ describe("App accessibility + capability + security", () => {
     // Select a subject that has multiple challenge presets for Recall Sprint.
     await user.selectOptions(
       screen.getByLabelText("Subject"),
-      "respiratory-physiotherapy",
+      "reasoning-and-tradeoffs",
     );
     const challengeGroup = screen.getByRole("group", { name: "Challenge" });
     const pressedButtons = within(challengeGroup).getAllByRole("button");
@@ -144,14 +144,11 @@ describe("App accessibility + capability + security", () => {
     vi.stubGlobal("fetch", vi.fn(async () => Promise.reject(new TypeError("offline"))));
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
-    expect(screen.getByText(/Microphone: unavailable/i)).toBeInTheDocument();
-
     const user = userEvent.setup();
     await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
-    // A topic heading appears (TOPIC_READY) without any network or microphone use.
-    await waitFor(() =>
-      expect(screen.getAllByRole("heading", { level: 2 }).length).toBeGreaterThan(0),
-    );
+    // The actionable topic state appears without any network or microphone use.
+    await screen.findByRole("button", { name: "Start timer" });
+    expect(screen.getByRole("button", { name: "Microphone unavailable" })).toBeDisabled();
   });
 
   it("keeps the prompt visible and removes setup controls during focused speech", async () => {
@@ -159,6 +156,7 @@ describe("App accessibility + capability + security", () => {
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
     await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
+    await screen.findByRole("button", { name: "Start timer" });
     const promptText = screen.getByRole("article").querySelector("p:not(.expectation)")?.textContent;
     expect(promptText).toBeTruthy();
     await user.click(screen.getByRole("button", { name: "Start timer" }));
@@ -169,7 +167,8 @@ describe("App accessibility + capability + security", () => {
   });
 
   it("offers mic opt-in after a spin; the primer is keyboard operable and dismissible", async () => {
-    stubSpeechCaps(() => Promise.resolve(fakeStream()));
+    const getUserMedia = vi.fn(() => Promise.resolve(fakeStream()));
+    stubSpeechCaps(getUserMedia);
     const user = userEvent.setup();
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
@@ -192,24 +191,25 @@ describe("App accessibility + capability + security", () => {
     await user.click(screen.getByRole("button", { name: "Not now" }));
     expect(screen.queryByRole("heading", { name: "Enable microphone feedback?" })).toBeNull();
     expect(screen.getByRole("button", { name: /Enable microphone feedback/i })).toBeInTheDocument();
+    expect(getUserMedia).not.toHaveBeenCalled();
   });
 
   it("announces mic permission denial and keeps the timer path intact", async () => {
-    stubSpeechCaps(() =>
+    const getUserMedia = vi.fn(() =>
       Promise.reject(new DOMException("denied", "NotAllowedError")),
     );
+    stubSpeechCaps(getUserMedia);
     const user = userEvent.setup();
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
     await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
     await user.click(await screen.findByRole("button", { name: /Enable microphone feedback/i }));
-    await user.click(screen.getByRole("button", { name: "Allow microphone" }));
-
-    await waitFor(() =>
-      expect(screen.getByText(/Microphone access was denied/i)).toBeInTheDocument(),
-    );
-    // The core loop is unaffected: the timer still starts without a mic.
+    await user.click(screen.getByRole("button", { name: "Use mic with timer" }));
+    expect(getUserMedia).not.toHaveBeenCalled();
+    // Access is requested only on Start; denial still enters the timer-only path.
     await user.click(screen.getByRole("button", { name: "Start timer" }));
+    await waitFor(() => expect(getUserMedia).toHaveBeenCalledTimes(1));
+    expect(screen.getByText(/Microphone access was denied/i)).toBeInTheDocument();
     expect(screen.queryByRole("group", { name: "Practice mode" })).not.toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 2 })).toHaveFocus();
   });

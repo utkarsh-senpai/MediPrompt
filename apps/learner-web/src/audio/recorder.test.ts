@@ -97,6 +97,8 @@ describe("AttemptRecorder", () => {
     expect(clip!.url).toBe(urls[0]);
     expect(rec.getClip("att-1")).toBe(clip);
     expect(rec.getClip("other")).toBeNull();
+    expect(trackStopped).toHaveLength(1);
+    expect(rec.getState()).toBe("IDLE");
   });
 
   it("throws when starting unarmed", () => {
@@ -105,6 +107,20 @@ describe("AttemptRecorder", () => {
     expect(() => rec.start()).toThrowError(
       expect.objectContaining({ code: "AUDIO_RECORD_FAILED" }) as Error,
     );
+  });
+
+  it("releases the microphone when MediaRecorder fails to start", async () => {
+    const { deps } = makeDeps({
+      createMediaRecorder: () =>
+        ({ start: () => { throw new Error("boom"); } }) as unknown as MediaRecorder,
+    });
+    const rec = new AttemptRecorder(deps);
+    await rec.arm();
+    expect(() => rec.start()).toThrowError(
+      expect.objectContaining({ code: "AUDIO_RECORD_FAILED" }) as Error,
+    );
+    expect(trackStopped).toHaveLength(1);
+    expect(rec.getState()).toBe("FAILED");
   });
 
   it("keeps no partial blob when the recording is empty", async () => {
@@ -128,6 +144,8 @@ describe("AttemptRecorder", () => {
     const clip = await rec.stop("att-1");
     expect(clip).toBeNull();
     expect(urls).toHaveLength(0);
+    expect(trackStopped).toHaveLength(1);
+    expect(rec.getState()).toBe("IDLE");
   });
 
   it("revokes the playback URL on revoke and release stops tracks", async () => {
@@ -139,6 +157,7 @@ describe("AttemptRecorder", () => {
     rec.revoke("att-1");
     expect(revoked).toEqual([urls[0]]);
     expect(rec.getClip("att-1")).toBeNull();
+    expect(trackStopped).toHaveLength(1);
     rec.release();
     expect(trackStopped).toHaveLength(1);
     expect(rec.getState()).toBe("IDLE");

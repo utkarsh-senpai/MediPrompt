@@ -25,8 +25,8 @@ export function DeliveryPanel({ metrics, textMetrics }: DeliveryPanelProps) {
     <section className="delivery-panel" aria-labelledby="delivery-heading">
       <h3 id="delivery-heading">Delivery observations</h3>
       <p className="status">
-        What this measures: how the attempt sounded — timing, pauses, audible fillers.
-        What it does not: whether the content was correct, complete, or good.
+        What this measures: timing and pauses from audio, plus transcript patterns after
+        your correction. It does not judge medical correctness, confidence, or emotion.
       </p>
       <dl className="metric-list">
         <div>
@@ -60,7 +60,7 @@ export function DeliveryPanel({ metrics, textMetrics }: DeliveryPanelProps) {
               </dd>
             </div>
             <div>
-              <dt>Filler words heard</dt>
+              <dt>Filler words in transcript</dt>
               <dd>{textMetrics.fillerCount ?? "Not measurable"}</dd>
             </div>
             <div>

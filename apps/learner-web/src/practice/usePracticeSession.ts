@@ -48,10 +48,18 @@ export interface OrchestratorDeps {
   random: RandomSource;
   bagStore: BagStore;
   audio?: AudioDeps;
+  /** Test-only timing seam; production defaults to the motion-aware draw delay. */
+  drawDelayMs?: number;
 }
 
 /** Microphone opt-in lifecycle; the no-audio path is first-class, not an error. */
-export type AudioOptInStatus = "OFF" | "PRIMER" | "ARMING" | "ARMED" | "UNAVAILABLE";
+export type AudioOptInStatus =
+  | "OFF"
+  | "PRIMER"
+  | "READY"
+  | "STARTING"
+  | "ACTIVE"
+  | "UNAVAILABLE";
 
 export interface AudioUiState {
   available: boolean;
@@ -83,7 +91,7 @@ export function initialSelection(pack: RuntimePack): PracticeSelection {
 }
 
 export function usePracticeSession(deps: OrchestratorDeps) {
-  const { pack, settings, monotonic, wall, random, bagStore, audio } = deps;
+  const { pack, settings, monotonic, wall, random, bagStore, audio, drawDelayMs } = deps;
 
   const [state, setState] = useState<SessionState>(() =>
     initialState(initialSelection(pack)),
@@ -96,6 +104,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const timerRef = useRef<number | null>(null);
   const deadlineRef = useRef<{ deadlineAt: number; requestId: string } | null>(null);
   const lastDrawnRef = useRef<Map<string, string>>(new Map());
+  const pendingDrawTimersRef = useRef<Set<number>>(new Set());
   const onVisibleRef = useRef<() => void>(() => {});
 
   // --- Audio orchestration state (orchestrator-owned; the reducer stays pure) ---
@@ -112,6 +121,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     sampleRate: number;
   } | null>(null);
   const transcriptionSessionRef = useRef<TranscriptionSession | null>(null);
+  const audioStartPendingRef = useRef(false);
 
   // Latest reducer deps for use inside the dispatch updater.
   const reducerDepsRef = useRef<ReducerDeps>({
@@ -206,7 +216,16 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       // Commands are drained from an effect after React commits the target view,
       // so the heading already exists. Focusing here avoids an extra-frame race
       // on slower devices and CI while preserving the visible transition.
-      document.getElementById(id)?.focus();
+      const heading = document.getElementById(id);
+      heading?.focus();
+      if (target === "topic") {
+        const reduceMotion =
+          globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+        heading?.scrollIntoView?.({
+          block: "start",
+          behavior: reduceMotion ? "auto" : "smooth",
+        });
+      }
     },
     [],
   );
@@ -269,12 +288,28 @@ export function usePracticeSession(deps: OrchestratorDeps) {
               researchSeconds: settings.researchSeconds,
             },
           );
-          dispatch({
-            type: "TOPIC_DRAWN",
-            requestId: cmd.requestId,
-            topic: snapshot,
-            now: monotonic.now(),
-          });
+          const reduceMotion =
+            globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+          const delay = drawDelayMs ?? (reduceMotion ? 100 : 650);
+          if (delay === 0) {
+            dispatch({
+              type: "TOPIC_DRAWN",
+              requestId: cmd.requestId,
+              topic: snapshot,
+              now: monotonic.now(),
+            });
+            break;
+          }
+          const timerId = window.setTimeout(() => {
+            pendingDrawTimersRef.current.delete(timerId);
+            dispatch({
+              type: "TOPIC_DRAWN",
+              requestId: cmd.requestId,
+              topic: snapshot,
+              now: monotonic.now(),
+            });
+          }, delay);
+          pendingDrawTimersRef.current.add(timerId);
           break;
         }
         case "START_DEADLINE":
@@ -293,6 +328,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
           try {
             audio.recorder.start();
             setAudioIssue(null);
+            setAudioStatus("ACTIVE");
           } catch (err) {
             // Recording could not start: the speaking window continues
             // timer-only and no audio object exists (error-matrix row).
@@ -308,6 +344,14 @@ export function usePracticeSession(deps: OrchestratorDeps) {
           if (!audio) break;
           void (async () => {
             const clip = await audio.recorder.stop(cmd.attemptId);
+            setAudioArmed(false);
+            reducerDepsRef.current = {
+              ...reducerDepsRef.current,
+              audioArmed: false,
+            };
+            setAudioStatus((previous) =>
+              previous === "UNAVAILABLE" ? previous : "READY",
+            );
             if (!clip) {
               setAudioIssue((prev) => prev ?? "AUDIO_RECORD_FAILED");
               return;
@@ -444,6 +488,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       startDeadline,
       stopDeadline,
       focusView,
+      drawDelayMs,
     ],
   );
 
@@ -454,7 +499,16 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     for (const cmd of cmds) runCommand(cmd);
   });
 
-  useEffect(() => () => stopDeadline(), [stopDeadline]);
+  useEffect(
+    () => () => {
+      stopDeadline();
+      for (const timerId of pendingDrawTimersRef.current) {
+        window.clearTimeout(timerId);
+      }
+      pendingDrawTimersRef.current.clear();
+    },
+    [stopDeadline],
+  );
 
   // Session teardown: release the microphone and terminate the worker — on
   // unmount only. The deps object may be rebuilt each render by the caller, so
@@ -483,10 +537,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     dispatch({ type: "SPIN_AGAIN", requestId: newRequestId(), now: now() });
   }, [dispatch, now]);
 
-  const startTimer = useCallback(() => {
-    dispatch({ type: "START_TIMER", now: now() });
-  }, [dispatch, now]);
-
   const startResearch = useCallback(() => {
     dispatch({ type: "START_RESEARCH", now: now() });
   }, [dispatch, now]);
@@ -496,10 +546,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     if (s.name === "RESEARCHING") {
       dispatch({ type: "DONE_RESEARCHING", requestId: s.requestId, now: now() });
     }
-  }, [dispatch, now]);
-
-  const confirmReady = useCallback(() => {
-    dispatch({ type: "CONFIRM_READY", now: now() });
   }, [dispatch, now]);
 
   const closeTimer = useCallback(() => {
@@ -527,31 +573,93 @@ export function usePracticeSession(deps: OrchestratorDeps) {
 
   const beginAudioOptIn = useCallback(() => {
     if (!audio || audioStatus !== "OFF") return;
+    const current = stateRef.current;
+    if (current.name !== "TOPIC_READY" && current.name !== "READY_TO_SPEAK") return;
     setAudioStatus("PRIMER");
   }, [audio, audioStatus]);
 
   const cancelAudioOptIn = useCallback(() => {
-    setAudioStatus((prev) => (prev === "PRIMER" ? "OFF" : prev));
+    setAudioStatus((previous) =>
+      previous === "PRIMER" || previous === "READY" ? "OFF" : previous,
+    );
   }, []);
 
   const confirmAudioOptIn = useCallback(() => {
-    if (!audio) return;
-    setAudioStatus("ARMING");
-    void (async () => {
+    if (!audio || audioStatus !== "PRIMER") return;
+    // Consent is remembered for this page session, but the browser stream is
+    // acquired only when the learner starts the speaking clock.
+    setAudioStatus("READY");
+    setAudioIssue(null);
+  }, [audio, audioStatus]);
+
+  const startSpeaking = useCallback(
+    async (eventType: "START_TIMER" | "CONFIRM_READY"): Promise<boolean> => {
+      const before = stateRef.current;
+      const canStart =
+        (eventType === "START_TIMER" && before.name === "TOPIC_READY") ||
+        (eventType === "CONFIRM_READY" && before.name === "READY_TO_SPEAK");
+      if (!canStart || audioStartPendingRef.current) return false;
+
+      const attemptId = before.attempt.attemptId;
+      const sendStartEvent = () => {
+        dispatch({ type: eventType, now: now() });
+      };
+      if (!audio || audioStatus !== "READY") {
+        sendStartEvent();
+        return true;
+      }
+
+      audioStartPendingRef.current = true;
+      setAudioStatus("STARTING");
       try {
         await audio.recorder.arm();
+        const current = stateRef.current;
+        const stillCurrent =
+          "attempt" in current &&
+          current.attempt.attemptId === attemptId &&
+          ((eventType === "START_TIMER" && current.name === "TOPIC_READY") ||
+            (eventType === "CONFIRM_READY" && current.name === "READY_TO_SPEAK"));
+        if (!stillCurrent) {
+          audio.recorder.release();
+          setAudioStatus("READY");
+          return false;
+        }
         setAudioArmed(true);
-        setAudioStatus("ARMED");
-        setAudioIssue(null);
+        reducerDepsRef.current = {
+          ...reducerDepsRef.current,
+          audioArmed: true,
+        };
+        sendStartEvent();
+        return true;
       } catch (err) {
         setAudioArmed(false);
+        reducerDepsRef.current = {
+          ...reducerDepsRef.current,
+          audioArmed: false,
+        };
         setAudioStatus("UNAVAILABLE");
         setAudioIssue(
           isAudioError(err) ? err.code : "AUDIO_MIC_UNAVAILABLE",
         );
+        // Permission or codec failure never blocks practice.
+        sendStartEvent();
+        return true;
+      } finally {
+        audioStartPendingRef.current = false;
       }
-    })();
-  }, [audio]);
+    },
+    [audio, audioStatus, dispatch, now],
+  );
+
+  const startTimer = useCallback(
+    () => startSpeaking("START_TIMER"),
+    [startSpeaking],
+  );
+
+  const confirmReady = useCallback(
+    () => startSpeaking("CONFIRM_READY"),
+    [startSpeaking],
+  );
 
   const currentAttemptId = useCallback((): string | null => {
     const s = stateRef.current;

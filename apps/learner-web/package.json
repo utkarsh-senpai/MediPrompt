@@ -2,14 +2,15 @@
   "name": "@mediprompt/learner-web",
   "private": true,
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "engines": {
     "node": ">=22.23.2",
     "pnpm": ">=9.15.0"
   },
   "scripts": {
-    "dev": "vite",
     "predev": "pnpm copy:packs && pnpm copy:model-runtime",
+    "dev": "vite",
+    "dev:medical": "pnpm copy:packs --draft-beta && pnpm copy:model-runtime && vite --mode medical-beta",
     "schema:generate": "node scripts/generate-schema-validator.mjs",
     "schema:check": "node scripts/generate-schema-validator.mjs --check",
     "copy:packs": "node scripts/copy-packs.mjs",
@@ -22,9 +23,11 @@
     "test": "vitest run",
     "test:a11y": "vitest run -c vitest.a11y.config.ts",
     "test:e2e": "playwright test",
-    "content:validate": "pnpm schema:check && pnpm pack:medical:check && tsx scripts/validate-content.ts",
-    "pack:medical:generate": "tsx scripts/generate-medical-pack.ts",
-    "pack:medical:check": "tsx scripts/generate-medical-pack.ts --check"
+    "content:validate": "pnpm schema:check && pnpm pack:demo:check && pnpm candidate:medical:check && tsx scripts/validate-content.ts",
+    "pack:demo:generate": "tsx scripts/generate-demo-pack.ts",
+    "pack:demo:check": "tsx scripts/generate-demo-pack.ts --check",
+    "candidate:medical:generate": "tsx scripts/generate-medical-candidate.ts",
+    "candidate:medical:check": "tsx scripts/generate-medical-candidate.ts --check"
   },
   "dependencies": {
     "@huggingface/transformers": "3.7.6",

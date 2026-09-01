@@ -68,19 +68,44 @@ test("phone-width first-time flow remains usable", async ({ page }) => {
   expect(hasNoHorizontalOverflow).toBe(true);
 });
 
-test("Viva depth and Deep Research handoff remain distinct", async ({ page }) => {
+test("reduced-motion mode disables ambient and draw animation", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./");
+  await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
+
+  const ambientAnimations = await page.evaluate(() => {
+    const atmosphere = document.querySelector(".atmosphere");
+    if (!atmosphere) return null;
+    return {
+      glow: getComputedStyle(atmosphere, "::before").animationName,
+      particles: getComputedStyle(atmosphere, "::after").animationName,
+    };
+  });
+  expect(ambientAnimations).toEqual({ glow: "none", particles: "none" });
+
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  const drawAnimation = await page
+    .locator(".spin-mark")
+    .evaluate((element) => getComputedStyle(element).animationName);
+  expect(drawAnimation).toBe("none");
+  await expect(page.getByRole("button", { name: "Start timer" })).toBeVisible();
+});
+
+test("Defend depth and Deep Research handoff remain distinct", async ({ page }) => {
   await page.goto("./");
 
   await page.getByLabel("Subject").selectOption("reasoning-and-tradeoffs");
   const challenge = page.getByRole("group", { name: "Challenge" });
   await expect(challenge).toBeVisible();
   await expect(challenge.getByRole("button")).toHaveCount(3);
-  await challenge.getByRole("button", { name: "Hard · Viva" }).click();
+  await challenge.getByRole("button", { name: "Defend" }).click();
   await page.getByRole("button", { name: "Spin for a topic" }).click();
-  await expect(page.getByText("Scenario:")).toBeVisible();
-  await expect(page.getByRole("list", { name: "Answer arc" })).toContainText(
-    "Safety-net",
-  );
+  const topicInfo = page.getByRole("button", { name: "More about this topic" });
+  const topicInfoId = await topicInfo.getAttribute("aria-describedby");
+  expect(topicInfoId).toBeTruthy();
+  await topicInfo.click();
+  await expect(page.locator(`[id="${topicInfoId}"]`)).toContainText("Fictional scenario:");
+  await expect(page.getByRole("list", { name: "Speaking path" })).toContainText("So what?");
 
   await page.reload();
   await page.getByRole("button", { name: "Deep Research" }).click();

@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MicPrimer } from "./MicPrimer";
+import { MicControl } from "./MicControl";
+import { AnswerCompass } from "./AnswerCompass";
 import { RecordingIndicator } from "./RecordingIndicator";
 import { PlaybackBar } from "./PlaybackBar";
 import { DeliveryPanel } from "./DeliveryPanel";
@@ -23,7 +25,7 @@ import type {
   TranscriptionUnavailableReason,
   TranscriptDraft,
 } from "@/practice/types";
-import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
+import medicalPackJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 
 const pack = validatePack(medicalPackJson) as RuntimePack;
 
@@ -72,8 +74,8 @@ const APPROVED: ApprovedTranscript = {
 function audioUi(overrides: Partial<AudioUiState> = {}): AudioUiState {
   return {
     available: true,
-    status: "ARMED",
-    armed: true,
+    status: "READY",
+    armed: false,
     issue: null,
     playback: { attemptId: "a1", url: "blob:fake-0", durationMs: 90_000 },
     transcriptionProgress: null,
@@ -93,10 +95,66 @@ describe("MicPrimer", () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/never leaves this device/i)).toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: "Allow microphone" }));
+    await user.click(screen.getByRole("button", { name: "Use mic with timer" }));
     expect(onConfirm).toHaveBeenCalledTimes(1);
     await user.click(screen.getByRole("button", { name: "Not now" }));
     expect(onDecline).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("MicControl", () => {
+  it("uses an accessible icon control and communicates when capture begins", async () => {
+    const user = userEvent.setup();
+    const onBegin = vi.fn();
+    const { rerender } = render(
+      <MicControl
+        audio={audioUi({ status: "OFF", armed: false })}
+        onBegin={onBegin}
+        onConfirm={() => {}}
+        onDecline={() => {}}
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: "Enable microphone feedback" }));
+    expect(onBegin).toHaveBeenCalledTimes(1);
+
+    rerender(
+      <MicControl
+        audio={audioUi({ status: "READY", armed: false })}
+        onBegin={() => {}}
+        onConfirm={() => {}}
+        onDecline={() => {}}
+      />,
+    );
+    expect(screen.getByText("Mic starts with timer")).toBeInTheDocument();
+  });
+});
+
+describe("AnswerCompass", () => {
+  const steps = [
+    { id: "define", label: "Define" },
+    { id: "explain", label: "Explain" },
+    { id: "apply", label: "Apply" },
+  ];
+
+  it("uses What, How, and So what and advances with elapsed time", () => {
+    const { rerender } = render(
+      <AnswerCompass steps={steps} remainingMs={90_000} totalMs={90_000} active />,
+    );
+    expect(screen.getByRole("list", { name: "Speaking path" })).toHaveTextContent(
+      "What?How?So what?",
+    );
+    expect(screen.getByRole("listitem", { name: /What.*current phase/i })).toHaveAttribute(
+      "aria-current",
+      "step",
+    );
+
+    rerender(
+      <AnswerCompass steps={steps} remainingMs={20_000} totalMs={90_000} active />,
+    );
+    expect(screen.getByRole("listitem", { name: /So what.*current phase/i })).toHaveAttribute(
+      "aria-current",
+      "step",
+    );
   });
 });
 
@@ -157,7 +215,7 @@ describe("DeliveryPanel", () => {
     expect(screen.queryByText("Speaking pace")).not.toBeInTheDocument();
     rerender(<DeliveryPanel metrics={METRICS} textMetrics={TEXT_METRICS} />);
     expect(screen.getByText("58.5 words per minute")).toBeInTheDocument();
-    expect(screen.getByText("Filler words heard")).toBeInTheDocument();
+    expect(screen.getByText("Filler words in transcript")).toBeInTheDocument();
     expect(screen.getByText("Repeated phrases")).toBeInTheDocument();
   });
 });
@@ -241,6 +299,10 @@ describe("TranscriptEditor", () => {
     expect(screen.getByText(/onnx-community\/whisper-base\.en/)).toBeInTheDocument();
     expect(screen.getByText(/q4, pinned build/)).toBeInTheDocument();
     expect(screen.getByText(/One part was uncertain/)).toBeInTheDocument();
+    const preview = screen.getByLabelText(
+      "Machine transcript with uncertain passages marked",
+    );
+    expect(preview.querySelector("mark")).toHaveTextContent("um");
 
     const editor = screen.getByLabelText("Transcript (editable)");
     expect(editor).toHaveValue(DRAFT.text);

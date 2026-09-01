@@ -1,11 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   type RuntimePack,
   type SettingsStore,
@@ -18,7 +11,6 @@ import { remainingMs } from "@/practice/deadlineTimer";
 import {
   usePracticeSession,
   type AudioDeps,
-  type AudioUiState,
 } from "@/practice/usePracticeSession";
 import { loadBundledPack } from "@/content/packLoader";
 import {
@@ -39,8 +31,10 @@ import { LocalStorageSettingsStore } from "@/platform/settingsStore";
 import { PracticeSurface } from "@/components/PracticeSurface";
 import { CountdownRing } from "@/components/CountdownRing";
 import { SettingsDialog } from "@/components/SettingsDialog";
-import { MicPrimer } from "@/components/MicPrimer";
+import { MicControl } from "@/components/MicControl";
 import { RecordingIndicator } from "@/components/RecordingIndicator";
+import { AnswerCompass } from "@/components/AnswerCompass";
+import { InfoTip } from "@/components/InfoTip";
 import { ProcessingView } from "@/components/ProcessingView";
 import { TranscriptEditor } from "@/components/TranscriptEditor";
 import { SelfReview } from "@/components/SelfReview";
@@ -53,54 +47,6 @@ interface PracticeAppProps {
   caps: Capabilities;
   onSettingsChange: (next: UserSettings) => void;
   onFocusModeChange: (active: boolean) => void;
-}
-
-/** Mic opt-in affordance on topic screens; every status is explicit UI, never silent. */
-function MicOptIn({
-  audio,
-  onBegin,
-  onConfirm,
-  onDecline,
-}: {
-  audio: AudioUiState;
-  onBegin: () => void;
-  onConfirm: () => void;
-  onDecline: () => void;
-}) {
-  if (!audio.available) return null;
-  switch (audio.status) {
-    case "OFF":
-      return (
-        <div className="toolbar">
-          <button type="button" onClick={onBegin}>
-            Enable microphone feedback (optional)
-          </button>
-        </div>
-      );
-    case "PRIMER":
-      return <MicPrimer onConfirm={onConfirm} onDecline={onDecline} />;
-    case "ARMING":
-      return (
-        <p className="status" role="status">
-          Requesting microphone permission…
-        </p>
-      );
-    case "ARMED":
-      return (
-        <p className="status">
-          Microphone on for this session — recording and transcription stay on this
-          device.
-        </p>
-      );
-    case "UNAVAILABLE":
-      return (
-        <p className="status" role="status">
-          {audio.issue
-            ? audioIssueCopy(audio.issue)
-            : "Microphone feedback is unavailable on this device. The timer and self-review work exactly the same."}
-        </p>
-      );
-  }
 }
 
 function useMilestones(remainingMsValue: number | null): string {
@@ -129,15 +75,20 @@ function useMilestones(remainingMsValue: number | null): string {
 
 function PromptDetails({ topic }: { topic: TopicSnapshot }) {
   return (
-    <>
-      <p className="expectation">{topic.expectation}</p>
-      <p>{topic.wording}</p>
+    <p className="prompt-copy">{topic.wording}</p>
+  );
+}
+
+function TopicInfo({ topic }: { topic: TopicSnapshot }) {
+  return (
+    <InfoTip label="More about this topic">
+      <span className="topic-info-copy">{topic.expectation}</span>
       {topic.caseText ? (
-        <p className="case-context">
-          <strong>Scenario:</strong> {topic.caseText}
-        </p>
+        <span className="topic-info-copy">
+          <strong>Fictional scenario:</strong> {topic.caseText}
+        </span>
       ) : null}
-    </>
+    </InfoTip>
   );
 }
 
@@ -159,15 +110,14 @@ function TopicCard({
           {eyebrow}
         </span>
       ) : null}
-      <h2 id={headingId} tabIndex={-1}>
-        {topic.title}
-      </h2>
+      <div className="topic-title-row">
+        <h2 id={headingId} tabIndex={-1}>
+          {topic.title}
+        </h2>
+        <TopicInfo topic={topic} />
+      </div>
       <PromptDetails topic={topic} />
-      <ol className="arc" aria-label="Answer arc">
-        {topic.answerArc.map((step) => (
-          <li key={step.id}>{step.label}</li>
-        ))}
-      </ol>
+      <AnswerCompass steps={topic.answerArc} />
       <div className="toolbar">{children}</div>
     </article>
   );
@@ -246,16 +196,18 @@ function PracticeApp({
     actions.spinAgain();
   }, [actions, muted]);
   const startTimer = useCallback(() => {
-    playTimerStart(muted);
-    actions.startTimer();
+    void actions.startTimer().then((started) => {
+      if (started) playTimerStart(muted);
+    });
   }, [actions, muted]);
   const startResearch = useCallback(() => {
     playTimerStart(muted);
     actions.startResearch();
   }, [actions, muted]);
   const confirmReady = useCallback(() => {
-    playTimerStart(muted);
-    actions.confirmReady();
+    void actions.confirmReady().then((started) => {
+      if (started) playTimerStart(muted);
+    });
   }, [actions, muted]);
 
   const topicEyebrow =
@@ -280,6 +232,13 @@ function PracticeApp({
 
   return (
     <>
+      {pack.review.status === "DRAFT" ? (
+        <aside className="draft-notice" role="note">
+          <strong>Curriculum beta · unreviewed draft</strong>
+          <span>Practice only — not for diagnosis, treatment, or clinical decisions.</span>
+        </aside>
+      ) : null}
+
       {showSurface ? (
         <PracticeSurface
           subjects={subjects}
@@ -301,15 +260,20 @@ function PracticeApp({
                 Begin research
               </button>
             ) : (
-              <button type="button" className="primary" onClick={startTimer}>
-                Start timer
+              <button
+                type="button"
+                className="primary"
+                onClick={startTimer}
+                disabled={session.audio.status === "STARTING"}
+              >
+                {session.audio.status === "STARTING" ? "Starting mic…" : "Start timer"}
               </button>
             )}
             <button type="button" onClick={spinAgain}>
               Spin again
             </button>
           </TopicCard>
-          <MicOptIn
+          <MicControl
             audio={session.audio}
             onBegin={actions.beginAudioOptIn}
             onConfirm={actions.confirmAudioOptIn}
@@ -321,14 +285,19 @@ function PracticeApp({
       {s.name === "READY_TO_SPEAK" ? (
         <>
           <TopicCard topic={s.topic} headingId="topic-heading" eyebrow={topicEyebrow}>
-            <button type="button" className="primary" onClick={confirmReady}>
-              Start speaking
+            <button
+              type="button"
+              className="primary"
+              onClick={confirmReady}
+              disabled={session.audio.status === "STARTING"}
+            >
+              {session.audio.status === "STARTING" ? "Starting mic…" : "Start speaking"}
             </button>
             <button type="button" onClick={spinAgain}>
               Spin again
             </button>
           </TopicCard>
-          <MicOptIn
+          <MicControl
             audio={session.audio}
             onBegin={actions.beginAudioOptIn}
             onConfirm={actions.confirmAudioOptIn}
@@ -339,9 +308,12 @@ function PracticeApp({
 
       {s.name === "RESEARCHING" ? (
         <section className="focus-view" aria-labelledby="speaking-heading">
-          <h2 id="speaking-heading" tabIndex={-1}>
-            {s.topic.title}
-          </h2>
+          <div className="focus-title-row">
+            <h2 id="speaking-heading" tabIndex={-1}>
+              {s.topic.title}
+            </h2>
+            <TopicInfo topic={s.topic} />
+          </div>
           <PromptDetails topic={s.topic} />
           <CountdownRing
             remainingMs={remaining ?? 0}
@@ -362,21 +334,30 @@ function PracticeApp({
 
       {s.name === "SPEAKING" ? (
         <section className="focus-view" aria-labelledby="speaking-heading">
-          <h2 id="speaking-heading" tabIndex={-1}>
-            {s.topic.title}
-          </h2>
+          <div className="focus-title-row">
+            <h2 id="speaking-heading" tabIndex={-1}>
+              {s.topic.title}
+            </h2>
+            <TopicInfo topic={s.topic} />
+          </div>
           <PromptDetails topic={s.topic} />
           <CountdownRing
             remainingMs={remaining ?? 0}
             totalMs={totalMs}
             caption="Speaking time left"
           />
-          {session.audio.armed ? <RecordingIndicator /> : null}
-          <ol className="arc" aria-label="Answer arc">
-            {s.topic.answerArc.map((step) => (
-              <li key={step.id}>{step.label}</li>
-            ))}
-          </ol>
+          {session.audio.status === "ACTIVE" ? <RecordingIndicator /> : null}
+          {session.audio.issue ? (
+            <p className="status" role="status">
+              {audioIssueCopy(session.audio.issue)}
+            </p>
+          ) : null}
+          <AnswerCompass
+            steps={s.topic.answerArc}
+            remainingMs={remaining}
+            totalMs={totalMs}
+            active
+          />
           <div className="toolbar">
             <button type="button" onClick={actions.closeTimer}>
               Finish now
@@ -574,9 +555,7 @@ export function App() {
       <main>
         <header className={focusMode ? "sr-only" : "brand"}>
           <h1>MediPrompt</h1>
-          <p className="brand-line">
-            Spin a topic. Speak against the clock. Audio never leaves this device.
-          </p>
+          <p className="brand-line">Think clearly. Speak clinically.</p>
         </header>
 
       {waitingWorker && !focusMode ? (
@@ -616,14 +595,6 @@ export function App() {
         />
       ) : null}
 
-      {!focusMode ? (
-        <p className="status" aria-label="capabilities">
-          Microphone: {caps.microphone ? "available" : "unavailable"} · Speech feedback:{" "}
-          {speechFeedbackAvailable(caps) ? "available" : "unsupported"} · Storage:{" "}
-          {caps.storage ? "available" : "unavailable"} · Online:{" "}
-          {caps.online ? "yes" : "no"}
-        </p>
-      ) : null}
       </main>
     </>
   );

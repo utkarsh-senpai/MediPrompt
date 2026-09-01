@@ -266,10 +266,10 @@ learner with every possible metric. It should select feedback that can change th
 
 Challenge is independent from practice mode and register:
 
-- **Easy - Guided (`GUIDED`):** retrieve and organize core ideas with a visible answer arc.
-- **Medium - Applied (`APPLIED`):** connect findings, interpretation, and action in a bounded
+- **Explain (`GUIDED`):** retrieve and organize core ideas with a visible answer arc.
+- **Apply (`APPLIED`):** connect findings, interpretation, and action in a bounded
   fictional case.
-- **Hard - Viva (`VIVA`):** prioritize and defend a plan in an incomplete or evolving fictional
+- **Defend (`VIVA`):** prioritize and defend a plan in an incomplete or evolving fictional
   case, including alternatives, uncertainty, and safety-net reasoning.
 
 Hardness comes from reasoning depth, integration, ambiguity, prioritization, and transfer. It does

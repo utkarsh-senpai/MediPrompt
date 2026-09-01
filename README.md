@@ -39,16 +39,21 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.3, PR #12):** the production pack is
-`content/packs/mpt-cardiorespiratory-v1.json` — 20 MPT cardiovascular/respiratory topics with full
-Guided/Applied/Viva rubric depth, mapped to the supplied curriculum and current sources including
-GOLD 2026, GINA 2026, 2025 ERS bronchiectasis, 2025 SCCM PADIS, 2025 ACC/AHA ACS, and 2025 AHA BLS.
-The pack ships `APPROVED`: the owner confirmed on 2026-08-31 that the source curriculum is a
-doctor-attested copy, and the medical review is recorded under the pseudonymous reviewer id
-`mpt-clinical-reviewer`. No personal or institutional identifiers (names, colleges, phone numbers)
-are committed to this repository. The earlier non-medical demo fixture and the
-`content/candidates/` review lane are retired; CI still proves that unapproved packs cannot enter
-the production artifact. See the
+**Content status (v0.3, PR #12):** the public production artifact ships the approved non-medical
+interaction fixture `content/packs/demo-interaction-fixture.json`. The genuine 20-topic MPT
+cardiovascular/respiratory pack is retained as the unreviewed `DRAFT`
+`content/candidates/mpt-cardiorespiratory-review-candidate.json`. It is mapped to the supplied
+curriculum and current primary sources, but source grounding is not medical approval. It may be
+used only in the explicitly labelled local curriculum beta and is excluded from normal dev,
+production builds, and GitHub Pages:
+
+```bash
+pnpm --filter @mediprompt/learner-web dev:medical
+```
+
+The beta displays `Curriculum beta · unreviewed draft` and is for practice only—not clinical use.
+Public medical release remains gated on a qualified educator reviewing the exact prompts, cases,
+rubrics, mappings, and cited-source scope. See the
 [source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
 
 | Document | Purpose |
@@ -63,16 +68,17 @@ the production artifact. See the
 | [Project memory](docs/PROJECT_MEMORY.md) | Current decisions, evidence, risks, and next-version pickup |
 | [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
 | [v0.3 development context](docs/V0.3_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for private speech intelligence |
-| [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator attestation |
+| [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
 
 The first playable must work without an account, microphone, model, transcript, or backend:
 
 1. Choose **Recall Sprint** or **Deep Research**.
-2. Choose an available challenge (**Easy - Guided**, **Medium - Applied**, or **Hard - Viva**) and
-   medical subject. Challenge is hidden when the selected pack has only one reviewed level.
-3. Press **Spin** to draw a topic; the timer action stays disabled until a topic is drawn.
+2. Choose an available challenge (**Explain**, **Apply**, or **Defend**) and subject. Challenge is
+   hidden when the selected pack has only one reviewed level.
+3. Press **Spin a topic** to draw a topic; the timer action stays unavailable until a topic is
+   drawn.
 4. In Recall Sprint, press **Start timer**. In Deep Research, run or finish the research timer,
    confirm **Ready to speak**, then enter the same speaking view.
 5. Keep the topic, a three-part medical answer arc, a large circular countdown, and an exit action
@@ -112,8 +118,8 @@ recording, transcription, evaluation, storage, or the network is unavailable.
   same timed answer.
 - **Teach-back:** explain the same topic to an examiner, junior student, or patient.
 
-Practice mode defines the activity. A separate challenge preset defines reasoning depth: Guided
-retrieval, Applied case reasoning, or Viva defense under uncertainty. Register, visible support,
+Practice mode defines the activity. A separate challenge preset defines reasoning depth: Explain
+for structured retrieval, Apply for bounded case reasoning, or Defend under uncertainty. Register, visible support,
 and accessibility time remain independent. See the
 [difficulty and depth design](docs/DIFFICULTY_AND_DEPTH_DESIGN.md).
 
@@ -174,10 +180,10 @@ would make later versions drift from decisions and code merged in earlier versio
 
 The first useful beta should serve one real medical student and let her complete the full prompt →
 speak → review → retry loop on a phone. The broad inventory contains 265
-[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset —
-20 cardiovascular/respiratory topics — now ships as the approved production pack
-(`mpt-cardiorespiratory-v1`); the source curriculum is doctor-attested per the owner, and the
-review is recorded pseudonymously to keep personal and institutional identifiers out of the repo.
+[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset of
+20 cardiovascular/respiratory topics is available in the controlled local beta while it awaits
+qualified educator review. Automated software checks can make v0.3 merge-ready; they cannot make
+unreviewed medical content public-release-ready.
 
 ## Contributing
 

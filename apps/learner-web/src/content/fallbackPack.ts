@@ -1,103 +1,97 @@
 import type { RuntimePack } from "@/practice/types";
 
-// Compiled, reviewed medical fallback. It keeps both v0.2 modes usable if the
-// separately cached pack is missing or rejected. The prompt is a generic
-// clinical-practice scaffold (no medical claims), approved under the same
-// attestation as the bundled pack; the reviewer id is pseudonymous by owner
-// decision so no personal details enter the repo.
+// Compiled, owner-reviewed non-medical fallback. It keeps both modes usable if
+// the separately cached pack is missing or rejected; it makes no medical claim.
 export const FALLBACK_PACK: RuntimePack = {
   schemaVersion: "1.0",
-  contentKind: "MEDICAL",
-  packId: "compiled-clinical-fallback",
+  contentKind: "NON_MEDICAL_INTERACTION",
+  packId: "compiled-interaction-fallback",
   version: "1.0.0",
-  title: "Offline clinical speaking fallback",
+  title: "Offline speaking fallback",
   locale: "en-IN",
   licence: {
     id: "CC-BY-4.0",
-    attribution: "Original MediPrompt prompt and rubric wording.",
+    attribution: "Utkarsh Meshram — original non-medical interaction fixture.",
   },
   review: {
     status: "APPROVED",
-    reviewers: [
-      { id: "utkarsh-senpai", role: "CONTENT_EDITOR" },
-      { id: "mpt-clinical-reviewer", role: "MEDICAL_REVIEWER" },
-    ],
-    reviewedAt: "2026-08-31",
+    reviewers: [{ id: "utkarsh-senpai", role: "CONTENT_EDITOR" }],
+    reviewedAt: "2026-08-30",
   },
   sources: [
     {
       sourceId: "fallback-original",
-      citation: "Original MediPrompt practice scaffold; makes no medical claims.",
+      citation: "Original non-medical interaction fixture.",
       url: "https://github.com/utkarsh-senpai/MediPrompt",
-      accessedAt: "2026-08-31",
+      accessedAt: "2026-08-30",
     },
   ],
   subjects: [
     {
-      subjectId: "fallback-clinical-practice",
-      title: "Clinical practice",
+      subjectId: "fallback-practice",
+      title: "Fallback practice",
       topics: [
         {
-          topicId: "explain-clinical-concept",
-          title: "Explain a clinical concept",
+          topicId: "explain-familiar-process",
+          title: "Explain a familiar process",
           variants: [
             {
-              variantId: "explain-clinical-concept-guided-recall-v1",
+              variantId: "explain-familiar-process-guided-rs-v1",
               challengePreset: "GUIDED",
               difficultyProfileVersion: "difficulty-profile/1.0",
               blueprint: "explain-concept",
-              promptId: "prompt-explain-clinical-concept-guided-recall",
+              promptId: "prompt-explain-familiar-process-guided-rs",
               mode: "RECALL_SPRINT",
               supportLevel: "FULL",
               wording:
-                "Choose a clinical concept you know well and explain what it is, the mechanism behind it, and why it matters for patient care.",
-              answerArc: ["define", "explain", "apply"],
+                "Choose a familiar everyday process and explain what it does, how it works, and why each step matters.",
+              answerArc: ["identify", "sequence", "connect"],
               timePolicy: { speakingSeconds: 90 },
               caseRef: null,
               followUpRefs: [],
-              rubricId: "explain-clinical-concept-guided-recall-rubric-v1",
+              rubricId: "explain-familiar-process-guided-rs-rubric-v1",
             },
             {
-              variantId: "explain-clinical-concept-guided-deep-v1",
+              variantId: "explain-familiar-process-guided-dr-v1",
               challengePreset: "GUIDED",
               difficultyProfileVersion: "difficulty-profile/1.0",
               blueprint: "explain-concept",
-              promptId: "prompt-explain-clinical-concept-guided-deep",
+              promptId: "prompt-explain-familiar-process-guided-dr",
               mode: "DEEP_RESEARCH",
               supportLevel: "FULL",
               wording:
-                "Research a clinical concept of your choice, then explain what it is, the mechanism behind it, and why it matters for patient care.",
-              answerArc: ["define", "explain", "apply"],
+                "Research a familiar everyday process, then explain what it does, how it works, and why each step matters.",
+              answerArc: ["identify", "sequence", "connect"],
               timePolicy: { speakingSeconds: 90, researchSeconds: 120 },
               caseRef: null,
               followUpRefs: [],
-              rubricId: "explain-clinical-concept-guided-deep-rubric-v1",
+              rubricId: "explain-familiar-process-guided-dr-rubric-v1",
             },
           ],
           rubrics: [
             {
-              rubricId: "explain-clinical-concept-guided-recall-rubric-v1",
-              variantId: "explain-clinical-concept-guided-recall-v1",
+              rubricId: "explain-familiar-process-guided-rs-rubric-v1",
+              variantId: "explain-familiar-process-guided-rs-v1",
               register: "EXAMINER",
               concepts: [
                 {
-                  conceptId: "clinical-concept-recall-structure",
-                  label: "Defines the concept, explains the mechanism, and states the clinical relevance",
-                  acceptedPhrases: ["definition", "mechanism", "clinical relevance"],
+                  conceptId: "familiar-process-rs-structure",
+                  label: "States the purpose and explains the sequence",
+                  acceptedPhrases: ["purpose", "sequence"],
                   weight: 1,
                   sourceRefs: ["fallback-original"],
                 },
               ],
             },
             {
-              rubricId: "explain-clinical-concept-guided-deep-rubric-v1",
-              variantId: "explain-clinical-concept-guided-deep-v1",
+              rubricId: "explain-familiar-process-guided-dr-rubric-v1",
+              variantId: "explain-familiar-process-guided-dr-v1",
               register: "EXAMINER",
               concepts: [
                 {
-                  conceptId: "clinical-concept-deep-structure",
-                  label: "Defines the concept, explains the mechanism, and states the clinical relevance",
-                  acceptedPhrases: ["definition", "mechanism", "clinical relevance"],
+                  conceptId: "familiar-process-dr-structure",
+                  label: "States the purpose and explains the sequence",
+                  acceptedPhrases: ["purpose", "sequence"],
                   weight: 1,
                   sourceRefs: ["fallback-original"],
                 },

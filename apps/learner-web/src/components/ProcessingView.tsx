@@ -71,9 +71,9 @@ export function ProcessingView({
         ) : (
           <>
             <p>
-              A small speech-to-text model (whisper-base.en, quantized) downloads once —
-              about 40&nbsp;MB — and is then cached for offline use. Transcription runs
-              entirely on this device; your audio is never uploaded.
+              A quantized whisper-base.en model downloads on first use and is cached for
+              later offline attempts. Progress appears before inference. Transcription
+              stays on this device; your audio is never uploaded.
             </p>
             <div className="toolbar">
               <button type="button" className="primary" onClick={onTranscribe}>

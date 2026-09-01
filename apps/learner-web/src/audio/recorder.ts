@@ -48,9 +48,9 @@ export class AttemptRecorder {
   }
 
   /**
-   * Acquire the microphone. Called only after the learner accepts the primer;
-   * the stream stays open for the session so the speaking window starts
-   * without a permission prompt mid-attempt.
+   * Acquire the microphone immediately before the speaking window. The learner
+   * has already accepted the primer, but no stream exists while reading the
+   * topic or researching.
    */
   async arm(): Promise<void> {
     if (this.state === "ARMED" || this.state === "RECORDING") return;
@@ -90,6 +90,9 @@ export class AttemptRecorder {
       this.recorder.start();
     } catch {
       this.recorder = null;
+      this.releaseStream();
+      this.mimeType = null;
+      this.state = "FAILED";
       throw new AudioError(
         "AUDIO_RECORD_FAILED",
         "Recording could not be started.",
@@ -106,8 +109,8 @@ export class AttemptRecorder {
   async stop(attemptId: string): Promise<RecordedClip | null> {
     if (this.state !== "RECORDING" || !this.recorder) return null;
     const recorder = this.recorder;
+    const mimeType = this.mimeType;
     this.recorder = null;
-    this.state = "ARMED";
 
     const blob = await new Promise<Blob | null>((resolve) => {
       recorder.onstop = () => {
@@ -115,7 +118,7 @@ export class AttemptRecorder {
           resolve(null);
           return;
         }
-        resolve(new Blob(this.chunks, { type: this.mimeType! }));
+        resolve(new Blob(this.chunks, { type: mimeType ?? "application/octet-stream" }));
       };
       recorder.onerror = () => resolve(null);
       try {
@@ -125,7 +128,10 @@ export class AttemptRecorder {
       }
     });
     this.chunks = [];
-    if (!blob || blob.size === 0) return null;
+    this.releaseStream();
+    this.mimeType = null;
+    this.state = "IDLE";
+    if (!blob || blob.size === 0 || !mimeType) return null;
     // Measured at finalization, not at stop() call time: MediaRecorder flushes
     // asynchronously and the last chunk lands between the two.
     const durationMs = Math.max(0, Math.round(this.deps.now() - this.startedAt));
@@ -134,7 +140,7 @@ export class AttemptRecorder {
     this.clip = {
       attemptId,
       blob,
-      mimeType: this.mimeType!,
+      mimeType,
       durationMs,
       url: this.deps.createObjectUrl(blob),
     };

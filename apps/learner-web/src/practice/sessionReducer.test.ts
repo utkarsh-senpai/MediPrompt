@@ -13,7 +13,7 @@ import type {
   TopicSnapshot,
   TranscriptDraft,
 } from "./types";
-import medicalPackJson from "@content/packs/mpt-cardiorespiratory-v1.json";
+import medicalPackJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 
 const pack = validatePack(medicalPackJson) as RuntimePack;
 

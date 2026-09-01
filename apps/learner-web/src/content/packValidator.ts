@@ -359,6 +359,39 @@ export function assertV02ProductionPack(pack: RuntimePack): void {
   }
 }
 
+/**
+ * Narrow gate for the explicit local/private medical beta. It never converts a
+ * draft into approved content; it proves both useful depth and production
+ * rejection before the learner can see it.
+ */
+export function assertControlledDraftPack(pack: RuntimePack): void {
+  const errors: string[] = [];
+  if (pack.contentKind !== "MEDICAL") {
+    errors.push(`controlled draft must be MEDICAL, got ${pack.contentKind}`);
+  }
+  if (pack.review.status !== "DRAFT") {
+    errors.push(`controlled draft must remain DRAFT, got ${pack.review.status}`);
+  }
+  if (pack.review.reviewers.length !== 0 || pack.review.reviewedAt !== null) {
+    errors.push("unattested draft must have no reviewers or review date");
+  }
+  try {
+    assertV02DemoMinimums(pack);
+  } catch (error) {
+    if (error instanceof PackValidationError) errors.push(...error.errors);
+    else errors.push((error as Error).message);
+  }
+  try {
+    assertV02ProductionPack(pack);
+    errors.push("controlled draft unexpectedly passed the production gate");
+  } catch {
+    // Required: a draft beta must remain impossible to activate as production.
+  }
+  if (errors.length > 0) {
+    throw new PackValidationError("controlled draft gate failed", errors);
+  }
+}
+
 /** Release-content gate for the primary v0.2 demonstration pack. */
 export function assertV02DemoMinimums(pack: RuntimePack): void {
   const topics = pack.subjects.flatMap((subject) => subject.topics);

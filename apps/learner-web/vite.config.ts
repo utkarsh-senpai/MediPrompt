@@ -19,6 +19,19 @@ export default defineConfig({
   plugins: [
     react(),
     {
+      name: "development-style-csp",
+      apply: "serve",
+      transformIndexHtml(html) {
+        // Vite injects imported CSS as <style> during local development. Relax
+        // style-src only for the dev server; production emits an external CSS
+        // asset and validate-build.mjs continues to reject unsafe-inline.
+        return html.replace(
+          "style-src 'self';",
+          "style-src 'self' 'unsafe-inline';",
+        );
+      },
+    },
+    {
       name: "strip-duplicate-ort-wasm",
       apply: "build",
       enforce: "post",
@@ -52,12 +65,12 @@ export default defineConfig({
         name: "MediPrompt",
         short_name: "MediPrompt",
         description:
-          "Privacy-first speaking-practice tool for medical students. First playable (v0.2).",
+          "Privacy-first speaking-practice tool for medical students.",
         start_url: `${base}`,
         scope: `${base}`,
         display: "standalone",
-        background_color: "#0e1716",
-        theme_color: "#0e1716",
+        background_color: "#07171a",
+        theme_color: "#07171a",
         icons: [
           {
             src: `${base}icon.svg`,
