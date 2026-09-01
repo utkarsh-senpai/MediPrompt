@@ -88,6 +88,7 @@ describe("LocalStorageSettingsStore", () => {
       speakingSeconds: TIME_BOUNDS.speakingSeconds.min,
       researchSeconds: DEFAULT_SETTINGS.researchSeconds,
       soundMuted: false,
+      semanticCoverage: false,
     });
   });
 
@@ -110,6 +111,17 @@ describe("LocalStorageSettingsStore", () => {
       soundMuted: true,
     });
     expect(new LocalStorageSettingsStore().load().soundMuted).toBe(true);
+  });
+
+  it("persists and reloads the semantic coverage opt-in", () => {
+    const store = new LocalStorageSettingsStore();
+    store.save({
+      schemaVersion: 1,
+      speakingSeconds: 90,
+      researchSeconds: 120,
+      semanticCoverage: true,
+    });
+    expect(new LocalStorageSettingsStore().load().semanticCoverage).toBe(true);
   });
 
   it("falls back to in-memory when localStorage is unavailable", () => {

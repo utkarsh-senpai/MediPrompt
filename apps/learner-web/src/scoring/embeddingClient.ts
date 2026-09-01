@@ -3,11 +3,15 @@
 // single in-flight job, stale-drop by attemptId, termination on
 // cancel/timeout/low-memory. See docs/V0.5_DEVELOPMENT_CONTEXT.md §4.
 
-import type { TranscriptionUnavailableReason } from "@/practice/types";
-
 export const EMBED_PROTOCOL_VERSION = 1;
 
-export type EmbeddingUnavailableReason = TranscriptionUnavailableReason;
+export type EmbeddingUnavailableReason =
+  | "LOAD_FAILED"
+  | "OFFLINE"
+  | "TIMEOUT"
+  | "LOW_MEMORY"
+  | "CANCELLED"
+  | "ERROR";
 
 export type WorkerEmbedInbound =
   | {
@@ -64,7 +68,34 @@ export interface EmbeddingClientOptions {
   scheduler?: Scheduler;
 }
 
-const DEFAULT_TIMEOUT_MS = 60_000;
+const DEFAULT_TIMEOUT_MS = 120_000;
+export const MAX_EMBED_TEXTS = 512;
+export const MAX_EMBED_TOTAL_CHARACTERS = 50_000;
+const MAX_EMBED_DIMENSION = 4_096;
+
+function validInput(texts: readonly string[]): boolean {
+  return (
+    texts.length > 0 &&
+    texts.length <= MAX_EMBED_TEXTS &&
+    texts.every((value) => typeof value === "string" && value.trim().length > 0) &&
+    texts.reduce((sum, value) => sum + value.length, 0) <= MAX_EMBED_TOTAL_CHARACTERS
+  );
+}
+
+function validEmbeddings(value: number[][], expectedCount: number): boolean {
+  if (!Array.isArray(value) || value.length !== expectedCount) return false;
+  const dimension = value[0]?.length ?? 0;
+  return (
+    dimension > 0 &&
+    dimension <= MAX_EMBED_DIMENSION &&
+    value.every(
+      (vector) =>
+        Array.isArray(vector) &&
+        vector.length === dimension &&
+        vector.every((item) => typeof item === "number" && Number.isFinite(item)),
+    )
+  );
+}
 
 export function createWorkerEmbeddingClient(
   options: EmbeddingClientOptions,
@@ -81,6 +112,7 @@ export function createWorkerEmbeddingClient(
     attemptId: string;
     onEvent: (event: EmbeddingEvent) => void;
     timeoutId: number;
+    expectedCount: number;
   } | null = null;
 
   const terminateWorker = () => {
@@ -101,11 +133,41 @@ export function createWorkerEmbeddingClient(
     current?.onEvent({ type: "unavailable", reason });
   };
 
+  const deferUnavailable = (
+    attemptId: string,
+    onEvent: (event: EmbeddingEvent) => void,
+    reason: EmbeddingUnavailableReason,
+  ): EmbeddingSession => {
+    let cancelled = false;
+    const timeoutId = scheduler.setTimeout(() => {
+      if (!cancelled) onEvent({ type: "unavailable", reason });
+    }, 0);
+    return {
+      attemptId,
+      cancel: () => {
+        if (cancelled) return;
+        cancelled = true;
+        scheduler.clearTimeout(timeoutId);
+        onEvent({ type: "unavailable", reason: "CANCELLED" });
+      },
+    };
+  };
+
   const handleMessage = (event: MessageEvent<WorkerEmbedOutbound>) => {
     const msg = event.data;
+    if (!msg || typeof msg !== "object" || !("type" in msg)) {
+      terminateWorker();
+      failJob("ERROR");
+      return;
+    }
     switch (msg.type) {
       case "load-progress":
-        job?.onEvent({ type: "progress", progress: msg.progress });
+        if (Number.isFinite(msg.progress)) {
+          job?.onEvent({
+            type: "progress",
+            progress: Math.min(1, Math.max(0, msg.progress)),
+          });
+        }
         break;
       case "ready":
         job?.onEvent({ type: "progress", progress: null });
@@ -113,6 +175,11 @@ export function createWorkerEmbeddingClient(
       case "result": {
         if (!job || msg.attemptId !== job.attemptId) return; // stale drop
         const current = job;
+        if (!validEmbeddings(msg.embeddings, current.expectedCount)) {
+          terminateWorker();
+          failJob("ERROR");
+          return;
+        }
         clearJob();
         current.onEvent({ type: "done", embeddings: msg.embeddings });
         break;
@@ -162,27 +229,39 @@ export function createWorkerEmbeddingClient(
         cancelJob("CANCELLED");
       }
 
-      if (!worker && !isOnline()) {
-        const timeoutId = scheduler.setTimeout(() => {
-          onEvent({ type: "unavailable", reason: "OFFLINE" });
-        }, 0);
-        void timeoutId;
-        return { attemptId: input.attemptId, cancel: () => undefined };
+      const immediateFailure = !validInput(input.texts)
+        ? "ERROR"
+        : !worker && !isOnline()
+          ? "OFFLINE"
+          : null;
+      if (immediateFailure) {
+        return deferUnavailable(input.attemptId, onEvent, immediateFailure);
       }
 
-      const activeWorker = worker ?? spawnWorker();
-      const timeoutId = scheduler.setTimeout(() => {
-        cancelJob("TIMEOUT");
-      }, timeoutMs);
-      job = { attemptId: input.attemptId, onEvent, timeoutId };
+      try {
+        const activeWorker = worker ?? spawnWorker();
+        const timeoutId = scheduler.setTimeout(() => {
+          cancelJob("TIMEOUT");
+        }, timeoutMs);
+        job = {
+          attemptId: input.attemptId,
+          onEvent,
+          timeoutId,
+          expectedCount: input.texts.length,
+        };
 
-      post({
-        type: "embed",
-        protocol: EMBED_PROTOCOL_VERSION,
-        attemptId: input.attemptId,
-        texts: input.texts,
-      });
-      void activeWorker;
+        post({
+          type: "embed",
+          protocol: EMBED_PROTOCOL_VERSION,
+          attemptId: input.attemptId,
+          texts: input.texts,
+        });
+        void activeWorker;
+      } catch {
+        clearJob();
+        terminateWorker();
+        return deferUnavailable(input.attemptId, onEvent, "ERROR");
+      }
 
       return {
         attemptId: input.attemptId,
@@ -202,7 +281,7 @@ export const EMBEDDING_MODEL = {
   id: "all-MiniLM-L6-v2",
   hfId: "Xenova/all-MiniLM-L6-v2",
   // Pinned revision; update deliberately and bump EMBED_PROTOCOL_VERSION on change.
-  version: "b3c8a7a5f4b1e2d8c9a7b6e5f4d3c2b1a9e8f7d6",
+  version: "751bff37182d3f1213fa05d7196b954e230abad9",
   quantization: "q8",
 } as const;
 
@@ -210,7 +289,7 @@ export const EMBEDDING_MODEL = {
 export function createDefaultEmbeddingClient(): EmbeddingClient {
   return createWorkerEmbeddingClient({
     workerFactory: () =>
-      new Worker(new URL("./embed.worker.ts", import.meta.url), {
+      new Worker(new URL("../speech/transcribe.worker.ts", import.meta.url), {
         type: "module",
       }),
   });

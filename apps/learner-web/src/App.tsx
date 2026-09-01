@@ -15,6 +15,7 @@ import {
 import { loadBundledPack } from "@/content/packLoader";
 import {
   detectCapabilities,
+  semanticCoverageAvailable,
   speechFeedbackAvailable,
   type Capabilities,
 } from "@/app/capabilities";
@@ -159,7 +160,7 @@ function PracticeApp({
   // v0.5: semantic embedding client, constructed only where workers + wasm exist.
   // Used only when the learner enables semantic coverage in settings.
   const embeddingClient = useMemo(
-    () => (speechFeedbackAvailable(caps) ? createDefaultEmbeddingClient() : undefined),
+    () => (semanticCoverageAvailable(caps) ? createDefaultEmbeddingClient() : undefined),
     [caps],
   );
 
@@ -441,10 +442,10 @@ function PracticeApp({
           textMetrics={s.textMetrics}
           transcript={s.transcript}
           coverage={s.coverage}
-          priorCoverage={s.priorCoverage}
-          gapScore={s.gapScore}
-          gapDirection={s.gapDirection}
+          history={s.attempt.history}
+          refinementDelta={s.refinementDelta}
           attemptIndex={s.attempt.attemptIndex}
+          semanticRefining={session.semanticRefining}
           audio={session.audio}
           onSpinAgain={spinAgain}
           onTryAgain={actions.startSecondAttempt}
@@ -474,6 +475,7 @@ function PracticeApp({
         <SettingsDialog
           store={settingsStore}
           settings={settings}
+          semanticCoverageAvailable={semanticCoverageAvailable(caps)}
           onSaved={onSettingsChange}
           onClose={() => setShowSettings(false)}
         />

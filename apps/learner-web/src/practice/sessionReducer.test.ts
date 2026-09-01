@@ -89,6 +89,7 @@ const TEXT_METRICS: TextMetrics = {
 const COVERAGE_REPORT: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
@@ -603,8 +604,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
-        priorCoverage: null,
-        gapScore: null,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -688,8 +688,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: typed,
         textMetrics: { fillerCount: 0, repeatedPhraseCount: 0 },
         coverage: COVERAGE_REPORT,
-        priorCoverage: null,
-        gapScore: null,
+        refinementDelta: null,
         now: 97_000,
       },
       deps,
@@ -713,8 +712,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
-        priorCoverage: null,
-        gapScore: null,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -783,7 +781,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     expect(commands).toEqual([]);
   });
 
-  it("START_SECOND_ATTEMPT from REVIEW re-arms the same topic with attemptIndex 2 and prior coverage", () => {
+  it("START_SECOND_ATTEMPT records history, revokes prior audio, and re-arms the same topic", () => {
     const review = transcriptReviewState();
     const approved = reduceSession(
       review,
@@ -793,8 +791,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
-        priorCoverage: null,
-        gapScore: null,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -806,11 +803,18 @@ describe("reduceSession — v0.3 review and exits", () => {
       armed,
     );
     expect(state.name).toBe("TOPIC_READY");
+    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "r1-attempt" });
     expect(commands).toContainEqual({ type: "FOCUS_VIEW", target: "topic" });
     if (state.name === "TOPIC_READY") {
       expect(state.attempt.attemptIndex).toBe(2);
       expect(state.attempt.attemptId).toBe("r2-attempt");
-      expect(state.attempt.priorCoverage).toEqual(COVERAGE_REPORT);
+      expect(state.attempt.history).toHaveLength(1);
+      expect(state.attempt.history[0]).toMatchObject({
+        attemptId: "r1-attempt",
+        attemptIndex: 1,
+        coverage: COVERAGE_REPORT,
+        transcriptText: APPROVED.text,
+      });
       const priorVariantId =
         approved.name === "REVIEW" ? approved.topic.topicRef.variantId : "";
       expect(state.topic.topicRef.variantId).toBe(priorVariantId);
@@ -837,8 +841,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
-        priorCoverage: null,
-        gapScore: null,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -846,6 +849,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     const refined: CoverageReport = {
       verifiable: true,
       unavailableReason: null,
+      scoring: { method: "LEXICAL_SEMANTIC", version: "semantic-v1" },
       conceptResults: [
         { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
         { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
@@ -861,7 +865,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         type: "COVERAGE_REFINED",
         attemptId: "r1-attempt",
         coverage: refined,
-        gapScore: null,
+        refinementDelta: null,
         now: 97_000,
       },
       armed,
@@ -882,8 +886,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
-        priorCoverage: null,
-        gapScore: null,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -891,6 +894,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     const refined: CoverageReport = {
       verifiable: true,
       unavailableReason: null,
+      scoring: { method: "LEXICAL_SEMANTIC", version: "semantic-v1" },
       conceptResults: [],
       hitCount: 1,
       totalCount: 1,
@@ -903,7 +907,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         type: "COVERAGE_REFINED",
         attemptId: "r-other-attempt",
         coverage: refined,
-        gapScore: null,
+        refinementDelta: null,
         now: 97_000,
       },
       armed,

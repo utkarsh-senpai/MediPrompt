@@ -13,6 +13,9 @@ import type {
   TopicSnapshot,
 } from "@/practice/types";
 
+/** Bounds session-local transcript/coverage history during repeated practice. */
+const MAX_PRIOR_ATTEMPTS = 19;
+
 export function initialState(selection: PracticeSelection): SessionState {
   return { name: "IDLE", selection };
 }
@@ -55,7 +58,7 @@ function buildAttempt(
     challengeIdentity: topic.challengeIdentity,
     createdAt: deps.nowIso,
     attemptIndex: 1,
-    priorCoverage: null,
+    history: [],
   };
 }
 
@@ -541,9 +544,7 @@ export function reduceSession(
           textMetrics: event.textMetrics,
           transcript: event.transcript,
           coverage: event.coverage,
-          priorCoverage: event.priorCoverage,
-          gapScore: event.gapScore?.score ?? null,
-          gapDirection: event.gapScore?.direction ?? null,
+          refinementDelta: event.refinementDelta,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
       };
@@ -563,27 +564,35 @@ export function reduceSession(
           textMetrics: event.textMetrics,
           transcript: event.transcript,
           coverage: event.coverage,
-          priorCoverage: event.priorCoverage,
-          gapScore: event.gapScore?.score ?? null,
-          gapDirection: event.gapScore?.direction ?? null,
+          refinementDelta: event.refinementDelta,
         },
         commands: [{ type: "FOCUS_VIEW", target: "review" }],
       };
     }
 
     case "START_SECOND_ATTEMPT": {
-      // Re-attempt the same topic from the review screen. The prior attempt's
-      // coverage rides along on the new AttemptDraft so Gap Score can be computed
-      // when attempt 2 is approved. Recording/transcription are re-armed by the
-      // normal START_TIMER/CONFIRM_READY flow.
+      // Re-attempt the same topic from the review screen. Capture the completed
+      // attempt and release its recording before re-arming the normal pipeline.
       if (state.name !== "REVIEW") return noChange(state);
+      const completed = {
+        attemptId: state.attempt.attemptId,
+        attemptIndex: state.attempt.attemptIndex,
+        topicRef: state.attempt.topicRef,
+        mode: state.attempt.mode,
+        challenge: state.attempt.challenge,
+        supportLevel: state.attempt.supportLevel,
+        register: state.attempt.register,
+        timePolicy: state.attempt.timePolicy,
+        coverage: state.coverage,
+        transcriptText: state.transcript.text,
+      };
       const nextAttempt: AttemptDraft = {
         ...state.attempt,
         attemptId: `${event.requestId}-attempt`,
         sessionId: event.requestId,
         createdAt: deps.nowIso,
         attemptIndex: state.attempt.attemptIndex + 1,
-        priorCoverage: state.coverage,
+        history: [...state.attempt.history, completed].slice(-MAX_PRIOR_ATTEMPTS),
       };
       return {
         state: {
@@ -593,7 +602,10 @@ export function reduceSession(
           topic: state.topic,
           attempt: nextAttempt,
         },
-        commands: [{ type: "FOCUS_VIEW", target: "topic" }],
+        commands: [
+          { type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId },
+          { type: "FOCUS_VIEW", target: "topic" },
+        ],
       };
     }
 
@@ -607,8 +619,7 @@ export function reduceSession(
         state: {
           ...state,
           coverage: event.coverage,
-          gapScore: event.gapScore?.score ?? null,
-          gapDirection: event.gapScore?.direction ?? null,
+          refinementDelta: event.refinementDelta,
         },
         commands: [],
       };

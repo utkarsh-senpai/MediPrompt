@@ -5,7 +5,10 @@ import { isElapsed } from "./deadlineTimer";
 import { listSubjects, presetsFor, eligibleVariantIds, findRubric } from "@/content/packQuery";
 import { isAudioError } from "@/audio/audioErrors";
 import { scoreCoverage } from "@/scoring/coverage";
-import { gapScore } from "@/scoring/gapScore";
+import {
+  refinementDelta,
+  toAttemptHistoryEntry,
+} from "@/scoring/refinementDelta";
 import type { AudioDecoder } from "@/audio/pcmDecode";
 import type { AttemptRecorder } from "@/audio/recorder";
 import { computeAudioMetrics, computeTextMetrics } from "@/audio/deliveryMetrics";
@@ -13,8 +16,17 @@ import type {
   TranscriptionClient,
   TranscriptionSession,
 } from "@/speech/transcriptionClient";
-import type { EmbeddingClient, EmbeddingSession } from "@/scoring/embeddingClient";
-import { semanticCoverage, type ConceptEmbeddings } from "@/scoring/semanticCoverage";
+import {
+  EMBEDDING_MODEL,
+  type EmbeddingClient,
+  type EmbeddingSession,
+} from "@/scoring/embeddingClient";
+import {
+  segmentTranscript,
+  semanticCoverage,
+  type ConceptEmbeddings,
+  type TextEmbedding,
+} from "@/scoring/semanticCoverage";
 import type {
   ApprovedTranscript,
   AudioErrorCode,
@@ -123,6 +135,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const [transcriptionProgress, setTranscriptionProgress] = useState<number | null>(
     null,
   );
+  const [semanticRefining, setSemanticRefining] = useState(false);
   const pcmCacheRef = useRef<{
     attemptId: string;
     pcm: Float32Array;
@@ -130,6 +143,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   } | null>(null);
   const transcriptionSessionRef = useRef<TranscriptionSession | null>(null);
   const embeddingSessionRef = useRef<EmbeddingSession | null>(null);
+  const rubricEmbeddingCacheRef = useRef<Map<string, ConceptEmbeddings[]>>(new Map());
   const audioStartPendingRef = useRef(false);
 
   // Latest reducer deps for use inside the dispatch updater.
@@ -539,13 +553,13 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     [],
   );
 
-  // Cancel any in-flight semantic refinement when the learner leaves the review screen.
+  // Cancel any in-flight semantic refinement when the learner leaves review or opts out.
   useEffect(() => {
-    if (state.name !== "REVIEW") {
+    if (state.name !== "REVIEW" || !settings.semanticCoverage) {
       embeddingSessionRef.current?.cancel();
       embeddingSessionRef.current = null;
     }
-  }, [state.name]);
+  }, [state.name, settings.semanticCoverage]);
 
   // --- Actions ---
 
@@ -712,48 +726,78 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     dispatch({ type: "START_TYPED_REVIEW", attemptId, now: now() });
   }, [currentAttemptId, dispatch, now]);
 
-  // v0.5: refine the lexical coverage with a semantic pass. The lexical score is
-  // already shown; this silently replaces it when the embedding model succeeds.
-  // Any unavailable/timeout/cancel path is a no-op — the learner keeps the lexical score.
+  // v0.5: supplement lexical coverage with possible meaning-match evidence. The
+  // lexical score remains authoritative; an unavailable semantic pass is a no-op.
   const requestSemanticRefinement = useCallback(
     (
       attemptId: string,
       text: string,
       concepts: readonly Concept[],
-      priorCoverage: CoverageReport | null,
+      baseline: CoverageReport,
+      rubricCacheKey: string,
     ) => {
       if (!embedding || !settings.semanticCoverage) return;
-      if (text.trim().length === 0 || concepts.length === 0) return;
-      const texts = [text, ...concepts.flatMap((c) => c.acceptedPhrases)];
+      const segmentTexts = segmentTranscript(text);
+      if (segmentTexts.length === 0 || concepts.length === 0) return;
+      const rubricTexts = concepts.map((concept) => ({
+        conceptId: concept.conceptId,
+        texts: [...new Set([concept.label, ...concept.acceptedPhrases])],
+      }));
+      const cachedRubricEmbeddings = rubricEmbeddingCacheRef.current.get(rubricCacheKey);
+      const texts = [
+        ...segmentTexts,
+        ...(cachedRubricEmbeddings ? [] : rubricTexts.flatMap((entry) => entry.texts)),
+      ];
+      setSemanticRefining(true);
       const session = embedding.embed({ attemptId, texts }, (event) => {
         if (event.type !== "done") {
           if (event.type === "unavailable" && embeddingSessionRef.current === session) {
             embeddingSessionRef.current = null;
+            setSemanticRefining(false);
           }
           return;
         }
         if (embeddingSessionRef.current === session) embeddingSessionRef.current = null;
-        let offset = 1;
-        const conceptEmbeddings: ConceptEmbeddings[] = concepts.map((c) => {
-          const phraseEmbeddings = c.acceptedPhrases.map(
-            (_, i) => event.embeddings[offset + i] ?? [],
-          );
-          offset += c.acceptedPhrases.length;
-          return { conceptId: c.conceptId, phraseEmbeddings };
-        });
+        setSemanticRefining(false);
+        const segments: TextEmbedding[] = segmentTexts.map((segmentText, index) => ({
+          text: segmentText,
+          embedding: event.embeddings[index] ?? [],
+        }));
+        let offset = segmentTexts.length;
+        const conceptEmbeddings: ConceptEmbeddings[] =
+          cachedRubricEmbeddings ??
+          rubricTexts.map((entry) => {
+            const rubricEmbeddings = entry.texts.map((rubricText, index) => ({
+              text: rubricText,
+              embedding: event.embeddings[offset + index] ?? [],
+            }));
+            offset += entry.texts.length;
+            return { conceptId: entry.conceptId, rubricEmbeddings };
+          });
+        if (!cachedRubricEmbeddings) {
+          const cache = rubricEmbeddingCacheRef.current;
+          cache.set(rubricCacheKey, conceptEmbeddings);
+          if (cache.size > 8) cache.delete(cache.keys().next().value as string);
+        }
         const refined = semanticCoverage({
-          transcriptEmbedding: event.embeddings[0] ?? [],
+          baseline,
+          segments,
           concepts,
           embeddings: conceptEmbeddings,
         });
         const current = stateRef.current;
         if (current.name !== "REVIEW" || current.attempt.attemptId !== attemptId) return;
-        const gap = gapScore(priorCoverage, refined);
+        const prior = current.attempt.history.at(-1);
+        const currentEntry = toAttemptHistoryEntry(
+          current.attempt,
+          refined,
+          current.transcript.text,
+        );
         dispatch({
           type: "COVERAGE_REFINED",
           attemptId,
           coverage: refined,
-          gapScore: priorCoverage !== null ? gap : null,
+          refinementDelta: prior ? refinementDelta(prior, currentEntry) : null,
           now: now(),
         });
       });
@@ -779,21 +823,27 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         spokenMs: s.metrics.spokenMs,
       });
       const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
-      const gap = gapScore(s.attempt.priorCoverage, coverage);
       const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
-      const prior = s.attempt.priorCoverage;
       const attemptId = s.attempt.attemptId;
+      const rubricCacheKey = [
+        pack.packId,
+        pack.version,
+        s.topic.topicRef.variantId,
+        s.topic.topicRef.rubricId,
+        EMBEDDING_MODEL.version,
+      ].join(":");
+      const prior = s.attempt.history.at(-1);
+      const currentEntry = toAttemptHistoryEntry(s.attempt, coverage, text);
       dispatch({
         type: "TRANSCRIPT_APPROVED",
         attemptId,
         transcript,
         textMetrics,
         coverage,
-        priorCoverage: prior,
-        gapScore: prior !== null ? gap : null,
+        refinementDelta: prior ? refinementDelta(prior, currentEntry) : null,
         now: now(),
       });
-      requestSemanticRefinement(attemptId, text, concepts, prior);
+      requestSemanticRefinement(attemptId, text, concepts, coverage, rubricCacheKey);
     },
     [wall, pack, dispatch, now, requestSemanticRefinement],
   );
@@ -812,21 +862,27 @@ export function usePracticeSession(deps: OrchestratorDeps) {
         spokenMs: s.metrics?.spokenMs,
       });
       const coverage = scoreCoverage(text, findRubric(pack, s.topic.topicRef)?.concepts ?? []);
-      const gap = gapScore(s.attempt.priorCoverage, coverage);
       const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
-      const prior = s.attempt.priorCoverage;
       const attemptId = s.attempt.attemptId;
+      const rubricCacheKey = [
+        pack.packId,
+        pack.version,
+        s.topic.topicRef.variantId,
+        s.topic.topicRef.rubricId,
+        EMBEDDING_MODEL.version,
+      ].join(":");
+      const prior = s.attempt.history.at(-1);
+      const currentEntry = toAttemptHistoryEntry(s.attempt, coverage, text);
       dispatch({
         type: "SELF_REVIEW_DONE",
         attemptId,
         transcript,
         textMetrics,
         coverage,
-        priorCoverage: prior,
-        gapScore: prior !== null ? gap : null,
+        refinementDelta: prior ? refinementDelta(prior, currentEntry) : null,
         now: now(),
       });
-      requestSemanticRefinement(attemptId, text, concepts, prior);
+      requestSemanticRefinement(attemptId, text, concepts, coverage, rubricCacheKey);
     },
     [wall, pack, dispatch, now, requestSemanticRefinement],
   );
@@ -857,7 +913,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     playback,
     transcriptionProgress,
   };
-
   return {
     state,
     now: renderNow,
@@ -866,6 +921,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     challengeVisible,
     eligibleCount,
     audio: audioUi,
+    semanticRefining,
     actions: {
       spin,
       spinAgain,

@@ -6,6 +6,7 @@ import { InfoTip } from "./InfoTip";
 interface SettingsDialogProps {
   store: SettingsStore;
   settings: UserSettings;
+  semanticCoverageAvailable: boolean;
   onClose: () => void;
   onSaved: (next: UserSettings) => void;
 }
@@ -13,6 +14,7 @@ interface SettingsDialogProps {
 export function SettingsDialog({
   store,
   settings,
+  semanticCoverageAvailable,
   onClose,
   onSaved,
 }: SettingsDialogProps) {
@@ -147,13 +149,15 @@ export function SettingsDialog({
             id="semantic-coverage"
             type="checkbox"
             checked={semanticCoverage}
+            disabled={!semanticCoverageAvailable}
             onChange={(e) => setSemanticCoverage(e.target.checked)}
           />
           <label htmlFor="semantic-coverage">
-            Semantic coverage (beta)
+            Meaning-match evidence (beta)
             <span className="settings-hint">
-              Refine content coverage with on-device meaning matching (downloads a small model on
-              first use). The lexical baseline runs first, so this never blocks practice.
+              {semanticCoverageAvailable
+                ? "Refine content coverage with on-device meaning matching (downloads a small model on first use). The lexical baseline runs first, so this never blocks practice."
+                : "Meaning matching needs WebAssembly and Web Worker support on this browser; lexical coverage remains available."}
             </span>
           </label>
         </div>

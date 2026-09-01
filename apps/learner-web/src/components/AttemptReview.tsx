@@ -1,13 +1,18 @@
 import type { AudioUiState } from "@/practice/usePracticeSession";
 import type {
   ApprovedTranscript,
+  AttemptHistoryEntry,
   CoverageReport,
   DeliveryMetrics,
-  GapDirection,
+  RefinementDeltaResult,
   TextMetrics,
   TopicSnapshot,
 } from "@/practice/types";
-import { formatGapScore, gapDirectionCopy } from "@/scoring/gapScore";
+import {
+  formatRefinementDelta,
+  refinementDirectionCopy,
+  refinementUnavailableCopy,
+} from "@/scoring/refinementDelta";
 import { CoveragePanel } from "./CoveragePanel";
 import { DeliveryPanel } from "./DeliveryPanel";
 import { PlaybackBar } from "./PlaybackBar";
@@ -18,32 +23,42 @@ interface AttemptReviewProps {
   textMetrics: TextMetrics | null;
   transcript: ApprovedTranscript;
   coverage: CoverageReport;
-  /** Prior attempt coverage; null on attempt 1 → no Gap Score block. */
-  priorCoverage: CoverageReport | null;
-  gapScore: number | null;
-  gapDirection: GapDirection | null;
+  history: AttemptHistoryEntry[];
+  refinementDelta: RefinementDeltaResult | null;
   attemptIndex: number;
+  semanticRefining?: boolean;
   audio: AudioUiState;
   onSpinAgain: () => void;
   onTryAgain: () => void;
 }
 
-/** Final review screen: approved transcript, content coverage, Gap Score, and delivery. */
+function coverageCopy(coverage: CoverageReport): string {
+  return coverage.verifiable
+    ? `${Math.round(coverage.weightedFraction * 100)}% coverage`
+    : "coverage unavailable";
+}
+
+/** Final review screen: approved transcript, content coverage, retry delta, and delivery. */
 export function AttemptReview({
   topic,
   metrics,
   textMetrics,
   transcript,
   coverage,
-  priorCoverage,
-  gapScore,
-  gapDirection,
+  history,
+  refinementDelta,
   attemptIndex,
+  semanticRefining = false,
   audio,
   onSpinAgain,
   onTryAgain,
 }: AttemptReviewProps) {
-  const showGap = priorCoverage !== null && gapScore !== null && gapDirection !== null;
+  const labelFor = (conceptId: string) =>
+    coverage.conceptResults.find((concept) => concept.conceptId === conceptId)?.label ??
+    history
+      .at(-1)
+      ?.coverage.conceptResults.find((concept) => concept.conceptId === conceptId)?.label ??
+    conceptId;
 
   return (
     <section aria-labelledby="review-heading">
@@ -52,20 +67,46 @@ export function AttemptReview({
       </h2>
       <p className="status">{topic.title}</p>
 
+      {semanticRefining ? (
+        <p className="status" role="status">
+          Checking related wording on this device… Lexical coverage is already available.
+        </p>
+      ) : null}
+
       {audio.playback ? (
         <PlaybackBar url={audio.playback.url} durationMs={audio.playback.durationMs} />
       ) : null}
 
-      {showGap ? (
-        <section className="gap-score-panel" aria-labelledby="gap-score-heading">
-          <h3 id="gap-score-heading">Gap Score</h3>
-          <p className="gap-score-value" aria-live="polite">
-            {formatGapScore(gapScore as number)}
-          </p>
-          <p className="status">{gapDirectionCopy(gapDirection as GapDirection)}</p>
+      {attemptIndex > 1 && refinementDelta ? (
+        <section className="refinement-delta-panel" aria-labelledby="refinement-delta-heading">
+          <h3 id="refinement-delta-heading">Refinement Delta</h3>
+          {refinementDelta.available ? (
+            <>
+              <p className="refinement-delta-value" aria-live="polite">
+                {formatRefinementDelta(refinementDelta.score)}
+              </p>
+              <p className="status">
+                {refinementDirectionCopy(refinementDelta.direction)}
+              </p>
+              {refinementDelta.newlyCoveredConceptIds.length > 0 ? (
+                <p className="status">
+                  Newly covered: {refinementDelta.newlyCoveredConceptIds.map(labelFor).join(", ")}.
+                </p>
+              ) : null}
+              {refinementDelta.lostConceptIds.length > 0 ? (
+                <p className="status">
+                  No longer detected: {refinementDelta.lostConceptIds.map(labelFor).join(", ")}.
+                </p>
+              ) : null}
+            </>
+          ) : (
+            <p className="status" role="status">
+              {refinementUnavailableCopy(refinementDelta.reason)}
+            </p>
+          )}
           <p className="status">
-            Gap Score is the change in coverage versus your previous attempt on this topic — not a
-            measure of correctness.
+            Refinement Delta compares coverage under the same practice and scoring conditions. It
+            does not measure correctness or long-term learning.
           </p>
         </section>
       ) : null}
@@ -84,6 +125,23 @@ export function AttemptReview({
       <CoveragePanel coverage={coverage} />
 
       {metrics ? <DeliveryPanel metrics={metrics} textMetrics={textMetrics} /> : null}
+
+      <details className="attempt-history">
+        <summary>Attempts ({attemptIndex})</summary>
+        {attemptIndex > history.length + 1 ? (
+          <p className="status">Showing the most recent {history.length + 1} attempts.</p>
+        ) : null}
+        <ol>
+          {history.map((attempt) => (
+            <li key={attempt.attemptId}>
+              Attempt {attempt.attemptIndex} — {coverageCopy(attempt.coverage)}
+            </li>
+          ))}
+          <li>
+            Attempt {attemptIndex} — {coverageCopy(coverage)}
+          </li>
+        </ol>
+      </details>
 
       <div className="toolbar">
         <button type="button" className="primary" onClick={onTryAgain}>

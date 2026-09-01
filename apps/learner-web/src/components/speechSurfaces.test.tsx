@@ -18,6 +18,7 @@ import type { AudioUiState } from "@/practice/usePracticeSession";
 import { MAX_TRANSCRIPT_CHARACTERS } from "@/practice/transcriptPolicy";
 import type {
   ApprovedTranscript,
+  AttemptHistoryEntry,
   AudioErrorCode,
   CoverageReport,
   DeliveryMetrics,
@@ -58,6 +59,7 @@ const TEXT_METRICS: TextMetrics = {
 const COVERAGE_FULL: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
@@ -71,6 +73,7 @@ const COVERAGE_FULL: CoverageReport = {
 const COVERAGE_PARTIAL: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
@@ -108,6 +111,22 @@ function audioUi(overrides: Partial<AudioUiState> = {}): AudioUiState {
     playback: { attemptId: "a1", url: "blob:fake-0", durationMs: 90_000 },
     transcriptionProgress: null,
     ...overrides,
+  };
+}
+
+function historyEntry(coverage = COVERAGE_PARTIAL): AttemptHistoryEntry {
+  const topic = topicSnapshot();
+  return {
+    attemptId: "a1",
+    attemptIndex: 1,
+    topicRef: topic.topicRef,
+    mode: topic.mode,
+    challenge: topic.challenge,
+    supportLevel: topic.supportLevel,
+    register: topic.register,
+    timePolicy: topic.timePolicy,
+    coverage,
+    transcriptText: APPROVED.text,
   };
 }
 
@@ -461,9 +480,8 @@ describe("AttemptReview", () => {
         textMetrics={TEXT_METRICS}
         transcript={APPROVED}
         coverage={COVERAGE_PARTIAL}
-        priorCoverage={null}
-        gapScore={null}
-        gapDirection={null}
+        history={[]}
+        refinementDelta={null}
         attemptIndex={1}
         audio={audioUi()}
         onSpinAgain={onSpinAgain}
@@ -496,9 +514,8 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={adversarial}
         coverage={COVERAGE_FULL}
-        priorCoverage={null}
-        gapScore={null}
-        gapDirection={null}
+        history={[]}
+        refinementDelta={null}
         attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
@@ -517,9 +534,8 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={{ ...APPROVED, wasEdited: false, rawText: undefined }}
         coverage={COVERAGE_FULL}
-        priorCoverage={null}
-        gapScore={null}
-        gapDirection={null}
+        history={[]}
+        refinementDelta={null}
         attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
@@ -531,7 +547,7 @@ describe("AttemptReview", () => {
     ).toBeNull();
   });
 
-  it("shows the Gap Score block and try-again action on a second attempt", () => {
+  it("shows Refinement Delta, changed concepts, history, and the retry action", () => {
     const onTryAgain = vi.fn();
     render(
       <AttemptReview
@@ -540,18 +556,25 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={APPROVED}
         coverage={COVERAGE_PARTIAL}
-        priorCoverage={COVERAGE_PARTIAL}
-        gapScore={0.3}
-        gapDirection="IMPROVED"
+        history={[historyEntry()]}
+        refinementDelta={{
+          available: true,
+          score: 0.3,
+          direction: "IMPROVED",
+          newlyCoveredConceptIds: ["c1"],
+          lostConceptIds: [],
+        }}
         attemptIndex={2}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
         onTryAgain={onTryAgain}
       />,
     );
-    expect(screen.getByRole("heading", { name: "Gap Score" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Refinement Delta" })).toBeInTheDocument();
     expect(screen.getByText("+30%")).toBeInTheDocument();
     expect(screen.getByText(/coverage improved on this attempt/i)).toBeInTheDocument();
+    expect(screen.getByText(/Newly covered: Names the slider role/)).toBeInTheDocument();
+    expect(screen.getByText("Attempts (2)")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Attempt review \(attempt 2\)/i })).toBeInTheDocument();
     const tryAgain = screen.getByRole("button", { name: "Try again on this topic" });
     expect(tryAgain).toBeInTheDocument();
@@ -559,7 +582,7 @@ describe("AttemptReview", () => {
     expect(onTryAgain).toHaveBeenCalledTimes(1);
   });
 
-  it("hides the Gap Score block on the first attempt but offers the try-again entry", () => {
+  it("hides Refinement Delta on the first attempt but offers the retry entry", () => {
     render(
       <AttemptReview
         topic={topicSnapshot()}
@@ -567,16 +590,15 @@ describe("AttemptReview", () => {
         textMetrics={null}
         transcript={APPROVED}
         coverage={COVERAGE_PARTIAL}
-        priorCoverage={null}
-        gapScore={null}
-        gapDirection={null}
+        history={[]}
+        refinementDelta={null}
         attemptIndex={1}
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
         onTryAgain={() => {}}
       />,
     );
-    expect(screen.queryByRole("heading", { name: "Gap Score" })).toBeNull();
+    expect(screen.queryByRole("heading", { name: "Refinement Delta" })).toBeNull();
     // The try-again action is the loop entry and is always available from review.
     expect(screen.getByRole("button", { name: "Try again on this topic" })).toBeInTheDocument();
   });

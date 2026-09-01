@@ -69,6 +69,7 @@ function stubSpeechCaps(getUserMedia: () => Promise<unknown>): void {
 
 describe("App accessibility + capability + security", () => {
   beforeEach(() => {
+    localStorage.clear();
     setMatchMedia(false);
     mockFetch(medicalPracticeBeta);
   });
@@ -119,9 +120,30 @@ describe("App accessibility + capability + security", () => {
     await user.click(trigger);
     expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
     expect(screen.getByLabelText(/Speaking time/)).toHaveFocus();
+    expect(screen.getByLabelText(/Meaning-match evidence/)).toBeDisabled();
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("dialog", { name: "Settings" })).not.toBeInTheDocument();
     expect(trigger).toHaveFocus();
+  });
+
+  it("persists semantic opt-in when worker and WebAssembly capabilities exist", async () => {
+    vi.stubGlobal(
+      "Worker",
+      class {
+        postMessage(): void {}
+        terminate(): void {}
+      },
+    );
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Settings" })).toBeEnabled());
+    await user.click(screen.getByRole("button", { name: "Settings" }));
+    const semantic = screen.getByLabelText(/Meaning-match evidence/);
+    expect(semantic).toBeEnabled();
+    await user.click(semantic);
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    await user.click(screen.getByRole("button", { name: "Settings" }));
+    expect(screen.getByLabelText(/Meaning-match evidence/)).toBeChecked();
   });
 
   it("renders at a 320px viewport without throwing", async () => {

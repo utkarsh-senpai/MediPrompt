@@ -24,7 +24,7 @@ function clampFiniteSeconds(
 }
 
 const REQUIRED_KEYS = ["researchSeconds", "schemaVersion", "speakingSeconds"];
-const OPTIONAL_KEYS = ["soundMuted"];
+const OPTIONAL_KEYS = ["soundMuted", "semanticCoverage"];
 
 function parseSettings(raw: unknown): UserSettings | null {
   if (typeof raw !== "object" || raw === null) return null;
@@ -54,7 +54,15 @@ function parseSettings(raw: unknown): UserSettings | null {
   );
   const soundMuted =
     typeof obj["soundMuted"] === "boolean" ? obj["soundMuted"] : false;
-  return { schemaVersion: 1, speakingSeconds, researchSeconds, soundMuted };
+  const semanticCoverage =
+    typeof obj["semanticCoverage"] === "boolean" ? obj["semanticCoverage"] : false;
+  return {
+    schemaVersion: 1,
+    speakingSeconds,
+    researchSeconds,
+    soundMuted,
+    semanticCoverage,
+  };
 }
 
 function safeStorage(): Storage | null {

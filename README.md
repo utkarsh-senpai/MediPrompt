@@ -14,7 +14,7 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.5 — Gap Score and semantic coverage** (current)
+**v0.5 — Grounded refinement** (current)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
 mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
@@ -31,12 +31,13 @@ and a **single actionable prescription** names the highest-weight missed concept
 Topics without a source-grounded rubric get a "not verifiable from sources" fallback instead of a
 fabricated grade. Coverage is shown visually and verbally separate from delivery.
 
-v0.5 closes the practice loop and sharpens the match. **Gap Score**: after a review, the learner can
-re-attempt the *same* topic and see the change in weighted coverage versus the prior attempt
-(improved / flat / regressed) — a coverage delta, not a correctness claim. **Semantic coverage
-(beta, opt-in in Settings)**: an optional `all-MiniLM-L6-v2` embedding pass refines the lexical
-matcher with on-device cosine similarity; the lexical engine always runs first as the guaranteed
-fallback, so the model never blocks practice. Decision resolutions are recorded in
+v0.5 closes the practice loop. **Refinement Delta** compares consecutive attempts only when the
+topic, prompt, rubric, practice settings, and scoring version are identical; it shows changed
+coverage and newly covered/lost concepts, never a knowledge or correctness claim. Optional
+`all-MiniLM-L6-v2` meaning matching compares bounded transcript segments with rubric wording on
+device. Because educator-labelled calibration is still pending, semantic matches appear as
+“possibly present — not counted” evidence and cannot inflate coverage or the delta. The lexical
+engine remains the guaranteed offline numeric baseline. Decision resolutions are recorded in
 [docs/V0.5_DEVELOPMENT_CONTEXT.md](docs/V0.5_DEVELOPMENT_CONTEXT.md). Spaced resurfacing, the Viva
 Round follow-up ladder, and the connected platform remain progressive enhancements for later versions.
 
@@ -78,7 +79,7 @@ the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 | [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
 | [v0.3 development context](docs/V0.3_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for private speech intelligence |
 | [v0.4 development context](docs/V0.4_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for content coverage |
-| [v0.5 development context](docs/V0.5_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for Gap Score and semantic coverage |
+| [v0.5 development context](docs/V0.5_DEVELOPMENT_CONTEXT.md) | Reviewed contract for retries, Refinement Delta, and semantic evidence |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
@@ -156,9 +157,10 @@ The zero-cost learner experience is an offline-capable static PWA:
 - Browser `MediaRecorder` and Web Audio APIs.
 - Browser-local speech recognition through Transformers.js, with `whisper-base.en` as the
   candidate default subject to representative-device and Indian-English medical-speech tests.
-- A deterministic browser-local lexical rubric baseline, with optional quantized
-  `all-MiniLM-L6-v2` embeddings planned as a later enhancement.
-- IndexedDB for private progress and a service worker for application/model caching.
+- A deterministic browser-local lexical rubric baseline, with optional pinned q8
+  `all-MiniLM-L6-v2` sentence/rubric evidence that remains non-counting until educator calibration.
+- IndexedDB for future private progress, a service worker for application/runtime caching, and the
+  Transformers.js browser cache for opt-in model files.
 - Versioned, human-reviewed YAML topic packs compiled to static JSON.
 
 Java remains a first-class part of the project through a Java 21/Spring Boot content compiler and,

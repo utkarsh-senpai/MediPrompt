@@ -826,6 +826,7 @@ progress {
 }
 
 .coverage-missed h4,
+.coverage-possible h4,
 .coverage-touched summary {
   font-size: 0.82rem;
   color: var(--muted);
@@ -833,6 +834,7 @@ progress {
 }
 
 .coverage-missed ul,
+.coverage-possible ul,
 .coverage-touched ul {
   margin: 0 0 0 1rem;
   padding: 0;
@@ -841,12 +843,13 @@ progress {
 }
 
 .coverage-missed li,
+.coverage-possible li,
 .coverage-touched li {
   font-size: 0.9rem;
   color: var(--ink);
 }
 
-.gap-score-panel {
+.refinement-delta-panel {
   background: var(--surface);
   border-radius: 1.25rem;
   padding: calc(var(--space) * 1.6);
@@ -856,7 +859,7 @@ progress {
     0 18px 44px #00000059;
 }
 
-.gap-score-value {
+.refinement-delta-value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--accent-bright);
@@ -868,6 +871,14 @@ progress {
   margin-top: 0.1rem;
   color: var(--muted);
   font-size: 0.78rem;
+}
+
+.attempt-history {
+  margin-block: var(--space);
+}
+
+.attempt-history li {
+  margin-block: 0.2rem;
 }
 
 .draft-notice {

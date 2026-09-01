@@ -22,7 +22,12 @@ export function CoveragePanel({ coverage }: CoveragePanelProps) {
     );
   }
 
-  const missed = coverage.conceptResults.filter((result) => !result.hit);
+  const possible = coverage.conceptResults.filter(
+    (result) => !result.hit && result.semanticEvidence?.status === "POSSIBLY_COVERED",
+  );
+  const missed = coverage.conceptResults.filter(
+    (result) => !result.hit && result.semanticEvidence?.status !== "POSSIBLY_COVERED",
+  );
   const touched = coverage.conceptResults.filter((result) => result.hit);
   const percent = Math.round(coverage.weightedFraction * 100);
 
@@ -52,6 +57,33 @@ export function CoveragePanel({ coverage }: CoveragePanelProps) {
         </div>
       ) : null}
 
+      {possible.length > 0 ? (
+        <div className="coverage-possible">
+          <h4>Possibly present — not counted</h4>
+          <p className="status">
+            Meaning matching found related wording. Check it yourself; this is not a correctness
+            decision.
+          </p>
+          <ul>
+            {possible.map((result) => (
+              <li key={result.conceptId}>
+                {result.label}
+                {result.semanticEvidence?.transcriptSegment ? (
+                  <span className="coverage-evidence">
+                    Your wording: “{result.semanticEvidence.transcriptSegment}”
+                  </span>
+                ) : null}
+                {result.semanticEvidence?.rubricText ? (
+                  <span className="coverage-evidence">
+                    Related rubric wording: “{result.semanticEvidence.rubricText}”
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       {touched.length > 0 ? (
         <details className="coverage-touched">
           <summary>Concepts you touched ({touched.length})</summary>
@@ -61,7 +93,13 @@ export function CoveragePanel({ coverage }: CoveragePanelProps) {
                 {result.label}
                 {result.matchedPhrase ? (
                   <span className="coverage-evidence">
-                    Matched rubric phrase: “{result.matchedPhrase}”
+                    Matched rubric wording: “{result.matchedPhrase}”
+                  </span>
+                ) : null}
+                {result.semanticEvidence?.status === "COVERED" &&
+                result.semanticEvidence.transcriptSegment ? (
+                  <span className="coverage-evidence">
+                    Your related wording: “{result.semanticEvidence.transcriptSegment}”
                   </span>
                 ) : null}
               </li>

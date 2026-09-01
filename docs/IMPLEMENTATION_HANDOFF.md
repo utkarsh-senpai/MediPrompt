@@ -52,14 +52,20 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ## Version pickup map
 
-### Current baseline: v0.4 content coverage
+### Current baseline: v0.5 grounded refinement
 
 The React/TypeScript PWA retains the compact v0.2 two-mode practice loop, strict topic-pack
 validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
 surfaces, and an atomic allowlisted offline cache. v0.3 adds opt-in local recording, delivery
-observations, transcription, correction, and typed self-review. PR #18 adds v0.4's bounded lexical
-coverage and one prescription after the learner approves or types text. Missing text/rubric evidence
-is unavailable rather than zero; matching remains coverage, never correctness.
+observations, transcription, correction, and typed self-review. v0.4 adds bounded lexical coverage
+and one prescription after the learner approves or types text. Missing text/rubric evidence is
+unavailable rather than zero; matching remains coverage, never correctness.
+
+v0.5 adds the same-topic retry chain, bounded session history, and an identity-checked Refinement
+Delta with newly covered/lost concepts. Optional pinned MiniLM evidence uses bounded transcript
+segments and displays `POSSIBLY_COVERED` matches without counting them. Whisper and MiniLM share
+one bundled model-worker asset. Semantic score promotion remains disabled pending educator-labelled
+calibration.
 
 The learner artifact contains only the 20-topic public physiotherapy practice beta, with the same
 snapshot compiled as its offline fallback; generic interaction subjects are regression-test inputs
@@ -76,19 +82,18 @@ The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScrip
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
 checklist** below and in the root README.
 
-### Current review branch: `feature/v0.4-content-coverage`
+### v0.5 release source: `feature/v0.5-gap-score-and-semantic`
 
-PR #18 must keep the v0.2 timer-only path and v0.3 privacy guarantees unchanged. Its v0.4 matcher
-uses whole normalized phrase tokens or nearby significant tokens, exposes the matched rubric phrase,
-bounds synchronous input, and distinguishes `NO_TRANSCRIPT` from `NO_SCORABLE_RUBRIC`. Quantized
-semantic matching, same-identity retry, and Refinement Delta are deliberately moved to v0.5. Do not
-merge PR #18 until its owner completes final review.
+PR #20 carries v0.5. Despite the historical branch name, user-facing and normative copy must say
+**Refinement Delta**, because “Gap Score” remains reserved for a future independently grounded
+construct. A delta must reject mismatched topic, variant, prompt, rubric, pack, difficulty, mode,
+register, support, time, or scoring identity. Missing coverage is unavailable, never flat zero.
 
 ### Later versions
 
 - v0.3: local recording/transcription and observable delivery metrics (deployed).
 - v0.4: deterministic lexical rubric coverage, visible accepted-phrase evidence, one prescription.
-- v0.5: optional semantic enhancer, same-identity retry, Refinement Delta.
+- v0.5: same-identity retry, Refinement Delta, and non-counting semantic evidence (current).
 - v0.6: Viva follow-ups/evidence updates, scheduling, local history/export/delete.
 - v0.7: Spring Boot content compiler and authoring/publication validation.
 - v0.8: target-user beta hardening.

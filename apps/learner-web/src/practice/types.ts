@@ -291,8 +291,16 @@ export interface ConceptResult {
   label: string;
   weight: number;
   hit: boolean;
-  /** The acceptedPhrase that matched, for evidence; null on miss or no phrases. */
+  /** Rubric phrase/label that matched, for evidence; null on miss. */
   matchedPhrase: string | null;
+  /** Optional sentence-level evidence from the v0.5 semantic enhancer. */
+  semanticEvidence?: {
+    status: "COVERED" | "POSSIBLY_COVERED" | "NOT_FOUND";
+    transcriptSegment: string | null;
+    rubricText: string | null;
+    similarity: number | null;
+    thresholdVersion: string;
+  };
 }
 
 export type CoverageUnavailableReason =
@@ -300,6 +308,11 @@ export type CoverageUnavailableReason =
   | "NO_SCORABLE_RUBRIC";
 
 interface CoverageReportValues {
+  /** Reproducible scoring identity; comparisons require an exact match. */
+  scoring: {
+    method: "LEXICAL" | "LEXICAL_SEMANTIC";
+    version: string;
+  };
   conceptResults: ConceptResult[];
   hitCount: number;
   totalCount: number;
@@ -319,15 +332,28 @@ export type CoverageReport =
       unavailableReason: CoverageUnavailableReason;
     });
 
-/** Direction of the Gap Score delta between two same-topic attempts. */
-export type GapDirection = "IMPROVED" | "FLAT" | "REGRESSED";
+/** Direction of a valid same-identity Refinement Delta. */
+export type RefinementDirection = "IMPROVED" | "FLAT" | "REGRESSED";
 
-/** Gap Score result: weighted-coverage delta and its plain-language direction. */
-export interface GapScoreResult {
-  /** weightedFraction(current) − weightedFraction(prior), in [−1, 1]. 0 when either is not verifiable. */
-  score: number;
-  direction: GapDirection;
-}
+export type RefinementDeltaUnavailableReason =
+  | "PRIOR_COVERAGE_UNAVAILABLE"
+  | "CURRENT_COVERAGE_UNAVAILABLE"
+  | "ATTEMPT_IDENTITY_MISMATCH"
+  | "SCORING_IDENTITY_MISMATCH";
+
+/** A delta is numeric only when both attempts and their scorers are comparable. */
+export type RefinementDeltaResult =
+  | {
+      available: true;
+      score: number;
+      direction: RefinementDirection;
+      newlyCoveredConceptIds: string[];
+      lostConceptIds: string[];
+    }
+  | {
+      available: false;
+      reason: RefinementDeltaUnavailableReason;
+    };
 
 export type AudioErrorCode =
   | "AUDIO_MIC_PERMISSION_DENIED"
@@ -360,8 +386,22 @@ export interface AttemptDraft {
   createdAt: string;
   /** 1 for the first attempt on a topic; increments on each same-topic re-attempt. */
   attemptIndex: number;
-  /** The prior attempt's coverage, carried into a re-attempt so Gap Score can be computed on approval. Null on attempt 1. */
-  priorCoverage: CoverageReport | null;
+  /** Completed prior attempts for the current same-topic retry chain; session-local only. */
+  history: AttemptHistoryEntry[];
+}
+
+/** Immutable, session-local record used for traceability and safe comparison. */
+export interface AttemptHistoryEntry {
+  attemptId: string;
+  attemptIndex: number;
+  topicRef: TopicRef;
+  mode: V02PracticeMode;
+  challenge: ChallengePreset;
+  supportLevel: SupportLevel;
+  register: Register;
+  timePolicy: TimePolicy;
+  coverage: CoverageReport;
+  transcriptText: string;
 }
 
 export type SessionState =
@@ -442,12 +482,8 @@ export type SessionState =
       transcript: ApprovedTranscript;
       /** Content coverage against the variant rubric; computed on approval. */
       coverage: CoverageReport;
-      /** Coverage of the prior same-topic attempt; null on attempt 1. */
-      priorCoverage: CoverageReport | null;
-      /** weightedFraction(coverage) − weightedFraction(priorCoverage); null on attempt 1. */
-      gapScore: number | null;
-      /** Direction of gapScore; null on attempt 1. */
-      gapDirection: GapDirection | null;
+      /** Same-identity coverage change; null on attempt 1. */
+      refinementDelta: RefinementDeltaResult | null;
     };
 
 export type SessionEvent =
@@ -489,10 +525,8 @@ export type SessionEvent =
       transcript: ApprovedTranscript;
       textMetrics: TextMetrics;
       coverage: CoverageReport;
-      /** Prior attempt coverage; null on attempt 1. */
-      priorCoverage: CoverageReport | null;
-      /** Gap Score for this attempt; null on attempt 1. */
-      gapScore: GapScoreResult | null;
+      /** Same-identity Refinement Delta; null on attempt 1. */
+      refinementDelta: RefinementDeltaResult | null;
       now: number;
     }
   | {
@@ -501,14 +535,12 @@ export type SessionEvent =
       transcript: ApprovedTranscript;
       textMetrics: TextMetrics;
       coverage: CoverageReport;
-      /** Prior attempt coverage; null on attempt 1. */
-      priorCoverage: CoverageReport | null;
-      /** Gap Score for this attempt; null on attempt 1. */
-      gapScore: GapScoreResult | null;
+      /** Same-identity Refinement Delta; null on attempt 1. */
+      refinementDelta: RefinementDeltaResult | null;
       now: number;
     }
   | {
-      // Begin a same-topic re-attempt from the review screen (v0.5 Gap Score loop).
+      // Begin a same-topic re-attempt from the review screen.
       type: "START_SECOND_ATTEMPT";
       requestId: string;
       now: number;
@@ -518,8 +550,8 @@ export type SessionEvent =
       type: "COVERAGE_REFINED";
       attemptId: string;
       coverage: CoverageReport;
-      /** Recomputed Gap Score against the same priorCoverage using the refined coverage. */
-      gapScore: GapScoreResult | null;
+      /** Recomputed delta after a semantic refinement. */
+      refinementDelta: RefinementDeltaResult | null;
       now: number;
     };
 
