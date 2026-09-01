@@ -337,4 +337,29 @@ describe("validatePack — custom cross-reference rejections", () => {
     p.subjects[0]!.topics[0]!.rubrics[0]!.concepts[0]!.sourceRefs = ["missing-src"];
     expectInvalid(p, "missing source");
   });
+
+  it("accepts a topic with source-grounded viva questions", () => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.vivaQuestions = [
+      { id: "topic-viva-q1", level: "RECALL", prompt: "Recall the core idea.", targetConceptIds: ["c1"] },
+    ];
+    expect(() => validatePack(p)).not.toThrow();
+  });
+
+  it("rejects a viva question referencing a missing concept", () => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.vivaQuestions = [
+      { id: "topic-viva-q1", level: "DEFEND", prompt: "Defend.", targetConceptIds: ["no-such-concept"] },
+    ];
+    expectInvalid(p, "references missing concept");
+  });
+
+  it("rejects duplicate viva question ids within a topic", () => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.vivaQuestions = [
+      { id: "topic-viva-q1", level: "RECALL", prompt: "Recall.", targetConceptIds: ["c1"] },
+      { id: "topic-viva-q1", level: "EXPLAIN", prompt: "Explain.", targetConceptIds: ["c1"] },
+    ];
+    expectInvalid(p, "viva question id");
+  });
 });

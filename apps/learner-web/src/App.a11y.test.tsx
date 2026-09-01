@@ -259,4 +259,31 @@ describe("App accessibility + capability + security", () => {
     expect(document.querySelector('img[src="x"]')).toBeNull();
     expect(document.querySelector("script")).toBeNull();
   });
+
+  it("v0.6 viva: defends a topic and reaches the viva overview from review", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
+    await user.selectOptions(screen.getByLabelText("Subject"), "cardiovascular-physiotherapy");
+    const challenge = screen.getByRole("group", { name: "Challenge" });
+    await user.click(within(challenge).getByRole("button", { name: "Defend" }));
+    await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
+    await screen.findByRole("button", { name: "Start timer" });
+    await user.click(screen.getByRole("button", { name: "Start timer" }));
+    await user.click(screen.getByRole("button", { name: "Finish now" }));
+    await user.click(screen.getByRole("button", { name: "Review this attempt" }));
+    await screen.findByLabelText(/Type what you said/i);
+    await user.type(
+      screen.getByLabelText(/Type what you said/i),
+      "Safety assessment and secondary prevention.",
+    );
+    await user.click(screen.getByRole("button", { name: "Save review" }));
+    // Review exposes the viva entry on this topic.
+    const beginViva = await screen.findByRole("button", { name: "Begin viva" });
+    await user.click(beginViva);
+    expect(screen.getByRole("heading", { name: /Viva:/ })).toBeInTheDocument();
+    // The ladder overview offers Begin and a return to attempt review.
+    expect(screen.getByRole("button", { name: "Begin viva" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Back to attempt review" })).toBeInTheDocument();
+  });
 });

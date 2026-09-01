@@ -30,6 +30,7 @@ interface AttemptReviewProps {
   audio: AudioUiState;
   onSpinAgain: () => void;
   onTryAgain: () => void;
+  onBeginViva: () => void;
 }
 
 function coverageCopy(coverage: CoverageReport): string {
@@ -52,6 +53,7 @@ export function AttemptReview({
   audio,
   onSpinAgain,
   onTryAgain,
+  onBeginViva,
 }: AttemptReviewProps) {
   const labelFor = (conceptId: string) =>
     coverage.conceptResults.find((concept) => concept.conceptId === conceptId)?.label ??
@@ -142,6 +144,25 @@ export function AttemptReview({
           </li>
         </ol>
       </details>
+
+      {topic.vivaQuestions.length > 0 ? (
+        <section className="viva-entry" aria-labelledby="viva-entry-heading">
+          <h3 id="viva-entry-heading">Defend this topic</h3>
+          <p className="status">
+            Answer {topic.vivaQuestions.length} follow-up
+            {topic.vivaQuestions.length === 1 ? "" : "s"} aloud, climbing from Recall
+            toward Defend. Viva coverage is not a grade.
+          </p>
+          <button type="button" className="primary" onClick={onBeginViva}>
+            Begin viva
+          </button>
+        </section>
+      ) : (
+        <p className="status">
+          Viva is unavailable for this topic: no source-grounded defense questions are
+          authored for it yet.
+        </p>
+      )}
 
       <div className="toolbar">
         <button type="button" className="primary" onClick={onTryAgain}>

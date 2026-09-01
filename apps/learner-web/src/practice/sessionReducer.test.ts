@@ -917,3 +917,282 @@ describe("reduceSession — v0.3 review and exits", () => {
     }
   });
 });
+
+// --- v0.6 viva defense-ladder transitions ---
+
+describe("reduceSession — v0.6 viva", () => {
+  const armed: ReducerDeps = { ...deps, audioArmed: true };
+  const VIVA_VARIANT = "cardiac-rehabilitation-viva-recall-v1";
+
+  function vivaSelection(): PracticeSelection {
+    return {
+      mode: "RECALL_SPRINT",
+      challenge: "VIVA",
+      subjectId: "cardiovascular-physiotherapy",
+      register: "EXAMINER",
+    };
+  }
+
+  function reviewState(): SessionState {
+    let s: SessionState = initialState(vivaSelection());
+    s = reduceSession(s, { type: "SPIN", requestId: "rv", now: 0 }, deps).state;
+    s = reduceSession(
+      s,
+      { type: "TOPIC_DRAWN", requestId: "rv", topic: snapshot(VIVA_VARIANT), now: 0 },
+      deps,
+    ).state;
+    s = reduceSession(s, { type: "START_TIMER", now: 0 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "rv", now: 90_000 }, deps).state;
+    s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "rv-attempt", now: 90_100 }, deps).state;
+    s = reduceSession(
+      s,
+      {
+        type: "SELF_REVIEW_DONE",
+        attemptId: "rv-attempt",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: COVERAGE_REPORT,
+        refinementDelta: null,
+        now: 91_000,
+      },
+      deps,
+    ).state;
+    return s;
+  }
+
+  const VIVA_COVERAGE: CoverageReport = {
+    verifiable: true,
+    unavailableReason: null,
+    scoring: { method: "LEXICAL", version: "lexical-v1" },
+    conceptResults: [
+      { conceptId: "cardiac-rehabilitation-viva-recall-c1", label: "Priorities", weight: 2, hit: true, matchedPhrase: "safety assessment" },
+    ],
+    hitCount: 1,
+    totalCount: 1,
+    weightedFraction: 1,
+    fraction: 1,
+  };
+
+  it("START_VIVA from REVIEW builds the ladder and revokes the main recording", () => {
+    const review = reviewState();
+    if (review.name !== "REVIEW") throw new Error("review missing");
+    expect(review.topic.vivaQuestions.length).toBe(3);
+    const { state, commands } = reduceSession(
+      review,
+      { type: "START_VIVA", requestId: "vv", now: 92_000 },
+      deps,
+    );
+    expect(state.name).toBe("VIVA_READY");
+    if (state.name === "VIVA_READY") {
+      expect(state.viva.questions).toHaveLength(3);
+      expect(state.viva.index).toBe(0);
+      expect(state.viva.answers).toEqual([]);
+      expect(state.viva.base.name).toBe("REVIEW");
+      expect(state.attempt.attemptId).toBe("vv-viva-q0");
+      expect(state.attempt.attemptIndex).toBe(review.attempt.attemptIndex + 1);
+    }
+    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "rv-attempt" });
+  });
+
+  it("START_VIVA is a no-op outside REVIEW", () => {
+    const idle = initialState(vivaSelection());
+    const { state } = reduceSession(idle, { type: "START_VIVA", requestId: "vv", now: 0 }, deps);
+    expect(state.name).toBe("IDLE");
+  });
+
+  it("runs the typed viva loop READY→ASKING→SPEAKING→complete→self-review→answer→next→complete", () => {
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
+    expect(s.name).toBe("VIVA_ASKING");
+    s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
+    expect(s.name).toBe("VIVA_SPEAKING");
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    expect(s.name).toBe("VIVA_ATTEMPT_COMPLETE");
+    s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "vv-viva-q0", now: 93_300 }, deps).state;
+    expect(s.name).toBe("VIVA_SELF_REVIEW");
+    s = reduceSession(
+      s,
+      {
+        type: "VIVA_SELF_REVIEW_DONE",
+        attemptId: "vv-viva-q0",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: VIVA_COVERAGE,
+        now: 94_000,
+      },
+      deps,
+    ).state;
+    expect(s.name).toBe("VIVA_ANSWER_REVIEW");
+    if (s.name === "VIVA_ANSWER_REVIEW") {
+      expect(s.coverage).toEqual(VIVA_COVERAGE);
+      expect(s.transcript).toEqual(APPROVED);
+    }
+    // Advance through all questions to VIVA_COMPLETE.
+    s = reduceSession(s, { type: "NEXT_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 94_100 }, deps).state;
+    expect(s.name).toBe("VIVA_ASKING");
+    if (s.name === "VIVA_ASKING") expect(s.viva.index).toBe(1);
+    // Answer q1 and q2 via the same typed path, then complete.
+    for (let q = 1; q < 3; q += 1) {
+      const attemptId = `vv-viva-q${q}`;
+      s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 94_200 + q * 1000 }, deps).state;
+      s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 94_300 + q * 1000 }, deps).state;
+      s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId, now: 94_400 + q * 1000 }, deps).state;
+      s = reduceSession(
+        s,
+        {
+          type: "VIVA_SELF_REVIEW_DONE",
+          attemptId,
+          transcript: APPROVED,
+          textMetrics: TEXT_METRICS,
+          coverage: VIVA_COVERAGE,
+          now: 94_500 + q * 1000,
+        },
+        deps,
+      ).state;
+      expect(s.name).toBe("VIVA_ANSWER_REVIEW");
+      s = reduceSession(s, { type: "NEXT_VIVA_QUESTION", attemptId, now: 94_600 + q * 1000 }, deps).state;
+    }
+    expect(s.name).toBe("VIVA_COMPLETE");
+    if (s.name === "VIVA_COMPLETE") {
+      expect(s.summary.answeredCount).toBe(3);
+      expect(s.summary.notVerifiableCount).toBe(0);
+      expect(s.summary.weightedFraction).toBe(1);
+      expect(s.summary.perFollowUp).toHaveLength(3);
+    }
+  });
+
+  it("EXIT_VIVA from VIVA_COMPLETE restores the base REVIEW coverage", () => {
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
+    s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "vv-viva-q0", now: 93_300 }, deps).state;
+    s = reduceSession(
+      s,
+      {
+        type: "VIVA_SELF_REVIEW_DONE",
+        attemptId: "vv-viva-q0",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: VIVA_COVERAGE,
+        now: 94_000,
+      },
+      deps,
+    ).state;
+    s = reduceSession(s, { type: "NEXT_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 94_100 }, deps).state;
+    // Exit immediately from VIVA_ASKING (q1) restores base REVIEW.
+    const before = s;
+    const { state, commands } = reduceSession(s, { type: "EXIT_VIVA", now: 95_000 }, deps);
+    expect(state.name).toBe("REVIEW");
+    if (state.name === "REVIEW") {
+      expect(state.coverage).toEqual(COVERAGE_REPORT);
+      expect(state.attempt.attemptId).toBe("rv-attempt");
+    }
+    // Exiting from an asking state revokes the in-flight viva recording.
+    if (before.name === "VIVA_ASKING") {
+      expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "vv-viva-q1" });
+    }
+  });
+
+  it("EXIT_VIVA from VIVA_SPEAKING (armed) stops the deadline and revokes the recording", () => {
+    const armedLocal: ReducerDeps = { ...deps, audioArmed: true };
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, armedLocal).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, armedLocal).state;
+    s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, armedLocal).state;
+    const { state, commands } = reduceSession(s, { type: "EXIT_VIVA", now: 92_500 }, armedLocal);
+    expect(state.name).toBe("REVIEW");
+    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "vv-viva-q0" });
+  });
+
+  it("APPROVE_VIVA_TRANSCRIPT stale-drops a mismatched attemptId", () => {
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
+    s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    // Place into VIVA_TRANSCRIPT_REVIEW via RECORDING_READY then TRANSCRIPT_READY.
+    s = reduceSession(s, { type: "RECORDING_READY", attemptId: "vv-viva-q0", now: 93_300 }, armed).state;
+    expect(s.name).toBe("VIVA_PROCESSING");
+    s = reduceSession(s, { type: "METRICS_READY", attemptId: "vv-viva-q0", metrics: METRICS, now: 93_400 }, armed).state;
+    s = reduceSession(s, { type: "TRANSCRIBE_REQUESTED", attemptId: "vv-viva-q0", now: 93_450 }, armed).state;
+    s = reduceSession(
+      s,
+      { type: "TRANSCRIPT_READY", attemptId: "vv-viva-q0", draft: DRAFT, now: 93_500 },
+      armed,
+    ).state;
+    expect(s.name).toBe("VIVA_TRANSCRIPT_REVIEW");
+    const { state } = reduceSession(
+      s,
+      {
+        type: "APPROVE_VIVA_TRANSCRIPT",
+        attemptId: "stale",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: VIVA_COVERAGE,
+        now: 94_000,
+      },
+      armed,
+    );
+    expect(state.name).toBe("VIVA_TRANSCRIPT_REVIEW");
+  });
+
+  it("VIVA_COVERAGE_REFINED replaces coverage on VIVA_ANSWER_REVIEW (stale drop)", () => {
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, deps).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, deps).state;
+    s = reduceSession(s, { type: "START_VIVA_SPEAKING", now: 92_200 }, deps).state;
+    s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "vv", now: 93_200 }, deps).state;
+    s = reduceSession(s, { type: "START_TYPED_REVIEW", attemptId: "vv-viva-q0", now: 93_300 }, deps).state;
+    s = reduceSession(
+      s,
+      {
+        type: "VIVA_SELF_REVIEW_DONE",
+        attemptId: "vv-viva-q0",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: VIVA_COVERAGE,
+        now: 94_000,
+      },
+      deps,
+    ).state;
+    const refined: CoverageReport = { ...VIVA_COVERAGE, weightedFraction: 0.5, fraction: 0.5 };
+    const { state } = reduceSession(
+      s,
+      { type: "VIVA_COVERAGE_REFINED", attemptId: "vv-viva-q0", coverage: refined, now: 94_100 },
+      deps,
+    );
+    if (state.name === "VIVA_ANSWER_REVIEW") expect(state.coverage).toEqual(refined);
+    // Stale attemptId is dropped.
+    const stale = reduceSession(
+      s,
+      { type: "VIVA_COVERAGE_REFINED", attemptId: "stale", coverage: refined, now: 94_200 },
+      deps,
+    ).state;
+    if (stale.name === "VIVA_ANSWER_REVIEW") expect(stale.coverage).toEqual(VIVA_COVERAGE);
+  });
+
+  it("SPIN_AGAIN from a viva state revokes the viva recording and draws again", () => {
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, armed).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, armed).state;
+    const { state, commands } = reduceSession(s, { type: "SPIN_AGAIN", requestId: "rnew", now: 93_000 }, armed);
+    expect(state.name).toBe("DRAWING");
+    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "vv-viva-q0" });
+  });
+
+  it("CHANGE_SELECTION from a viva state cleans up and returns to IDLE", () => {
+    let s = reviewState();
+    s = reduceSession(s, { type: "START_VIVA", requestId: "vv", now: 92_000 }, armed).state;
+    s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, armed).state;
+    const { state, commands } = reduceSession(
+      s,
+      { type: "CHANGE_SELECTION", selection: recallSelection("respiratory-physiotherapy") },
+      armed,
+    );
+    expect(state.name).toBe("IDLE");
+    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "vv-viva-q0" });
+  });
+});

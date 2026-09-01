@@ -248,6 +248,24 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
       allCaseIds.push(...topic.cases.map((item) => item.caseId));
       allFollowUpIds.push(...topic.followUps.map((item) => item.followUpId));
 
+      // v0.6 viva questions: targetConceptIds must resolve to a concept in some
+      // rubric of this topic, and question ids must be unique within the topic.
+      const topicConceptIds = new Set(
+        topic.rubrics.flatMap((r) => r.concepts.map((c) => c.conceptId)),
+      );
+      const vivaQuestionIds: string[] = [];
+      for (const q of topic.vivaQuestions ?? []) {
+        vivaQuestionIds.push(q.id);
+        for (const target of q.targetConceptIds) {
+          if (!topicConceptIds.has(target)) {
+            errors.push(
+              `topic ${topic.topicId}: viva question ${q.id} references missing concept ${target}`,
+            );
+          }
+        }
+      }
+      assertUnique(vivaQuestionIds, `viva question id in topic ${topic.topicId}`, errors);
+
       const hasGuided = topic.variants.some((v) => v.challengePreset === "GUIDED");
       if (!hasGuided) {
         errors.push(`topic ${topic.topicId}: every topic must have at least one GUIDED variant`);

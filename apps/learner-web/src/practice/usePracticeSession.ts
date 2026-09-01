@@ -208,7 +208,11 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       stopDeadline();
       const s = stateRef.current;
       const requestId =
-        s.name === "SPEAKING" || s.name === "RESEARCHING" ? s.requestId : "";
+        s.name === "SPEAKING" || s.name === "RESEARCHING"
+          ? s.requestId
+          : s.name === "VIVA_SPEAKING"
+            ? s.viva.requestId
+            : "";
       deadlineRef.current = { deadlineAt, requestId };
       const tick = () => {
         const d = deadlineRef.current;
@@ -227,13 +231,28 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   );
 
   const focusView = useCallback(
-    (target: "topic" | "speaking" | "complete" | "processing" | "review") => {
+    (
+      target:
+        | "topic"
+        | "speaking"
+        | "complete"
+        | "processing"
+        | "review"
+        | "viva-asking"
+        | "viva-processing"
+        | "viva-review"
+        | "viva-complete",
+    ) => {
       const ids: Record<typeof target, string> = {
         topic: "topic-heading",
         speaking: "speaking-heading",
         complete: "complete-heading",
         processing: "processing-heading",
         review: "review-heading",
+        "viva-asking": "viva-asking-heading",
+        "viva-processing": "viva-processing-heading",
+        "viva-review": "viva-review-heading",
+        "viva-complete": "viva-complete-heading",
       };
       const id = ids[target];
       // Commands are drained from an effect after React commits the target view,
@@ -553,13 +572,16 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     [],
   );
 
-  // Cancel any in-flight semantic refinement when the learner leaves review or opts out.
+  // Cancel any in-flight semantic refinement when the learner leaves a coverage
+  // view (main REVIEW or a viva answer review) or opts out of semantic coverage.
+  const inCoverageView =
+    state.name === "REVIEW" || state.name === "VIVA_ANSWER_REVIEW";
   useEffect(() => {
-    if (state.name !== "REVIEW" || !settings.semanticCoverage) {
+    if (!inCoverageView || !settings.semanticCoverage) {
       embeddingSessionRef.current?.cancel();
       embeddingSessionRef.current = null;
     }
-  }, [state.name, settings.semanticCoverage]);
+  }, [inCoverageView, settings.semanticCoverage]);
 
   // --- Actions ---
 
@@ -728,6 +750,8 @@ export function usePracticeSession(deps: OrchestratorDeps) {
 
   // v0.5: supplement lexical coverage with possible meaning-match evidence. The
   // lexical score remains authoritative; an unavailable semantic pass is a no-op.
+  // v0.6: also refines a viva defense answer (VIVA_ANSWER_REVIEW), dispatching
+  // VIVA_COVERAGE_REFINED with no Refinement Delta (viva has no retry delta).
   const requestSemanticRefinement = useCallback(
     (
       attemptId: string,
@@ -735,6 +759,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       concepts: readonly Concept[],
       baseline: CoverageReport,
       rubricCacheKey: string,
+      mode: "REVIEW" | "VIVA" = "REVIEW",
     ) => {
       if (!embedding || !settings.semanticCoverage) return;
       const segmentTexts = segmentTranscript(text);
@@ -786,6 +811,18 @@ export function usePracticeSession(deps: OrchestratorDeps) {
           embeddings: conceptEmbeddings,
         });
         const current = stateRef.current;
+        if (mode === "VIVA") {
+          if (current.name !== "VIVA_ANSWER_REVIEW" || current.attempt.attemptId !== attemptId) {
+            return;
+          }
+          dispatch({
+            type: "VIVA_COVERAGE_REFINED",
+            attemptId,
+            coverage: refined,
+            now: now(),
+          });
+          return;
+        }
         if (current.name !== "REVIEW" || current.attempt.attemptId !== attemptId) return;
         const prior = current.attempt.history.at(-1);
         const currentEntry = toAttemptHistoryEntry(
@@ -893,6 +930,210 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     dispatch({ type: "START_SECOND_ATTEMPT", requestId: newRequestId(), now: now() });
   }, [dispatch, now]);
 
+  // --- v0.6 viva defense-ladder actions ---
+
+  /** Resolve the current viva question's target concepts from the variant rubric. */
+  const vivaTargetConcepts = useCallback(
+    (question: { targetConceptIds: readonly string[] }): readonly Concept[] => {
+      const s = stateRef.current;
+      if (!("topic" in s)) return [];
+      const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
+      const wanted = new Set(question.targetConceptIds);
+      return concepts.filter((c) => wanted.has(c.conceptId));
+    },
+    [pack],
+  );
+
+  const startViva = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "REVIEW") return;
+    if (s.topic.vivaQuestions.length === 0) return;
+    dispatch({ type: "START_VIVA", requestId: newRequestId(), now: now() });
+  }, [dispatch, now]);
+
+  const beginVivaQuestion = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "VIVA_READY") return;
+    dispatch({ type: "BEGIN_VIVA_QUESTION", attemptId: s.attempt.attemptId, now: now() });
+  }, [dispatch, now]);
+
+  const startVivaSpeaking = useCallback(async (): Promise<boolean> => {
+    const before = stateRef.current;
+    if (before.name !== "VIVA_ASKING" || audioStartPendingRef.current) return false;
+    const attemptId = before.attempt.attemptId;
+    if (!audio || audioStatus !== "READY") {
+      dispatch({ type: "START_VIVA_SPEAKING", now: now() });
+      return true;
+    }
+    audioStartPendingRef.current = true;
+    setAudioStatus("STARTING");
+    try {
+      await audio.recorder.arm();
+      const current = stateRef.current;
+      const stillCurrent =
+        current.name === "VIVA_ASKING" &&
+        "attempt" in current &&
+        current.attempt.attemptId === attemptId;
+      if (!stillCurrent) {
+        audio.recorder.release();
+        setAudioStatus("READY");
+        return false;
+      }
+      setAudioArmed(true);
+      reducerDepsRef.current = { ...reducerDepsRef.current, audioArmed: true };
+      dispatch({ type: "START_VIVA_SPEAKING", now: now() });
+      return true;
+    } catch (err) {
+      setAudioArmed(false);
+      reducerDepsRef.current = { ...reducerDepsRef.current, audioArmed: false };
+      setAudioStatus("UNAVAILABLE");
+      setAudioIssue(isAudioError(err) ? err.code : "AUDIO_MIC_UNAVAILABLE");
+      dispatch({ type: "START_VIVA_SPEAKING", now: now() });
+      return true;
+    } finally {
+      audioStartPendingRef.current = false;
+    }
+  }, [audio, audioStatus, dispatch, now]);
+
+  const vivaRubricCacheKey = useCallback(
+    (questionId: string): string => {
+      const s = stateRef.current;
+      if (!("topic" in s)) return questionId;
+      return [
+        pack.packId,
+        pack.version,
+        s.topic.topicRef.variantId,
+        s.topic.topicRef.rubricId,
+        questionId,
+        EMBEDDING_MODEL.version,
+      ].join(":");
+    },
+    [pack],
+  );
+
+  const approveVivaTranscript = useCallback(
+    (text: string) => {
+      const s = stateRef.current;
+      if (s.name !== "VIVA_TRANSCRIPT_REVIEW") return;
+      const question = s.viva.questions[s.viva.index];
+      if (!question) return;
+      const targets = vivaTargetConcepts(question);
+      const transcript: ApprovedTranscript = {
+        rawText: s.draft.text,
+        text,
+        approvedAt: wall.isoNow(),
+        wasEdited: text !== s.draft.text,
+      };
+      const textMetrics = computeTextMetrics({ text, spokenMs: s.metrics.spokenMs });
+      const coverage = scoreCoverage(text, targets);
+      const attemptId = s.attempt.attemptId;
+      dispatch({
+        type: "APPROVE_VIVA_TRANSCRIPT",
+        attemptId,
+        transcript,
+        textMetrics,
+        coverage,
+        now: now(),
+      });
+      requestSemanticRefinement(
+        attemptId,
+        text,
+        targets,
+        coverage,
+        vivaRubricCacheKey(question.id),
+        "VIVA",
+      );
+    },
+    [wall, dispatch, now, requestSemanticRefinement, vivaTargetConcepts, vivaRubricCacheKey],
+  );
+
+  const submitVivaSelfReview = useCallback(
+    (text: string) => {
+      const s = stateRef.current;
+      if (s.name !== "VIVA_SELF_REVIEW") return;
+      const question = s.viva.questions[s.viva.index];
+      if (!question) return;
+      const targets = vivaTargetConcepts(question);
+      const transcript: ApprovedTranscript = {
+        text,
+        approvedAt: wall.isoNow(),
+        wasEdited: false,
+      };
+      const textMetrics = computeTextMetrics({ text, spokenMs: s.metrics?.spokenMs });
+      const coverage = scoreCoverage(text, targets);
+      const attemptId = s.attempt.attemptId;
+      dispatch({
+        type: "VIVA_SELF_REVIEW_DONE",
+        attemptId,
+        transcript,
+        textMetrics,
+        coverage,
+        now: now(),
+      });
+      requestSemanticRefinement(
+        attemptId,
+        text,
+        targets,
+        coverage,
+        vivaRubricCacheKey(question.id),
+        "VIVA",
+      );
+    },
+    [wall, dispatch, now, requestSemanticRefinement, vivaTargetConcepts, vivaRubricCacheKey],
+  );
+
+  const requestVivaTranscription = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "VIVA_PROCESSING" && s.name !== "VIVA_SELF_REVIEW") return;
+    dispatch({ type: "TRANSCRIBE_REQUESTED", attemptId: s.attempt.attemptId, now: now() });
+  }, [dispatch, now]);
+
+  const declineVivaTranscription = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "VIVA_PROCESSING") return;
+    dispatch({
+      type: "TRANSCRIPTION_UNAVAILABLE",
+      attemptId: s.attempt.attemptId,
+      reason: "DECLINED",
+      now: now(),
+    });
+  }, [dispatch, now]);
+
+  const startVivaTypedReview = useCallback(() => {
+    const s = stateRef.current;
+    if (
+      s.name !== "VIVA_ATTEMPT_COMPLETE" &&
+      s.name !== "VIVA_PROCESSING" &&
+      s.name !== "VIVA_TRANSCRIPT_REVIEW"
+    ) {
+      return;
+    }
+    dispatch({ type: "START_TYPED_REVIEW", attemptId: s.attempt.attemptId, now: now() });
+  }, [dispatch, now]);
+
+  const nextVivaQuestion = useCallback(() => {
+    const s = stateRef.current;
+    if (s.name !== "VIVA_ANSWER_REVIEW") return;
+    dispatch({ type: "NEXT_VIVA_QUESTION", attemptId: s.attempt.attemptId, now: now() });
+  }, [dispatch, now]);
+
+  const exitViva = useCallback(() => {
+    const s = stateRef.current;
+    const vivaNames = [
+      "VIVA_READY",
+      "VIVA_ASKING",
+      "VIVA_SPEAKING",
+      "VIVA_ATTEMPT_COMPLETE",
+      "VIVA_PROCESSING",
+      "VIVA_TRANSCRIPT_REVIEW",
+      "VIVA_SELF_REVIEW",
+      "VIVA_ANSWER_REVIEW",
+      "VIVA_COMPLETE",
+    ] as const;
+    if (!vivaNames.includes(s.name as (typeof vivaNames)[number])) return;
+    dispatch({ type: "EXIT_VIVA", now: now() });
+  }, [dispatch, now]);
+
   // --- Derived UI data ---
 
   const subjects = listSubjects(pack);
@@ -921,7 +1162,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     challengeVisible,
     eligibleCount,
     audio: audioUi,
-    semanticRefining,
+    semanticRefining: semanticRefining && inCoverageView,
     actions: {
       spin,
       spinAgain,
@@ -940,6 +1181,16 @@ export function usePracticeSession(deps: OrchestratorDeps) {
       approveTranscript,
       submitSelfReview,
       startSecondAttempt,
+      startViva,
+      beginVivaQuestion,
+      startVivaSpeaking,
+      approveVivaTranscript,
+      submitVivaSelfReview,
+      requestVivaTranscription,
+      declineVivaTranscription,
+      startVivaTypedReview,
+      nextVivaQuestion,
+      exitViva,
     },
   };
 }

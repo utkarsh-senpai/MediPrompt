@@ -709,3 +709,148 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     expect(rec.revoked).toContain("blob:fake-0");
   });
 });
+
+// --- v0.6 viva defense ladder (typed path; reuses the transcript pipeline) ---
+
+describe("usePracticeSession — v0.6 viva", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function vivaSetup() {
+    const nowRef = { value: 0 };
+    const monotonic = { now: () => nowRef.value };
+    const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
+    const random = seededRandom(123);
+    const bagStore = new InMemoryBagStore();
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: DEFAULT_SETTINGS,
+        monotonic,
+        wall,
+        random,
+        bagStore,
+        drawDelayMs: 0,
+      }),
+    );
+    const advance = (ms: number) =>
+      act(() => {
+        nowRef.value += ms;
+        vi.advanceTimersByTime(ms);
+      });
+    return { hook, advance };
+  }
+
+  /** Drive a cardiovascular Defend spin to REVIEW via the typed self-review path. */
+  async function toReview(ctx: ReturnType<typeof vivaSetup>) {
+    const { hook, advance } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    act(() =>
+      result.current.actions.setSelection({
+        challenge: "VIVA",
+        subjectId: "cardiovascular-physiotherapy",
+      }),
+    );
+    act(() => result.current.actions.spin());
+    const drawn = currentState();
+    if (drawn.name !== "TOPIC_READY") throw new Error("topic not drawn");
+    expect(drawn.topic.vivaQuestions.length).toBe(3);
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    act(() => result.current.actions.startTypedReview());
+    act(() => result.current.actions.submitSelfReview("safety assessment and secondary prevention"));
+    const reviewed = currentState();
+    if (reviewed.name !== "REVIEW") throw new Error("review not reached");
+  }
+
+  it("runs a full typed viva: review → viva → 3 answers → complete → exit to review", async () => {
+    const ctx = vivaSetup();
+    const { hook } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    await toReview(ctx);
+
+    act(() => result.current.actions.startViva());
+    expect(currentState().name).toBe("VIVA_READY");
+
+    act(() => result.current.actions.beginVivaQuestion());
+    expect(currentState().name).toBe("VIVA_ASKING");
+
+    for (let q = 0; q < 3; q += 1) {
+      if (currentState().name !== "VIVA_ASKING") throw new Error(`q${q} not asking`);
+      await act(async () => {
+        await result.current.actions.startVivaSpeaking();
+      });
+      expect(currentState().name).toBe("VIVA_SPEAKING");
+      ctx.advance(120_000);
+      expect(currentState().name).toBe("VIVA_ATTEMPT_COMPLETE");
+      act(() => result.current.actions.startVivaTypedReview());
+      expect(currentState().name).toBe("VIVA_SELF_REVIEW");
+      // Each question targets a different concept; answer with that concept's phrase.
+      const answer =
+        q === 0
+          ? "safety assessment with secondary prevention and patient goals"
+          : q === 1
+            ? "individualized exercise with supervision and risk stratification"
+            : "shared decision making with escalation for recurrent symptoms";
+      act(() => result.current.actions.submitVivaSelfReview(answer));
+      expect(currentState().name).toBe("VIVA_ANSWER_REVIEW");
+      const answerState = currentState();
+      if (answerState.name === "VIVA_ANSWER_REVIEW") {
+        expect(answerState.coverage.verifiable).toBe(true);
+        expect(answerState.coverage.hitCount).toBe(1);
+      }
+      act(() => result.current.actions.nextVivaQuestion());
+    }
+    expect(currentState().name).toBe("VIVA_COMPLETE");
+    const completeState = currentState();
+    if (completeState.name === "VIVA_COMPLETE") {
+      expect(completeState.summary.answeredCount).toBe(3);
+      expect(completeState.summary.weightedFraction).toBe(1);
+    }
+
+    act(() => result.current.actions.exitViva());
+    expect(currentState().name).toBe("REVIEW");
+    const reviewAgain = currentState();
+    if (reviewAgain.name === "REVIEW") {
+      expect(reviewAgain.coverage.verifiable).toBe(true);
+    }
+  });
+
+  it("startViva is a no-op before REVIEW is reached", async () => {
+    const ctx = vivaSetup();
+    const { hook } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    act(() =>
+      result.current.actions.setSelection({
+        challenge: "GUIDED",
+        subjectId: "cardiovascular-physiotherapy",
+      }),
+    );
+    act(() => result.current.actions.spin());
+    if (currentState().name !== "TOPIC_READY") throw new Error("topic not drawn");
+    // startViva guards on REVIEW; from TOPIC_READY it must be a no-op.
+    act(() => result.current.actions.startViva());
+    expect(currentState().name).toBe("TOPIC_READY");
+  });
+
+  it("exitViva from VIVA_READY returns to REVIEW", async () => {
+    const ctx = vivaSetup();
+    const { hook } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    await toReview(ctx);
+    act(() => result.current.actions.startViva());
+    expect(currentState().name).toBe("VIVA_READY");
+    act(() => result.current.actions.exitViva());
+    expect(currentState().name).toBe("REVIEW");
+  });
+});

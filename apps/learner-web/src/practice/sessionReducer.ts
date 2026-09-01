@@ -1,6 +1,7 @@
-import { eligibleVariantIds, toTopicSnapshot, findVariant } from "@/content/packQuery";
+import { eligibleVariantIds, toTopicSnapshot, findVariant, vivaQuestionsFor } from "@/content/packQuery";
 import { fingerprint } from "@/practice/shuffledBag";
 import { startDeadline } from "@/practice/deadlineTimer";
+import { summarizeViva } from "@/scoring/vivaSummary";
 import type {
   AttemptDraft,
   ChallengePreset,
@@ -8,13 +9,21 @@ import type {
   PracticeSelection,
   ReducerDeps,
   ReducerResult,
+  ReviewState,
   SessionEvent,
   SessionState,
   TopicSnapshot,
+  VivaAnswer,
+  VivaRuntime,
 } from "@/practice/types";
+import { MAX_VIVA_ANSWERS } from "@/practice/types";
 
 /** Bounds session-local transcript/coverage history during repeated practice. */
 const MAX_PRIOR_ATTEMPTS = 19;
+
+/** Per-defense speaking window. Shorter than the main attempt: a viva answer is
+ * a bounded defense, not a full monologue. */
+export const VIVA_SPEAKING_SECONDS = 120;
 
 export function initialState(selection: PracticeSelection): SessionState {
   return { name: "IDLE", selection };
@@ -72,6 +81,60 @@ function deadlineFor(
   return startDeadline(now, seconds * 1000);
 }
 
+function isVivaState(state: SessionState): boolean {
+  switch (state.name) {
+    case "VIVA_READY":
+    case "VIVA_ASKING":
+    case "VIVA_SPEAKING":
+    case "VIVA_ATTEMPT_COMPLETE":
+    case "VIVA_PROCESSING":
+    case "VIVA_TRANSCRIPT_REVIEW":
+    case "VIVA_SELF_REVIEW":
+    case "VIVA_ANSWER_REVIEW":
+    case "VIVA_COMPLETE":
+      return true;
+    default:
+      return false;
+  }
+}
+
+function vivaAttempt(
+  requestId: string,
+  index: number,
+  baseAttemptIndex: number,
+  topic: TopicSnapshot,
+  deps: ReducerDeps,
+): AttemptDraft {
+  return {
+    sessionId: requestId,
+    attemptId: `${requestId}-viva-q${index}`,
+    topicRef: topic.topicRef,
+    mode: topic.mode,
+    challenge: topic.challenge,
+    supportLevel: topic.supportLevel,
+    register: topic.register,
+    timePolicy: topic.timePolicy,
+    challengeIdentity: topic.challengeIdentity,
+    createdAt: deps.nowIso,
+    attemptIndex: baseAttemptIndex + index + 1,
+    history: [],
+  };
+}
+
+/** Commands to release the in-flight viva recording/transcription on exit. */
+function vivaCleanup(state: SessionState): Command[] {
+  if (!isVivaState(state) || !("attempt" in state)) return [];
+  const commands: Command[] = [];
+  if (
+    state.name === "VIVA_PROCESSING" &&
+    state.transcription === "RUNNING"
+  ) {
+    commands.push({ type: "CANCEL_TRANSCRIPTION", attemptId: state.attempt.attemptId });
+  }
+  commands.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
+  return commands;
+}
+
 function noChange(state: SessionState): ReducerResult {
   return { state, commands: [] };
 }
@@ -88,6 +151,12 @@ export function reduceSession(
       }
       // Post-attempt states hold a recording (and maybe a running transcription);
       // leaving them releases both. ATTEMPT_COMPLETE only holds one when armed.
+      if (isVivaState(state)) {
+        return {
+          state: { name: "IDLE", selection: event.selection },
+          commands: vivaCleanup(state),
+        };
+      }
       if (
         state.name === "PROCESSING" ||
         state.name === "TRANSCRIPT_REVIEW" ||
@@ -144,6 +213,10 @@ export function reduceSession(
           cleanup.push({ type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId });
           break;
         default:
+          if (isVivaState(state)) {
+            cleanup.push(...vivaCleanup(state));
+            break;
+          }
           return noChange(state);
       }
       return {
@@ -275,6 +348,26 @@ export function reduceSession(
     }
 
     case "TIMER_ELAPSED": {
+      if (state.name === "VIVA_SPEAKING") {
+        if (state.viva.requestId !== event.requestId) return noChange(state);
+        const commands: Command[] = [
+          { type: "STOP_DEADLINE" },
+          { type: "FOCUS_VIEW", target: "complete" },
+        ];
+        if (deps.audioArmed) {
+          commands.push({ type: "STOP_RECORDING", attemptId: state.attempt.attemptId });
+        }
+        return {
+          state: {
+            name: "VIVA_ATTEMPT_COMPLETE",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+          },
+          commands,
+        };
+      }
       if (
         (state.name !== "SPEAKING" && state.name !== "RESEARCHING") ||
         state.requestId !== event.requestId
@@ -315,6 +408,25 @@ export function reduceSession(
     }
 
     case "CLOSE_TIMER": {
+      if (state.name === "VIVA_SPEAKING") {
+        const commands: Command[] = [
+          { type: "STOP_DEADLINE" },
+          { type: "FOCUS_VIEW", target: "complete" },
+        ];
+        if (deps.audioArmed) {
+          commands.push({ type: "STOP_RECORDING", attemptId: state.attempt.attemptId });
+        }
+        return {
+          state: {
+            name: "VIVA_ATTEMPT_COMPLETE",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+          },
+          commands,
+        };
+      }
       if (state.name === "RESEARCHING") {
         // Abandon research, stay on the drawn topic.
         return {
@@ -356,6 +468,24 @@ export function reduceSession(
     // All keyed by attemptId: stale async results are dropped, never applied.
 
     case "RECORDING_READY": {
+      if (state.name === "VIVA_ATTEMPT_COMPLETE" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "VIVA_PROCESSING",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+            metrics: null,
+            draft: null,
+            transcription: "IDLE",
+          },
+          commands: [
+            { type: "RUN_ANALYSIS", attemptId: event.attemptId },
+            { type: "FOCUS_VIEW", target: "viva-processing" },
+          ],
+        };
+      }
       if (state.name !== "ATTEMPT_COMPLETE" || state.attempt.attemptId !== event.attemptId) {
         return noChange(state);
       }
@@ -379,6 +509,53 @@ export function reduceSession(
     case "START_TYPED_REVIEW": {
       // The typed/self-review path is always available, including when audio or
       // transcription succeeded — the learner may simply prefer typing.
+      if (state.name === "VIVA_ATTEMPT_COMPLETE" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "VIVA_SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+            metrics: null,
+            transcriptionIssue: null,
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+        };
+      }
+      if (state.name === "VIVA_PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        const commands: Command[] = [];
+        if (state.transcription === "RUNNING") {
+          commands.push({ type: "CANCEL_TRANSCRIPTION", attemptId: event.attemptId });
+        }
+        commands.push({ type: "FOCUS_VIEW", target: "viva-review" });
+        return {
+          state: {
+            name: "VIVA_SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            transcriptionIssue: null,
+          },
+          commands,
+        };
+      }
+      if (state.name === "VIVA_TRANSCRIPT_REVIEW" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "VIVA_SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            transcriptionIssue: null,
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+        };
+      }
       if (state.name === "ATTEMPT_COMPLETE" && state.attempt.attemptId === event.attemptId) {
         return {
           state: {
@@ -427,6 +604,26 @@ export function reduceSession(
     }
 
     case "METRICS_READY": {
+      if (state.name === "VIVA_PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        if (state.draft !== null) {
+          return {
+            state: {
+              name: "VIVA_TRANSCRIPT_REVIEW",
+              selection: state.selection,
+              topic: state.topic,
+              viva: state.viva,
+              attempt: state.attempt,
+              metrics: event.metrics,
+              draft: state.draft,
+            },
+            commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+          };
+        }
+        return { state: { ...state, metrics: event.metrics }, commands: [] };
+      }
+      if (state.name === "VIVA_SELF_REVIEW" && state.attempt.attemptId === event.attemptId) {
+        return { state: { ...state, metrics: event.metrics }, commands: [] };
+      }
       if (state.name === "PROCESSING" && state.attempt.attemptId === event.attemptId) {
         // Audio-derived metrics are final at this point; editing a transcript
         // later never changes them.
@@ -454,6 +651,31 @@ export function reduceSession(
     }
 
     case "TRANSCRIBE_REQUESTED": {
+      if (state.name === "VIVA_PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        if (state.transcription === "RUNNING") return noChange(state);
+        return {
+          state: { ...state, transcription: "RUNNING" },
+          commands: [{ type: "START_TRANSCRIPTION", attemptId: event.attemptId }],
+        };
+      }
+      if (state.name === "VIVA_SELF_REVIEW" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "VIVA_PROCESSING",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            draft: null,
+            transcription: "RUNNING",
+          },
+          commands: [
+            { type: "START_TRANSCRIPTION", attemptId: event.attemptId },
+            { type: "FOCUS_VIEW", target: "viva-processing" },
+          ],
+        };
+      }
       if (state.name === "PROCESSING" && state.attempt.attemptId === event.attemptId) {
         if (state.transcription === "RUNNING") return noChange(state);
         return {
@@ -486,6 +708,27 @@ export function reduceSession(
 
     case "TRANSCRIPT_READY": {
       if (
+        state.name === "VIVA_PROCESSING" &&
+        state.attempt.attemptId === event.attemptId &&
+        state.transcription === "RUNNING"
+      ) {
+        if (state.metrics !== null) {
+          return {
+            state: {
+              name: "VIVA_TRANSCRIPT_REVIEW",
+              selection: state.selection,
+              topic: state.topic,
+              viva: state.viva,
+              attempt: state.attempt,
+              metrics: state.metrics,
+              draft: event.draft,
+            },
+            commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+          };
+        }
+        return { state: { ...state, draft: event.draft, transcription: "IDLE" }, commands: [] };
+      }
+      if (
         state.name !== "PROCESSING" ||
         state.attempt.attemptId !== event.attemptId ||
         state.transcription !== "RUNNING"
@@ -513,6 +756,20 @@ export function reduceSession(
     }
 
     case "TRANSCRIPTION_UNAVAILABLE": {
+      if (state.name === "VIVA_PROCESSING" && state.attempt.attemptId === event.attemptId) {
+        return {
+          state: {
+            name: "VIVA_SELF_REVIEW",
+            selection: state.selection,
+            topic: state.topic,
+            viva: state.viva,
+            attempt: state.attempt,
+            metrics: state.metrics,
+            transcriptionIssue: event.reason,
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+        };
+      }
       if (state.name !== "PROCESSING" || state.attempt.attemptId !== event.attemptId) {
         return noChange(state);
       }
@@ -623,6 +880,192 @@ export function reduceSession(
         },
         commands: [],
       };
+    }
+
+    // --- v0.6 viva defense-ladder events ---
+
+    case "START_VIVA": {
+      if (state.name !== "REVIEW") return noChange(state);
+      const questions = vivaQuestionsFor(deps.pack, state.topic.topicRef);
+      if (questions.length === 0) return noChange(state);
+      const base: ReviewState = state;
+      const runtime: VivaRuntime = {
+        requestId: event.requestId,
+        questions,
+        index: 0,
+        answers: [],
+        base,
+      };
+      const attempt = vivaAttempt(
+        event.requestId,
+        0,
+        base.attempt.attemptIndex,
+        state.topic,
+        deps,
+      );
+      return {
+        state: {
+          name: "VIVA_READY",
+          selection: state.selection,
+          topic: state.topic,
+          viva: runtime,
+          attempt,
+        },
+        // Release the main attempt's recording; the viva uses its own clip.
+        commands: [
+          { type: "REVOKE_RECORDING", attemptId: base.attempt.attemptId },
+          { type: "FOCUS_VIEW", target: "viva-asking" },
+        ],
+      };
+    }
+
+    case "BEGIN_VIVA_QUESTION": {
+      if (state.name !== "VIVA_READY") return noChange(state);
+      if (state.attempt.attemptId !== event.attemptId) return noChange(state);
+      return {
+        state: {
+          name: "VIVA_ASKING",
+          selection: state.selection,
+          topic: state.topic,
+          viva: state.viva,
+          attempt: state.attempt,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "viva-asking" }],
+      };
+    }
+
+    case "START_VIVA_SPEAKING": {
+      if (state.name !== "VIVA_ASKING") return noChange(state);
+      const deadlineAt = deadlineFor(event.now, VIVA_SPEAKING_SECONDS);
+      const commands: Command[] = [
+        { type: "START_DEADLINE", deadlineAt },
+        { type: "FOCUS_VIEW", target: "speaking" },
+      ];
+      if (deps.audioArmed) {
+        commands.push({ type: "START_RECORDING", attemptId: state.attempt.attemptId });
+      }
+      return {
+        state: {
+          name: "VIVA_SPEAKING",
+          selection: state.selection,
+          topic: state.topic,
+          viva: state.viva,
+          attempt: state.attempt,
+          deadlineAt,
+        },
+        commands,
+      };
+    }
+
+    case "APPROVE_VIVA_TRANSCRIPT": {
+      if (
+        state.name !== "VIVA_TRANSCRIPT_REVIEW" ||
+        state.attempt.attemptId !== event.attemptId
+      ) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          name: "VIVA_ANSWER_REVIEW",
+          selection: state.selection,
+          topic: state.topic,
+          viva: state.viva,
+          attempt: state.attempt,
+          metrics: state.metrics,
+          textMetrics: event.textMetrics,
+          transcript: event.transcript,
+          coverage: event.coverage,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+      };
+    }
+
+    case "VIVA_SELF_REVIEW_DONE": {
+      if (state.name !== "VIVA_SELF_REVIEW" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      return {
+        state: {
+          name: "VIVA_ANSWER_REVIEW",
+          selection: state.selection,
+          topic: state.topic,
+          viva: state.viva,
+          attempt: state.attempt,
+          metrics: state.metrics,
+          textMetrics: event.textMetrics,
+          transcript: event.transcript,
+          coverage: event.coverage,
+        },
+        commands: [{ type: "FOCUS_VIEW", target: "viva-review" }],
+      };
+    }
+
+    case "VIVA_COVERAGE_REFINED": {
+      if (
+        state.name !== "VIVA_ANSWER_REVIEW" ||
+        state.attempt.attemptId !== event.attemptId
+      ) {
+        return noChange(state);
+      }
+      return { state: { ...state, coverage: event.coverage }, commands: [] };
+    }
+
+    case "NEXT_VIVA_QUESTION": {
+      if (state.name !== "VIVA_ANSWER_REVIEW" || state.attempt.attemptId !== event.attemptId) {
+        return noChange(state);
+      }
+      const question = state.viva.questions[state.viva.index];
+      if (!question) return noChange(state);
+      const completed: VivaAnswer = {
+        questionIndex: state.viva.index,
+        question,
+        attemptId: state.attempt.attemptId,
+        transcript: state.transcript,
+        coverage: state.coverage,
+        textMetrics: state.textMetrics,
+        metrics: state.metrics,
+      };
+      const answers = [...state.viva.answers, completed].slice(-MAX_VIVA_ANSWERS);
+      const nextIndex = state.viva.index + 1;
+      if (nextIndex >= state.viva.questions.length) {
+        return {
+          state: {
+            name: "VIVA_COMPLETE",
+            selection: state.selection,
+            topic: state.topic,
+            viva: { ...state.viva, answers },
+            summary: summarizeViva(answers),
+          },
+          commands: [{ type: "FOCUS_VIEW", target: "viva-complete" }],
+        };
+      }
+      const nextAttempt = vivaAttempt(
+        state.viva.requestId,
+        nextIndex,
+        state.viva.base.attempt.attemptIndex,
+        state.topic,
+        deps,
+      );
+      // Release the just-answered clip before arming the next defense.
+      return {
+        state: {
+          name: "VIVA_ASKING",
+          selection: state.selection,
+          topic: state.topic,
+          viva: { ...state.viva, index: nextIndex, answers },
+          attempt: nextAttempt,
+        },
+        commands: [
+          { type: "REVOKE_RECORDING", attemptId: state.attempt.attemptId },
+          { type: "FOCUS_VIEW", target: "viva-asking" },
+        ],
+      };
+    }
+
+    case "EXIT_VIVA": {
+      if (!isVivaState(state)) return noChange(state);
+      const base = (state as { viva: VivaRuntime }).viva.base;
+      return { state: base, commands: vivaCleanup(state) };
     }
 
     default:
