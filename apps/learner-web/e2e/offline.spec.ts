@@ -6,6 +6,12 @@ import { test, expect } from "@playwright/test";
 test("core loop works online and after an offline reload", async ({ page, context }) => {
   await page.goto("./");
   await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
+  await expect(page.getByText("Curriculum beta · unreviewed draft")).toBeVisible();
+  await expect(page.getByLabel("Subject").locator("option")).toHaveText([
+    "🫁 Respiratory Physiotherapy",
+    "❤️ Cardiovascular Physiotherapy",
+  ]);
+  await expect(page.getByText("Everyday Explanations")).toHaveCount(0);
 
   // Online core loop: spin -> topic -> start timer -> finish.
   await page.getByRole("button", { name: "Spin for a topic" }).click();
@@ -52,7 +58,7 @@ test("core loop works online and after an offline reload", async ({ page, contex
   await context.setOffline(true);
   await page.reload();
   await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
-  await expect(page.getByText(/small reviewed offline fallback/i)).toHaveCount(0);
+  await expect(page.getByText(/same bundled curriculum-beta snapshot/i)).toHaveCount(0);
   await context.setOffline(false);
 });
 
@@ -66,6 +72,20 @@ test("phone-width first-time flow remains usable", async ({ page }) => {
     () => document.documentElement.scrollWidth <= window.innerWidth,
   );
   expect(hasNoHorizontalOverflow).toBe(true);
+});
+
+test("native subject options keep readable contrast", async ({ page }) => {
+  await page.goto("./");
+  const palette = await page.getByLabel("Subject").locator("option").first().evaluate(
+    (option) => {
+      const style = getComputedStyle(option);
+      return { color: style.color, backgroundColor: style.backgroundColor };
+    },
+  );
+  expect(palette).toEqual({
+    color: "rgb(20, 32, 29)",
+    backgroundColor: "rgb(247, 240, 228)",
+  });
 });
 
 test("reduced-motion mode disables ambient and draw animation", async ({ page }) => {
@@ -94,7 +114,7 @@ test("reduced-motion mode disables ambient and draw animation", async ({ page })
 test("Defend depth and Deep Research handoff remain distinct", async ({ page }) => {
   await page.goto("./");
 
-  await page.getByLabel("Subject").selectOption("reasoning-and-tradeoffs");
+  await page.getByLabel("Subject").selectOption("respiratory-physiotherapy");
   const challenge = page.getByRole("group", { name: "Challenge" });
   await expect(challenge).toBeVisible();
   await expect(challenge.getByRole("button")).toHaveCount(3);
@@ -105,11 +125,11 @@ test("Defend depth and Deep Research handoff remain distinct", async ({ page }) 
   expect(topicInfoId).toBeTruthy();
   await topicInfo.click();
   await expect(page.locator(`[id="${topicInfoId}"]`)).toContainText("Fictional scenario:");
-  await expect(page.getByRole("list", { name: "Speaking path" })).toContainText("So what?");
+  await expect(page.getByRole("list", { name: "Speaking path" })).toContainText("Now what?");
 
   await page.reload();
   await page.getByRole("button", { name: "Deep Research" }).click();
-  await page.getByLabel("Subject").selectOption("reasoning-and-tradeoffs");
+  await page.getByLabel("Subject").selectOption("respiratory-physiotherapy");
   await expect(page.getByRole("group", { name: "Challenge" })).toHaveCount(0);
   await page.getByRole("button", { name: "Spin for a topic" }).click();
   await page.getByRole("button", { name: "Begin research" }).click();

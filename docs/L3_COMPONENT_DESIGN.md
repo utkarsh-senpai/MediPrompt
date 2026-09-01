@@ -226,9 +226,9 @@ TopicPack
 Rules:
 
 - Identifiers are stable, lowercase, and pack-scoped; display titles may change.
-- `contentKind` distinguishes reviewed medical material from an explicitly non-medical interaction
-  fixture. An `APPROVED` medical pack requires a `MEDICAL_REVIEWER`; a content editor cannot
-  promote medical claims.
+- `contentKind` distinguishes medical material from an explicitly non-medical interaction fixture.
+  An `APPROVED` medical pack requires a `MEDICAL_REVIEWER`; a content editor cannot promote
+  medical claims. A learner-visible `DRAFT` is a practice beta, never an approval state.
 - `DRAFT` review candidates carry an empty `reviewers` array and `reviewedAt: null`. This is valid
   authoring state, not malformed approval. `APPROVED` still requires at least one reviewer and a
   real ISO review date; the medical production gate additionally requires `MEDICAL_REVIEWER`.
@@ -238,8 +238,8 @@ Rules:
 - Every medical assertion or expected concept links to a pack source entry.
 - Accepted phrases are curated equivalents, not model-generated at runtime.
 - Common errors are optional and never shown as if detected unless transcript evidence supports it.
-- Mode, challenge, and register are independent; every published combination points to a reviewed
-  variant-specific rubric.
+- Mode, challenge, and register are independent; every medical-release combination points to a
+  reviewed variant-specific rubric. Public-beta rubrics remain explicitly unreviewed.
 - `GUIDED`, `APPLIED`, and `VIVA` are versioned difficulty vectors. A scalar difficulty label is not
   sufficient authoring metadata.
 - Applied variants require a bounded fictional case. Viva variants additionally require plausible
@@ -250,13 +250,16 @@ Rules:
 - Published packs contain original wording and licence metadata, not copied textbook prose.
 
 Extracted curriculum inventories are a separate authoring input, not a weak form of `TopicPack`.
-Each candidate moves through `candidate -> normalized -> educator-reviewed -> prompt-ready ->
-published`. Only the last state may be compiled into a runtime pack. At the first three states,
-empty prompts and rubrics are expected and publication validation must reject them.
+Each candidate moves through `candidate -> normalized -> prompt-ready-beta -> educator-reviewed ->
+published`. Only the last state may be compiled into an approved medical release pack. A
+source-grounded `prompt-ready-beta` snapshot may run only through the explicit public-draft gate,
+with empty attestation and a persistent non-clinical warning. Earlier incomplete states remain
+invalid learner content.
 
 The first source-grounded candidate is stored in `content/candidates/`, not `content/packs/`.
 Candidate validation applies the runtime schema and demo depth minimums, then asserts that the
-production gate fails. Build copying reads only `content/packs/`.
+medical release gate fails. Build copying allowlists that exact 20-topic candidate for the public
+practice beta and rejects the generic regression fixture from the learner artifact.
 
 The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
 assessment/investigation, clinical reasoning, intervention/rehabilitation,

@@ -1,6 +1,6 @@
 // Generates the source-grounded MPT cardiorespiratory educator-review candidate.
-// The artifact is deliberately DRAFT. It can run only in the explicit local
-// medical-beta mode and cannot pass the public-production content gate.
+// The artifact is deliberately DRAFT. It powers the explicitly labelled
+// public practice beta and cannot pass the medically approved release gate.
 
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";

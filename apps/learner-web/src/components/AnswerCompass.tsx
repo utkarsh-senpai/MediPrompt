@@ -1,6 +1,6 @@
 import type { SpeechArcStep } from "@/practice/types";
 
-const PHASES = ["What?", "How?", "So what?"] as const;
+const PHASES = ["What?", "So what?", "Now what?"] as const;
 
 interface AnswerCompassProps {
   steps: SpeechArcStep[];

@@ -10,7 +10,7 @@
   "scripts": {
     "predev": "pnpm copy:packs && pnpm copy:model-runtime",
     "dev": "vite",
-    "dev:medical": "pnpm copy:packs --draft-beta && pnpm copy:model-runtime && vite --mode medical-beta",
+    "dev:medical": "pnpm copy:packs && pnpm copy:model-runtime && vite",
     "schema:generate": "node scripts/generate-schema-validator.mjs",
     "schema:check": "node scripts/generate-schema-validator.mjs --check",
     "copy:packs": "node scripts/copy-packs.mjs",
