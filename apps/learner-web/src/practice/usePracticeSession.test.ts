@@ -71,7 +71,7 @@ describe("usePracticeSession", () => {
     });
     expect(result.current.state.name).toBe("SPEAKING");
 
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
   });
 
@@ -111,7 +111,7 @@ describe("usePracticeSession", () => {
     act(() => result.current.actions.startResearch());
     expect(result.current.state.name).toBe("RESEARCHING");
 
-    advance(120_000);
+    advance(DEFAULT_SETTINGS.researchSeconds * 1000);
     expect(result.current.state.name).toBe("READY_TO_SPEAK");
 
     await act(async () => {
@@ -119,7 +119,7 @@ describe("usePracticeSession", () => {
     });
     expect(result.current.state.name).toBe("SPEAKING");
 
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
   });
 
@@ -130,7 +130,7 @@ describe("usePracticeSession", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
     act(() => result.current.actions.spinAgain());
     expect(result.current.state.name).toBe("TOPIC_READY");
@@ -151,7 +151,7 @@ describe("usePracticeSession", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     act(() => result.current.actions.startTypedReview());
     act(() => result.current.actions.submitSelfReview(rubric.concepts[0]!.acceptedPhrases[0]!));
     const firstReview = currentState();
@@ -169,7 +169,7 @@ describe("usePracticeSession", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     act(() => result.current.actions.startTypedReview());
     const completeAnswer = rubric.concepts
       .map((concept) => concept.acceptedPhrases[0])
@@ -240,7 +240,7 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
 
     act(() => result.current.actions.startTypedReview());
@@ -279,7 +279,7 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     act(() => result.current.actions.startTypedReview());
     act(() => result.current.actions.submitSelfReview("another answer"));
     expect(embedTextCounts).toHaveLength(2);
@@ -313,7 +313,7 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     act(() => result.current.actions.startTypedReview());
     act(() => result.current.actions.submitSelfReview("zzz qqq xxx nonword"));
     expect(result.current.state.name).toBe("REVIEW");
@@ -414,7 +414,9 @@ async function flushAsync() {
   }
 }
 
-function setupAudio(options: { denyMic?: boolean; decodeFails?: boolean } = {}) {
+function setupAudio(
+  options: { denyMic?: boolean; decodeFails?: boolean; decoder?: AudioDecoder } = {},
+) {
   const nowRef = { value: 0 };
   const monotonic = { now: () => nowRef.value };
   const wall = { isoNow: () => "2026-08-30T00:00:00.000Z" };
@@ -422,7 +424,7 @@ function setupAudio(options: { denyMic?: boolean; decodeFails?: boolean } = {}) 
   const bagStore = new InMemoryBagStore();
   const rec = fakeRecorderDeps(options);
   const recorder = new AttemptRecorder(rec.deps);
-  const decoder: AudioDecoder = options.decodeFails
+  const decoder: AudioDecoder = options.decoder ?? (options.decodeFails
     ? { decode: () => Promise.reject(new AudioError("AUDIO_DECODE_FAILED", "bad blob")) }
     : {
         decode: () =>
@@ -431,7 +433,7 @@ function setupAudio(options: { denyMic?: boolean; decodeFails?: boolean } = {}) 
             sampleRate: FIXTURE_RATE,
             durationMs: 1100,
           }),
-      };
+      });
   const transcription = fakeTranscriptionClient();
   const hook = renderHook(() =>
     usePracticeSession({
@@ -466,7 +468,7 @@ async function toProcessing(ctx: AudioHook) {
   await act(async () => {
     await hook.result.current.actions.startTimer();
   });
-  advance(90_000);
+  advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
   await flushAsync();
 }
 
@@ -476,6 +478,22 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
   });
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  it("does not start the speaking timer while the microphone primer is unresolved", async () => {
+    const ctx = setupAudio();
+    const { result } = ctx.hook;
+    act(() => result.current.actions.spin());
+    act(() => result.current.actions.beginAudioOptIn());
+    expect(result.current.audio.status).toBe("PRIMER");
+
+    let started = true;
+    await act(async () => {
+      started = await result.current.actions.startTimer();
+    });
+    expect(started).toBe(false);
+    expect(result.current.state.name).toBe("TOPIC_READY");
+    expect(ctx.rec.getUserMedia).not.toHaveBeenCalled();
   });
 
   it("runs the full audio path: primer → ready → record → process → transcribe → review", async () => {
@@ -500,7 +518,7 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     expect(result.current.state.name).toBe("SPEAKING");
     expect(ctx.recorder.getState()).toBe("RECORDING");
 
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     await flushAsync();
     expect(result.current.state.name).toBe("PROCESSING");
     expect(result.current.audio.playback?.url).toBe("blob:fake-0");
@@ -567,7 +585,7 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     expect(result.current.audio.status).toBe("UNAVAILABLE");
     expect(result.current.audio.issue).toBe("AUDIO_MIC_PERMISSION_DENIED");
     expect(ctx.recorder.getState()).toBe("FAILED");
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     await flushAsync();
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
     expect(result.current.audio.playback).toBeNull();
@@ -641,7 +659,7 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     await flushAsync();
 
     expect(result.current.state.name).toBe("SELF_REVIEW");
@@ -687,6 +705,53 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     expect(ctx.rec.revoked).toContain("blob:fake-0");
   });
 
+  it("does not start transcription when PCM preparation finishes after the learner leaves", async () => {
+    const pending: Array<(value: {
+      pcm: Float32Array;
+      sampleRate: number;
+      durationMs: number;
+    }) => void> = [];
+    const decoder: AudioDecoder = {
+      decode: () =>
+        new Promise((resolve) => {
+          pending.push(resolve);
+        }),
+    };
+    const ctx = setupAudio({ decoder });
+    const { hook, advance, transcription } = ctx;
+    const { result } = hook;
+
+    act(() => result.current.actions.spin());
+    act(() => result.current.actions.beginAudioOptIn());
+    act(() => result.current.actions.confirmAudioOptIn());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
+    await flushAsync();
+    expect(result.current.state.name).toBe("PROCESSING");
+    expect(pending).toHaveLength(1);
+
+    act(() => result.current.actions.requestTranscription());
+    await flushAsync();
+    expect(pending).toHaveLength(2);
+    act(() => result.current.actions.spinAgain());
+    expect(result.current.state.name).toBe("TOPIC_READY");
+
+    const decoded = {
+      pcm: SPEECH_PCM,
+      sampleRate: FIXTURE_RATE,
+      durationMs: 1100,
+    };
+    await act(async () => {
+      for (const resolve of pending) resolve(decoded);
+      await Promise.resolve();
+    });
+    await flushAsync();
+    expect(transcription.jobs).toHaveLength(0);
+    expect(result.current.state.name).toBe("TOPIC_READY");
+  });
+
   it("a stale clip finalizing after spin-again is revoked, never dispatched", async () => {
     const ctx = setupAudio();
     const { hook, advance, rec } = ctx;
@@ -700,12 +765,264 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
     await act(async () => {
       await result.current.actions.startTimer();
     });
-    advance(90_000);
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
     // The stop finalization is async; spin before it resolves.
     act(() => result.current.actions.spinAgain());
     await flushAsync();
     expect(result.current.state.name).toBe("TOPIC_READY");
     expect(result.current.audio.playback).toBeNull();
     expect(rec.revoked).toContain("blob:fake-0");
+  });
+});
+
+// --- v0.6 viva defense ladder (typed path; reuses the transcript pipeline) ---
+
+describe("usePracticeSession — v0.6 viva", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function vivaSetup() {
+    const nowRef = { value: 0 };
+    const monotonic = { now: () => nowRef.value };
+    const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
+    const random = seededRandom(123);
+    const bagStore = new InMemoryBagStore();
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: DEFAULT_SETTINGS,
+        monotonic,
+        wall,
+        random,
+        bagStore,
+        drawDelayMs: 0,
+      }),
+    );
+    const advance = (ms: number) =>
+      act(() => {
+        nowRef.value += ms;
+        vi.advanceTimersByTime(ms);
+      });
+    return { hook, advance };
+  }
+
+  /** Drive a cardiovascular Defend spin to REVIEW via the typed self-review path. */
+  async function toReview(ctx: ReturnType<typeof vivaSetup>) {
+    const { hook, advance } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    act(() =>
+      result.current.actions.setSelection({
+        challenge: "VIVA",
+        subjectId: "cardiovascular-physiotherapy",
+      }),
+    );
+    act(() => result.current.actions.spin());
+    const drawn = currentState();
+    if (drawn.name !== "TOPIC_READY") throw new Error("topic not drawn");
+    expect(drawn.topic.vivaQuestions.length).toBe(3);
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
+    act(() => result.current.actions.startTypedReview());
+    act(() => result.current.actions.submitSelfReview("safety assessment and secondary prevention"));
+    const reviewed = currentState();
+    if (reviewed.name !== "REVIEW") throw new Error("review not reached");
+  }
+
+  async function toAudioReview(ctx: AudioHook, enableMainMic = true) {
+    const { result } = ctx.hook;
+    act(() =>
+      result.current.actions.setSelection({
+        challenge: "VIVA",
+        subjectId: "cardiovascular-physiotherapy",
+      }),
+    );
+    act(() => result.current.actions.spin());
+    if (enableMainMic) {
+      act(() => result.current.actions.beginAudioOptIn());
+      act(() => result.current.actions.confirmAudioOptIn());
+    }
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    ctx.advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
+    await flushAsync();
+    act(() => result.current.actions.startTypedReview());
+    act(() =>
+      result.current.actions.submitSelfReview(
+        "safety assessment and secondary prevention",
+      ),
+    );
+    expect(result.current.state.name).toBe("REVIEW");
+  }
+
+  it("runs a full typed viva: review → viva → 3 answers → complete → exit to review", async () => {
+    const ctx = vivaSetup();
+    const { hook } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    await toReview(ctx);
+
+    act(() => result.current.actions.startViva());
+    expect(currentState().name).toBe("VIVA_READY");
+
+    act(() => result.current.actions.beginVivaQuestion());
+    expect(currentState().name).toBe("VIVA_ASKING");
+
+    for (let q = 0; q < 3; q += 1) {
+      if (currentState().name !== "VIVA_ASKING") throw new Error(`q${q} not asking`);
+      await act(async () => {
+        await result.current.actions.startVivaSpeaking();
+      });
+      expect(currentState().name).toBe("VIVA_SPEAKING");
+      ctx.advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
+      expect(currentState().name).toBe("VIVA_ATTEMPT_COMPLETE");
+      act(() => result.current.actions.startVivaTypedReview());
+      expect(currentState().name).toBe("VIVA_SELF_REVIEW");
+      // Each question targets a different concept; answer with that concept's phrase.
+      const answer =
+        q === 0
+          ? "safety assessment with secondary prevention and patient goals"
+          : q === 1
+            ? "individualized exercise with supervision and risk stratification"
+            : "shared decision making with escalation for recurrent symptoms";
+      act(() => result.current.actions.submitVivaSelfReview(answer));
+      expect(currentState().name).toBe("VIVA_ANSWER_REVIEW");
+      const answerState = currentState();
+      if (answerState.name === "VIVA_ANSWER_REVIEW") {
+        expect(answerState.coverage.verifiable).toBe(true);
+        expect(answerState.coverage.hitCount).toBe(1);
+      }
+      act(() => result.current.actions.nextVivaQuestion());
+    }
+    expect(currentState().name).toBe("VIVA_COMPLETE");
+    const completeState = currentState();
+    if (completeState.name === "VIVA_COMPLETE") {
+      expect(completeState.summary.answeredCount).toBe(3);
+      expect(completeState.summary.weightedFraction).toBe(1);
+    }
+
+    act(() => result.current.actions.exitViva());
+    expect(currentState().name).toBe("REVIEW");
+    const reviewAgain = currentState();
+    if (reviewAgain.name === "REVIEW") {
+      expect(reviewAgain.coverage.verifiable).toBe(true);
+    }
+  });
+
+  it("startViva is a no-op before REVIEW is reached", async () => {
+    const ctx = vivaSetup();
+    const { hook } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    act(() =>
+      result.current.actions.setSelection({
+        challenge: "GUIDED",
+        subjectId: "cardiovascular-physiotherapy",
+      }),
+    );
+    act(() => result.current.actions.spin());
+    if (currentState().name !== "TOPIC_READY") throw new Error("topic not drawn");
+    // startViva guards on REVIEW; from TOPIC_READY it must be a no-op.
+    act(() => result.current.actions.startViva());
+    expect(currentState().name).toBe("TOPIC_READY");
+  });
+
+  it("exitViva from VIVA_READY returns to REVIEW", async () => {
+    const ctx = vivaSetup();
+    const { hook } = ctx;
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    await toReview(ctx);
+    act(() => result.current.actions.startViva());
+    expect(currentState().name).toBe("VIVA_READY");
+    act(() => result.current.actions.exitViva());
+    expect(currentState().name).toBe("REVIEW");
+  });
+
+  it("stops the live deadline and microphone when the learner exits an active viva", async () => {
+    const ctx = setupAudio();
+    const { result } = ctx.hook;
+    await toAudioReview(ctx);
+
+    act(() => result.current.actions.startViva());
+    act(() => result.current.actions.beginVivaQuestion());
+    await act(async () => {
+      await result.current.actions.startVivaSpeaking();
+    });
+    expect(result.current.state.name).toBe("VIVA_SPEAKING");
+    expect(ctx.recorder.getState()).toBe("RECORDING");
+
+    act(() => result.current.actions.exitViva());
+    await flushAsync();
+    expect(result.current.state.name).toBe("REVIEW");
+    expect(ctx.recorder.getState()).toBe("IDLE");
+    expect(ctx.rec.stopTrack).toHaveBeenCalledTimes(2);
+    expect(ctx.rec.revoked).toContain("blob:fake-1");
+
+    ctx.advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
+    expect(result.current.state.name).toBe("REVIEW");
+  });
+
+  it("allows microphone opt-in at the viva question after a typed main attempt", async () => {
+    const ctx = setupAudio();
+    const { result } = ctx.hook;
+    await toAudioReview(ctx, false);
+
+    act(() => result.current.actions.startViva());
+    act(() => result.current.actions.beginVivaQuestion());
+    expect(result.current.audio.status).toBe("OFF");
+    act(() => result.current.actions.beginAudioOptIn());
+    expect(result.current.audio.status).toBe("PRIMER");
+
+    let started = true;
+    await act(async () => {
+      started = await result.current.actions.startVivaSpeaking();
+    });
+    expect(started).toBe(false);
+    expect(result.current.state.name).toBe("VIVA_ASKING");
+
+    act(() => result.current.actions.confirmAudioOptIn());
+    await act(async () => {
+      started = await result.current.actions.startVivaSpeaking();
+    });
+    expect(started).toBe(true);
+    expect(result.current.state.name).toBe("VIVA_SPEAKING");
+    expect(ctx.recorder.getState()).toBe("RECORDING");
+  });
+
+  it("focuses the shared processing and review headings during viva audio fallback", async () => {
+    const processing = document.createElement("h2");
+    processing.id = "processing-heading";
+    processing.tabIndex = -1;
+    const review = document.createElement("h2");
+    review.id = "review-heading";
+    review.tabIndex = -1;
+    document.body.append(processing, review);
+
+    const ctx = setupAudio();
+    const { result } = ctx.hook;
+    await toAudioReview(ctx);
+    act(() => result.current.actions.startViva());
+    act(() => result.current.actions.beginVivaQuestion());
+    await act(async () => {
+      await result.current.actions.startVivaSpeaking();
+    });
+    ctx.advance(DEFAULT_SETTINGS.speakingSeconds * 1000);
+    await flushAsync();
+    expect(result.current.state.name).toBe("VIVA_PROCESSING");
+    expect(document.activeElement).toBe(processing);
+
+    act(() => result.current.actions.startVivaTypedReview());
+    expect(result.current.state.name).toBe("VIVA_SELF_REVIEW");
+    expect(document.activeElement).toBe(review);
+    processing.remove();
+    review.remove();
   });
 });

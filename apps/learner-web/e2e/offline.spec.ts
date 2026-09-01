@@ -194,3 +194,54 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   await expect(page.getByText("Attempt 2 — 100% coverage")).toBeVisible();
   await context.setOffline(false);
 });
+
+test("v0.6 viva defense ladder scores three answers and returns to review", async ({ page }) => {
+  await page.goto("./");
+  await page.getByLabel("Subject").selectOption("cardiovascular-physiotherapy");
+  await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
+  ).toBeVisible();
+
+  // Reach the main attempt review via the typed path.
+  await page.getByRole("button", { name: "Start timer" }).click();
+  await page.getByRole("button", { name: "Finish now" }).click();
+  await page.getByRole("button", { name: "Review this attempt" }).click();
+  await page.getByLabel(/Type what you said/i).fill("Safety assessment and secondary prevention.");
+  await page.getByRole("button", { name: "Save review" }).click();
+  // The main attempt review appears before the viva entry is opened.
+  await expect(page.getByRole("heading", { name: "Attempt review" })).toBeVisible();
+
+  // Open the viva ladder.
+  await page.getByRole("button", { name: "Begin viva" }).first().click();
+  await expect(page.getByRole("heading", { name: /Viva:/ })).toBeVisible();
+  await page.getByRole("button", { name: "Begin viva" }).click();
+
+  const answers = [
+    "Safety assessment with secondary prevention and patient goals.",
+    "Individualized exercise with supervision and risk stratification.",
+    "Shared decision making with escalation for recurrent symptoms.",
+  ];
+  for (const answer of answers) {
+    await expect(page.getByRole("button", { name: "Start speaking" })).toBeVisible();
+    await page.getByRole("button", { name: "Start speaking" }).click();
+    await page.getByRole("button", { name: "Finish now" }).click();
+    await page.getByRole("button", { name: "Review this answer" }).click();
+    await page.getByLabel(/Type what you said/i).fill(answer);
+    await page.getByRole("button", { name: "Save review" }).click();
+    await expect(page.getByRole("heading", { name: "Content coverage" })).toBeVisible();
+    if (answer === answers[answers.length - 1]) {
+      await page.getByRole("button", { name: "Finish viva" }).click();
+    } else {
+      await page.getByRole("button", { name: "Next question" }).click();
+    }
+  }
+
+  await expect(page.getByRole("heading", { name: /Viva complete:/ })).toBeVisible();
+  await expect(
+    page.getByText(/100% target-concept coverage across 3 scored answers/i),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Back to attempt review" }).click();
+  await expect(page.getByRole("heading", { name: "Attempt review" })).toBeVisible();
+});

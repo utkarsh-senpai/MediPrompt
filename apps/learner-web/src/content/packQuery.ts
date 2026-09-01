@@ -9,6 +9,7 @@ import type {
   TopicRef,
   TopicSnapshot,
   Variant,
+  VivaQuestion,
   V02PracticeMode,
 } from "@/practice/types";
 
@@ -96,6 +97,30 @@ export function findRubric(
   return found.topic.rubrics.find((r) => r.rubricId === topicRef.rubricId);
 }
 
+/**
+ * v0.6: resolve the viva defense ladder for a drawn topic ref. Only questions
+ * whose targetConceptIds all exist in the variant's rubric are exposed. The
+ * ladder is all-or-nothing so a partially mismatched pack cannot silently skip
+ * a question or change the authored progression. Returns an empty array when
+ * the topic has no usable ladder.
+ */
+export function vivaQuestionsFor(
+  pack: RuntimePack,
+  topicRef: Pick<TopicRef, "variantId" | "rubricId">,
+): VivaQuestion[] {
+  const rubric = findRubric(pack, topicRef);
+  if (!rubric) return [];
+  const found = findVariant(pack, topicRef.variantId);
+  if (!found) return [];
+  const conceptIds = new Set(rubric.concepts.map((c) => c.conceptId));
+  const questions = found.topic.vivaQuestions ?? [];
+  return questions.every((question) =>
+    question.targetConceptIds.every((id) => conceptIds.has(id)),
+  )
+    ? questions
+    : [];
+}
+
 const PRESET_EXPECTATION: Record<ChallengePreset, string> = {
   GUIDED: "Explain core ideas",
   APPLIED: "Apply ideas to a bounded case",
@@ -169,5 +194,6 @@ export function toTopicSnapshot(
       variantId: variant.variantId,
       supportLevel: variant.supportLevel,
     },
+    vivaQuestions: vivaQuestionsFor(pack, topicRef),
   };
 }

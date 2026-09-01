@@ -3,6 +3,11 @@ import { LocalStorageSettingsStore, InMemorySettingsStore } from "./settingsStor
 import { DEFAULT_SETTINGS, TIME_BOUNDS } from "@/practice/types";
 
 describe("InMemorySettingsStore", () => {
+  it("defaults to 60 seconds speaking and 10 minutes research", () => {
+    expect(DEFAULT_SETTINGS.speakingSeconds).toBe(60);
+    expect(DEFAULT_SETTINGS.researchSeconds).toBe(600);
+  });
+
   it("loads defaults and clamps on save", () => {
     const store = new InMemorySettingsStore();
     expect(store.load()).toEqual(DEFAULT_SETTINGS);

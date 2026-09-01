@@ -15,6 +15,15 @@ interface ConceptSeed {
   sourceRefs: string[];
 }
 
+type VivaLevel = "RECALL" | "EXPLAIN" | "APPLY" | "DIFFERENTIATE" | "DEFEND";
+
+interface VivaQuestionSeed {
+  level: VivaLevel;
+  prompt: string;
+  /** Concept IDs (resolved against a rubric of this topic) the question targets. */
+  targetConceptIds: string[];
+}
+
 interface TopicSeed {
   topicId: string;
   title: string;
@@ -29,6 +38,9 @@ interface TopicSeed {
     probe: string;
     evidenceUpdate: string;
   };
+  /** v0.6 defense-ladder questions. targetConceptIds use the runtime concept-id
+   * convention `${topicId}-${kind}-c${n}` so they resolve at generation time. */
+  viva?: VivaQuestionSeed[];
 }
 
 interface SubjectSeed {
@@ -251,6 +263,26 @@ const respiratoryTopics: TopicSeed[] = [
       evidenceUpdate:
         "The person develops new chest pressure during the baseline walk. Explain how this changes your immediate priorities and why exercise progression must stop pending appropriate assessment.",
     },
+    viva: [
+      {
+        level: "RECALL",
+        prompt:
+          "Recall how COPD is confirmed before rehabilitation planning begins.",
+        targetConceptIds: ["copd-assessment-planning-guided-recall-c1"],
+      },
+      {
+        level: "APPLY",
+        prompt:
+          "Apply the assessment domains that shape a person-centred rehabilitation plan for someone with two exacerbations this year and reduced activity.",
+        targetConceptIds: ["copd-assessment-planning-guided-recall-c2"],
+      },
+      {
+        level: "DEFEND",
+        prompt:
+          "Defend your recommendation for pulmonary rehabilitation and individualized non-pharmacological management, including what would pause exercise.",
+        targetConceptIds: ["copd-assessment-planning-guided-recall-c3"],
+      },
+    ],
   },
   {
     topicId: "pulmonary-rehabilitation",
@@ -283,6 +315,26 @@ const respiratoryTopics: TopicSeed[] = [
       evidenceUpdate:
         "Reliable transport becomes available once weekly but not twice weekly. Compare a hybrid pathway with fully centre-based and fully remote options.",
     },
+    viva: [
+      {
+        level: "RECALL",
+        prompt:
+          "Recall where comprehensive pulmonary rehabilitation begins and why individual assessment matters.",
+        targetConceptIds: ["pulmonary-rehabilitation-guided-recall-c1"],
+      },
+      {
+        level: "APPLY",
+        prompt:
+          "Apply the components of an accessible pulmonary rehabilitation pathway for someone who cannot travel twice weekly.",
+        targetConceptIds: ["pulmonary-rehabilitation-guided-recall-c2"],
+      },
+      {
+        level: "DEFEND",
+        prompt:
+          "Defend how you would review outcomes that matter to the person, and what reassessment would trigger a change in delivery.",
+        targetConceptIds: ["pulmonary-rehabilitation-guided-recall-c3"],
+      },
+    ],
   },
   {
     topicId: "asthma-assessment-self-management",
@@ -363,6 +415,26 @@ const cardiovascularTopics: TopicSeed[] = [
       c("Use a resting 12-lead ECG as one part of basic assessment, not as an isolated clearance test", ["12-lead ECG", "part of basic assessment", "not isolated"], ["src-esc-ccs-2024"]),
       c("Recognize instability or red flags and refer rather than independently diagnosing cardiac disease", ["red flags", "refer", "within scope"], ["src-esc-ccs-2024", "src-acsm-getp-2025"]),
     ],
+    viva: [
+      {
+        level: "RECALL",
+        prompt:
+          "Recall where a cardiovascular physiotherapy assessment starts and why history and risk factors matter.",
+        targetConceptIds: ["cardiovascular-assessment-ecg-guided-recall-c1"],
+      },
+      {
+        level: "EXPLAIN",
+        prompt:
+          "Explain the role of a resting 12-lead ECG and why it is not an isolated clearance test.",
+        targetConceptIds: ["cardiovascular-assessment-ecg-guided-recall-c2"],
+      },
+      {
+        level: "DEFEND",
+        prompt:
+          "Defend your response to instability or red flags, including why you refer rather than diagnose independently.",
+        targetConceptIds: ["cardiovascular-assessment-ecg-guided-recall-c3"],
+      },
+    ],
   },
   {
     topicId: "cardiac-rehabilitation",
@@ -395,6 +467,26 @@ const cardiovascularTopics: TopicSeed[] = [
       evidenceUpdate:
         "The person reports new pressure-like chest discomfort during light walking. Explain why progression stops and what escalation is required before rehabilitation continues.",
     },
+    viva: [
+      {
+        level: "RECALL",
+        prompt:
+          "Recall the priorities that should come first when planning cardiovascular rehabilitation after an acute coronary syndrome.",
+        targetConceptIds: ["cardiac-rehabilitation-viva-recall-c1"],
+      },
+      {
+        level: "APPLY",
+        prompt:
+          "Apply those priorities to a person who is anxious about activity: how do you individualize exercise dose and supervision?",
+        targetConceptIds: ["cardiac-rehabilitation-viva-recall-c2"],
+      },
+      {
+        level: "DEFEND",
+        prompt:
+          "Defend your plan if the person reports recurrent symptoms during light walking. What escalation boundaries hold, and how do you preserve shared decision making?",
+        targetConceptIds: ["cardiac-rehabilitation-viva-recall-c3"],
+      },
+    ],
   },
   {
     topicId: "chronic-coronary-syndrome-rehab",
@@ -612,6 +704,16 @@ function buildTopic(topic: TopicSeed): object {
     rubrics,
     cases,
     followUps,
+    ...(topic.viva
+      ? {
+          vivaQuestions: topic.viva.map((question, index) => ({
+            id: `${topic.topicId}-viva-q${index + 1}`,
+            level: question.level,
+            prompt: question.prompt,
+            targetConceptIds: question.targetConceptIds,
+          })),
+        }
+      : {}),
   };
 }
 
@@ -619,7 +721,7 @@ const pack = {
   schemaVersion: "1.0",
   contentKind: "MEDICAL",
   packId: "mpt-cardiorespiratory-review-candidate",
-  version: "0.1.0",
+  version: "0.2.0",
   title: "MPT Cardiovascular and Respiratory — educator review candidate",
   locale: "en-IN",
   licence: {
