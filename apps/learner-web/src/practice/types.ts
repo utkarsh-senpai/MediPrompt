@@ -81,6 +81,21 @@ export interface FollowUp {
   kind: "PROBE" | "EVIDENCE_UPDATE";
 }
 
+/**
+ * v0.6 viva defense ladder. A viva question targets a subset of the variant's
+ * rubric concepts (by conceptId) and is answered aloud, transcribed on-device,
+ * and coverage-scored against only those targets. Source-grounded to the same
+ * rubric concepts — no new clinical claims.
+ */
+export type VivaLevel = "RECALL" | "EXPLAIN" | "APPLY" | "DIFFERENTIATE" | "DEFEND";
+
+export interface VivaQuestion {
+  id: string;
+  level: VivaLevel;
+  prompt: string;
+  targetConceptIds: string[];
+}
+
 export interface TimePolicy {
   preparationSeconds?: number;
   speakingSeconds: number;
@@ -110,6 +125,8 @@ export interface Topic {
   rubrics: Rubric[];
   cases: FictionalCase[];
   followUps: FollowUp[];
+  /** v0.6: optional defense-ladder questions authored for this topic. */
+  vivaQuestions?: VivaQuestion[];
 }
 
 export interface Subject {
@@ -222,6 +239,12 @@ export interface TopicSnapshot {
   supportLevel: SupportLevel;
   register: Register;
   challengeIdentity: ChallengeIdentity;
+  /**
+   * v0.6: viva questions whose targetConceptIds all exist in the variant's
+   * rubric. Empty when the topic has no usable viva ladder; the UI treats that
+   * as an explicit "viva unavailable" outcome rather than hiding the feature.
+   */
+  vivaQuestions: VivaQuestion[];
 }
 
 // --- v0.3 speech intelligence contracts (verbatim from L4) ---
@@ -355,6 +378,57 @@ export type RefinementDeltaResult =
       reason: RefinementDeltaUnavailableReason;
     };
 
+// --- v0.6 viva defense-ladder contracts ---
+// Viva coverage is "did the expected idea appear in this defense answer",
+// scored against the question's targetConceptIds. It is separate from the main
+// attempt coverage, is never a correctness grade, and never feeds Refinement Delta.
+
+/** One completed defense answer, session-local only. */
+export interface VivaAnswer {
+  questionIndex: number;
+  question: VivaQuestion;
+  attemptId: string;
+  transcript: ApprovedTranscript;
+  coverage: CoverageReport;
+  textMetrics: TextMetrics | null;
+  metrics: DeliveryMetrics | null;
+}
+
+/** Bounded viva attempt trace (≤ MAX_VIVA_ANSWERS) carried across viva states. */
+export interface VivaRuntime {
+  requestId: string;
+  questions: VivaQuestion[];
+  index: number;
+  answers: VivaAnswer[];
+  /** The REVIEW state to restore on EXIT_VIVA (main attempt coverage preserved). */
+  base: ReviewState;
+}
+
+export interface VivaFollowUpSummary {
+  questionId: string;
+  level: VivaLevel;
+  coverage: CoverageReport;
+}
+
+export interface VivaSummary {
+  answeredCount: number;
+  /** Answers included in the numeric aggregate. */
+  scoredCount: number;
+  notVerifiableCount: number;
+  /** Weighted fraction across verifiable answers; 0 when none are verifiable. */
+  weightedFraction: number;
+  perFollowUp: VivaFollowUpSummary[];
+}
+
+/** Captured when the ladder is exhausted; derived purely from the answers. */
+export type VivaCompleteState = {
+  name: "VIVA_COMPLETE";
+  selection: PracticeSelection;
+  topic: TopicSnapshot;
+  viva: VivaRuntime;
+  summary: VivaSummary;
+};
+
 export type AudioErrorCode =
   | "AUDIO_MIC_PERMISSION_DENIED"
   | "AUDIO_MIC_UNAVAILABLE"
@@ -484,7 +558,87 @@ export type SessionState =
       coverage: CoverageReport;
       /** Same-identity coverage change; null on attempt 1. */
       refinementDelta: RefinementDeltaResult | null;
-    };
+    }
+  // --- v0.6 viva defense-ladder states. Kept separate from the v0.2–v0.5
+  // paths so the main loop is untouched; async results are stale-dropped by the
+  // current viva attempt's attemptId. `attempt` is the in-flight defense answer
+  // so the shared recorder/transcription pipeline keys off it unchanged. ---
+  | {
+      name: "VIVA_READY";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+    }
+  | {
+      name: "VIVA_ASKING";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+    }
+  | {
+      name: "VIVA_SPEAKING";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+      deadlineAt: number;
+    }
+  | {
+      name: "VIVA_ATTEMPT_COMPLETE";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+    }
+  | {
+      name: "VIVA_PROCESSING";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics | null;
+      draft: TranscriptDraft | null;
+      transcription: "IDLE" | "RUNNING";
+    }
+  | {
+      name: "VIVA_TRANSCRIPT_REVIEW";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics;
+      draft: TranscriptDraft;
+    }
+  | {
+      name: "VIVA_SELF_REVIEW";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics | null;
+      transcriptionIssue: TranscriptionUnavailableReason | null;
+    }
+  | {
+      name: "VIVA_ANSWER_REVIEW";
+      selection: PracticeSelection;
+      topic: TopicSnapshot;
+      viva: VivaRuntime;
+      attempt: AttemptDraft;
+      metrics: DeliveryMetrics | null;
+      textMetrics: TextMetrics | null;
+      transcript: ApprovedTranscript;
+      /** Coverage against the current question's targetConceptIds. */
+      coverage: CoverageReport;
+    }
+  | VivaCompleteState;
+
+/** The REVIEW member of SessionState, restored when the learner exits viva. */
+export type ReviewState = Extract<SessionState, { name: "REVIEW" }>;
+
+/** Bounds the session-local viva answer trace. */
+export const MAX_VIVA_ANSWERS = 19;
 
 export type SessionEvent =
   | { type: "CHANGE_SELECTION"; selection: PracticeSelection }
@@ -553,7 +707,35 @@ export type SessionEvent =
       /** Recomputed delta after a semantic refinement. */
       refinementDelta: RefinementDeltaResult | null;
       now: number;
-    };
+    }
+  // --- v0.6 viva events ---
+  | { type: "START_VIVA"; requestId: string; now: number }
+  | { type: "BEGIN_VIVA_QUESTION"; attemptId: string; now: number }
+  | { type: "START_VIVA_SPEAKING"; now: number }
+  | {
+      type: "APPROVE_VIVA_TRANSCRIPT";
+      attemptId: string;
+      transcript: ApprovedTranscript;
+      textMetrics: TextMetrics;
+      coverage: CoverageReport;
+      now: number;
+    }
+  | {
+      type: "VIVA_SELF_REVIEW_DONE";
+      attemptId: string;
+      transcript: ApprovedTranscript;
+      textMetrics: TextMetrics;
+      coverage: CoverageReport;
+      now: number;
+    }
+  | {
+      type: "VIVA_COVERAGE_REFINED";
+      attemptId: string;
+      coverage: CoverageReport;
+      now: number;
+    }
+  | { type: "NEXT_VIVA_QUESTION"; attemptId: string; now: number }
+  | { type: "EXIT_VIVA"; now: number };
 
 // --- Commands the orchestrator runs as effects ---
 
@@ -568,7 +750,16 @@ export type Command =
   | { type: "STOP_DEADLINE" }
   | {
       type: "FOCUS_VIEW";
-      target: "topic" | "speaking" | "complete" | "processing" | "review";
+      target:
+        | "topic"
+        | "speaking"
+        | "complete"
+        | "processing"
+        | "review"
+        | "viva-asking"
+        | "viva-processing"
+        | "viva-review"
+        | "viva-complete";
     }
   // --- v0.3 commands (orchestrator effects; reducer stays pure) ---
   | { type: "START_RECORDING"; attemptId: string }
@@ -602,8 +793,8 @@ export interface ReducerResult {
 
 export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   schemaVersion: 1,
-  speakingSeconds: 90,
-  researchSeconds: 120,
+  speakingSeconds: 60,
+  researchSeconds: 600,
   soundMuted: false,
   semanticCoverage: false,
 });

@@ -4,6 +4,7 @@ import type {
   Subject,
   Topic,
   Variant,
+  VivaLevel,
 } from "../practice/types";
 import generatedSchemaValidator from "./generated/topicPackSchemaValidator";
 
@@ -38,6 +39,14 @@ const PRESET_RANK: Record<ChallengePreset, number> = {
   GUIDED: 0,
   APPLIED: 1,
   VIVA: 2,
+};
+
+const VIVA_LEVEL_RANK: Record<VivaLevel, number> = {
+  RECALL: 0,
+  EXPLAIN: 1,
+  APPLY: 2,
+  DIFFERENTIATE: 3,
+  DEFEND: 4,
 };
 
 const DANGEROUS_KEYS = new Set(["__proto__", "prototype", "constructor"]);
@@ -247,6 +256,44 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
 
       allCaseIds.push(...topic.cases.map((item) => item.caseId));
       allFollowUpIds.push(...topic.followUps.map((item) => item.followUpId));
+
+      // v0.6 viva questions: targetConceptIds must resolve to a concept in some
+      // rubric of this topic, and question ids must be unique within the topic.
+      const topicConceptIds = new Set(
+        topic.rubrics.flatMap((r) => r.concepts.map((c) => c.conceptId)),
+      );
+      const vivaQuestionIds: string[] = [];
+      const vivaQuestions = topic.vivaQuestions ?? [];
+      for (const [index, q] of vivaQuestions.entries()) {
+        vivaQuestionIds.push(q.id);
+        const previous = vivaQuestions[index - 1];
+        if (previous && VIVA_LEVEL_RANK[q.level] <= VIVA_LEVEL_RANK[previous.level]) {
+          errors.push(
+            `topic ${topic.topicId}: viva ladder levels must be in strictly increasing order`,
+          );
+        }
+        for (const target of q.targetConceptIds) {
+          if (!topicConceptIds.has(target)) {
+            errors.push(
+              `topic ${topic.topicId}: viva question ${q.id} references missing concept ${target}`,
+            );
+          }
+        }
+      }
+      assertUnique(vivaQuestionIds, `viva question id in topic ${topic.topicId}`, errors);
+      if (
+        vivaQuestions.length > 0 &&
+        !topic.rubrics.some((rubric) => {
+          const rubricConceptIds = new Set(rubric.concepts.map((concept) => concept.conceptId));
+          return vivaQuestions.every((question) =>
+            question.targetConceptIds.every((target) => rubricConceptIds.has(target)),
+          );
+        })
+      ) {
+        errors.push(
+          `topic ${topic.topicId}: every viva question must target one complete variant rubric`,
+        );
+      }
 
       const hasGuided = topic.variants.some((v) => v.challengePreset === "GUIDED");
       if (!hasGuided) {

@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "contentKind": "MEDICAL",
   "packId": "mpt-cardiorespiratory-review-candidate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "MPT Cardiovascular and Respiratory — educator review candidate",
   "locale": "en-IN",
   "licence": {
@@ -889,6 +889,32 @@
               "text": "The person develops new chest pressure during the baseline walk. Explain how this changes your immediate priorities and why exercise progression must stop pending appropriate assessment.",
               "kind": "EVIDENCE_UPDATE"
             }
+          ],
+          "vivaQuestions": [
+            {
+              "id": "copd-assessment-planning-viva-q1",
+              "level": "RECALL",
+              "prompt": "Recall how COPD is confirmed before rehabilitation planning begins.",
+              "targetConceptIds": [
+                "copd-assessment-planning-guided-recall-c1"
+              ]
+            },
+            {
+              "id": "copd-assessment-planning-viva-q2",
+              "level": "APPLY",
+              "prompt": "Apply the assessment domains that shape a person-centred rehabilitation plan for someone with two exacerbations this year and reduced activity.",
+              "targetConceptIds": [
+                "copd-assessment-planning-guided-recall-c2"
+              ]
+            },
+            {
+              "id": "copd-assessment-planning-viva-q3",
+              "level": "DEFEND",
+              "prompt": "Defend your recommendation for pulmonary rehabilitation and individualized non-pharmacological management, including what would pause exercise.",
+              "targetConceptIds": [
+                "copd-assessment-planning-guided-recall-c3"
+              ]
+            }
           ]
         },
         {
@@ -1196,6 +1222,32 @@
               "followUpId": "pulmonary-rehabilitation-evidence-v1",
               "text": "Reliable transport becomes available once weekly but not twice weekly. Compare a hybrid pathway with fully centre-based and fully remote options.",
               "kind": "EVIDENCE_UPDATE"
+            }
+          ],
+          "vivaQuestions": [
+            {
+              "id": "pulmonary-rehabilitation-viva-q1",
+              "level": "RECALL",
+              "prompt": "Recall where comprehensive pulmonary rehabilitation begins and why individual assessment matters.",
+              "targetConceptIds": [
+                "pulmonary-rehabilitation-guided-recall-c1"
+              ]
+            },
+            {
+              "id": "pulmonary-rehabilitation-viva-q2",
+              "level": "APPLY",
+              "prompt": "Apply the components of an accessible pulmonary rehabilitation pathway for someone who cannot travel twice weekly.",
+              "targetConceptIds": [
+                "pulmonary-rehabilitation-guided-recall-c2"
+              ]
+            },
+            {
+              "id": "pulmonary-rehabilitation-viva-q3",
+              "level": "DEFEND",
+              "prompt": "Defend how you would review outcomes that matter to the person, and what reassessment would trigger a change in delivery.",
+              "targetConceptIds": [
+                "pulmonary-rehabilitation-guided-recall-c3"
+              ]
             }
           ]
         },
@@ -2233,7 +2285,33 @@
             }
           ],
           "cases": [],
-          "followUps": []
+          "followUps": [],
+          "vivaQuestions": [
+            {
+              "id": "cardiovascular-assessment-ecg-viva-q1",
+              "level": "RECALL",
+              "prompt": "Recall where a cardiovascular physiotherapy assessment starts and why history and risk factors matter.",
+              "targetConceptIds": [
+                "cardiovascular-assessment-ecg-guided-recall-c1"
+              ]
+            },
+            {
+              "id": "cardiovascular-assessment-ecg-viva-q2",
+              "level": "EXPLAIN",
+              "prompt": "Explain the role of a resting 12-lead ECG and why it is not an isolated clearance test.",
+              "targetConceptIds": [
+                "cardiovascular-assessment-ecg-guided-recall-c2"
+              ]
+            },
+            {
+              "id": "cardiovascular-assessment-ecg-viva-q3",
+              "level": "DEFEND",
+              "prompt": "Defend your response to instability or red flags, including why you refer rather than diagnose independently.",
+              "targetConceptIds": [
+                "cardiovascular-assessment-ecg-guided-recall-c3"
+              ]
+            }
+          ]
         },
         {
           "topicId": "cardiac-rehabilitation",
@@ -2541,6 +2619,32 @@
               "followUpId": "cardiac-rehabilitation-evidence-v1",
               "text": "The person reports new pressure-like chest discomfort during light walking. Explain why progression stops and what escalation is required before rehabilitation continues.",
               "kind": "EVIDENCE_UPDATE"
+            }
+          ],
+          "vivaQuestions": [
+            {
+              "id": "cardiac-rehabilitation-viva-q1",
+              "level": "RECALL",
+              "prompt": "Recall the priorities that should come first when planning cardiovascular rehabilitation after an acute coronary syndrome.",
+              "targetConceptIds": [
+                "cardiac-rehabilitation-viva-recall-c1"
+              ]
+            },
+            {
+              "id": "cardiac-rehabilitation-viva-q2",
+              "level": "APPLY",
+              "prompt": "Apply those priorities to a person who is anxious about activity: how do you individualize exercise dose and supervision?",
+              "targetConceptIds": [
+                "cardiac-rehabilitation-viva-recall-c2"
+              ]
+            },
+            {
+              "id": "cardiac-rehabilitation-viva-q3",
+              "level": "DEFEND",
+              "prompt": "Defend your plan if the person reports recurrent symptoms during light walking. What escalation boundaries hold, and how do you preserve shared decision making?",
+              "targetConceptIds": [
+                "cardiac-rehabilitation-viva-recall-c3"
+              ]
             }
           ]
         },

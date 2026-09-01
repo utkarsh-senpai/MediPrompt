@@ -187,23 +187,32 @@ works offline and rejects mismatched variant, difficulty, register, support, rub
 time, or scoring identities. Educator-labelled calibration remains mandatory before semantic
 evidence may change numeric coverage.
 
-### v0.6 — Viva and retention
+### v0.6 — Viva defense ladder
 
-**Planned branch:** `feature/v0.6-viva-retention`
+**Branch:** `feature/v0.6-viva-round`
 
 Add:
 
-- Viva Round with reviewed progressive questions and evidence updates for reasoning under
-  uncertainty.
-- Per-topic, learner-controlled challenge suggestions with visible no-penalty scaffolding.
-- Examiner, junior, and patient teach-back register.
-- Exam date and daily queue.
-- Simple deterministic 1/3/7/14-day scheduling adjusted by learner self-rating and coverage.
-- Local progress, topic history, export, and delete-all controls.
-- Two additional hand-authored content packs.
+- An opt-in, progressive viva ladder after attempt review, with one 60-second answer per question.
+- A distinct attempt/timer identity for every answer and complete recorder, transcript, exit, and
+  stale-result cleanup.
+- Lexical target-concept coverage per answer, optional non-counting semantic evidence, and an
+  aggregate that excludes unverifiable answers honestly.
+- Strictly increasing, one-rubric, all-or-nothing authored ladders that reveal each examiner prompt
+  only when it becomes current.
+- A source-linked `0.2.0` medical candidate with four draft viva ladders; its educator-review gate
+  remains unchanged.
 
-**Exit gate:** the queue is deterministic and timezone-safe; missed days do not punish the learner;
-all progress can be exported/deleted; three packs pass schema, source, and content-review gates.
+**Exit gate:** the original v0.2-v0.5 loop remains available without microphone/model/network;
+typed and recorded vivas complete offline; every active exit releases deadline, stream, clip, and
+worker state; stale timers/results cannot advance another answer; coverage names only scored
+answers; schema/content/a11y/E2E/bundle/audit gates pass.
+
+**Rebaseline note (2026-09-02):** scheduling, exam countdown, persistent history, export/delete,
+additional registers, challenge suggestions, and two extra packs were previously grouped into
+v0.6. They are not implemented or accepted by this release. They return to prioritization after
+the v0.7 content pipeline and must receive their own scope, privacy model, tests, and exit gate
+before v1.0.
 
 ### v0.7 — Java content pipeline
 
@@ -335,7 +344,7 @@ The four-to-six-week beta target assumes focused solo development after v0.1 app
 | 2 | v0.3 recording, deterministic delivery metrics, initial STT benchmark |
 | 3 | v0.4 deterministic lexical coverage and one prescription |
 | 4 | v0.5 semantic enhancement, same-identity retry, and Refinement Delta |
-| 5 | v0.6 viva ladder, scheduling, and additional draft packs |
+| 5 | v0.6 hardened viva defense ladder |
 | 6 | v0.7 PDF/content compiler; v0.8 beta hardening follows observed use |
 
 Dates may move; exit gates do not. If the local model blocks phone usability, ship a useful typed or

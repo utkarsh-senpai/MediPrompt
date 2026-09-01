@@ -14,7 +14,7 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.5 — Grounded refinement** (current)
+**v0.6 — Viva defense ladder** (release candidate)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
 mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
@@ -31,15 +31,22 @@ and a **single actionable prescription** names the highest-weight missed concept
 Topics without a source-grounded rubric get a "not verifiable from sources" fallback instead of a
 fabricated grade. Coverage is shown visually and verbally separate from delivery.
 
-v0.5 closes the practice loop. **Refinement Delta** compares consecutive attempts only when the
+v0.5 closes the retry loop. **Refinement Delta** compares consecutive attempts only when the
 topic, prompt, rubric, practice settings, and scoring version are identical; it shows changed
 coverage and newly covered/lost concepts, never a knowledge or correctness claim. Optional
 `all-MiniLM-L6-v2` meaning matching compares bounded transcript segments with rubric wording on
 device. Because educator-labelled calibration is still pending, semantic matches appear as
 “possibly present — not counted” evidence and cannot inflate coverage or the delta. The lexical
-engine remains the guaranteed offline numeric baseline. Decision resolutions are recorded in
-[docs/V0.5_DEVELOPMENT_CONTEXT.md](docs/V0.5_DEVELOPMENT_CONTEXT.md). Spaced resurfacing, the Viva
-Round follow-up ladder, and the connected platform remain progressive enhancements for later versions.
+engine remains the guaranteed offline numeric baseline.
+
+v0.6 adds an opt-in oral defense after review. Each 60-second viva answer has its own timer and
+attempt identity, can use the same optional local microphone/transcription or equal typed path, and
+is scored only against that question's target concepts. Future examiner prompts stay hidden until
+their turn. Unverifiable answers are named and excluded from the aggregate. The ladder is strictly
+increasing and all-or-nothing for one drawn rubric; exit always stops the deadline, microphone,
+transcription, and clip lifecycle. The full reviewed contract is in
+[docs/V0.6_DEVELOPMENT_CONTEXT.md](docs/V0.6_DEVELOPMENT_CONTEXT.md). Scheduling and persistence
+remain later enhancements.
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -53,7 +60,7 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.4 public practice beta):** the learner app uses the genuine 20-topic MPT
+**Content status (v0.6 public practice beta):** the learner app uses the genuine 20-topic MPT
 cardiovascular/respiratory candidate from
 `content/candidates/mpt-cardiorespiratory-review-candidate.json`, split into Respiratory
 Physiotherapy and Cardiovascular Physiotherapy subjects. The generic interaction fixture remains
@@ -80,6 +87,7 @@ the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 | [v0.3 development context](docs/V0.3_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for private speech intelligence |
 | [v0.4 development context](docs/V0.4_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for content coverage |
 | [v0.5 development context](docs/V0.5_DEVELOPMENT_CONTEXT.md) | Reviewed contract for retries, Refinement Delta, and semantic evidence |
+| [v0.6 development context](docs/V0.6_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the oral-defense ladder and release hardening |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
@@ -121,13 +129,13 @@ Resurface weak topics later
 The extended loop is progressive enhancement. The basic timed speaking tool remains useful if
 recording, transcription, evaluation, storage, or the network is unavailable.
 
-## Planned practice modes
+## Practice modes
 
-- **Recall Sprint:** speak immediately for 60–90 seconds.
-- **Viva Round:** a structured answer followed by recall, explanation, application,
-  differentiation, and defence questions.
-- **Deep Research:** a configurable research timer, an explicit ready-to-speak handoff, then the
-  same timed answer.
+- **Recall Sprint:** speak immediately; the default is 60 seconds.
+- **Viva Round:** after a structured answer, opt into progressive recall, explanation,
+  application, differentiation, and defence questions, 60 seconds each.
+- **Deep Research:** a configurable research timer defaulting to 10 minutes, an explicit
+  ready-to-speak handoff, then the same 60-second answer.
 - **Teach-back:** explain the same topic to an examiner, junior student, or patient.
 
 Practice mode defines the activity. A separate challenge preset defines reasoning depth: Explain

@@ -41,6 +41,11 @@ import { ProcessingView } from "@/components/ProcessingView";
 import { TranscriptEditor } from "@/components/TranscriptEditor";
 import { SelfReview } from "@/components/SelfReview";
 import { AttemptReview } from "@/components/AttemptReview";
+import { VivaOverview } from "@/components/VivaOverview";
+import { VivaQuestionCard } from "@/components/VivaQuestionCard";
+import { VivaAnswerReview } from "@/components/VivaAnswerReview";
+import { VivaSummary } from "@/components/VivaSummary";
+import { VIVA_SPEAKING_SECONDS } from "@/practice/sessionReducer";
 
 interface PracticeAppProps {
   pack: RuntimePack;
@@ -189,6 +194,9 @@ function PracticeApp({
   } else if (s.name === "RESEARCHING") {
     remaining = remainingMs(s.deadlineAt, now);
     totalMs = (s.topic.timePolicy.researchSeconds ?? settings.researchSeconds) * 1000;
+  } else if (s.name === "VIVA_SPEAKING") {
+    remaining = remainingMs(s.deadlineAt, now);
+    totalMs = VIVA_SPEAKING_SECONDS * 1000;
   }
   const milestone = useMilestones(remaining);
 
@@ -219,6 +227,11 @@ function PracticeApp({
       if (started) playTimerStart(muted);
     });
   }, [actions, muted]);
+  const startVivaSpeaking = useCallback(() => {
+    void actions.startVivaSpeaking().then((started) => {
+      if (started) playTimerStart(muted);
+    });
+  }, [actions, muted]);
 
   const topicEyebrow =
     s.name !== "IDLE" && s.name !== "DRAWING" && "topic" in s
@@ -234,7 +247,10 @@ function PracticeApp({
         })()
       : undefined;
 
-  const showSurface = s.name !== "SPEAKING" && s.name !== "RESEARCHING";
+  const showSurface =
+    s.name !== "SPEAKING" &&
+    s.name !== "RESEARCHING" &&
+    s.name !== "VIVA_SPEAKING";
   useEffect(() => {
     onFocusModeChange(!showSurface);
     return () => onFocusModeChange(false);
@@ -274,7 +290,9 @@ function PracticeApp({
                 type="button"
                 className="primary"
                 onClick={startTimer}
-                disabled={session.audio.status === "STARTING"}
+                disabled={
+                  session.audio.status === "STARTING" || session.audio.status === "PRIMER"
+                }
               >
                 {session.audio.status === "STARTING" ? "Starting mic…" : "Start timer"}
               </button>
@@ -299,7 +317,9 @@ function PracticeApp({
               type="button"
               className="primary"
               onClick={confirmReady}
-              disabled={session.audio.status === "STARTING"}
+              disabled={
+                session.audio.status === "STARTING" || session.audio.status === "PRIMER"
+              }
             >
               {session.audio.status === "STARTING" ? "Starting mic…" : "Start speaking"}
             </button>
@@ -449,6 +469,150 @@ function PracticeApp({
           audio={session.audio}
           onSpinAgain={spinAgain}
           onTryAgain={actions.startSecondAttempt}
+          onBeginViva={actions.startViva}
+        />
+      ) : null}
+
+      {s.name === "VIVA_READY" ? (
+        <VivaOverview
+          topic={s.topic}
+          questions={s.viva.questions}
+          onBegin={actions.beginVivaQuestion}
+          onExit={actions.exitViva}
+        />
+      ) : null}
+
+      {s.name === "VIVA_ASKING" ? (
+        <>
+          <VivaQuestionCard
+            topic={s.topic}
+            question={s.viva.questions[s.viva.index]!}
+            questionIndex={s.viva.index}
+            total={s.viva.questions.length}
+            audio={session.audio}
+            onBeginAudioOptIn={actions.beginAudioOptIn}
+            onConfirmAudioOptIn={actions.confirmAudioOptIn}
+            onCancelAudioOptIn={actions.cancelAudioOptIn}
+            onStartSpeaking={startVivaSpeaking}
+            onExit={actions.exitViva}
+          />
+        </>
+      ) : null}
+
+      {s.name === "VIVA_SPEAKING" ? (
+        <section className="focus-view" aria-labelledby="speaking-heading">
+          <div className="focus-title-row">
+            <h2 id="speaking-heading" tabIndex={-1}>
+              {s.topic.title}
+            </h2>
+          </div>
+          <p className="status">
+            Viva · question {s.viva.index + 1} of {s.viva.questions.length}
+          </p>
+          <p className="prompt-copy">{s.viva.questions[s.viva.index]!.prompt}</p>
+          <CountdownRing
+            remainingMs={remaining ?? 0}
+            totalMs={totalMs}
+            caption="Defense time left"
+          />
+          {session.audio.status === "ACTIVE" ? <RecordingIndicator /> : null}
+          {session.audio.issue ? (
+            <p className="status" role="status">
+              {audioIssueCopy(session.audio.issue)}
+            </p>
+          ) : null}
+          <div className="toolbar">
+            <button type="button" onClick={actions.closeTimer}>
+              Finish now
+            </button>
+            <button type="button" onClick={actions.exitViva}>
+              Exit viva
+            </button>
+          </div>
+        </section>
+      ) : null}
+
+      {s.name === "VIVA_ATTEMPT_COMPLETE" ? (
+        <section aria-labelledby="complete-heading">
+          <h2 id="complete-heading" tabIndex={-1}>
+            Defense complete
+          </h2>
+          <p className="status">
+            You finished a timed defense answer. Review it, or exit the viva.
+          </p>
+          {session.audio.issue ? (
+            <p className="status" role="status">
+              {audioIssueCopy(session.audio.issue)}
+            </p>
+          ) : null}
+          {session.audio.armed && !session.audio.issue ? (
+            <p className="status" role="status">
+              Finalizing your recording…
+            </p>
+          ) : null}
+          <div className="toolbar">
+            <button type="button" className="primary" onClick={actions.startVivaTypedReview}>
+              Review this answer
+            </button>
+            <button type="button" onClick={actions.exitViva}>
+              Exit viva
+            </button>
+          </div>
+        </section>
+      ) : null}
+
+      {s.name === "VIVA_PROCESSING" ? (
+        <ProcessingView
+          topic={s.topic}
+          metrics={s.metrics}
+          transcription={s.transcription}
+          audio={session.audio}
+          onTranscribe={actions.requestVivaTranscription}
+          onDecline={actions.declineVivaTranscription}
+          onCancel={actions.startVivaTypedReview}
+        />
+      ) : null}
+
+      {s.name === "VIVA_TRANSCRIPT_REVIEW" ? (
+        <TranscriptEditor
+          draft={s.draft}
+          onApprove={actions.approveVivaTranscript}
+          onTypeInstead={actions.startVivaTypedReview}
+        />
+      ) : null}
+
+      {s.name === "VIVA_SELF_REVIEW" ? (
+        <SelfReview
+          metrics={s.metrics}
+          transcriptionIssue={s.transcriptionIssue}
+          audio={session.audio}
+          onSubmit={actions.submitVivaSelfReview}
+          onRetryTranscription={actions.requestVivaTranscription}
+        />
+      ) : null}
+
+      {s.name === "VIVA_ANSWER_REVIEW" ? (
+        <VivaAnswerReview
+          topic={s.topic}
+          question={s.viva.questions[s.viva.index]!}
+          questionIndex={s.viva.index}
+          total={s.viva.questions.length}
+          transcript={s.transcript}
+          coverage={s.coverage}
+          metrics={s.metrics}
+          textMetrics={s.textMetrics}
+          semanticRefining={session.semanticRefining}
+          audio={session.audio}
+          onNext={actions.nextVivaQuestion}
+          onExit={actions.exitViva}
+        />
+      ) : null}
+
+      {s.name === "VIVA_COMPLETE" ? (
+        <VivaSummary
+          topic={s.topic}
+          summary={s.summary}
+          onExit={actions.exitViva}
         />
       ) : null}
 
