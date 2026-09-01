@@ -1,8 +1,8 @@
 # MediPrompt execution plan
 
-**Status:** v0.2 implemented and security-reviewed; v0.3 is next
+**Status:** v0.7 private learning plan implemented and under promotion review
 **Owner:** Utkarsh Meshram (`utkarsh-senpai`)
-**Last updated:** 2026-08-30
+**Last updated:** 2026-09-02
 
 ## 1. Outcome
 
@@ -210,13 +210,39 @@ answers; schema/content/a11y/E2E/bundle/audit gates pass.
 
 **Rebaseline note (2026-09-02):** scheduling, exam countdown, persistent history, export/delete,
 additional registers, challenge suggestions, and two extra packs were previously grouped into
-v0.6. They are not implemented or accepted by this release. They return to prioritization after
-the v0.7 content pipeline and must receive their own scope, privacy model, tests, and exit gate
-before v1.0.
+v0.6. v0.7 accepts only the first four as one privacy-reviewed local learning-plan outcome.
+Registers, suggestions, and additional packs remain unplanned. The Java content pipeline moves to
+v0.8.
 
-### v0.7 — Java content pipeline
+### v0.7 — Private learning plan and spaced resurfacing
 
-**Planned branch:** `feature/v0.7-content-compiler`
+**Branch:** `feature/v0.7-spaced-resurfacing`
+
+Add:
+
+- Off-by-default, explicit consent for local practice history.
+- IndexedDB version 2 with an exact topic index, strict untrusted-data parsing, deep-copy
+  boundaries, a newest-500-attempt limit, and an in-memory no-storage fallback.
+- Transcript-free attempt summaries: only topic/practice identity, review date, aggregate coverage,
+  scoring identity, and schedule. Audio, transcript text, concept results, transcript excerpts, and
+  embeddings remain session-local.
+- A deterministic SM-2-style queue using learner-local calendar dates; unverifiable attempts do
+  not change scheduling.
+- A compact Learning plan surface that opens the exact next due current-pack topic.
+- An optional strict calendar exam date; only a future/today date within 14 days activates
+  weakest-coverage triage. Past exams never activate urgency sorting.
+- Metadata export, pause-without-delete, and two-step delete-all whose success is verified by a
+  zero-record reload.
+- Real IndexedDB adapter tests in addition to memory-fallback tests.
+
+**Exit gate:** no persistence occurs without opt-in; no saved/exported record contains transcript
+or audio-derived content; due-topic launch revalidates complete pack identity; storage errors never
+block practice; retention, migration, strict dates, export/delete, unit, accessibility, content,
+build, E2E, bundle, and dependency-audit gates pass.
+
+### v0.8 — Java content pipeline
+
+**Planned branch:** `feature/v0.8-content-compiler`
 
 Add a Java 21/Spring Boot command-line content compiler:
 
@@ -239,9 +265,9 @@ golden PDF fixtures are reproducible; every educator-reviewed candidate has an e
 mapping and page evidence; no extracted content is published without educator, source-use, licence,
 and runtime-schema approval.
 
-### v0.8 — Real-user beta hardening
+### v0.9 — Real-user beta hardening
 
-**Planned branch:** `feature/v0.8-beta-hardening`
+**Planned branch:** `feature/v0.9-beta-hardening`
 
 Add/fix only what is required by observed use:
 
@@ -345,7 +371,8 @@ The four-to-six-week beta target assumes focused solo development after v0.1 app
 | 3 | v0.4 deterministic lexical coverage and one prescription |
 | 4 | v0.5 semantic enhancement, same-identity retry, and Refinement Delta |
 | 5 | v0.6 hardened viva defense ladder |
-| 6 | v0.7 PDF/content compiler; v0.8 beta hardening follows observed use |
+| 6 | v0.7 private learning plan; v0.8 content compiler follows promotion |
+| Beta | v0.9 hardening follows observed use on the target learner's devices |
 
 Dates may move; exit gates do not. If the local model blocks phone usability, ship a useful typed or
 self-reviewed transcript path rather than delaying the entire learning loop.

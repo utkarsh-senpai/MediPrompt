@@ -2,6 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { reduceSession, initialState, findVariant, toTopicSnapshot } from "./sessionReducer";
 import { draw } from "./shuffledBag";
 import { isElapsed } from "./deadlineTimer";
+import {
+  coverageToQuality,
+  latestRecord,
+  scheduleReview,
+  topicFingerprint,
+} from "./spacedRepetition";
 import { listSubjects, presetsFor, eligibleVariantIds, findRubric } from "@/content/packQuery";
 import { isAudioError } from "@/audio/audioErrors";
 import { scoreCoverage } from "@/scoring/coverage";
@@ -35,6 +41,7 @@ import type {
   Command,
   Concept,
   CoverageReport,
+  HistoryStore,
   PracticeSelection,
   ReducerDeps,
   RuntimePack,
@@ -46,6 +53,7 @@ import type {
 } from "./types";
 import type { MonotonicClock, WallClock } from "@/platform/clock";
 import type { RandomSource } from "@/platform/random";
+import { toPersistedCoverage } from "@/platform/historyStore";
 
 /**
  * Audio/transcription platform surface. Every touchpoint is injected so the
@@ -70,6 +78,9 @@ export interface OrchestratorDeps {
   embedding?: EmbeddingClient;
   /** Test-only timing seam; production defaults to the motion-aware draw delay. */
   drawDelayMs?: number;
+  /** v0.7: local metadata store; writes also require explicit learner opt-in. */
+  historyStore?: HistoryStore;
+  onHistoryChanged?: () => void;
 }
 
 /** Microphone opt-in lifecycle; the no-audio path is first-class, not an error. */
@@ -92,6 +103,14 @@ export interface AudioUiState {
   transcriptionProgress: number | null;
 }
 
+export type HistorySaveState =
+  | "OFF"
+  | "IDLE"
+  | "SAVING"
+  | "SAVED"
+  | "SAVED_SESSION"
+  | "ERROR";
+
 function newRequestId(): string {
   const c = globalThis.crypto;
   if (c?.randomUUID) return c.randomUUID();
@@ -111,7 +130,19 @@ export function initialSelection(pack: RuntimePack): PracticeSelection {
 }
 
 export function usePracticeSession(deps: OrchestratorDeps) {
-  const { pack, settings, monotonic, wall, random, bagStore, audio, embedding, drawDelayMs } = deps;
+  const {
+    pack,
+    settings,
+    monotonic,
+    wall,
+    random,
+    bagStore,
+    audio,
+    embedding,
+    drawDelayMs,
+    historyStore,
+    onHistoryChanged,
+  } = deps;
 
   const [state, setState] = useState<SessionState>(() =>
     initialState(initialSelection(pack)),
@@ -136,6 +167,10 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     null,
   );
   const [semanticRefining, setSemanticRefining] = useState(false);
+  const [historySaveState, setHistorySaveState] = useState<HistorySaveState>(
+    settings.practiceHistory ? "IDLE" : "OFF",
+  );
+  const lastHistoryPayloadRef = useRef<string | null>(null);
   const pcmCacheRef = useRef<{
     attemptId: string;
     pcm: Float32Array;
@@ -596,6 +631,74 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     }
   }, [inCoverageView, settings.semanticCoverage]);
 
+  // Persist only learner-approved, privacy-minimized review metadata and only
+  // after the learner explicitly enables the private learning plan.
+  useEffect(() => {
+    if (!settings.practiceHistory || !historyStore) {
+      return;
+    }
+    if (state.name !== "REVIEW") {
+      return;
+    }
+
+    const coverage = toPersistedCoverage(state.coverage);
+    const payloadKey = JSON.stringify([
+      state.attempt.attemptId,
+      coverage.scoring.method,
+      coverage.scoring.version,
+      coverage.hitCount,
+      coverage.totalCount,
+      coverage.weightedFraction,
+    ]);
+    if (lastHistoryPayloadRef.current === payloadKey) return;
+    lastHistoryPayloadRef.current = payloadKey;
+    let cancelled = false;
+
+    const persist = async () => {
+      if (!cancelled) setHistorySaveState("SAVING");
+      const fp = topicFingerprint(state.attempt.topicRef);
+      const existing = await historyStore.loadTopic(fp);
+      const previous = latestRecord(
+        existing.filter(
+          (record) => record.attemptId !== state.attempt.attemptId && record.schedule !== null,
+        ),
+      );
+      const quality = coverageToQuality(coverage);
+      const reviewedAt = state.transcript.approvedAt;
+      const schedule =
+        quality === null
+          ? null
+          : scheduleReview(previous?.schedule ?? null, quality, new Date(reviewedAt));
+      await historyStore.append({
+        schemaVersion: 1,
+        attemptId: state.attempt.attemptId,
+        topicFingerprint: fp,
+        topicRef: state.attempt.topicRef,
+        mode: state.attempt.mode,
+        challenge: state.attempt.challenge,
+        attemptIndex: state.attempt.attemptIndex,
+        reviewedAt,
+        coverage,
+        schedule,
+      });
+      const storageMode = await historyStore.storageMode();
+      if (!cancelled) {
+        setHistorySaveState(storageMode === "DEVICE" ? "SAVED" : "SAVED_SESSION");
+        onHistoryChanged?.();
+      }
+    };
+
+    void persist().catch(() => {
+      if (!cancelled) {
+        lastHistoryPayloadRef.current = null;
+        setHistorySaveState("ERROR");
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [historyStore, onHistoryChanged, settings.practiceHistory, state]);
+
   // --- Actions ---
 
   const now = useCallback(() => monotonic.now(), [monotonic]);
@@ -607,6 +710,50 @@ export function usePracticeSession(deps: OrchestratorDeps) {
   const spinAgain = useCallback(() => {
     dispatch({ type: "SPIN_AGAIN", requestId: newRequestId(), now: now() });
   }, [dispatch, now]);
+
+  const practiceTopic = useCallback(
+    (ref: TopicSnapshot["topicRef"]): boolean => {
+      const current = stateRef.current;
+      if (
+        current.name !== "IDLE" ||
+        ref.packId !== pack.packId ||
+        ref.packVersion !== pack.version
+      ) {
+        return false;
+      }
+      const found = findVariant(pack, ref.variantId);
+      if (
+        !found ||
+        found.subject.subjectId !== ref.subjectId ||
+        found.topic.topicId !== ref.topicId ||
+        found.variant.promptId !== ref.promptId ||
+        found.variant.rubricId !== ref.rubricId ||
+        found.variant.difficultyProfileVersion !== ref.difficultyProfileVersion ||
+        (found.variant.mode !== "RECALL_SPRINT" && found.variant.mode !== "DEEP_RESEARCH")
+      ) {
+        return false;
+      }
+      const topic = toTopicSnapshot(pack, found.variant, found.topic, found.subject, {
+        speakingSeconds: settings.speakingSeconds,
+        researchSeconds: settings.researchSeconds,
+      });
+      const selection: PracticeSelection = {
+        mode: topic.mode,
+        challenge: topic.challenge,
+        subjectId: found.subject.subjectId,
+        register: "EXAMINER",
+      };
+      dispatch({
+        type: "RESURFACE_TOPIC",
+        requestId: newRequestId(),
+        selection,
+        topic,
+        now: now(),
+      });
+      return true;
+    },
+    [dispatch, now, pack, settings.researchSeconds, settings.speakingSeconds],
+  );
 
   const startResearch = useCallback(() => {
     dispatch({ type: "START_RESEARCH", now: now() });
@@ -1188,9 +1335,15 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     eligibleCount,
     audio: audioUi,
     semanticRefining: semanticRefining && inCoverageView,
+    historySaveState: !settings.practiceHistory
+      ? "OFF"
+      : historyStore
+        ? historySaveState
+        : "ERROR",
     actions: {
       spin,
       spinAgain,
+      practiceTopic,
       startTimer,
       startResearch,
       doneResearching,

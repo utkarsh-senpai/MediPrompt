@@ -25,7 +25,7 @@ MediPrompt/
 │       │   ├── scheduling/          # due queue and local-date rules
 │       │   ├── content/             # runtime schema and pack repository
 │       │   ├── settings/            # localStorage preferences + memory fallback
-│       │   ├── persistence/         # IndexedDB, migrations, export/delete
+│       │   ├── platform/            # local settings, IndexedDB and exam-date adapters
 │       │   └── test/                # shared fixtures and test helpers
 │       └── e2e/
 ├── tools/
@@ -173,6 +173,11 @@ in-memory default store when browser storage is unavailable or throws. It contai
 audio, attempt, account, or medical-learning data. `clear()` participates in the user-facing
 delete-all workflow.
 
+`IndexedDbHistoryStore` is opt-in at the orchestration boundary. Its exact v0.7 record contains
+topic/practice identity, review timestamp, aggregate coverage/scoring identity, and nullable
+schedule only. The materialized topic index must equal the canonical topic fingerprint. Audio,
+transcripts, concept results, semantic transcript excerpts, and embeddings are prohibited.
+
 ## 3. Session reducer
 
 ```ts
@@ -235,8 +240,9 @@ tick                  => render remaining(current monotonic time)
 visibility restored   => recompute; emit deadline event once when remaining == 0
 ```
 
-Wall-clock ISO timestamps are used for persistence; a monotonic clock is used within an active
-timer. Tests inject both clocks. Main speaking defaults to 60 seconds and Deep Research to 600
+Wall-clock ISO instants identify reviewed attempts; strict learner-local `YYYY-MM-DD` values drive
+due/exam calendar arithmetic. A monotonic clock is used within an active timer. Tests inject both
+clocks. Main speaking defaults to 60 seconds and Deep Research to 600
 seconds. Every v0.6 viva answer uses a fixed 60-second window and its unique attempt ID as the
 deadline request ID; a late timer event from an earlier answer is ignored.
 
@@ -341,18 +347,15 @@ knowledge gap, grade, or evidence of long-term learning.
 ### Spaced scheduling
 
 ```text
-rating ∈ {AGAIN, HARD, GOOD, EASY}
-coverageBand ∈ {UNKNOWN, LOW, MEDIUM, HIGH}
-base interval index = prior successful index
-AGAIN or LOW       => 1 day; reset index
-HARD               => max(1, current interval); no more than 3 days
-GOOD               => next interval in [1, 3, 7, 14]
-EASY and HIGH      => advance one additional interval, capped at 14
-dueDate            => learner local date + selected days
+quality = aggregate coverage band in 0..5; unverifiable => null
+quality < 3        => repetitions = 0; interval = 1 day
+quality >= 3       => update clamped SM-2 easiness; intervals begin 1, then 3 days
+later interval     => round(previous interval * updated easiness)
+dueDate            => learner-local review calendar date + interval
 ```
 
-The exact matrix is fixture-defined before v0.6. No streak loss or escalating penalty is applied.
-Changing timezone preserves the intended local due date unless the learner chooses rebasing.
+The recurrence is deterministic and fixture-tested. A missed due date does not compound a penalty.
+Within 14 days before a non-past exam, due topics are secondarily triaged by weakest coverage.
 
 ## 5. Runtime topic-pack schema
 
@@ -362,7 +365,7 @@ Curriculum extraction produces an authoring inventory, not the runtime schema sh
 current MPT file under `docs/curriculum/` is deliberately `runtimeCompatible: false`; empty prompt
 and rubric arrays are evidence that content has not been authored, not valid learner content.
 
-Minimum candidate shape for the v0.7 authoring schema:
+Minimum candidate shape for the planned v0.8 authoring schema:
 
 ```yaml
 schemaVersion: authoring-inventory/1.0
@@ -654,8 +657,9 @@ CI performance on hosted runners is not presented as phone performance.
 | v0.4 | Difficulty-specific golden lexical evidence, whole-token/local-window false-positive guards, distinct transcript/rubric `NOT_VERIFIABLE` outcomes, one prescription, offline typed-review E2E |
 | v0.5 | Optional non-counting semantic evidence with pinned model/versioned thresholds and lexical fallback, bounded same-identity retry history, mismatch rejection and valid Refinement Delta |
 | v0.6 | Opt-in post-review viva ladder; independent 60-second answer identities; hidden future prompts; typed/local-audio parity; strict one-rubric all-or-nothing validation; honest scored/unverifiable aggregate; active exit and stale-result cleanup; offline/a11y/budget/audit evidence |
-| v0.7 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
-| v0.8 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
+| v0.7 | Explicit persistence opt-in; transcript/audio-free bounded records; strict validation and local dates; real IndexedDB index/migration tests; due-topic launch; exam triage; metadata export and verified delete-all; no-storage core regression |
+| v0.8 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
+| v0.9 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
 | v1.0 | Clean-device release journey, offline full loop, three approved packs, licence/privacy/security/recovery checklist |
 | v1.1+ | Consent/authz/sync/provider contracts, retention/deletion, source-grounded results and local-mode regression |
 

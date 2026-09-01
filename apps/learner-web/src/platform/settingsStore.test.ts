@@ -94,6 +94,7 @@ describe("LocalStorageSettingsStore", () => {
       researchSeconds: DEFAULT_SETTINGS.researchSeconds,
       soundMuted: false,
       semanticCoverage: false,
+      practiceHistory: false,
     });
   });
 
@@ -127,6 +128,18 @@ describe("LocalStorageSettingsStore", () => {
       semanticCoverage: true,
     });
     expect(new LocalStorageSettingsStore().load().semanticCoverage).toBe(true);
+  });
+
+  it("keeps practice history off by default and persists explicit opt-in", () => {
+    const store = new LocalStorageSettingsStore();
+    expect(store.load().practiceHistory).toBe(false);
+    store.save({
+      schemaVersion: 1,
+      speakingSeconds: 60,
+      researchSeconds: 600,
+      practiceHistory: true,
+    });
+    expect(new LocalStorageSettingsStore().load().practiceHistory).toBe(true);
   });
 
   it("falls back to in-memory when localStorage is unavailable", () => {
