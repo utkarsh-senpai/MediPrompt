@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { MAX_TRANSCRIPT_CHARACTERS } from "@/practice/transcriptPolicy";
 import type { TranscriptDraft } from "@/practice/types";
 
 function normalizedRanges(
@@ -67,6 +68,7 @@ interface TranscriptEditorProps {
 export function TranscriptEditor({ draft, onApprove, onTypeInstead }: TranscriptEditorProps) {
   const [text, setText] = useState(draft.text);
   const uncertainCount = draft.uncertainRanges.length;
+  const isTooLong = text.length > MAX_TRANSCRIPT_CHARACTERS;
 
   return (
     <section aria-labelledby="review-heading">
@@ -89,10 +91,18 @@ export function TranscriptEditor({ draft, onApprove, onTypeInstead }: Transcript
       <UncertainTranscript draft={draft} />
       <div className="control-row">
         <label htmlFor="transcript-editor">Transcript (editable)</label>
+        {isTooLong ? (
+          <p id="transcript-length-error" className="status" role="alert">
+            Shorten the transcript to {MAX_TRANSCRIPT_CHARACTERS.toLocaleString("en-IN")} characters
+            before approval.
+          </p>
+        ) : null}
         <textarea
           id="transcript-editor"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          maxLength={MAX_TRANSCRIPT_CHARACTERS}
+          aria-describedby={isTooLong ? "transcript-length-error" : undefined}
           rows={6}
         />
       </div>
@@ -101,7 +111,7 @@ export function TranscriptEditor({ draft, onApprove, onTypeInstead }: Transcript
           type="button"
           className="primary"
           onClick={() => onApprove(text)}
-          disabled={text.trim().length === 0}
+          disabled={text.trim().length === 0 || isTooLong}
         >
           Approve transcript
         </button>

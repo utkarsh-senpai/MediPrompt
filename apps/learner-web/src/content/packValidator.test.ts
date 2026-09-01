@@ -234,6 +234,12 @@ describe("validatePack — schema rejections", () => {
     p.subjects[0]!.topics[0]!.variants[0]!.timePolicy.speakingSeconds = 1;
     expectInvalid(p, "schema");
   });
+
+  it("rejects a rubric concept without an accepted phrase", () => {
+    const p = basePack() as RuntimePack;
+    p.subjects[0]!.topics[0]!.rubrics[0]!.concepts[0]!.acceptedPhrases = [];
+    expectInvalid(p, "schema");
+  });
 });
 
 describe("validatePack — custom cross-reference rejections", () => {

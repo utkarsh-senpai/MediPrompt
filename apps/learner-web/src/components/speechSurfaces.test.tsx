@@ -15,6 +15,7 @@ import { audioIssueCopy, transcriptionIssueCopy } from "@/app/audioCopy";
 import { findVariant, toTopicSnapshot } from "@/content/packQuery";
 import { validatePack } from "@/content/packValidator";
 import type { AudioUiState } from "@/practice/usePracticeSession";
+import { MAX_TRANSCRIPT_CHARACTERS } from "@/practice/transcriptPolicy";
 import type {
   ApprovedTranscript,
   AudioErrorCode,
@@ -56,6 +57,7 @@ const TEXT_METRICS: TextMetrics = {
 
 const COVERAGE_FULL: CoverageReport = {
   verifiable: true,
+  unavailableReason: null,
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
@@ -68,6 +70,7 @@ const COVERAGE_FULL: CoverageReport = {
 
 const COVERAGE_PARTIAL: CoverageReport = {
   verifiable: true,
+  unavailableReason: null,
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
@@ -331,6 +334,7 @@ describe("TranscriptEditor", () => {
 
     const editor = screen.getByLabelText("Transcript (editable)");
     expect(editor).toHaveValue(DRAFT.text);
+    expect(editor).toHaveAttribute("maxLength", String(MAX_TRANSCRIPT_CHARACTERS));
     await user.clear(editor);
     await user.type(editor, "Zippers interlock teeth.");
     await user.click(screen.getByRole("button", { name: "Approve transcript" }));
@@ -349,6 +353,18 @@ describe("TranscriptEditor", () => {
 
     await user.click(screen.getByRole("button", { name: "Type from scratch instead" }));
     expect(onTypeInstead).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects an oversized machine draft until the learner shortens it", () => {
+    render(
+      <TranscriptEditor
+        draft={{ ...DRAFT, text: "x".repeat(MAX_TRANSCRIPT_CHARACTERS + 1) }}
+        onApprove={() => {}}
+        onTypeInstead={() => {}}
+      />,
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent(/Shorten the transcript/);
+    expect(screen.getByRole("button", { name: "Approve transcript" })).toBeDisabled();
   });
 });
 
@@ -421,6 +437,10 @@ describe("SelfReview", () => {
       />,
     );
     expect(screen.queryByRole("status")).toBeNull();
+    expect(screen.getByLabelText(/Type what you said/i)).toHaveAttribute(
+      "maxLength",
+      String(MAX_TRANSCRIPT_CHARACTERS),
+    );
     await user.type(
       screen.getByLabelText(/Type what you said/i),
       "Zippers interlock rows of teeth.",

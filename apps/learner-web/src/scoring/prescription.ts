@@ -15,6 +15,9 @@ export interface Prescription {
   text: string;
 }
 
+const FULL_COVERAGE_TEXT =
+  "You touched every listed concept. On the next attempt, explain the same concepts more concisely.";
+
 /**
  * Build the single prescription line for a coverage report. Missed concepts are
  * ordered by weight descending then by original rubric order, so the chosen
@@ -22,6 +25,13 @@ export interface Prescription {
  */
 export function prescribe(report: CoverageReport): Prescription {
   if (!report.verifiable) {
+    if (report.unavailableReason === "NO_TRANSCRIPT") {
+      return {
+        kind: "NOT_VERIFIABLE",
+        text:
+          "No transcript was provided, so content coverage was not scored. Add or approve a transcript on the next attempt.",
+      };
+    }
     return {
       kind: "NOT_VERIFIABLE",
       text:
@@ -32,8 +42,7 @@ export function prescribe(report: CoverageReport): Prescription {
   if (report.hitCount === report.totalCount) {
     return {
       kind: "FULL",
-      text:
-        "You touched every listed concept. On the next attempt, tighten your timing or try a harder variant of this topic.",
+      text: FULL_COVERAGE_TEXT,
     };
   }
 
@@ -46,13 +55,12 @@ export function prescribe(report: CoverageReport): Prescription {
   if (!target) {
     return {
       kind: "FULL",
-      text:
-        "You touched every listed concept. On the next attempt, tighten your timing or try a harder variant of this topic.",
+      text: FULL_COVERAGE_TEXT,
     };
   }
 
   return {
     kind: "ACTION",
-    text: `Next attempt: address "${target.label}".`,
+    text: `On your next attempt, explain: "${target.label}".`,
   };
 }

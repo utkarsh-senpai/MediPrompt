@@ -89,7 +89,7 @@ export function findVariant(
  */
 export function findRubric(
   pack: RuntimePack,
-  topicRef: { variantId: string; rubricId: string },
+  topicRef: Pick<TopicRef, "variantId" | "rubricId">,
 ): Rubric | undefined {
   const found = findVariant(pack, topicRef.variantId);
   if (!found) return undefined;

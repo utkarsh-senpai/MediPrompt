@@ -140,3 +140,37 @@ test("Defend depth and Deep Research handoff remain distinct", async ({ page }) 
   await expect(page.getByText("Speaking time left")).toBeVisible();
   await expect(page.getByRole("group", { name: "Practice mode" })).toHaveCount(0);
 });
+
+test("v0.4 scores a real physiotherapy recap locally and explains its evidence", async ({
+  page,
+  context,
+}) => {
+  await page.goto("./");
+  await page.getByLabel("Subject").selectOption("cardiovascular-physiotherapy");
+  await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
+  await page.getByRole("button", { name: "Spin for a topic" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
+  ).toBeVisible();
+
+  await page.getByRole("button", { name: "Start timer" }).click();
+  await page.getByRole("button", { name: "Finish now" }).click();
+  await page.getByRole("button", { name: "Review this attempt" }).click();
+  await expect(page.getByRole("heading", { name: "Review your attempt" })).toBeVisible();
+
+  await page.evaluate(async () => navigator.serviceWorker.ready.then(() => undefined));
+  await context.setOffline(true);
+  await page.getByLabel(/Type what you said/i).fill(
+    "Start with safety assessment and secondary prevention. Exercise should use risk stratification and supervision.",
+  );
+  await page.getByRole("button", { name: "Save review" }).click();
+
+  await expect(page.getByRole("heading", { name: "Content coverage" })).toBeVisible();
+  await expect(page.getByText(/You touched 2 of 3 listed concepts \(67% by weight\)/)).toBeVisible();
+  await expect(page.getByText(/On your next attempt, explain:/)).toContainText(
+    "shared decision making",
+  );
+  await page.getByText("Concepts you touched (2)").click();
+  await expect(page.getByText(/Matched rubric phrase: “safety assessment”/)).toBeVisible();
+  await context.setOffline(false);
+});

@@ -289,9 +289,11 @@ export interface ConceptResult {
   matchedPhrase: string | null;
 }
 
-export interface CoverageReport {
-  /** False when the rubric has no scorable concepts → the not-verifiable fallback. */
-  verifiable: boolean;
+export type CoverageUnavailableReason =
+  | "NO_TRANSCRIPT"
+  | "NO_SCORABLE_RUBRIC";
+
+interface CoverageReportValues {
   conceptResults: ConceptResult[];
   hitCount: number;
   totalCount: number;
@@ -300,6 +302,16 @@ export interface CoverageReport {
   /** Flat-fraction echo (hitCount/totalCount) for copy that ignores weight. */
   fraction: number;
 }
+
+export type CoverageReport =
+  | (CoverageReportValues & {
+      verifiable: true;
+      unavailableReason: null;
+    })
+  | (CoverageReportValues & {
+      verifiable: false;
+      unavailableReason: CoverageUnavailableReason;
+    });
 
 export type AudioErrorCode =
   | "AUDIO_MIC_PERMISSION_DENIED"

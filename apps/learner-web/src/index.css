@@ -846,6 +846,13 @@ progress {
   color: var(--ink);
 }
 
+.coverage-evidence {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .draft-notice {
   display: grid;
   gap: 0.1rem;

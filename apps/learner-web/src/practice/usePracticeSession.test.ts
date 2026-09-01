@@ -344,6 +344,8 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
       expect(result.current.state.transcript.rawText).toBe(WHISPER_DRAFT.text);
       expect(result.current.state.textMetrics?.wordsPerMinute).toBeGreaterThan(0);
       expect(result.current.state.textMetrics?.fillerCount).toBe(0);
+      expect(result.current.state.coverage.verifiable).toBe(true);
+      expect(result.current.state.coverage.totalCount).toBeGreaterThan(0);
       // Audio-derived metrics are untouched by the transcript edit.
       expect(result.current.state.metrics?.pauses).toHaveLength(1);
     }
@@ -391,6 +393,8 @@ describe("usePracticeSession — v0.3 audio orchestration", () => {
       expect(result.current.state.metrics).toBeNull();
       expect(result.current.state.textMetrics?.wordsPerMinute).toBeUndefined();
       expect(result.current.state.transcript.text).toBe("what I said, from memory");
+      expect(result.current.state.coverage.verifiable).toBe(true);
+      expect(result.current.state.coverage.totalCount).toBeGreaterThan(0);
     }
   });
 

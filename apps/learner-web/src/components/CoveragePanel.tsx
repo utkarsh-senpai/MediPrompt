@@ -57,7 +57,14 @@ export function CoveragePanel({ coverage }: CoveragePanelProps) {
           <summary>Concepts you touched ({touched.length})</summary>
           <ul>
             {touched.map((result) => (
-              <li key={result.conceptId}>{result.label}</li>
+              <li key={result.conceptId}>
+                {result.label}
+                {result.matchedPhrase ? (
+                  <span className="coverage-evidence">
+                    Matched rubric phrase: “{result.matchedPhrase}”
+                  </span>
+                ) : null}
+              </li>
             ))}
           </ul>
         </details>

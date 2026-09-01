@@ -33,7 +33,7 @@ describe("prescribe", () => {
     expect(report.hitCount).toBe(report.totalCount);
     const prescription = prescribe(report);
     expect(prescription.kind).toBe("FULL");
-    expect(prescription.text).toMatch(/tighten your timing|harder variant/);
+    expect(prescription.text).toContain("explain the same concepts more concisely");
   });
 
   it("surfaces the not-verifiable fallback when the rubric is empty", () => {
@@ -41,6 +41,14 @@ describe("prescribe", () => {
     const prescription = prescribe(report);
     expect(prescription.kind).toBe("NOT_VERIFIABLE");
     expect(prescription.text).toContain("not scored");
+  });
+
+  it("distinguishes a missing transcript from a missing rubric", () => {
+    const report = scoreCoverage("", concepts);
+    const prescription = prescribe(report);
+    expect(prescription.kind).toBe("NOT_VERIFIABLE");
+    expect(prescription.text).toContain("No transcript was provided");
+    expect(prescription.text).not.toContain("No source-grounded rubric");
   });
 
   it("is stable for a given report (ties break by rubric order)", () => {

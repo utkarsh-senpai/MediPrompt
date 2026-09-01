@@ -132,8 +132,9 @@ and accessibility time remain independent. See the
 
 MediPrompt keeps two dimensions separate:
 
-- **Content coverage:** whether the answer expresses human-reviewed rubric concepts and their
-  accepted synonyms. Local mode does not claim to prove medical correctness.
+- **Content coverage:** whether the answer expresses source-linked rubric concepts and their
+  accepted phrases. The current public-beta rubric is an unreviewed draft; local mode never claims
+  medical correctness or educator approval.
 - **Delivery:** observable measurements such as duration, pace, fillers, repetition, silence,
   pause placement, loudness stability, and time discipline.
 
@@ -149,7 +150,8 @@ The zero-cost learner experience is an offline-capable static PWA:
 - Browser `MediaRecorder` and Web Audio APIs.
 - Browser-local speech recognition through Transformers.js, with `whisper-base.en` as the
   candidate default subject to representative-device and Indian-English medical-speech tests.
-- Browser-local rubric matching using quantized `all-MiniLM-L6-v2` embeddings.
+- A deterministic browser-local lexical rubric baseline, with optional quantized
+  `all-MiniLM-L6-v2` embeddings planned as a later enhancement.
 - IndexedDB for private progress and a service worker for application/model caching.
 - Versioned, human-reviewed YAML topic packs compiled to static JSON.
 

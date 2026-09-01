@@ -147,28 +147,44 @@ deterministic within documented tolerances.
 **Decision gate:** if `base.en` is too slow or large on the target phone, test tiny/base model tiers
 or make transcription optional. Do not hide failure behind a fabricated transcript.
 
-### v0.4 — Grounded refinement loop
+### v0.4 — Trustworthy lexical coverage
 
-**Planned branch:** `feature/v0.4-grounded-refinement`
+**Branch:** `feature/v0.4-content-coverage`
 
 Add:
 
-- Quantized `all-MiniLM-L6-v2` in a worker.
-- Rubric concept and synonym matching with visible evidence.
+- A deterministic on-device baseline that matches whole accepted phrases or nearby significant
+  tokens; partial-word substrings and evidence spread across an answer do not count.
+- Rubric-concept coverage with the matched accepted phrase visible as evidence.
 - Coverage feedback explicitly labelled as coverage, not correctness.
 - One deterministic improvement prescription.
-- Second attempt against the same prompt variant and difficulty profile.
-- Refinement Delta and a sentence/rubric evidence view.
-- “Not verifiable from this rubric” outcome.
+- Distinct “not verifiable” outcomes for a missing transcript and a rubric with no scorable
+  accepted phrases.
+- A bounded synchronous input and a schema requirement that every concept has at least one
+  accepted phrase.
 
 **Exit gate:** golden transcript fixtures produce stable matches; false-positive/false-negative
-review is documented; every feedback statement traces to an input metric or rubric item; second
-attempt comparison works offline and rejects mismatched variant, difficulty, register, support,
-rubric, or time identities.
+review is documented; every coverage statement traces to a rubric item and matched phrase; an empty
+typed review never becomes zero coverage; the full typed-review and coverage path works offline.
 
-### v0.5 — Viva and retention
+### v0.5 — Grounded refinement loop
 
-**Planned branch:** `feature/v0.5-viva-retention`
+**Planned branch:** `feature/v0.5-grounded-refinement`
+
+Add:
+
+- Optional quantized `all-MiniLM-L6-v2` in a worker, layered over the v0.4 lexical baseline.
+- Versioned thresholds, sentence/rubric evidence, and explicit `POSSIBLY_COVERED` results.
+- Second attempt against the same prompt variant and complete attempt identity.
+- Refinement Delta plus newly covered/lost concepts.
+
+**Exit gate:** educator-labelled semantic fixtures calibrate thresholds; model failure falls back to
+the lexical baseline; second-attempt comparison works offline and rejects mismatched variant,
+difficulty, register, support, rubric, mode, pack, or time identities.
+
+### v0.6 — Viva and retention
+
+**Planned branch:** `feature/v0.6-viva-retention`
 
 Add:
 
@@ -184,9 +200,9 @@ Add:
 **Exit gate:** the queue is deterministic and timezone-safe; missed days do not punish the learner;
 all progress can be exported/deleted; three packs pass schema, source, and content-review gates.
 
-### v0.6 — Java content pipeline
+### v0.7 — Java content pipeline
 
-**Planned branch:** `feature/v0.6-content-compiler`
+**Planned branch:** `feature/v0.7-content-compiler`
 
 Add a Java 21/Spring Boot command-line content compiler:
 
@@ -209,9 +225,9 @@ golden PDF fixtures are reproducible; every educator-reviewed candidate has an e
 mapping and page evidence; no extracted content is published without educator, source-use, licence,
 and runtime-schema approval.
 
-### v0.7 — Real-user beta hardening
+### v0.8 — Real-user beta hardening
 
-**Planned branch:** `feature/v0.7-beta-hardening`
+**Planned branch:** `feature/v0.8-beta-hardening`
 
 Add/fix only what is required by observed use:
 
@@ -312,10 +328,10 @@ The four-to-six-week beta target assumes focused solo development after v0.1 app
 | --- | --- |
 | 1 | v0.2 first playable |
 | 2 | v0.3 recording, deterministic delivery metrics, initial STT benchmark |
-| 3 | v0.4 coverage and retry loop |
-| 4 | v0.5 viva ladder, scheduling, three draft packs |
-| 5 | v0.6 PDF/content compiler and first real syllabus pack |
-| 6 | v0.7 friend beta fixes, accessibility, performance, and privacy hardening |
+| 3 | v0.4 deterministic lexical coverage and one prescription |
+| 4 | v0.5 semantic enhancement, same-identity retry, and Refinement Delta |
+| 5 | v0.6 viva ladder, scheduling, and additional draft packs |
+| 6 | v0.7 PDF/content compiler; v0.8 beta hardening follows observed use |
 
 Dates may move; exit gates do not. If the local model blocks phone usability, ship a useful typed or
 self-reviewed transcript path rather than delaying the entire learning loop.

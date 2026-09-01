@@ -88,6 +88,7 @@ const TEXT_METRICS: TextMetrics = {
 
 const COVERAGE_REPORT: CoverageReport = {
   verifiable: true,
+  unavailableReason: null,
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
