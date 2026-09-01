@@ -3,7 +3,8 @@
 ## Source citation
 
 - **Document title:** Competency-Based Post Graduate Curriculum for the Indian Physiotherapy Post Graduate
-- **Institution:** Ravi Nair Physiotherapy College, Datta Meghe Institute of Higher Education and Research (Deemed University), Wardha, Maharashtra, India
+- **Institution:** not recorded in this repository; the privately supplied PDF is not
+  redistributed.
 - **Source file:** `MPT COMPETENCY BASED CURRICULUM.pdf` (extracted with `pdftotext -layout` to ~5,972 lines / 210 pages)
 - **Extracted and reviewed:** 2026-08-30 for MediPrompt
 

@@ -14,12 +14,18 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.2 — First playable** (current reviewed baseline)
+**v0.3 — Private speech intelligence** (current)
 
-The runnable learner application lives in `apps/learner-web/`. It delivers the compact
-mode/challenge/subject → Spin → timed-speech loop with no account, microphone, model download,
-backend, or persistent storage requirement. Speech intelligence, feedback, scheduling, and the
-connected platform remain progressive enhancements for later versions.
+The runnable learner application lives in `apps/learner-web/`. On top of the compact
+mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
+storage), v0.3 adds optional on-device speech feedback: a plain-language mic primer,
+session-local recording during the speaking window, in-app playback, Web Audio delivery
+observations (time speaking, pauses, clipping, loudness variation), and — on explicit request —
+pinned whisper-base.en transcription that downloads once and runs entirely in the browser.
+Audio and transcripts never leave the device, and the timer-only loop is unchanged when the
+mic is unsupported or declined. Decision resolutions are recorded in
+[docs/V0.3_DEVELOPMENT_CONTEXT.md](docs/V0.3_DEVELOPMENT_CONTEXT.md) §16. Scheduling, feedback
+quality scoring, and the connected platform remain progressive enhancements for later versions.
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -33,13 +39,21 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.2):** the runnable pack at `content/packs/demo-interaction-fixture.json` is a
-**non-medical interaction fixture** approved by the owner (`CONTENT_EDITOR`). A separate
-20-topic, 46-rubric MPT cardiovascular/respiratory medical pack now exists under
-`content/candidates/`. It is mapped to the supplied curriculum and current sources including GOLD
-2026, GINA 2026, 2025 ERS bronchiectasis, 2025 SCCM PADIS, 2025 ACC/AHA ACS, and 2025 AHA BLS.
-Candidate validation proves its structure and also proves that it cannot enter the production
-artifact while educator attestation is absent. See the
+**Content status (v0.3, PR #12):** the public production artifact ships the approved non-medical
+interaction fixture `content/packs/demo-interaction-fixture.json`. The genuine 20-topic MPT
+cardiovascular/respiratory pack is retained as the unreviewed `DRAFT`
+`content/candidates/mpt-cardiorespiratory-review-candidate.json`. It is mapped to the supplied
+curriculum and current primary sources, but source grounding is not medical approval. It may be
+used only in the explicitly labelled local curriculum beta and is excluded from normal dev,
+production builds, and GitHub Pages:
+
+```bash
+pnpm --filter @mediprompt/learner-web dev:medical
+```
+
+The beta displays `Curriculum beta · unreviewed draft` and is for practice only—not clinical use.
+Public medical release remains gated on a qualified educator reviewing the exact prompts, cases,
+rubrics, mappings, and cited-source scope. See the
 [source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
 
 | Document | Purpose |
@@ -53,16 +67,18 @@ artifact while educator attestation is absent. See the
 | [Implementation handoff](docs/IMPLEMENTATION_HANDOFF.md) | Minimum-context entry point for the next agent or contributor |
 | [Project memory](docs/PROJECT_MEMORY.md) | Current decisions, evidence, risks, and next-version pickup |
 | [v0.2 development context](docs/V0.2_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for the first-playable version |
-| [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator attestation |
+| [v0.3 development context](docs/V0.3_DEVELOPMENT_CONTEXT.md) | Consolidated build brief for private speech intelligence |
+| [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 
 ## Basic product contract
 
 The first playable must work without an account, microphone, model, transcript, or backend:
 
 1. Choose **Recall Sprint** or **Deep Research**.
-2. Choose an available challenge (**Easy - Guided**, **Medium - Applied**, or **Hard - Viva**) and
-   medical subject. Challenge is hidden when the selected pack has only one reviewed level.
-3. Press **Spin** to draw a topic; the timer action stays disabled until a topic is drawn.
+2. Choose an available challenge (**Explain**, **Apply**, or **Defend**) and subject. Challenge is
+   hidden when the selected pack has only one reviewed level.
+3. Press **Spin a topic** to draw a topic; the timer action stays unavailable until a topic is
+   drawn.
 4. In Recall Sprint, press **Start timer**. In Deep Research, run or finish the research timer,
    confirm **Ready to speak**, then enter the same speaking view.
 5. Keep the topic, a three-part medical answer arc, a large circular countdown, and an exit action
@@ -102,8 +118,8 @@ recording, transcription, evaluation, storage, or the network is unavailable.
   same timed answer.
 - **Teach-back:** explain the same topic to an examiner, junior student, or patient.
 
-Practice mode defines the activity. A separate challenge preset defines reasoning depth: Guided
-retrieval, Applied case reasoning, or Viva defense under uncertainty. Register, visible support,
+Practice mode defines the activity. A separate challenge preset defines reasoning depth: Explain
+for structured retrieval, Apply for bounded case reasoning, or Defend under uncertainty. Register, visible support,
 and accessibility time remain independent. See the
 [difficulty and depth design](docs/DIFFICULTY_AND_DEPTH_DESIGN.md).
 
@@ -164,10 +180,10 @@ would make later versions drift from decisions and code merged in earlier versio
 
 The first useful beta should serve one real medical student and let her complete the full prompt →
 speak → review → retry loop on a phone. The broad inventory contains 265
-[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset is
-now source-grounded as a 20-topic cardiovascular/respiratory review candidate. Publication remains
-blocked only on qualified educator review of MediPrompt's exact prompts, rubrics, cases, accepted
-phrases, source scope, and exam relevance—not on missing source research or authoring.
+[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset of
+20 cardiovascular/respiratory topics is available in the controlled local beta while it awaits
+qualified educator review. Automated software checks can make v0.3 merge-ready; they cannot make
+unreviewed medical content public-release-ready.
 
 ## Contributing
 

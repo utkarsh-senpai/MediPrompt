@@ -1,7 +1,7 @@
 import type { RuntimePack } from "@/practice/types";
 
-// Compiled, owner-reviewed non-medical fallback. It keeps both v0.2 modes usable
-// if the separately cached pack is missing or rejected; it is not medical content.
+// Compiled, owner-reviewed non-medical fallback. It keeps both modes usable if
+// the separately cached pack is missing or rejected; it makes no medical claim.
 export const FALLBACK_PACK: RuntimePack = {
   schemaVersion: "1.0",
   contentKind: "NON_MEDICAL_INTERACTION",
@@ -11,7 +11,7 @@ export const FALLBACK_PACK: RuntimePack = {
   locale: "en-IN",
   licence: {
     id: "CC-BY-4.0",
-    attribution: "Utkarsh Meshram - original non-medical interaction fixture.",
+    attribution: "Utkarsh Meshram — original non-medical interaction fixture.",
   },
   review: {
     status: "APPROVED",
@@ -45,7 +45,7 @@ export const FALLBACK_PACK: RuntimePack = {
               supportLevel: "FULL",
               wording:
                 "Choose a familiar everyday process and explain what it does, how it works, and why each step matters.",
-              answerArc: ["define", "sequence", "explain"],
+              answerArc: ["identify", "sequence", "connect"],
               timePolicy: { speakingSeconds: 90 },
               caseRef: null,
               followUpRefs: [],
@@ -61,7 +61,7 @@ export const FALLBACK_PACK: RuntimePack = {
               supportLevel: "FULL",
               wording:
                 "Research a familiar everyday process, then explain what it does, how it works, and why each step matters.",
-              answerArc: ["define", "sequence", "explain"],
+              answerArc: ["identify", "sequence", "connect"],
               timePolicy: { speakingSeconds: 90, researchSeconds: 120 },
               caseRef: null,
               followUpRefs: [],
@@ -75,8 +75,8 @@ export const FALLBACK_PACK: RuntimePack = {
               register: "EXAMINER",
               concepts: [
                 {
-                  conceptId: "familiar-process-rs-purpose",
-                  label: "States the purpose and sequence",
+                  conceptId: "familiar-process-rs-structure",
+                  label: "States the purpose and explains the sequence",
                   acceptedPhrases: ["purpose", "sequence"],
                   weight: 1,
                   sourceRefs: ["fallback-original"],
@@ -89,8 +89,8 @@ export const FALLBACK_PACK: RuntimePack = {
               register: "EXAMINER",
               concepts: [
                 {
-                  conceptId: "familiar-process-dr-purpose",
-                  label: "States the purpose and sequence",
+                  conceptId: "familiar-process-dr-structure",
+                  label: "States the purpose and explains the sequence",
                   acceptedPhrases: ["purpose", "sequence"],
                   weight: 1,
                   sourceRefs: ["fallback-original"],

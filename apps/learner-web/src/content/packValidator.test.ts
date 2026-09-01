@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
   assertV02ProductionPack,
+  assertControlledDraftPack,
   assertV02DemoMinimums,
   PackValidationError,
   validatePack,
 } from "./packValidator";
 import type { RuntimePack } from "@/practice/types";
 import demoPackJson from "@content/packs/demo-interaction-fixture.json";
+import medicalCandidateJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
 import nfpFixture from "@content/fixtures/not-for-publication.fixture.json";
 
 function basePack(): unknown {
@@ -127,7 +129,7 @@ describe("validatePack — happy paths", () => {
 });
 
 describe("assertV02ProductionPack", () => {
-  it("accepts the demo pack", () => {
+  it("accepts the production pack", () => {
     expect(() => assertV02ProductionPack(validatePack(demoPackJson))).not.toThrow();
     expect(() => assertV02DemoMinimums(validatePack(demoPackJson))).not.toThrow();
   });
@@ -177,6 +179,12 @@ describe("assertV02ProductionPack", () => {
 
   it("enforces the demo topic and challenge-trio minimums separately", () => {
     expect(() => assertV02DemoMinimums(validatePack(basePack()))).toThrow();
+  });
+
+  it("permits the medical candidate only through the controlled draft gate", () => {
+    const candidate = validatePack(medicalCandidateJson);
+    expect(() => assertControlledDraftPack(candidate)).not.toThrow();
+    expect(() => assertV02ProductionPack(candidate)).toThrow();
   });
 });
 

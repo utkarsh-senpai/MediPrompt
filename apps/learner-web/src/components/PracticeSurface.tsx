@@ -4,6 +4,8 @@ import type {
   V02PracticeMode,
 } from "@/practice/types";
 import type { SubjectOption } from "@/content/packQuery";
+import { subjectEmoji } from "@/app/subjectEmoji";
+import { InfoTip } from "./InfoTip";
 
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
@@ -16,15 +18,15 @@ export interface PracticeSurfaceProps {
   onSpin: () => void;
 }
 
-const MODES: { id: V02PracticeMode; label: string; hint: string }[] = [
-  { id: "RECALL_SPRINT", label: "Recall Sprint", hint: "Draw a topic and speak at once." },
-  { id: "DEEP_RESEARCH", label: "Deep Research", hint: "Research first, then speak." },
+const MODES: { id: V02PracticeMode; label: string; hint: string; emoji: string }[] = [
+  { id: "RECALL_SPRINT", label: "Recall Sprint", hint: "Draw a topic and speak at once.", emoji: "⚡" },
+  { id: "DEEP_RESEARCH", label: "Deep Research", hint: "Research first, then speak.", emoji: "🔬" },
 ];
 
 const PRESET_LABEL: Record<ChallengePreset, string> = {
-  GUIDED: "Easy · Guided",
-  APPLIED: "Medium · Applied",
-  VIVA: "Hard · Viva",
+  GUIDED: "Explain",
+  APPLIED: "Apply",
+  VIVA: "Defend",
 };
 
 export function PracticeSurface({
@@ -40,22 +42,36 @@ export function PracticeSurface({
   const spinDisabled = drawing || eligibleCount === 0;
 
   return (
-    <section aria-labelledby="controls-heading">
+    <section className="setup-surface" aria-labelledby="controls-heading">
       <h2 id="controls-heading" className="sr-only">
         Practice setup
       </h2>
 
       <div className="control-row">
-        <span id="mode-label">Practice mode</span>
-        <div className="chips" role="group" aria-labelledby="mode-label">
+        <span className="label-row">
+          <span id="mode-label">Practice mode</span>
+          <InfoTip label="About the practice modes">
+            Recall Sprint draws a topic and starts the speaking clock at once. Deep
+            Research gives you timed reading first, then the same speaking clock.
+          </InfoTip>
+        </span>
+        <div
+          className={`mode-switch sel-${MODES.findIndex((m) => m.id === selection.mode)}`}
+          role="group"
+          aria-labelledby="mode-label"
+        >
           {MODES.map((m) => (
             <button
               key={m.id}
               type="button"
+              className="mode-option"
               aria-pressed={selection.mode === m.id}
               title={m.hint}
               onClick={() => onChange({ mode: m.id })}
             >
+              <span className="mode-emoji" aria-hidden="true">
+                {m.emoji}
+              </span>
               {m.label}
             </button>
           ))}
@@ -64,7 +80,13 @@ export function PracticeSurface({
 
       {challengeVisible ? (
         <div className="control-row">
-          <span id="challenge-label">Challenge</span>
+          <span className="label-row">
+            <span id="challenge-label">Challenge</span>
+            <InfoTip label="About challenge levels">
+              Explain builds a clear concept map. Apply adds a fictional scenario.
+              Defend changes a constraint and asks you to respond to new evidence.
+            </InfoTip>
+          </span>
           <div className="chips" role="group" aria-labelledby="challenge-label">
             {presets.map((p) => (
               <button
@@ -89,7 +111,7 @@ export function PracticeSurface({
         >
           {subjects.map((s) => (
             <option key={s.subjectId} value={s.subjectId}>
-              {s.title}
+              {subjectEmoji(s.title)} {s.title}
             </option>
           ))}
         </select>
@@ -101,8 +123,15 @@ export function PracticeSurface({
         onClick={onSpin}
         disabled={spinDisabled}
         aria-label="Spin for a topic"
+        aria-busy={drawing}
+        data-drawing={drawing ? "true" : undefined}
       >
-        {drawing ? "Drawing…" : "Spin"}
+        <svg className="spin-mark" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="10" />
+          <path d="M16 3v5M16 24v5M3 16h5M24 16h5" />
+          <path className="spin-needle" d="m12 20 2.6-6.1L20 12l-2.6 6.1L12 20Z" />
+        </svg>
+        <span>{drawing ? "Finding a topic…" : "Spin a topic"}</span>
       </button>
 
       <p className="status" role="status">

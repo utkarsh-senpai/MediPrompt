@@ -1,25 +1,24 @@
 # MPT Cardiovascular and Respiratory Medical-Content Review
 
-**Status:** source-grounded educator-review candidate; DRAFT; not for learner publication
+**Status:** CONTROLLED BETA CANDIDATE — `DRAFT`, unreviewed, and excluded from public builds
 
 **Evidence checked:** 2026-08-30
 
-**Runtime candidate:** content/candidates/mpt-cardiorespiratory-review-candidate.json
+**Candidate:** content/candidates/mpt-cardiorespiratory-review-candidate.json
 
 **Generator:** apps/learner-web/scripts/generate-medical-candidate.ts
 
 ## Decision
 
-MediPrompt now contains a complete 20-topic medical candidate pack rather than an empty medical
-authoring queue. Every expected concept in its 46 prompt rubrics resolves to one or more identified
-sources, all prompts and fictional cases use original wording, and three topics have distinct
-Guided, Applied, and Viva variants.
+MediPrompt has a complete 20-topic medical review candidate rather than an empty authoring queue.
+Every expected concept resolves to one or more identified sources, all prompts and fictional cases
+use original wording, and three topics have distinct Guided, Applied, and Viva variants.
 
-The pack deliberately remains DRAFT. A guideline, textbook, or curriculum can support a claim,
-but it cannot attest that a qualified educator reviewed MediPrompt's exact selection, phrasing,
-fictional cases, rubrics, accepted phrases, scope, and exam relevance. The application therefore
-continues to publish the approved non-medical interaction fixture until the attestation in this
-document is completed by an identifiable medical educator.
+The pack remains `DRAFT` because a guideline, textbook, or curriculum can support a claim but
+cannot attest that a qualified educator reviewed MediPrompt's exact selection, phrasing,
+fictional cases, rubrics, accepted phrases, scope, and exam relevance. It is testable only through
+the explicitly labelled local curriculum beta. Public production continues to use the approved
+non-medical interaction fixture.
 
 ## What was validated
 
@@ -28,8 +27,8 @@ document is completed by an identifiable medical educator.
 The supplied source is:
 
 - **Title:** Competency-Based Post Graduate Curriculum for the Indian Physiotherapy Post Graduate
-- **Institution:** Ravi Nair Physiotherapy College, Datta Meghe Institute of Higher Education and
-  Research, Wardha
+- **Institution:** not recorded in this repository; the supplied PDF is used as a private
+  curriculum reference and is not redistributed.
 - **Subject:** MPT in Cardiovascular and Respiratory Sciences, 2022-2023 to 2026-2027
 - **File pages used:** 119-127 for the competency tables; 137-138 for recommended books and journals
 - **SHA-256:** 245e15083822f842a5177f617604343328de3efa4063b03b245033061d15247c
@@ -111,7 +110,7 @@ runtime-oriented; this document is the durable traceability record.
 | ATS, Interpretation of Arterial Blood Gases | Official clinical-education resource; page has no visible publication date | Used only for the interpretation sequence. Educator must verify local reference ranges and teaching method. |
 | BACPR, Standards and Core Components, 4th ed., 2023 | Current BACPR standard found | Official publication page linked; no diagrams or standard text copied. |
 | ACSM, Guidelines for Exercise Testing and Prescription, 12th ed., 24 Mar 2025, ISBN 9781975219215 | Current 2025 edition; aligns with curriculum exercise-testing scope | Commercial book. Only bibliographic and high-level concepts are cited; no paywalled prose is included. |
-| DMIHER/RNPC MPT curriculum, 2022-2027 | Governing supplied curriculum for topic selection | Local PDF is not redistributed. Institution landing page is linked; local hash and page coordinates preserve provenance. |
+| Supplied MPT curriculum, 2022-2027 | Governing supplied curriculum for topic selection | Local PDF is not redistributed. The stored hash and page coordinates preserve provenance without publishing the source document. |
 
 Search results, vendor blogs, news summaries, Guideline Central, and Physio-Pedia were used only to
 locate or corroborate primary sources. They are not used as ground truth in the runtime candidate.
@@ -125,13 +124,18 @@ locate or corroborate primary sources. They are not used as ground truth in the 
 - Accepted phrases are retrieval cues, not exhaustive model answers.
 - Source coverage can later support a “mentioned/not yet mentioned” signal; it cannot certify that
   a spoken answer is medically correct.
-- The generator emits review.status DRAFT, an empty reviewer list, and reviewedAt null.
-- Candidate validation first checks generator/artifact drift, then requires 20 topics, three
-  challenge trios, valid references, and guaranteed failure of the production gate.
-- Build validation forbids the candidate identifier in production output. Only content/packs/ is
-  copied to the PWA.
+- The generator emits `review.status: DRAFT`, `reviewers: []`, and `reviewedAt: null`.
+- Candidate validation checks generator/artifact drift, 20 topics, three challenge trios, valid
+  references, controlled-beta restrictions, and explicit failure of the production gate.
+- Build validation forbids draft/candidate markers and `beta-packs/` in production output. Only
+  `content/packs/` is copied to the public PWA.
 
 ## Required educator review
+
+**Pending:** educator review is intentionally deferred until the application has real-user beta
+feedback and a v1.x release plan. This does not block local curriculum-beta testing or software
+merge, but it blocks publishing the medical pack. The checklist below applies to the exact
+candidate commit proposed for release.
 
 The medical reviewer must review the generated JSON and this evidence matrix, not just the source
 list.
@@ -173,6 +177,10 @@ guideline author, AI system, repository owner, or placeholder as MEDICAL_REVIEWE
 
 ## Promotion procedure after genuine approval
 
+Not yet executed. PR #12 deliberately restores the pack to the candidate lane and keeps the
+non-medical demo fixture in public production. Complete all steps below in a later, dedicated
+medical-content promotion PR.
+
 1. Apply every reviewer correction in the generator and regenerate the candidate.
 2. Record the completed attestation in the promotion PR.
 3. Change the reviewed artifact to APPROVED, add the identified MEDICAL_REVIEWER, and set the
@@ -184,4 +192,5 @@ guideline author, AI system, repository owner, or placeholder as MEDICAL_REVIEWE
 7. Run content, unit, accessibility, build, offline/E2E, dependency, secret, and link gates.
 8. Merge only after the medical reviewer approves the exact final diff and CI commit.
 
-Until those steps are complete, “source-grounded” must never be displayed as “medically approved.”
+Until those steps are complete, “source-grounded” must never be displayed as
+“medically approved.”
