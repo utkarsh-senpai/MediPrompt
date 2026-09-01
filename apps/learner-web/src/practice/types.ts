@@ -29,6 +29,8 @@ export type ReviewerRole = "MEDICAL_REVIEWER" | "CONTENT_EDITOR";
 
 export type ContentKind = "MEDICAL" | "NON_MEDICAL_INTERACTION";
 
+export type SubjectAvailability = "ACTIVE" | "COMING_SOON";
+
 // --- Runtime topic pack ---
 
 export interface Licence {
@@ -132,6 +134,8 @@ export interface Topic {
 export interface Subject {
   subjectId: string;
   title: string;
+  /** Missing in legacy fixtures means ACTIVE. */
+  availability?: SubjectAvailability;
   topics: Topic[];
 }
 

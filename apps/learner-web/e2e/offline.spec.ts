@@ -8,9 +8,20 @@ test("core loop works online and after an offline reload", async ({ page, contex
   await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
   await expect(page.getByText("Curriculum beta · unreviewed draft")).toBeVisible();
   await expect(page.getByLabel("Subject").locator("option")).toHaveText([
+    "📖 Research Methods and Bioethics — coming soon",
+    "🧬 Applied Physiotherapeutics — coming soon",
+    "🧬 Musculoskeletal Physiotherapy — coming soon",
+    "🧠 Neuro Physiotherapy",
     "🫁 Respiratory Physiotherapy",
     "❤️ Cardiovascular Physiotherapy",
+    "🧬 Community Health Physiotherapy — coming soon",
+    "🧬 Sports Physiotherapy — coming soon",
   ]);
+  const subjectAvailability = await page
+    .getByLabel("Subject")
+    .locator("option")
+    .evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).disabled));
+  expect(subjectAvailability).toEqual([true, true, true, false, false, false, true, true]);
   await expect(page.getByText("Everyday Explanations")).toHaveCount(0);
 
   // Online core loop: spin -> topic -> start timer -> finish.

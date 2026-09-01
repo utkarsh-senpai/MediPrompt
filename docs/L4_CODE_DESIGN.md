@@ -458,7 +458,11 @@ The normative schema will live at `content/schema/topic-pack.schema.json`. Minim
 
 Schema restrictions include `additionalProperties: false`, semantic pack versions, valid locale,
 unique stable IDs, versioned challenge profiles, bounded timer values, non-empty original wording,
-resolvable source references, and allowed review statuses. The normal medical release gate rejects
+resolvable source references, explicit subject availability in the curriculum beta, and allowed
+review statuses. `availability` is optional for backward-compatible fixtures (missing means active),
+but the public candidate explicitly marks `ACTIVE` or `COMING_SOON`. Empty rubric concepts are
+structurally valid only for `COMING_SOON` shells; active subjects require sourced concepts. The
+normal medical release gate rejects
 anything not `APPROVED`; the separate public-practice-beta gate accepts only one allowlisted,
 source-grounded `MEDICAL`/`DRAFT` snapshot with empty attestation. `contentKind` is required; an approved `MEDICAL` pack requires at least one
 `MEDICAL_REVIEWER`, while `CONTENT_EDITOR` approval is limited to
@@ -473,9 +477,12 @@ all-or-nothing check against the drawn rubric; malformed partial ladders are nev
 Review metadata models absence honestly: an unattested `DRAFT` has `reviewers: []` and
 `reviewedAt: null`. The schema condition requires at least one reviewer and a non-null ISO date for
 `APPROVED`; medical release validation then enforces the role/content-kind rule. Medical review
-candidates live under `content/candidates/`, must meet the v0.2 topic/trio minimums, and must fail
-the medical release gate. The v0.3 beta copy step allowlists the exact 20-topic candidate; artifact
-and service-worker validation require `DRAFT`, no reviewers/date, and exclude generic packs.
+candidates live under `content/candidates/`, must meet the practice topic/trio minimums, and must
+fail the medical release gate. The beta copy step allowlists the exact 265-topic candidate; runtime
+validation requires exactly 35 Neuro, 13 Respiratory, and 13 Cardiovascular active topics, five
+known `COMING_SOON` subject shells, `DRAFT`, no reviewers/date, and exclusion of generic packs.
+`generate-active-subjects-attestation.ts` deterministically emits every active prompt, expected
+criterion, accepted phrase, and citation; its `--check` mode is part of `content:validate`.
 
 ## 6. Java compiler contracts
 

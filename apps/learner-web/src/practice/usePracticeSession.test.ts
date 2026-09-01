@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { usePracticeSession } from "./usePracticeSession";
+import { initialSelection, usePracticeSession } from "./usePracticeSession";
 import { validatePack } from "@/content/packValidator";
 import { findRubric } from "@/content/packQuery";
 import { seededRandom } from "@/platform/random";
@@ -42,6 +42,16 @@ function setup() {
       drawDelayMs: 0,
     }),
   );
+  // Default to an authored subject + APPLIED challenge so spin() always draws
+  // a coverable topic (scaffold topics are GUIDED-only with empty rubrics).
+  act(() =>
+    hook.result.current.actions.setSelection({
+      mode: "RECALL_SPRINT",
+      challenge: "APPLIED",
+      subjectId: "respiratory-physiotherapy",
+      register: "EXAMINER",
+    }),
+  );
   // Advance both the fake clock (to flush interval ticks) and the injected monotonic value.
   const advance = (ms: number) =>
     act(() => {
@@ -57,6 +67,10 @@ describe("usePracticeSession", () => {
   });
   afterEach(() => {
     vi.useRealTimers();
+  });
+
+  it("defaults to the first active subject, not a coming-soon curriculum shell", () => {
+    expect(initialSelection(pack).subjectId).toBe("neuro-physiotherapy");
   });
 
   it("runs the full Recall Sprint loop: spin → speak → complete", async () => {
@@ -139,7 +153,9 @@ describe("usePracticeSession", () => {
 
   it("opens the exact current-pack topic selected by the resurfacing queue", () => {
     const { hook } = setup();
-    const subject = pack.subjects[0]!;
+    const subject = pack.subjects.find(
+      (candidate) => candidate.subjectId === "neuro-physiotherapy",
+    )!;
     const topic = subject.topics[0]!;
     const variant = topic.variants.find(
       (candidate) =>
@@ -163,6 +179,38 @@ describe("usePracticeSession", () => {
     if (hook.result.current.state.name === "TOPIC_READY") {
       expect(hook.result.current.state.topic.topicRef.variantId).toBe(variant.variantId);
     }
+  });
+
+  it("rejects direct selection and saved-topic launch for a coming-soon subject", () => {
+    const { hook } = setup();
+    const before = hook.result.current.state.selection.subjectId;
+    act(() =>
+      hook.result.current.actions.setSelection({
+        subjectId: "musculoskeletal-physiotherapy",
+      }),
+    );
+    expect(hook.result.current.state.selection.subjectId).toBe(before);
+
+    const subject = pack.subjects.find(
+      (candidate) => candidate.subjectId === "musculoskeletal-physiotherapy",
+    )!;
+    const topic = subject.topics[0]!;
+    const variant = topic.variants[0]!;
+    let opened = true;
+    act(() => {
+      opened = hook.result.current.actions.practiceTopic({
+        packId: pack.packId,
+        packVersion: pack.version,
+        subjectId: subject.subjectId,
+        topicId: topic.topicId,
+        variantId: variant.variantId,
+        difficultyProfileVersion: variant.difficultyProfileVersion,
+        promptId: variant.promptId,
+        rubricId: variant.rubricId,
+      });
+    });
+    expect(opened).toBe(false);
+    expect(hook.result.current.state.name).toBe("IDLE");
   });
 
   it("retries the identical topic and computes Refinement Delta from consecutive attempts", async () => {
@@ -235,6 +283,14 @@ describe("usePracticeSession", () => {
       }),
     );
 
+    act(() =>
+      hook.result.current.actions.setSelection({
+        mode: "RECALL_SPRINT",
+        challenge: "APPLIED",
+        subjectId: "respiratory-physiotherapy",
+        register: "EXAMINER",
+      }),
+    );
     act(() => hook.result.current.actions.spin());
     const ready = hook.result.current.state;
     if (ready.name !== "TOPIC_READY") throw new Error("topic missing");
@@ -313,6 +369,14 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
       });
     const { result } = hook;
 
+    act(() =>
+      result.current.actions.setSelection({
+        mode: "RECALL_SPRINT",
+        challenge: "APPLIED",
+        subjectId: "respiratory-physiotherapy",
+        register: "EXAMINER",
+      }),
+    );
     act(() => result.current.actions.spin());
     await act(async () => {
       await result.current.actions.startTimer();
@@ -386,6 +450,14 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
         vi.advanceTimersByTime(ms);
       });
     const { result } = hook;
+    act(() =>
+      result.current.actions.setSelection({
+        mode: "RECALL_SPRINT",
+        challenge: "APPLIED",
+        subjectId: "respiratory-physiotherapy",
+        register: "EXAMINER",
+      }),
+    );
     act(() => result.current.actions.spin());
     await act(async () => {
       await result.current.actions.startTimer();
@@ -522,6 +594,14 @@ function setupAudio(
       bagStore,
       audio: { recorder, decoder, transcription: transcription.client },
       drawDelayMs: 0,
+    }),
+  );
+  act(() =>
+    hook.result.current.actions.setSelection({
+      mode: "RECALL_SPRINT",
+      challenge: "APPLIED",
+      subjectId: "respiratory-physiotherapy",
+      register: "EXAMINER",
     }),
   );
   const advance = (ms: number) =>
