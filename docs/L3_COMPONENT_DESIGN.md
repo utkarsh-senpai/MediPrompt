@@ -230,7 +230,7 @@ A source pack is review-oriented YAML; runtime packs are compiled JSON. The conc
 TopicPack
  ├─ identity: schemaVersion, contentKind, packId, version, title, locale, licence
  ├─ provenance: maintainers, reviewers, sources, reviewedAt
- └─ subjects[]
+ └─ subjects[]: subjectId, title, availability (`ACTIVE` or `COMING_SOON`)
      └─ topics[]
          ├─ identity: topicId, title, tags
          ├─ curriculum: program, year, track, paper, module, competencyCodes, sourceLocators
@@ -247,6 +247,9 @@ TopicPack
 Rules:
 
 - Identifiers are stable, lowercase, and pack-scoped; display titles may change.
+- Missing subject availability means `ACTIVE` only for backward compatibility. The curriculum beta
+  declares every subject explicitly. `COMING_SOON` entries remain visible but cannot contribute
+  presets, eligible variants, direct launches, learning-plan queues, scoring, or spacing.
 - `contentKind` distinguishes medical material from an explicitly non-medical interaction fixture.
   An `APPROVED` medical pack requires a `MEDICAL_REVIEWER`; a content editor cannot promote
   medical claims. A learner-visible `DRAFT` is a practice beta, never an approval state.
@@ -256,7 +259,8 @@ Rules:
 - Curriculum coordinates preserve source navigation and are never inferred from display order.
 - Classification is orthogonal to curriculum coordinates: it supports discovery but never replaces
   year, track, paper, module, competency code, or page evidence.
-- Every medical assertion or expected concept links to a pack source entry.
+- Every medical assertion or expected concept in an `ACTIVE` subject links to a pack source entry.
+  Empty concepts are allowed only in non-playable `COMING_SOON` authoring shells.
 - Accepted phrases are curated equivalents, not model-generated at runtime.
 - Common errors are optional and never shown as if detected unless transcript evidence supports it.
 - Mode, challenge, and register are independent; every medical-release combination points to a
@@ -279,10 +283,12 @@ source-grounded `prompt-ready-beta` snapshot may run only through the explicit p
 with empty attestation and a persistent non-clinical warning. Earlier incomplete states remain
 invalid learner content.
 
-The first source-grounded candidate is stored in `content/candidates/`, not `content/packs/`.
+The source-grounded candidate is stored in `content/candidates/`, not `content/packs/`.
 Candidate validation applies the runtime schema and demo depth minimums, then asserts that the
-medical release gate fails. Build copying allowlists that exact 20-topic candidate for the public
-practice beta and rejects the generic regression fixture from the learner artifact.
+medical release gate fails. Build copying allowlists that exact candidate for the public practice
+beta and rejects the generic regression fixture from the learner artifact. As of v0.7 the
+allowlisted candidate contains the full 265-topic catalog, exactly 61 active authored topics, and
+five disabled subject shells; its public gate fixes the subject IDs, counts, and availability split.
 
 The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
 assessment/investigation, clinical reasoning, intervention/rehabilitation,

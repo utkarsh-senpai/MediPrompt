@@ -77,26 +77,28 @@ content, copy, or visual identity.
 
 ## Medical-content boundary
 
-- The 265 labels under `docs/curriculum/` are `DRAFT`, `REFERENCE_ONLY`, and never runtime learner
-  content.
-- The genuine curriculum-grounded first subset is
-  `content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.2.0`: 20 cardiovascular/respiratory
-  topics with three challenge variants. It remains `MEDICAL`, `DRAFT`, `reviewers: []`, and
-  `reviewedAt: null`.
-- Source research includes the supplied curriculum and current primary sources such as GOLD 2026,
-  GINA 2026, the 2025 ERS bronchiectasis guideline, 2025 SCCM PADIS focused update, 2025 ACC/AHA
-  ACS guideline, and 2025 AHA adult BLS guideline. Currency and provenance support review; they do
-  not substitute for review.
-- Normal development and GitHub Pages load that exact 20-topic candidate as an explicitly labelled
-  **public practice beta**. The only selectable subjects are Respiratory Physiotherapy and
-  Cardiovascular Physiotherapy; generic Everyday/Science/Reasoning topics are not copied into the
-  learner artifact.
+- The 265 curriculum-derived labels under `docs/curriculum/` are the canonical catalog. The runtime
+  candidate mirrors all eight app subjects but uses availability as a safety boundary.
+- `content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.3.0` is `MEDICAL`,
+  `DRAFT`, `reviewers: []`, and `reviewedAt: null`. Neuro (35), Respiratory (13), and
+  Cardiovascular (13) are the only `ACTIVE` subjects; every one of their 61 topics has sourced
+  criteria. The remaining five subjects are visible, disabled `COMING_SOON` skeletons.
+- All 35 Neuro topics are authored from the curriculum plus sources checked in 2026. The evidence
+  set includes 2025-26 publications and older still-current/foundational guidance and measures.
+  Never summarize it as “all references are 2025-26.” Currency and provenance support review;
+  they do not substitute for qualified educator review.
+- Normal development and GitHub Pages load this candidate as an explicitly labelled **public
+  practice beta**. UI, query, session, direct-snapshot, and saved-plan paths limit practice to the
+  three active subjects; generic Everyday/Science/Reasoning topics are not shipped.
 - Every beta screen displays `Curriculum beta · unreviewed draft` and `not for diagnosis,
   treatment, or clinical decisions`. The approved non-medical interaction fixture remains only for
   schema/regression tests.
-- Build and service-worker validation require the exact `MEDICAL`, `DRAFT`, unattested 20-topic
-  snapshot, reject fabricated reviewer identifiers and legacy `beta-packs/`, and reject the generic
-  interaction fixture from the public artifact.
+- Build and service-worker validation require the exact `MEDICAL`, `DRAFT`, unattested 265-topic
+  catalog and its exact 3-active/5-coming-soon split. Structural validation forbids empty rubrics in
+  active subjects. The generic interaction fixture and legacy `beta-packs/` path remain excluded.
+- `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md` is generated from the candidate and covers
+  every active question and expected answer criterion. It remains unsigned and does not change
+  review status; `content:validate` rejects worksheet drift.
 
 ## Review and release policy
 
@@ -151,8 +153,8 @@ privacy-minimized learning-plan metadata after learner action.
 
 ## Current pickup state
 
-PR #24 rebaselines v0.7 from the previously planned Java compiler to the private learning plan and
-spaced-resurfacing outcome. It includes explicit consent, transcript-free records, working
+v0.7 contains the private learning plan and spaced-resurfacing outcome plus the 265-topic catalog
+and three-subject activation gate. It includes explicit consent, transcript-free records, working
 IndexedDB v2 indexing, strict validation, bounded retention, local-calendar scheduling, exam
 triage, exact due-topic launch, export, and verified deletion. The Java 21/Spring Boot content
 compiler is now v0.8; target-user hardening is v0.9. Extra registers, challenge suggestions, and
@@ -161,8 +163,8 @@ while model instances and activation paths remain separate. GitHub operations mu
 `utkarsh-senpai`; release changes flow through `develop` before `main` and Pages.
 
 The beta may be publicly testable, but medical approval remains blocked pending educator
-attestation. The next release work is target-device/model benchmarking and a v1.x
-educator-review/release plan.
+attestation. Use the generated active-subject worksheet for that review after target-user feedback;
+the next release work is target-device/model benchmarking and a v1.x educator-review/release plan.
 
 ## Source of truth
 
@@ -176,6 +178,8 @@ educator-review/release plan.
 - `docs/V0.7_DEVELOPMENT_CONTEXT.md`: private learning-plan privacy, storage, scheduling, and UI contract.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
+- `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`: generated review worksheet for all 61 active
+  topics; never hand-edit or treat the unsigned file as approval.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.
 
 If memory conflicts with a normative design or an exit gate, the execution plan and L1-L4 design

@@ -70,11 +70,17 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.6 public practice beta):** the learner app uses the genuine 20-topic MPT
-cardiovascular/respiratory candidate from
-`content/candidates/mpt-cardiorespiratory-review-candidate.json`, split into Respiratory
-Physiotherapy and Cardiovascular Physiotherapy subjects. The generic interaction fixture remains
-only as a schema/regression-test input and is not copied into the public app.
+**Content status (v0.7 curriculum expansion):** the learner app uses the 265-topic MPT
+competency-based curriculum candidate from
+`content/candidates/mpt-cardiorespiratory-review-candidate.json`, spanning all eight app-subjects
+(Research Methods & Bioethics, Applied Physiotherapeutics, Musculoskeletal, Neuro, Respiratory,
+Cardiovascular, Community Health, Sports). All eight are visible, but only Neuro, Respiratory, and
+Cardiovascular are active. Every variant across their 61 topics has original, source-linked answer
+criteria; all 35 Neuro topics are authored. The other five subjects are disabled `COMING_SOON`
+curriculum skeletons and cannot enter a draw, saved-plan launch, or scoring path. Sources were
+checked in 2026 and include 2025-26 publications plus older still-current guidelines, validated
+measures, and foundational texts; this must not be described as “all sources are from 2025-26.”
+The generic interaction fixture remains only as a schema/regression-test input.
 
 The medical pack remains `DRAFT`, with no reviewer or review date. Every screen therefore displays
 `Curriculum beta · unreviewed draft` and is for recall/speaking practice only—not diagnosis,
@@ -82,6 +88,8 @@ treatment, clinical decisions, or a claim of medical approval. Source grounding 
 useful for feedback; a public **medical release** remains gated on a qualified educator reviewing
 the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 [source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
+The generated [active-subject review worksheet](docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md)
+contains every active question and its expected evidence criteria for qualified human review.
 
 | Document | Purpose |
 | --- | --- |
@@ -100,6 +108,7 @@ the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
 | [v0.6 development context](docs/V0.6_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the oral-defense ladder and release hardening |
 | [v0.7 development context](docs/V0.7_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the private learning plan and spaced resurfacing |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
+| [Active-subject review worksheet](docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md) | All active prompts, expected criteria, citations, and reviewer sign-off fields |
 
 ## Basic product contract
 
@@ -216,9 +225,10 @@ would make later versions drift from decisions and code merged in earlier versio
 
 The first useful beta should serve one real medical student and let her complete the full prompt →
 speak → review → retry loop on a phone. The broad inventory contains 265
-[reference-only candidate labels](docs/curriculum/MPT-CBC-topics.md). A coherent first subset of
-20 cardiovascular/respiratory topics is available in the explicitly labelled public practice beta
-while it awaits qualified educator review. Automated checks can make the software and beta
+[curriculum-derived candidate labels](docs/curriculum/MPT-CBC-topics.md). The 35 Neuro, 13
+Respiratory, and 13 Cardiovascular topics are available in the explicitly labelled public practice
+beta; the remaining five subjects are visible but disabled until researched and authored.
+Automated checks can make the software and beta
 delivery test-ready; they cannot make unreviewed medical content medically release-ready.
 
 ## Contributing
