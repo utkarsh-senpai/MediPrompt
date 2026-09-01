@@ -19,6 +19,12 @@ import type {
 
 export type { ConceptResult, CoverageReport };
 
+/** Increment when lexical normalization or matching semantics change. */
+export const LEXICAL_SCORING = Object.freeze({
+  method: "LEXICAL" as const,
+  version: "lexical-v1",
+});
+
 /** Stopwords dropped before token matching so phrase logic is not noise-driven. */
 const STOPWORDS = new Set([
   "a", "an", "the", "and", "or", "of", "to", "in", "for", "with", "on",
@@ -109,6 +115,7 @@ function unavailable(reason: CoverageUnavailableReason): CoverageReport {
   return {
     verifiable: false,
     unavailableReason: reason,
+    scoring: LEXICAL_SCORING,
     conceptResults: [],
     hitCount: 0,
     totalCount: 0,
@@ -153,6 +160,7 @@ export function scoreCoverage(transcript: string, concepts: readonly Concept[]):
   return {
     verifiable: true,
     unavailableReason: null,
+    scoring: LEXICAL_SCORING,
     conceptResults,
     hitCount,
     totalCount,

@@ -55,3 +55,8 @@ export function speechFeedbackAvailable(caps: Capabilities): boolean {
     caps.worker
   );
 }
+
+/** Semantic typed-review enhancement does not require microphone or audio APIs. */
+export function semanticCoverageAvailable(caps: Capabilities): boolean {
+  return caps.webAssembly && caps.worker;
+}

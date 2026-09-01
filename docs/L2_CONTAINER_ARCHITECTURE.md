@@ -61,10 +61,10 @@ flowchart TB
 | --- | --- | --- | --- |
 | Basic practice core | Mode/subject selection, topic draw, focused timer, answer arc, finish and repeat | In-memory current topic/timer | v0.2+ |
 | Learner enhancements | Recording, review, coverage, retry, scheduling and history UI | In-memory active session | v0.3+ |
-| Browser workers | Transcription, then optional semantic coverage off the main thread | Temporary audio/features/model state | v0.3 and v0.5+ |
+| Browser workers | Separate transcription/embedding instances backed by one shared bundled worker asset | Temporary audio/features/model state | v0.3 and v0.5+ |
 | localStorage | Accessibility and timer settings | Learner-owned settings | v0.2+ |
 | IndexedDB | Attempts, pack metadata, model metadata, due queue | Learner-owned local data | v0.6+ |
-| Service worker/cache | Offline shell, content and optional pinned model assets | Public immutable assets | v0.2+ |
+| Service worker/cache | Offline shell, content, and same-origin ORT runtime; Transformers.js separately caches opt-in model files | Public immutable assets | v0.2+ |
 | Topic packs | Prompts, reviewed rubrics, follow-ups and source metadata | No learner data | v0.2+ |
 | Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | v0.7+ |
 | GitHub Actions/Pages | Validation, static build and publication | Public build artifacts | v0.2+ |
@@ -183,7 +183,7 @@ from production secrets. Its deployment target remains undecided until v1.1 plan
 | Static host | GitHub Pages | No recurring infrastructure cost | Availability, policy, or scale limitation |
 | Recording | MediaRecorder + Web Audio | Native browser primitives | Unsupported target browser |
 | Local STT | Transformers.js + candidate `whisper-base.en` | Local privacy and acceptable candidate quality | v0.3 device benchmark |
-| Coverage | v0.4 lexical baseline; optional quantized `all-MiniLM-L6-v2` from v0.5 | Inspectable local coverage with deterministic fallback | Human disagreement or device budget |
+| Coverage | v0.4 lexical baseline; optional pinned q8 `all-MiniLM-L6-v2` evidence from v0.5 | Inspectable fallback; semantic evidence is non-counting until educator calibration | Calibrated labelled fixtures or device budget |
 | Local storage | IndexedDB | Structured, asynchronous, offline | Data-volume or compatibility evidence |
 | Content authoring | Versioned YAML | Reviewable diffs | Reviewer usability evidence |
 | Content runtime | Validated JSON | Fast deterministic browser consumption | None expected |

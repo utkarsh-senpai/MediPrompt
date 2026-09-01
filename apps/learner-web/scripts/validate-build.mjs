@@ -172,6 +172,8 @@ const shellBytes = files
 // v0.3: the shell now carries the pinned transformers.js worker graph (~0.9 MB)
 // so the service worker can precache it for offline transcription. Initial load
 // is still bounded by the entry budget above; the wasm runtime is separate.
+// v0.5 reuses one shared model-worker asset for Whisper and MiniLM, so adding
+// meaning matching must not double the bundled transformers.js graph.
 const MAX_SHELL_BYTES = 1536 * 1024;
 if (shellBytes > MAX_SHELL_BYTES) errors.push(`shell budget exceeded: ${shellBytes} bytes`);
 

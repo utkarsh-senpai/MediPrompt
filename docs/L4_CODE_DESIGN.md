@@ -290,7 +290,7 @@ for each rubric concept:
 
 The matched accepted phrase is retained as visible evidence. This baseline can establish that a
 listed idea was mentioned; it does not infer correctness, contradiction, or clinical safety.
-v0.5 may add the semantic enhancer below without removing the lexical fallback:
+v0.5 adds the semantic evidence path below without removing the lexical fallback:
 
 ```text
 sentences = segment(normalize(approvedTranscript))
@@ -298,15 +298,16 @@ for each rubric concept:
     phrases = [label, ...acceptedPhrases]
     best = max(cosine(embed(sentence), embed(phrase))) across pairs
     if explicit negation/contradiction rule applies: do not mark covered
-    if best >= coveredThreshold: COVERED with best sentence
+    if an educator-calibrated coveredThreshold exists and best >= it: COVERED with best sentence
     else if best >= possibleThreshold: POSSIBLY_COVERED with best sentence
     else: NOT_FOUND
 weightedCoverage = sum(weights of COVERED) / sum(all concept weights)
 ```
 
-Thresholds are versioned and calibrated against educator-labelled fixtures. “Possibly covered” does
-not contribute to the default Refinement Delta. Exact curated phrase matching may establish
-coverage before embeddings, but it still cannot prove broader medical correctness.
+Thresholds are versioned. The v0.5 public beta deliberately disables semantic-to-`COVERED`
+promotion until educator-labelled fixtures calibrate it; it surfaces only “possibly covered”
+sentence/rubric evidence, which does not contribute to Refinement Delta. Exact curated phrase
+matching may establish coverage, but it still cannot prove broader medical correctness.
 
 ### Prescription selection
 
@@ -326,7 +327,7 @@ identity (“you are unconfident”) or issue multiple instructions.
 ### Refinement Delta
 
 ```text
-if same topic + variant + difficulty profile + prompt + rubric version + mode + register + support + time policy:
+if same topic + variant + difficulty profile + prompt + rubric + pack/version + mode + register + support + time policy + scoring identity:
     delta = attempt2.weightedCoverage - attempt1.weightedCoverage
 else:
     delta = unavailable(reason)
@@ -647,7 +648,7 @@ CI performance on hosted runners is not presented as phone performance.
 | v0.2 | Independent mode/challenge/subject controls, challenge hiding for single-level content, three reviewed prompt trios, drawing state, timer disabled before draw, Spin/Spin again, Recall direct-to-speech path, Deep Research research -> ready -> speech path, duration settings, challenge-specific arc, complete/exit/repeat, full-fingerprint random bag, background timer, responsive/a11y/offline shell, and operation with mic/storage/models/network disabled |
 | v0.3 | Permission paths, record/playback, deterministic audio fixtures, local STT progress/cancel/failure, device benchmark, zero audio requests |
 | v0.4 | Difficulty-specific golden lexical evidence, whole-token/local-window false-positive guards, distinct transcript/rubric `NOT_VERIFIABLE` outcomes, one prescription, offline typed-review E2E |
-| v0.5 | Optional semantic evidence with calibrated thresholds and lexical fallback, same-identity retry, mismatch rejection and valid Refinement Delta |
+| v0.5 | Optional non-counting semantic evidence with pinned model/versioned thresholds and lexical fallback, bounded same-identity retry history, mismatch rejection and valid Refinement Delta |
 | v0.6 | Reviewed Viva follow-ups/evidence updates, register rubrics, learner-controlled challenge suggestions, deterministic due queue, timezone cases, export/delete-all |
 | v0.7 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
 | v0.8 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |

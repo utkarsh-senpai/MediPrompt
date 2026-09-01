@@ -2,6 +2,7 @@ import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { usePracticeSession } from "./usePracticeSession";
 import { validatePack } from "@/content/packValidator";
+import { findRubric } from "@/content/packQuery";
 import { seededRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
 import { AudioError } from "@/audio/audioErrors";
@@ -11,10 +12,12 @@ import type {
   TranscriptionClient,
   TranscriptionEvent,
 } from "@/speech/transcriptionClient";
+import type { EmbeddingClient, EmbeddingEvent } from "@/scoring/embeddingClient";
 import { FIXTURE_RATE, concat, silence, sineBurst } from "@/test/pcmFixtures";
 import {
   DEFAULT_SETTINGS,
   type RuntimePack,
+  type SessionState,
   type TranscriptDraft,
 } from "./types";
 import medicalPackJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
@@ -131,6 +134,194 @@ describe("usePracticeSession", () => {
     expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
     act(() => result.current.actions.spinAgain());
     expect(result.current.state.name).toBe("TOPIC_READY");
+  });
+
+  it("retries the identical topic and computes Refinement Delta from consecutive attempts", async () => {
+    const { hook, advance } = setup();
+    const { result } = hook;
+    const currentState = (): SessionState => result.current.state;
+    act(() => result.current.actions.spin());
+    const firstReady = currentState();
+    expect(firstReady.name).toBe("TOPIC_READY");
+    if (firstReady.name !== "TOPIC_READY") throw new Error("topic missing");
+    const originalRef = firstReady.topic.topicRef;
+    const rubric = findRubric(pack, originalRef);
+    if (!rubric) throw new Error("rubric missing");
+
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    act(() => result.current.actions.startTypedReview());
+    act(() => result.current.actions.submitSelfReview(rubric.concepts[0]!.acceptedPhrases[0]!));
+    const firstReview = currentState();
+    expect(firstReview.name).toBe("REVIEW");
+    if (firstReview.name !== "REVIEW") throw new Error("first review missing");
+    const firstFraction = firstReview.coverage.weightedFraction;
+
+    act(() => result.current.actions.startSecondAttempt());
+    const retryReady = currentState();
+    expect(retryReady.name).toBe("TOPIC_READY");
+    if (retryReady.name !== "TOPIC_READY") throw new Error("retry missing");
+    expect(retryReady.topic.topicRef).toEqual(originalRef);
+    expect(retryReady.attempt.history).toHaveLength(1);
+
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    act(() => result.current.actions.startTypedReview());
+    const completeAnswer = rubric.concepts
+      .map((concept) => concept.acceptedPhrases[0])
+      .join(". ");
+    act(() => result.current.actions.submitSelfReview(completeAnswer));
+    const secondReview = currentState();
+    expect(secondReview.name).toBe("REVIEW");
+    if (secondReview.name === "REVIEW") {
+      expect(secondReview.attempt.attemptIndex).toBe(2);
+      expect(secondReview.refinementDelta).toMatchObject({
+        available: true,
+        direction: "IMPROVED",
+      });
+      if (secondReview.refinementDelta?.available) {
+        expect(secondReview.refinementDelta.score).toBeCloseTo(1 - firstFraction, 5);
+        expect(secondReview.refinementDelta.newlyCoveredConceptIds.length).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
+// --- v0.5 semantic refinement (stub embedding client; lexical baseline still runs) ---
+
+describe("usePracticeSession — v0.5 semantic refinement", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("refines lexical coverage via the embedding client when semanticCoverage is enabled", async () => {
+    const nowRef = { value: 0 };
+    const monotonic = { now: () => nowRef.value };
+    const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
+    const random = seededRandom(123);
+    const bagStore = new InMemoryBagStore();
+    let lastEmbed: (event: EmbeddingEvent) => void = () => {};
+    const embedTextCounts: number[] = [];
+    const embedding: EmbeddingClient = {
+      embed(input, onEvent) {
+        embedTextCounts.push(input.texts.length);
+        lastEmbed = onEvent;
+        return { attemptId: input.attemptId, cancel: () => undefined };
+      },
+      dispose() {},
+    };
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: { ...DEFAULT_SETTINGS, semanticCoverage: true },
+        monotonic,
+        wall,
+        random,
+        bagStore,
+        drawDelayMs: 0,
+        embedding,
+      }),
+    );
+    const advance = (ms: number) =>
+      act(() => {
+        nowRef.value += ms;
+        vi.advanceTimersByTime(ms);
+      });
+    const { result } = hook;
+
+    act(() => result.current.actions.spin());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    expect(result.current.state.name).toBe("ATTEMPT_COMPLETE");
+
+    act(() => result.current.actions.startTypedReview());
+    expect(result.current.state.name).toBe("SELF_REVIEW");
+
+    // Gibberish transcript: lexical coverage is verifiable with 0 hits.
+    act(() => result.current.actions.submitSelfReview("zzz qqq xxx nonword"));
+    expect(result.current.state.name).toBe("REVIEW");
+    if (result.current.state.name === "REVIEW") {
+      expect(result.current.state.coverage.verifiable).toBe(true);
+      expect(result.current.state.coverage.hitCount).toBe(0);
+    }
+
+    // Every segment/rubric vector is identical. Until educator calibration,
+    // semantic evidence remains POSSIBLY_COVERED and cannot inflate the score.
+    act(() => {
+      lastEmbed({
+        type: "done",
+        embeddings: Array.from({ length: embedTextCounts[0] ?? 0 }, () => [1, 0]),
+      });
+    });
+    if (result.current.state.name === "REVIEW") {
+      expect(result.current.state.coverage.verifiable).toBe(true);
+      expect(result.current.state.coverage.hitCount).toBe(0);
+      expect(result.current.state.coverage.totalCount).toBeGreaterThan(0);
+      expect(result.current.state.coverage.weightedFraction).toBe(0);
+      expect(result.current.state.coverage.scoring.method).toBe("LEXICAL");
+      expect(
+        result.current.state.coverage.conceptResults.every(
+          (concept) => concept.semanticEvidence?.status === "POSSIBLY_COVERED",
+        ),
+      ).toBe(true);
+    }
+
+    act(() => result.current.actions.startSecondAttempt());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    act(() => result.current.actions.startTypedReview());
+    act(() => result.current.actions.submitSelfReview("another answer"));
+    expect(embedTextCounts).toHaveLength(2);
+    expect(embedTextCounts[1]).toBeLessThan(embedTextCounts[0]!);
+  });
+
+  it("keeps lexical coverage when semantic is disabled (no embedding dep)", async () => {
+    const nowRef = { value: 0 };
+    const monotonic = { now: () => nowRef.value };
+    const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
+    const random = seededRandom(123);
+    const bagStore = new InMemoryBagStore();
+    const hook = renderHook(() =>
+      usePracticeSession({
+        pack,
+        settings: { ...DEFAULT_SETTINGS, semanticCoverage: false },
+        monotonic,
+        wall,
+        random,
+        bagStore,
+        drawDelayMs: 0,
+      }),
+    );
+    const advance = (ms: number) =>
+      act(() => {
+        nowRef.value += ms;
+        vi.advanceTimersByTime(ms);
+      });
+    const { result } = hook;
+    act(() => result.current.actions.spin());
+    await act(async () => {
+      await result.current.actions.startTimer();
+    });
+    advance(90_000);
+    act(() => result.current.actions.startTypedReview());
+    act(() => result.current.actions.submitSelfReview("zzz qqq xxx nonword"));
+    expect(result.current.state.name).toBe("REVIEW");
+    if (result.current.state.name === "REVIEW") {
+      expect(result.current.state.coverage.hitCount).toBe(0);
+      expect(result.current.state.refinementDelta).toBeNull();
+      expect(result.current.state.attempt.history).toEqual([]);
+    }
   });
 });
 

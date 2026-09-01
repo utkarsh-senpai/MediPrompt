@@ -169,18 +169,23 @@ typed review never becomes zero coverage; the full typed-review and coverage pat
 
 ### v0.5 — Grounded refinement loop
 
-**Planned branch:** `feature/v0.5-grounded-refinement`
+**Branch:** `feature/v0.5-gap-score-and-semantic` (historical branch name; the product term is
+Refinement Delta)
 
 Add:
 
-- Optional quantized `all-MiniLM-L6-v2` in a worker, layered over the v0.4 lexical baseline.
-- Versioned thresholds, sentence/rubric evidence, and explicit `POSSIBLY_COVERED` results.
+- Optional pinned q8 `all-MiniLM-L6-v2` in a shared model-worker asset, layered over the v0.4
+  lexical baseline.
+- Versioned sentence/rubric evidence and explicit `POSSIBLY_COVERED` results. Until educator
+  calibration, semantic evidence is visible but cannot alter numeric coverage.
 - Second attempt against the same prompt variant and complete attempt identity.
 - Refinement Delta plus newly covered/lost concepts.
 
-**Exit gate:** educator-labelled semantic fixtures calibrate thresholds; model failure falls back to
-the lexical baseline; second-attempt comparison works offline and rejects mismatched variant,
-difficulty, register, support, rubric, mode, pack, or time identities.
+**Exit gate:** the public model revision and q8 runtime are verified; malformed/model-failure paths
+retain lexical coverage; uncalibrated semantic evidence is not counted; second-attempt comparison
+works offline and rejects mismatched variant, difficulty, register, support, rubric, mode, pack,
+time, or scoring identities. Educator-labelled calibration remains mandatory before semantic
+evidence may change numeric coverage.
 
 ### v0.6 — Viva and retention
 

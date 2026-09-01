@@ -4,8 +4,7 @@
 
 **Updated:** 2026-09-01
 
-**Current work:** v0.4 content coverage on `feature/v0.4-content-coverage` (PR #18), targeting
-`develop`; keep the PR open for owner review
+**Current version:** v0.5 grounded refinement from PR #20, promoted through `develop` to `main`
 
 ## Product invariant
 
@@ -33,7 +32,15 @@ content, copy, or visual identity.
 - v0.4 deterministic coverage over learner-approved text: whole accepted-phrase tokens or nearby
   significant tokens, visible matched-phrase evidence, and exactly one prioritized next action.
   Missing text or a non-scorable rubric produces an explicit unavailable outcome, never zero
-  coverage. Semantic matching and same-identity retry remain v0.5 work.
+  coverage.
+- v0.5 bounded same-topic retry history and **Refinement Delta**, computed only for identical topic,
+  practice, time, pack/rubric, and scoring identities. Missing/mismatched inputs are explicitly
+  unavailable; newly covered and lost concepts remain visible.
+- Optional pinned q8 MiniLM meaning matching compares bounded sentence windows with rubric wording.
+  The verified model revision is `751bff37182d3f1213fa05d7196b954e230abad9`; malformed output,
+  timeout, offline, cancellation, or low memory retains lexical coverage. Until educator-labelled
+  calibration, semantic results are “possibly present — not counted” and cannot change coverage or
+  Refinement Delta.
 - Microphone consent does not acquire a stream. Permission is requested only when the speaking
   timer starts; recording stops with the timer and every stream/object URL is released.
 
@@ -104,6 +111,8 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 - No audio or transcript upload in the zero-cost path.
 - The public beta may report lexical coverage against its source-linked draft rubric only while the
   unreviewed-draft warning remains conspicuous. It must never claim correctness or medical approval.
+- Semantic evidence must remain non-counting until a qualified educator-labelled calibration set
+  establishes and versions promotion/rejection thresholds.
 - Never score emotion, anxiety, confidence, personality, intelligence, competence, accent, or
   native-speaker likeness.
 - Do not ship user/provider API keys in the static client. Future connected/BYOK integrations need
@@ -123,10 +132,10 @@ data. v0.3 keeps learner audio/transcripts session-local and export-free.
 
 ## Current pickup state
 
-The deployed v0.3 baseline is on `main`; deployment is CI-gated through GitHub Pages. PR #18 adds
-the bounded v0.4 lexical coverage baseline, matched-phrase disclosure, and one prescription. Its
-review-fix work must remain one commit on the feature branch and the PR must stay open for the
-owner's final review. GitHub operations must use `utkarsh-senpai`.
+The v0.5 release line adds bounded retry history, identity-checked Refinement Delta, and optional
+non-counting semantic evidence. Whisper and MiniLM use one shared bundled worker asset, while their
+model instances and explicit activation paths remain separate. GitHub operations must use
+`utkarsh-senpai`; release changes flow through `develop` before `main` and Pages.
 
 The beta may be publicly testable, but medical approval remains blocked pending educator
 attestation. The next release work is target-device/model benchmarking and a v1.x
@@ -139,6 +148,7 @@ educator-review/release plan.
 - `docs/DIFFICULTY_AND_DEPTH_DESIGN.md`: challenge-depth contract.
 - `docs/V0.3_DEVELOPMENT_CONTEXT.md`: v0.3 implementation and review decisions.
 - `docs/V0.4_DEVELOPMENT_CONTEXT.md`: v0.4 lexical-coverage contract and v0.5 deferrals.
+- `docs/V0.5_DEVELOPMENT_CONTEXT.md`: reviewed retry, delta, semantic, and safety contract.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.

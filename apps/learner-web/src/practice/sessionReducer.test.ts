@@ -89,6 +89,7 @@ const TEXT_METRICS: TextMetrics = {
 const COVERAGE_REPORT: CoverageReport = {
   verifiable: true,
   unavailableReason: null,
+  scoring: { method: "LEXICAL", version: "lexical-v1" },
   conceptResults: [
     { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
     { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: false, matchedPhrase: null },
@@ -603,6 +604,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -686,6 +688,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: typed,
         textMetrics: { fillerCount: 0, repeatedPhraseCount: 0 },
         coverage: COVERAGE_REPORT,
+        refinementDelta: null,
         now: 97_000,
       },
       deps,
@@ -709,6 +712,7 @@ describe("reduceSession — v0.3 review and exits", () => {
         transcript: APPROVED,
         textMetrics: TEXT_METRICS,
         coverage: COVERAGE_REPORT,
+        refinementDelta: null,
         now: 96_000,
       },
       armed,
@@ -775,5 +779,141 @@ describe("reduceSession — v0.3 review and exits", () => {
       deps,
     );
     expect(commands).toEqual([]);
+  });
+
+  it("START_SECOND_ATTEMPT records history, revokes prior audio, and re-arms the same topic", () => {
+    const review = transcriptReviewState();
+    const approved = reduceSession(
+      review,
+      {
+        type: "TRANSCRIPT_APPROVED",
+        attemptId: "r1-attempt",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: COVERAGE_REPORT,
+        refinementDelta: null,
+        now: 96_000,
+      },
+      armed,
+    ).state;
+    expect(approved.name).toBe("REVIEW");
+    const { state, commands } = reduceSession(
+      approved,
+      { type: "START_SECOND_ATTEMPT", requestId: "r2", now: 100_000 },
+      armed,
+    );
+    expect(state.name).toBe("TOPIC_READY");
+    expect(commands).toContainEqual({ type: "REVOKE_RECORDING", attemptId: "r1-attempt" });
+    expect(commands).toContainEqual({ type: "FOCUS_VIEW", target: "topic" });
+    if (state.name === "TOPIC_READY") {
+      expect(state.attempt.attemptIndex).toBe(2);
+      expect(state.attempt.attemptId).toBe("r2-attempt");
+      expect(state.attempt.history).toHaveLength(1);
+      expect(state.attempt.history[0]).toMatchObject({
+        attemptId: "r1-attempt",
+        attemptIndex: 1,
+        coverage: COVERAGE_REPORT,
+        transcriptText: APPROVED.text,
+      });
+      const priorVariantId =
+        approved.name === "REVIEW" ? approved.topic.topicRef.variantId : "";
+      expect(state.topic.topicRef.variantId).toBe(priorVariantId);
+    }
+  });
+
+  it("START_SECOND_ATTEMPT is a no-op outside REVIEW", () => {
+    const idle = initialState(recallSelection());
+    const { state } = reduceSession(
+      idle,
+      { type: "START_SECOND_ATTEMPT", requestId: "r2", now: 100_000 },
+      deps,
+    );
+    expect(state.name).toBe("IDLE");
+  });
+
+  it("COVERAGE_REFINED replaces coverage and recomputes the gap on REVIEW", () => {
+    const review = transcriptReviewState();
+    const approved = reduceSession(
+      review,
+      {
+        type: "TRANSCRIPT_APPROVED",
+        attemptId: "r1-attempt",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: COVERAGE_REPORT,
+        refinementDelta: null,
+        now: 96_000,
+      },
+      armed,
+    ).state;
+    const refined: CoverageReport = {
+      verifiable: true,
+      unavailableReason: null,
+      scoring: { method: "LEXICAL_SEMANTIC", version: "semantic-v1" },
+      conceptResults: [
+        { conceptId: "c1", label: "Names the slider role", weight: 2, hit: true, matchedPhrase: "slider" },
+        { conceptId: "c2", label: "Explains interlocking teeth", weight: 3, hit: true, matchedPhrase: "interlocking teeth" },
+      ],
+      hitCount: 2,
+      totalCount: 2,
+      weightedFraction: 1,
+      fraction: 1,
+    };
+    const { state } = reduceSession(
+      approved,
+      {
+        type: "COVERAGE_REFINED",
+        attemptId: "r1-attempt",
+        coverage: refined,
+        refinementDelta: null,
+        now: 97_000,
+      },
+      armed,
+    );
+    expect(state.name).toBe("REVIEW");
+    if (state.name === "REVIEW") {
+      expect(state.coverage).toEqual(refined);
+    }
+  });
+
+  it("COVERAGE_REFINED is a stale drop for a non-current attempt", () => {
+    const review = transcriptReviewState();
+    const approved = reduceSession(
+      review,
+      {
+        type: "TRANSCRIPT_APPROVED",
+        attemptId: "r1-attempt",
+        transcript: APPROVED,
+        textMetrics: TEXT_METRICS,
+        coverage: COVERAGE_REPORT,
+        refinementDelta: null,
+        now: 96_000,
+      },
+      armed,
+    ).state;
+    const refined: CoverageReport = {
+      verifiable: true,
+      unavailableReason: null,
+      scoring: { method: "LEXICAL_SEMANTIC", version: "semantic-v1" },
+      conceptResults: [],
+      hitCount: 1,
+      totalCount: 1,
+      weightedFraction: 1,
+      fraction: 1,
+    };
+    const { state } = reduceSession(
+      approved,
+      {
+        type: "COVERAGE_REFINED",
+        attemptId: "r-other-attempt",
+        coverage: refined,
+        refinementDelta: null,
+        now: 97_000,
+      },
+      armed,
+    );
+    if (state.name === "REVIEW") {
+      expect(state.coverage).toEqual(COVERAGE_REPORT);
+    }
   });
 });

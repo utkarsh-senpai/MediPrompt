@@ -141,7 +141,7 @@ test("Defend depth and Deep Research handoff remain distinct", async ({ page }) 
   await expect(page.getByRole("group", { name: "Practice mode" })).toHaveCount(0);
 });
 
-test("v0.4 scores a real physiotherapy recap locally and explains its evidence", async ({
+test("v0.5 scores and compares a real physiotherapy retry while offline", async ({
   page,
   context,
 }) => {
@@ -171,6 +171,26 @@ test("v0.4 scores a real physiotherapy recap locally and explains its evidence",
     "shared decision making",
   );
   await page.getByText("Concepts you touched (2)").click();
-  await expect(page.getByText(/Matched rubric phrase: “safety assessment”/)).toBeVisible();
+  await expect(page.getByText(/Matched rubric wording: “safety assessment”/)).toBeVisible();
+
+  // v0.5: the retry stays on the exact topic and computes a valid offline delta.
+  await page.getByRole("button", { name: "Try again on this topic" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Start timer" }).click();
+  await page.getByRole("button", { name: "Finish now" }).click();
+  await page.getByRole("button", { name: "Review this attempt" }).click();
+  await page.getByLabel(/Type what you said/i).fill(
+    "Start with safety assessment and secondary prevention. Exercise should use risk stratification and supervision. Use shared decision making and escalation for recurrent symptoms.",
+  );
+  await page.getByRole("button", { name: "Save review" }).click();
+
+  await expect(page.getByRole("heading", { name: "Refinement Delta" })).toBeVisible();
+  await expect(page.getByText("+33%", { exact: true })).toBeVisible();
+  await expect(page.getByText(/Newly covered: Use shared decision making/)).toBeVisible();
+  await page.getByText("Attempts (2)").click();
+  await expect(page.getByText("Attempt 1 — 67% coverage")).toBeVisible();
+  await expect(page.getByText("Attempt 2 — 100% coverage")).toBeVisible();
   await context.setOffline(false);
 });
