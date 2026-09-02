@@ -294,7 +294,7 @@ and model versions used by `PracticeSession` and `AttemptComparison`.
 
 ### Java content compiler
 
-The planned v0.8 compiler must:
+The planned v0.9 compiler must:
 
 - validate the vector/preset combination rather than trusting a difficulty string;
 - reject Applied/Viva variants without case provenance and medical review;
@@ -335,9 +335,11 @@ Subject        [selected subject]
 | v0.3 | Measure delivery identically across challenges; accessibility time changes do not mutate difficulty |
 | v0.4 | Add deterministic lexical coverage over difficulty-specific source-linked draft rubrics, visible accepted-phrase evidence, and one prescription; educator review remains pending |
 | v0.5 | Add optional non-counting semantic evidence, bounded same-variant retry history, complete comparison guards, and Refinement Delta |
-| v0.6 | Add reviewed follow-ups/evidence updates, Viva challenge flow, per-topic suggestions, and no-penalty support controls |
-| v0.8 | Add authoring schema/compiler validation, coverage reports, lifecycle gates, and fake-escalation detection |
-| v0.9 | Pilot timing, comprehensibility, challenge calibration, and subgroup/device failure modes with the target student and educator |
+| v0.6 | Add reviewed follow-ups/evidence updates and the opt-in Viva defense ladder |
+| v0.7 | Add the private learning plan, spaced resurfacing, and exam-date triage without changing difficulty labels |
+| v0.8 | Activate the complete 35/26/34 subject set while preserving authored challenge and timer contracts |
+| v0.9 | Add authoring schema/compiler validation, coverage reports, lifecycle gates, and fake-escalation detection |
+| v0.10 | Pilot timing, comprehensibility, challenge calibration, and subgroup/device failure modes with the target student and educator |
 
 ## 13. Test and acceptance matrix
 

@@ -14,7 +14,7 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.7 — Private learning plan & spaced resurfacing** (release candidate)
+**v0.8 — Three active MPT subjects** (release candidate)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
 mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
@@ -58,6 +58,13 @@ triaged weakest-coverage-first. Past exams never activate urgency sorting. Index
 visible and never blocks the original practice loop. The reviewed contract is in
 [docs/V0.7_DEVELOPMENT_CONTEXT.md](docs/V0.7_DEVELOPMENT_CONTEXT.md).
 
+v0.8 keeps every v0.2-v0.7 learning feature and completes the first three playable curriculum
+subjects: Neuro Physiotherapy (35), the curriculum-aligned combined Cardiovascular & Respiratory
+Physiotherapy subject (26), and Sports Physiotherapy (34). All 95 active topics have non-empty,
+source-linked speaking criteria; four additional curriculum subjects remain visible and disabled.
+The content is production-ready as an explicitly unreviewed practice beta, not medically attested.
+See [docs/V0.8_DEVELOPMENT_CONTEXT.md](docs/V0.8_DEVELOPMENT_CONTEXT.md).
+
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
 pnpm install
@@ -70,13 +77,13 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.7 curriculum expansion):** the learner app uses the 265-topic MPT
+**Content status (v0.8 active-subject expansion):** the learner app uses the 265-topic MPT
 competency-based curriculum candidate from
-`content/candidates/mpt-cardiorespiratory-review-candidate.json`, spanning all eight app-subjects
-(Research Methods & Bioethics, Applied Physiotherapeutics, Musculoskeletal, Neuro, Respiratory,
-Cardiovascular, Community Health, Sports). All eight are visible, but only Neuro, Respiratory, and
-Cardiovascular are active. Every variant across their 61 topics has original, source-linked answer
-criteria; all 35 Neuro topics are authored. The other five subjects are disabled `COMING_SOON`
+`content/candidates/mpt-cardiorespiratory-review-candidate.json`, spanning seven app subjects
+(Research Methods & Bioethics, Applied Physiotherapeutics, Musculoskeletal, Neuro, combined
+Cardiovascular & Respiratory, Community Health, and Sports). All seven are visible. Neuro (35),
+combined Cardiovascular & Respiratory (26), and Sports (34) are active. Every variant across their
+95 topics has original, source-linked answer criteria. The other four subjects are disabled `COMING_SOON`
 curriculum skeletons and cannot enter a draw, saved-plan launch, or scoring path. Sources were
 checked in 2026 and include 2025-26 publications plus older still-current guidelines, validated
 measures, and foundational texts; this must not be described as “all sources are from 2025-26.”
@@ -107,6 +114,7 @@ contains every active question and its expected evidence criteria for qualified 
 | [v0.5 development context](docs/V0.5_DEVELOPMENT_CONTEXT.md) | Reviewed contract for retries, Refinement Delta, and semantic evidence |
 | [v0.6 development context](docs/V0.6_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the oral-defense ladder and release hardening |
 | [v0.7 development context](docs/V0.7_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the private learning plan and spaced resurfacing |
+| [v0.8 development context](docs/V0.8_DEVELOPMENT_CONTEXT.md) | Three-subject activation, evidence boundaries, counts, budgets, and release gates |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 | [Active-subject review worksheet](docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md) | All active prompts, expected criteria, citations, and reviewer sign-off fields |
 
@@ -225,9 +233,9 @@ would make later versions drift from decisions and code merged in earlier versio
 
 The first useful beta should serve one real medical student and let her complete the full prompt →
 speak → review → retry loop on a phone. The broad inventory contains 265
-[curriculum-derived candidate labels](docs/curriculum/MPT-CBC-topics.md). The 35 Neuro, 13
-Respiratory, and 13 Cardiovascular topics are available in the explicitly labelled public practice
-beta; the remaining five subjects are visible but disabled until researched and authored.
+[curriculum-derived candidate labels](docs/curriculum/MPT-CBC-topics.md). The 35 Neuro, 26 combined
+Cardiovascular & Respiratory, and 34 Sports topics are available in the explicitly labelled public
+practice beta; the remaining four subjects are visible but disabled until researched and authored.
 Automated checks can make the software and beta
 delivery test-ready; they cannot make unreviewed medical content medically release-ready.
 

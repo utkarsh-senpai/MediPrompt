@@ -44,6 +44,10 @@ function activeSubjects(pack: RuntimePack) {
 function generate(pack: RuntimePack): string {
   const sources = new Map(pack.sources.map((source) => [source.sourceId, source]));
   const active = activeSubjects(pack);
+  const catalogTopics = pack.subjects.flatMap((subject) => subject.topics);
+  const comingSoonCount = pack.subjects.filter(
+    (subject) => subject.availability === "COMING_SOON",
+  ).length;
   const activeTopics = active.flatMap((subject) => subject.topics);
   const activeVariants = activeTopics.flatMap((topic) => topic.variants);
   const usedSourceIds = new Set(
@@ -64,9 +68,9 @@ function generate(pack: RuntimePack): string {
     "",
     `- Pack: \`${pack.packId}\` version \`${pack.version}\``,
     `- Generated from the validated candidate: ${active.length} active subjects, ${activeTopics.length} topics, ${activeVariants.length} prompt variants`,
-    "- Active subjects: Neuro Physiotherapy, Respiratory Physiotherapy, and Cardiovascular Physiotherapy",
+    `- Active subjects: ${active.map((subject) => subject.title).join(", ")}`,
     "- Evidence status: sources were checked in 2026 and include 2025–26 publications plus older still-current guidelines, measurement standards, and foundational texts",
-    "- Curriculum catalog: 265 topics across eight visible subjects; five subjects remain `COMING_SOON` and cannot start practice",
+    `- Curriculum catalog: ${catalogTopics.length} topics across ${pack.subjects.length} visible subjects; ${comingSoonCount} subjects remain \`COMING_SOON\` and cannot start practice`,
     "- This worksheet reviews educational prompts and answer criteria. It is not patient-specific guidance, a diagnostic protocol, or a substitute for local policy or supervised clinical training.",
     "",
     "## Reviewer record",

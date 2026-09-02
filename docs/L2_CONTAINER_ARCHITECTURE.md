@@ -67,7 +67,7 @@ flowchart TB
 | IndexedDB | Opt-in bounded attempt/schedule metadata; no audio or transcript content | Learner-owned local data | v0.7+ |
 | Service worker/cache | Offline shell, content, and same-origin ORT runtime; Transformers.js separately caches opt-in model files | Public immutable assets | v0.2+ |
 | Topic packs | Prompts, reviewed rubrics, follow-ups and source metadata | No learner data | v0.2+ |
-| Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | planned v0.8+ |
+| Content compiler | PDF candidate extraction, validation and deterministic compilation | Authorized source input and review drafts | planned v0.9+ |
 | GitHub Actions/Pages | Validation, static build and publication | Public build artifacts | v0.2+ |
 
 Model files should be fetched only after the learner enables speech or optional semantic coverage. The

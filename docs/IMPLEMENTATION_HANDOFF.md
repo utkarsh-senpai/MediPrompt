@@ -16,8 +16,8 @@ Read only these files first:
 6. `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md` for the generated current review scope;
    use the cardiorespiratory source review only for the original 20-topic history.
 
-The current repository includes the v0.7 learner app and a complete source-linked medical review
-candidate. Its 61 active topics are learner-visible as a public **practice beta**, but the full
+The current repository includes the v0.8 learner app and a complete source-linked medical review
+candidate. Its 95 active topics are learner-visible as a public **practice beta**, but the full
 265-topic candidate is still `DRAFT`; do not mistake public availability, the broad
 MPT inventory, source linkage, or automated coverage for educator approval.
 
@@ -37,7 +37,7 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 - Product name: MediPrompt.
 - Hosting baseline: static PWA on GitHub Pages; zero recurring app cost.
 - Front end: React + TypeScript; pure reducer/domain logic and browser adapters.
-- Java: Java 21/Spring Boot command-line content compiler at v0.8, then an optional modular monolith
+- Java: Java 21/Spring Boot command-line content compiler at v0.9, then an optional modular monolith
   for connected features at v1.1+.
 - Medical ground truth: human-reviewed, source-linked rubrics. Local semantic matching reports
   coverage, not correctness.
@@ -53,7 +53,7 @@ feedback, scheduling, Spring Boot, and connected AI are progressive enhancements
 
 ## Version pickup map
 
-### Current baseline: v0.7 private learning plan
+### Current baseline: v0.8 three-subject curriculum beta
 
 The React/TypeScript PWA retains the compact v0.2 two-mode practice loop, strict topic-pack
 validation, non-repeating full-fingerprint draws, deadline-based timers, responsive and accessible
@@ -84,13 +84,14 @@ sorting, and storage failure never blocks practice.
 
 The learner artifact contains the 265-topic public physiotherapy curriculum beta, with the same
 snapshot compiled as its offline fallback; generic interaction subjects are regression-test inputs
-only. All eight subjects are visible. Neuro, Respiratory, and Cardiovascular are `ACTIVE`; the five
-remaining subjects are disabled `COMING_SOON` shells and are rejected below the UI as well.
+only. All seven subjects are visible. Neuro, combined Cardiovascular & Respiratory, and Sports are
+`ACTIVE`; the four remaining subjects are disabled `COMING_SOON` shells and are rejected below the
+UI as well.
 
-`content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.3.0` has 61 active,
-source-authored topics: all 35 Neuro, 13 Respiratory, and 13 Cardiovascular topics. The original 20
-cardiorespiratory definitions are protected by regression hashes. There are seven full challenge
-trios. Sources were checked in 2026 and mix 2025-26 publications with older still-current or
+`content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.3.0` has 95 active,
+source-authored topics: all 35 Neuro, 26 combined Cardiovascular & Respiratory, and 34 Sports
+topics. The original cardiorespiratory definitions remain protected by regression hashes. There
+are eight full challenge trios. Sources were checked in 2026 and mix 2025-26 publications with official current rules and older still-current or
 foundational material. The candidate remains `DRAFT`, has no reviewer/date attestation, and fails
 the medical release gate by design. Its generated active-subject review worksheet is comprehensive
 but unsigned and therefore is not an attestation.
@@ -99,11 +100,11 @@ The frozen toolchain is Node 22.23.2 in CI, pnpm 9.15.0, React 18.3.1, TypeScrip
 6.4.3, Vitest 3.2.6, and Playwright 1.62.1. The required checks are listed under **PR review
 checklist** below and in the root README.
 
-### v0.7 release source: `feature/v0.7-spaced-resurfacing`
+### v0.8 release source: `feature/v0.8-active-subjects`
 
-PR #24 carries v0.7. The release includes only the local learning plan and scheduling outcome; it
-does not add accounts, synchronization, transcript/audio persistence, import, extra registers,
-challenge suggestions, extra packs, or the Java compiler.
+PR #28 carries v0.8. The release merges the Cardiovascular and Respiratory app subjects to match
+the curriculum and activates the complete Sports subject. It does not add accounts,
+synchronization, transcript/audio persistence, import, extra registers, or the Java compiler.
 
 ### Later versions
 
@@ -111,9 +112,10 @@ challenge suggestions, extra packs, or the Java compiler.
 - v0.4: deterministic lexical rubric coverage, visible accepted-phrase evidence, one prescription.
 - v0.5: same-identity retry, Refinement Delta, and non-counting semantic evidence.
 - v0.6: opt-in, source-grounded viva defense ladder with lifecycle hardening.
-- v0.7: private learning plan, local spaced resurfacing, exam triage, and data controls (current).
-- v0.8: Spring Boot content compiler and authoring/publication validation.
-- v0.9: target-user beta hardening.
+- v0.7: private learning plan, local spaced resurfacing, exam triage, and data controls.
+- v0.8: three complete active subjects and combined cardiorespiratory identity (current).
+- v0.9: Spring Boot content compiler and authoring/publication validation.
+- v0.10: target-user beta hardening.
 - v1.1+: optional connected service and provider-backed coaching.
 
 The detailed exit gate for each version is authoritative in `docs/EXECUTION_PLAN.md`.
@@ -138,14 +140,14 @@ See `docs/DIFFICULTY_AND_DEPTH_DESIGN.md` for runtime YAML, UI, progression, and
 
 ## Curriculum and medical-content status
 
-- 7 curriculum subjects / 8 app subjects and 265 candidate practice-topic labels are stored under
-  `docs/curriculum/`; Cardiovascular and Respiratory remain separate app subjects.
+- Seven curriculum-aligned app subjects and 265 candidate practice-topic labels are stored under
+  `docs/curriculum/`; Cardiovascular and Respiratory use one combined app subject.
 - IDs are unique lowercase kebab-case; normalized titles are unique.
 - Every candidate maps once to a paper/page-range index.
 - The reference extraction remains `DRAFT`/`REFERENCE_ONLY`; the generated runtime candidate has an
   independently validated activation boundary.
-- Neuro (35), Respiratory (13), and Cardiovascular (13) have source-linked prompt/rubric content.
-  Five other subjects remain catalog-only `COMING_SOON` entries with empty rubrics permitted only
+- Neuro (35), combined Cardiovascular & Respiratory (26), and Sports (34) have source-linked
+  prompt/rubric content. Four other subjects remain catalog-only `COMING_SOON` entries with empty rubrics permitted only
   because every practice and saved-plan entry path rejects them.
 - Qualified educator review of the exact active candidate remains outstanding. Complete
   `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`; do not infer approval from
