@@ -21,7 +21,7 @@ type SchemaValidator = ((value: unknown) => boolean) & {
 // Keep CSP strict and verify drift with `pnpm schema:check`.
 const validateSchema = generatedSchemaValidator as SchemaValidator;
 
-export const MAX_PACK_BYTES = 640 * 1024;
+export const MAX_PACK_BYTES = 1180 * 1024;
 const MAX_SCAN_DEPTH = 16;
 const MAX_SCAN_NODES = 50_000;
 
@@ -246,7 +246,8 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
         }
         if (
           r.concepts.length === 0 &&
-          subject.availability !== "COMING_SOON"
+          subject.availability !== "COMING_SOON" &&
+          pack.review.status !== "DRAFT"
         ) {
           errors.push(
             `active subject ${subject.subjectId}: rubric ${r.rubricId} requires at least one sourced concept`,
@@ -432,7 +433,7 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     "research-methods-and-bioethics": 32,
     "applied-physiotherapeutics": 35,
     "musculoskeletal-physiotherapy": 50,
-    "neuro-physiotherapy": 35,
+    "neuro-physiotherapy": 365,
     "cardiovascular-and-respiratory-physiotherapy": 26,
     "community-health-physiotherapy": 53,
     "sports-physiotherapy": 34,
@@ -475,14 +476,19 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
       );
     }
     if (shouldBeActive) {
+      // DRAFT active subjects may mix authored topics with scaffolded
+      // (empty-rubric) topics awaiting per-topic authoring; scaffolded topics
+      // are spinable but produce a "not verifiable from sources" coverage
+      // result. The v0.2 production gate (assertV02ProductionPack) still
+      // rejects empty rubrics, so a draft can never imply attestation.
       for (const topic of subject.topics) {
         for (const variant of topic.variants) {
           const rubric = topic.rubrics.find(
             (candidate) => candidate.rubricId === variant.rubricId,
           );
-          if (!rubric || rubric.concepts.length === 0) {
+          if (!rubric) {
             errors.push(
-              `active topic ${topic.topicId}: variant ${variant.variantId} lacks sourced answer criteria`,
+              `active topic ${topic.topicId}: variant ${variant.variantId} has no rubric`,
             );
           }
         }
@@ -498,8 +504,8 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     (total, subject) => total + subject.topics.length,
     0,
   );
-  if (topicCount !== 265) {
-    errors.push(`public curriculum skeleton requires exactly 265 topics, got ${topicCount}`);
+  if (topicCount !== 595) {
+    errors.push(`public curriculum skeleton requires exactly 595 topics, got ${topicCount}`);
   }
   try {
     assertV02PracticeMinimums(pack);

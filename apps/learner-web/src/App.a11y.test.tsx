@@ -87,20 +87,14 @@ describe("App accessibility + capability + security", () => {
     expect(document.querySelector('[aria-live="polite"]')).not.toBeNull();
   });
 
-  it("exposes challenge state via aria-pressed, not color alone", async () => {
-    const user = userEvent.setup();
+  it("exposes practice-mode state via aria-pressed, not color alone", async () => {
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
-    // Select a subject that has multiple challenge presets for Recall Sprint.
-    await user.selectOptions(
-      screen.getByLabelText("Subject"),
-      "neuro-physiotherapy",
-    );
-    const challengeGroup = screen.getByRole("group", { name: "Challenge" });
-    const pressedButtons = within(challengeGroup).getAllByRole("button");
-    expect(pressedButtons.length).toBeGreaterThan(1);
-    // Exactly one preset is pressed at a time; aria-pressed is the signal.
-    expect(pressedButtons.filter((b) => b.getAttribute("aria-pressed") === "true")).toHaveLength(1);
+    const modeGroup = screen.getByRole("group", { name: "Practice mode" });
+    const modeButtons = within(modeGroup).getAllByRole("button");
+    expect(modeButtons.length).toBeGreaterThan(1);
+    // Exactly one mode is pressed at a time; aria-pressed is the signal.
+    expect(modeButtons.filter((b) => b.getAttribute("aria-pressed") === "true")).toHaveLength(1);
   });
 
   it("the Spin control is keyboard reachable", async () => {
@@ -279,22 +273,20 @@ describe("App accessibility + capability + security", () => {
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
     await user.selectOptions(screen.getByLabelText("Subject"), "cardiovascular-and-respiratory-physiotherapy");
-    const challenge = screen.getByRole("group", { name: "Challenge" });
-    await user.click(within(challenge).getByRole("button", { name: "Defend" }));
-    // The merged cardioresp subject has three viva topics, but only the
-    // cardiac-rehabilitation ladder resolves to authored viva questions. Pin the
-    // Fisher-Yates draw to that topic by forcing the crypto RNG to 1, which
-    // selects the alphabetically-first eligible variant (cardiac-rehabilitation).
-    const cryptoSpy = vi
-      .spyOn(globalThis.crypto, "getRandomValues")
-      .mockImplementation(<T extends ArrayBufferView>(array: T): T => {
-        const view = array as unknown as Uint32Array;
-        if (view.length > 0) view[0] = 1;
-        return array;
+    // The merged cardioresp subject has 26 Guided-eligible topics, but only the
+    // cardiac-rehabilitation ladder resolves to authored viva questions. Spin
+    // until that topic is drawn (the Fisher-Yates bag is non-repeating, so it
+    // surfaces within a few draws).
+    const targetHeading = "Comprehensive cardiovascular rehabilitation";
+    for (let attempt = 0; attempt < 40; attempt += 1) {
+      const spinButton = screen.getByRole("button", {
+        name: attempt === 0 ? "Spin for a topic" : "Spin again",
       });
-    await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
-    await screen.findByRole("button", { name: "Start timer" });
-    cryptoSpy.mockRestore();
+      await user.click(spinButton);
+      await screen.findByRole("button", { name: "Start timer" });
+      if (screen.queryByRole("heading", { name: targetHeading })) break;
+    }
+    expect(screen.getByRole("heading", { name: targetHeading })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Start timer" }));
     await user.click(screen.getByRole("button", { name: "Finish now" }));
     await user.click(screen.getByRole("button", { name: "Review this attempt" }));
@@ -311,5 +303,5 @@ describe("App accessibility + capability + security", () => {
     // The ladder overview offers Begin and a return to attempt review.
     expect(screen.getByRole("button", { name: "Begin viva" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Back to attempt review" })).toBeInTheDocument();
-  });
+  }, 20000);
 });

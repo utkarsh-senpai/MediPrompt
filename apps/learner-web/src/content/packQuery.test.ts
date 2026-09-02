@@ -53,12 +53,24 @@ describe("curriculum subject availability", () => {
 });
 
 describe("active medical-content completeness", () => {
-  it("ships all 35 Neuro topics with sourced criteria for every variant", () => {
+  it("ships 365 Neuro topics; authored topics have sourced criteria for every variant", () => {
     const neuro = pack.subjects.find(
       (subject) => subject.subjectId === "neuro-physiotherapy",
     )!;
-    expect(neuro.topics).toHaveLength(35);
+    expect(neuro.topics).toHaveLength(365);
     for (const topic of neuro.topics) {
+      const authored = topic.rubrics.some((rubric) => rubric.concepts.length > 0);
+      if (!authored) {
+        // Scaffolded topic: variants exist but rubric concepts are empty — valid under DRAFT.
+        for (const variant of topic.variants) {
+          const rubric = topic.rubrics.find(
+            (candidate) => candidate.rubricId === variant.rubricId,
+          );
+          expect(rubric?.concepts.length, variant.variantId).toBe(0);
+        }
+        continue;
+      }
+      // Authored topic: every variant's rubric has sourced criteria.
       for (const variant of topic.variants) {
         const rubric = topic.rubrics.find(
           (candidate) => candidate.rubricId === variant.rubricId,

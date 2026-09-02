@@ -1,18 +1,13 @@
-import type {
-  ChallengePreset,
-  PracticeSelection,
-  V02PracticeMode,
-} from "@/practice/types";
-import type { SubjectOption } from "@/content/packQuery";
+import type { PracticeSelection, V02PracticeMode } from "@/practice/types";
+import type { SubjectOption, TopicIndexEntry } from "@/content/packQuery";
 import { subjectEmoji } from "@/app/subjectEmoji";
 import { InfoTip } from "./InfoTip";
 
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
   selection: PracticeSelection;
-  presets: ChallengePreset[];
-  challengeVisible: boolean;
   eligibleCount: number;
+  topicIndex: TopicIndexEntry[];
   drawing: boolean;
   onChange: (partial: Partial<PracticeSelection>) => void;
   onSpin: () => void;
@@ -23,23 +18,17 @@ const MODES: { id: V02PracticeMode; label: string; hint: string; emoji: string }
   { id: "DEEP_RESEARCH", label: "Deep Research", hint: "Research first, then speak.", emoji: "🔬" },
 ];
 
-const PRESET_LABEL: Record<ChallengePreset, string> = {
-  GUIDED: "Explain",
-  APPLIED: "Apply",
-  VIVA: "Defend",
-};
-
 export function PracticeSurface({
   subjects,
   selection,
-  presets,
-  challengeVisible,
   eligibleCount,
+  topicIndex,
   drawing,
   onChange,
   onSpin,
 }: PracticeSurfaceProps) {
   const spinDisabled = drawing || eligibleCount === 0;
+  const authoredCount = topicIndex.filter((t) => t.authored).length;
 
   return (
     <section className="setup-surface" aria-labelledby="controls-heading">
@@ -78,30 +67,6 @@ export function PracticeSurface({
         </div>
       </div>
 
-      {challengeVisible ? (
-        <div className="control-row">
-          <span className="label-row">
-            <span id="challenge-label">Challenge</span>
-            <InfoTip label="About challenge levels">
-              Explain builds a clear concept map. Apply adds a fictional scenario.
-              Defend changes a constraint and asks you to respond to new evidence.
-            </InfoTip>
-          </span>
-          <div className="chips" role="group" aria-labelledby="challenge-label">
-            {presets.map((p) => (
-              <button
-                key={p}
-                type="button"
-                aria-pressed={selection.challenge === p}
-                onClick={() => onChange({ challenge: p })}
-              >
-                {PRESET_LABEL[p]}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : null}
-
       <div className="control-row">
         <label htmlFor="subject-select">Subject</label>
         <select
@@ -121,6 +86,27 @@ export function PracticeSurface({
           ))}
         </select>
       </div>
+
+      {topicIndex.length > 0 ? (
+        <details className="topic-index">
+          <summary>
+            Browse all {topicIndex.length} topics
+            {authoredCount < topicIndex.length
+              ? ` (${authoredCount} with full feedback, ${topicIndex.length - authoredCount} preparing)`
+              : ""}
+          </summary>
+          <ol>
+            {topicIndex.map((topic) => (
+              <li key={topic.topicId} className={topic.authored ? "authored" : "scaffolded"}>
+                <span className="topic-index-title">{topic.title}</span>
+                <span className="topic-index-badge">
+                  {topic.authored ? "Full feedback" : "Feedback coming"}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </details>
+      ) : null}
 
       <button
         type="button"

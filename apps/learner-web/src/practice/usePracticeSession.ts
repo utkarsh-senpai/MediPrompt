@@ -10,9 +10,11 @@ import {
 } from "./spacedRepetition";
 import {
   listSubjects,
+  listTopicIndex,
   presetsFor,
   eligibleVariantIds,
   findRubric,
+  findVivaRubric,
   findSubject,
   isSubjectActive,
 } from "@/content/packQuery";
@@ -1116,12 +1118,12 @@ export function usePracticeSession(deps: OrchestratorDeps) {
 
   // --- v0.6 viva defense-ladder actions ---
 
-  /** Resolve the current viva question's target concepts from the variant rubric. */
+  /** Resolve the current viva question's target concepts from the viva rubric. */
   const vivaTargetConcepts = useCallback(
     (question: { targetConceptIds: readonly string[] }): readonly Concept[] => {
       const s = stateRef.current;
       if (!("topic" in s)) return [];
-      const concepts = findRubric(pack, s.topic.topicRef)?.concepts ?? [];
+      const concepts = findVivaRubric(pack, s.topic.topicRef)?.concepts ?? [];
       const wanted = new Set(question.targetConceptIds);
       return concepts.filter((c) => wanted.has(c.conceptId));
     },
@@ -1332,6 +1334,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     state.selection.mode,
     state.selection.challenge,
   ).length;
+  const topicIndex = listTopicIndex(pack, state.selection.subjectId);
 
   const audioUi: AudioUiState = {
     available: audio != null,
@@ -1348,6 +1351,7 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     presets,
     challengeVisible,
     eligibleCount,
+    topicIndex,
     audio: audioUi,
     semanticRefining: semanticRefining && inCoverageView,
     historySaveState: !settings.practiceHistory

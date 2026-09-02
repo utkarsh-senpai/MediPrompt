@@ -91,20 +91,40 @@ function generate(pack: RuntimePack): string {
 
   for (const subject of active) {
     lines.push(`## ${subject.title}`, "");
-    for (const [topicIndex, topic] of subject.topics.entries()) {
+    let topicNumber = 0;
+    for (const topic of subject.topics) {
+      const authoredVariants = topic.variants.filter((variant) => {
+        const rubric = topic.rubrics.find(
+          (candidate) => candidate.rubricId === variant.rubricId,
+        );
+        return rubric !== undefined && rubric.concepts.length > 0;
+      });
+      if (authoredVariants.length === 0) {
+        // Scaffolded topic: present in the curriculum but awaiting per-topic
+        // authoring. It is spinable in a limited "coverage not scored" mode and
+        // is not yet ready for educator attestation.
+        topicNumber += 1;
+        lines.push(
+          `### ${topicNumber}. ${topic.title}`,
+          "",
+          `Topic ID: \`${topic.topicId}\``,
+          "",
+          "_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._",
+          "",
+        );
+        continue;
+      }
+      topicNumber += 1;
       lines.push(
-        `### ${topicIndex + 1}. ${topic.title}`,
+        `### ${topicNumber}. ${topic.title}`,
         "",
         `Topic ID: \`${topic.topicId}\``,
         "",
       );
-      for (const variant of topic.variants) {
+      for (const variant of authoredVariants) {
         const rubric = topic.rubrics.find(
           (candidate) => candidate.rubricId === variant.rubricId,
-        );
-        if (!rubric || rubric.concepts.length === 0) {
-          throw new Error(`active variant ${variant.variantId} has no answer criteria`);
-        }
+        )!;
         lines.push(
           `#### Question — ${variant.challengePreset} / ${variant.mode}`,
           "",

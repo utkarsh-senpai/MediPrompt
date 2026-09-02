@@ -32,6 +32,32 @@ export function isSubjectActive(subject: Subject | undefined): boolean {
   return subject !== undefined && subject.availability !== "COMING_SOON";
 }
 
+export interface TopicIndexEntry {
+  topicId: string;
+  title: string;
+  /** True when at least one variant rubric has sourced concepts (full coverage feedback). */
+  authored: boolean;
+}
+
+/** Flat, in-order topic list for a subject, flagging authored vs scaffolded topics. */
+export function listTopicIndex(
+  pack: RuntimePack,
+  subjectId: string,
+): TopicIndexEntry[] {
+  const subject = findSubject(pack, subjectId);
+  if (!subject) return [];
+  return subject.topics.map((topic) => ({
+    topicId: topic.topicId,
+    title: topic.title,
+    authored: topic.variants.some((variant) => {
+      const rubric = topic.rubrics.find(
+        (candidate) => candidate.rubricId === variant.rubricId,
+      );
+      return rubric !== undefined && rubric.concepts.length > 0;
+    }),
+  }));
+}
+
 export function findSubject(
   pack: RuntimePack,
   subjectId: string,
@@ -114,21 +140,42 @@ export function findRubric(
  * a question or change the authored progression. Returns an empty array when
  * the topic has no usable ladder.
  */
+/**
+ * Resolve the rubric that backs a topic's viva defense ladder. Prefers the drawn
+ * variant's own rubric; otherwise falls back to any rubric in the topic whose
+ * concepts cover every viva question's targets. The cross-rubric fallback lets a
+ * learner enter the viva ladder from a Guided attempt even when the viva
+ * questions were authored against the topic's Viva-variant rubric. Returns
+ * undefined when no single rubric covers all targets.
+ */
+export function findVivaRubric(
+  pack: RuntimePack,
+  topicRef: Pick<TopicRef, "variantId" | "rubricId">,
+): Rubric | undefined {
+  const found = findVariant(pack, topicRef.variantId);
+  if (!found) return undefined;
+  const questions = found.topic.vivaQuestions ?? [];
+  if (questions.length === 0) return undefined;
+  const coversAll = (rubric: Rubric): boolean => {
+    const conceptIds = new Set(rubric.concepts.map((c) => c.conceptId));
+    return questions.every((question) =>
+      question.targetConceptIds.every((id) => conceptIds.has(id)),
+    );
+  };
+  const drawn = found.topic.rubrics.find((r) => r.rubricId === topicRef.rubricId);
+  if (drawn && coversAll(drawn)) return drawn;
+  return found.topic.rubrics.find(coversAll);
+}
+
 export function vivaQuestionsFor(
   pack: RuntimePack,
   topicRef: Pick<TopicRef, "variantId" | "rubricId">,
 ): VivaQuestion[] {
-  const rubric = findRubric(pack, topicRef);
-  if (!rubric) return [];
   const found = findVariant(pack, topicRef.variantId);
   if (!found) return [];
-  const conceptIds = new Set(rubric.concepts.map((c) => c.conceptId));
   const questions = found.topic.vivaQuestions ?? [];
-  return questions.every((question) =>
-    question.targetConceptIds.every((id) => conceptIds.has(id)),
-  )
-    ? questions
-    : [];
+  if (questions.length === 0) return [];
+  return findVivaRubric(pack, topicRef) ? questions : [];
 }
 
 const PRESET_EXPECTATION: Record<ChallengePreset, string> = {

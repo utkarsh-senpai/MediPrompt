@@ -136,26 +136,11 @@ test("reduced-motion mode disables ambient and draw animation", async ({ page })
   await expect(page.getByRole("button", { name: "Start timer" })).toBeVisible();
 });
 
-test("Defend depth and Deep Research handoff remain distinct", async ({ page }) => {
+test("Deep Research handoff stays distinct from Recall Sprint", async ({ page }) => {
   await page.goto("./");
 
-  await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
-  const challenge = page.getByRole("group", { name: "Challenge" });
-  await expect(challenge).toBeVisible();
-  await expect(challenge.getByRole("button")).toHaveCount(3);
-  await challenge.getByRole("button", { name: "Defend" }).click();
-  await page.getByRole("button", { name: "Spin for a topic" }).click();
-  const topicInfo = page.getByRole("button", { name: "More about this topic" });
-  const topicInfoId = await topicInfo.getAttribute("aria-describedby");
-  expect(topicInfoId).toBeTruthy();
-  await topicInfo.click();
-  await expect(page.locator(`[id="${topicInfoId}"]`)).toContainText("Fictional scenario:");
-  await expect(page.getByRole("list", { name: "Speaking path" })).toContainText("Now what?");
-
-  await page.reload();
   await page.getByRole("button", { name: "Deep Research" }).click();
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
-  await expect(page.getByRole("group", { name: "Challenge" })).toHaveCount(0);
   await page.getByRole("button", { name: "Spin for a topic" }).click();
   await page.getByRole("button", { name: "Begin research" }).click();
   await expect(page.getByText("Research time left")).toBeVisible();
@@ -172,7 +157,6 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
 }) => {
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
-  await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
   await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
 
   await page.getByRole("button", { name: "Start timer" }).click();
@@ -183,17 +167,17 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   await page.evaluate(async () => navigator.serviceWorker.ready.then(() => undefined));
   await context.setOffline(true);
   await page.getByLabel(/Type what you said/i).fill(
-    "Start with safety assessment and secondary prevention. Exercise should use risk stratification and supervision.",
+    "Start with person-centred assessment and goal setting for an individualized plan. Coordinate core components including exercise and education with psychosocial support.",
   );
   await page.getByRole("button", { name: "Save review" }).click();
 
   await expect(page.getByRole("heading", { name: "Content coverage" })).toBeVisible();
   await expect(page.getByText(/You touched 2 of 3 listed concepts \(67% by weight\)/)).toBeVisible();
   await expect(page.getByText(/On your next attempt, explain:/)).toContainText(
-    "shared decision making",
+    "long-term support",
   );
   await page.getByText("Concepts you touched (2)").click();
-  await expect(page.getByText(/Matched rubric wording: “safety assessment”/)).toBeVisible();
+  await expect(page.getByText(/Matched rubric wording: “person-centred assessment”/)).toBeVisible();
 
   // v0.5: the retry stays on the exact topic and computes a valid offline delta.
   await page.getByRole("button", { name: "Try again on this topic" }).click();
@@ -204,13 +188,13 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   await page.getByRole("button", { name: "Finish now" }).click();
   await page.getByRole("button", { name: "Review this attempt" }).click();
   await page.getByLabel(/Type what you said/i).fill(
-    "Start with safety assessment and secondary prevention. Exercise should use risk stratification and supervision. Use shared decision making and escalation for recurrent symptoms.",
+    "Start with person-centred assessment and goal setting for an individualized plan. Coordinate core components including exercise and education with psychosocial support. Plan continuity with long-term support and outcome audit across the pathway.",
   );
   await page.getByRole("button", { name: "Save review" }).click();
 
   await expect(page.getByRole("heading", { name: "Refinement Delta" })).toBeVisible();
   await expect(page.getByText("+33%", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Newly covered: Use shared decision making/)).toBeVisible();
+  await expect(page.getByText(/Newly covered: .*long-term support/)).toBeVisible();
   await page.getByText("Attempts (2)").click();
   await expect(page.getByText("Attempt 1 — 67% coverage")).toBeVisible();
   await expect(page.getByText("Attempt 2 — 100% coverage")).toBeVisible();
@@ -220,7 +204,6 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
 test("v0.6 viva defense ladder scores three answers and returns to review", async ({ page }) => {
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
-  await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
   await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
 
   // Reach the main attempt review via the typed path.

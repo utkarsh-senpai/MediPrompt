@@ -195,7 +195,7 @@ function PracticeApp({
     onHistoryChanged,
   });
 
-  const { state, now, subjects, presets, challengeVisible, eligibleCount, actions } =
+  const { state, now, subjects, eligibleCount, topicIndex, actions } =
     session;
 
   const [showSettings, setShowSettings] = useState(false);
@@ -296,9 +296,8 @@ function PracticeApp({
         <PracticeSurface
           subjects={subjects}
           selection={s.selection}
-          presets={presets}
-          challengeVisible={challengeVisible}
           eligibleCount={eligibleCount}
+          topicIndex={topicIndex}
           drawing={s.name === "DRAWING"}
           onChange={actions.setSelection}
           onSpin={s.name === "IDLE" ? spin : spinAgain}

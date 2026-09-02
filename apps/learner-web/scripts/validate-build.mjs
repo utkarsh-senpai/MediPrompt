@@ -111,7 +111,7 @@ const expectedSubjectCounts = {
   "research-methods-and-bioethics": 32,
   "applied-physiotherapeutics": 35,
   "musculoskeletal-physiotherapy": 50,
-  "neuro-physiotherapy": 35,
+  "neuro-physiotherapy": 365,
   "cardiovascular-and-respiratory-physiotherapy": 26,
   "community-health-physiotherapy": 53,
   "sports-physiotherapy": 34,
@@ -137,11 +137,11 @@ if (
   !Array.isArray(publicPack.review?.reviewers) ||
   publicPack.review.reviewers.length !== 0 ||
   publicPack.review.reviewedAt !== null ||
-  publicTopicCount !== 265 ||
+  publicTopicCount !== 595 ||
   !subjectContractValid
 ) {
   errors.push(
-    "public physiotherapy pack is not the expected unattested 265-topic DRAFT with exactly three active subjects",
+    "public physiotherapy pack is not the expected unattested 595-topic DRAFT with exactly three active subjects",
   );
 }
 
@@ -201,12 +201,14 @@ const shellBytes = files
 // v0.5 reuses one shared model-worker asset for Whisper and MiniLM, so adding
 // meaning matching must not double the bundled transformers.js graph.
 // v0.7 adds the opt-in IndexedDB validator, scheduling, export/delete, and
-// learning-plan UI. The content pack grew from 20 to 265 curriculum topics
-// (~400 KiB) and is dynamically imported as a fallback chunk rather than bundled
+// learning-plan UI. The content pack grew from 20 to 595 curriculum topics
+// (~1.03 MiB) and is dynamically imported as a fallback chunk rather than bundled
 // into the entry, so the stricter 512 KiB initial-entry budget above remains
 // unchanged. The shell budget is widened to carry the larger pack file plus its
-// fallback chunk alongside the reused model worker.
-const MAX_SHELL_BYTES = 2560 * 1024;
+// fallback chunk (the pack ships twice — precached under /packs and as a
+// dynamic-import chunk for offline-before-SW robustness) alongside the reused
+// model worker.
+const MAX_SHELL_BYTES = 4096 * 1024;
 if (shellBytes > MAX_SHELL_BYTES) errors.push(`shell budget exceeded: ${shellBytes} bytes`);
 
 if (errors.length > 0) {

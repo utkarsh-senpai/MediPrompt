@@ -77,16 +77,19 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.8 active-subject expansion):** the learner app uses the 265-topic MPT
+**Content status (v0.9 neuro expansion):** the learner app uses the 595-topic MPT
 competency-based curriculum candidate from
 `content/candidates/mpt-cardiorespiratory-review-candidate.json`, spanning seven app subjects
 (Research Methods & Bioethics, Applied Physiotherapeutics, Musculoskeletal, Neuro, combined
-Cardiovascular & Respiratory, Community Health, and Sports). All seven are visible. Neuro (35),
-combined Cardiovascular & Respiratory (26), and Sports (34) are active. Every variant across their
-95 topics has original, source-linked answer criteria. The other four subjects are disabled `COMING_SOON`
-curriculum skeletons and cannot enter a draw, saved-plan launch, or scoring path. Sources were
-checked in 2026 and include 2025-26 publications plus older still-current guidelines, validated
-measures, and foundational texts; this must not be described as “all sources are from 2025-26.”
+Cardiovascular & Respiratory, Community Health, and Sports). All seven are visible. Neuro (365),
+combined Cardiovascular & Respiratory (26), and Sports (34) are active. The 365 Neuro topics are
+section-prefixed (e.g. "Stroke — Hemiplegic gait") and drawn from a 22-section neuro master list;
+most are scaffolded (spinable in a "coverage not scored — focus on structure and delivery" mode)
+with sourced answer criteria added per-topic in follow-up PRs. Combined Cardiovascular &
+Respiratory and Sports remain fully source-authored. The other four subjects are disabled
+`COMING_SOON` curriculum skeletons and cannot enter a draw, saved-plan launch, or scoring path.
+Sources were checked in 2026 and include 2025-26 publications plus older still-current guidelines,
+validated measures, and foundational texts; this must not be described as “all sources are from 2025-26.”
 The generic interaction fixture remains only as a schema/regression-test input.
 
 The medical pack remains `DRAFT`, with no reviewer or review date. Every screen therefore displays
