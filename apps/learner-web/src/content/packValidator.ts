@@ -21,7 +21,7 @@ type SchemaValidator = ((value: unknown) => boolean) & {
 // Keep CSP strict and verify drift with `pnpm schema:check`.
 const validateSchema = generatedSchemaValidator as SchemaValidator;
 
-export const MAX_PACK_BYTES = 640 * 1024;
+export const MAX_PACK_BYTES = 2 * 1024 * 1024;
 const MAX_SCAN_DEPTH = 16;
 const MAX_SCAN_NODES = 50_000;
 
@@ -246,7 +246,8 @@ function customChecks(pack: RuntimePack, errors: string[]): void {
         }
         if (
           r.concepts.length === 0 &&
-          subject.availability !== "COMING_SOON"
+          subject.availability !== "COMING_SOON" &&
+          pack.review.status !== "DRAFT"
         ) {
           errors.push(
             `active subject ${subject.subjectId}: rubric ${r.rubricId} requires at least one sourced concept`,
@@ -428,15 +429,15 @@ export function assertV02ProductionPack(pack: RuntimePack): void {
  */
 export function assertPublicDraftPracticePack(pack: RuntimePack): void {
   const errors: string[] = [];
-  const expectedSubjectCounts: Record<string, number> = {
-    "research-methods-and-bioethics": 32,
-    "applied-physiotherapeutics": 35,
-    "musculoskeletal-physiotherapy": 50,
-    "neuro-physiotherapy": 35,
-    "cardiovascular-and-respiratory-physiotherapy": 26,
-    "community-health-physiotherapy": 53,
-    "sports-physiotherapy": 34,
-  };
+  const expectedSubjectIds = new Set([
+    "research-methods-and-bioethics",
+    "applied-physiotherapeutics",
+    "musculoskeletal-physiotherapy",
+    "neuro-physiotherapy",
+    "cardiovascular-and-respiratory-physiotherapy",
+    "community-health-physiotherapy",
+    "sports-physiotherapy",
+  ]);
 
   const expectedActive = new Set([
     "neuro-physiotherapy",
@@ -456,17 +457,13 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     errors.push(`unexpected public practice pack id: ${pack.packId}`);
   }
   const actualSubjectIds = new Set(pack.subjects.map((subject) => subject.subjectId));
-  for (const [subjectId, expectedCount] of Object.entries(expectedSubjectCounts)) {
+  for (const subjectId of expectedSubjectIds) {
     const subject = pack.subjects.find((candidate) => candidate.subjectId === subjectId);
     if (!subject) {
       errors.push(`missing curriculum subject ${subjectId}`);
       continue;
     }
-    if (subject.topics.length !== expectedCount) {
-      errors.push(
-        `subject ${subjectId} requires ${expectedCount} topics, got ${subject.topics.length}`,
-      );
-    }
+    if (subject.topics.length === 0) errors.push(`subject ${subjectId} has no topics`);
     const shouldBeActive = expectedActive.has(subjectId);
     const isActive = subject.availability === "ACTIVE";
     if (isActive !== shouldBeActive) {
@@ -475,14 +472,27 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
       );
     }
     if (shouldBeActive) {
+      // DRAFT active subjects may mix authored topics with simple speaking
+      // topics whose rubrics are empty. Every active topic must still support
+      // both retained practice modes through a Guided variant.
       for (const topic of subject.topics) {
+        const guidedModes = new Set(
+          topic.variants
+            .filter((variant) => variant.challengePreset === "GUIDED")
+            .map((variant) => variant.mode),
+        );
+        for (const mode of ["RECALL_SPRINT", "DEEP_RESEARCH"] as const) {
+          if (!guidedModes.has(mode)) {
+            errors.push(`active topic ${topic.topicId}: missing Guided ${mode} variant`);
+          }
+        }
         for (const variant of topic.variants) {
           const rubric = topic.rubrics.find(
             (candidate) => candidate.rubricId === variant.rubricId,
           );
-          if (!rubric || rubric.concepts.length === 0) {
+          if (!rubric) {
             errors.push(
-              `active topic ${topic.topicId}: variant ${variant.variantId} lacks sourced answer criteria`,
+              `active topic ${topic.topicId}: variant ${variant.variantId} has no rubric`,
             );
           }
         }
@@ -490,16 +500,9 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     }
   }
   for (const subjectId of actualSubjectIds) {
-    if (!(subjectId in expectedSubjectCounts)) {
+    if (!expectedSubjectIds.has(subjectId)) {
       errors.push(`unexpected curriculum subject ${subjectId}`);
     }
-  }
-  const topicCount = pack.subjects.reduce(
-    (total, subject) => total + subject.topics.length,
-    0,
-  );
-  if (topicCount !== 265) {
-    errors.push(`public curriculum skeleton requires exactly 265 topics, got ${topicCount}`);
   }
   try {
     assertV02PracticeMinimums(pack);
@@ -518,32 +521,14 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
   }
 }
 
-/** Minimum useful breadth/depth shared by the regression and public-beta packs. */
+/** Minimum useful breadth shared by the regression and public-beta packs. */
 export function assertV02PracticeMinimums(pack: RuntimePack): void {
   const topics = pack.subjects.flatMap((subject) =>
     subject.availability === "COMING_SOON" ? [] : subject.topics,
   );
-  const trioCount = topics.filter((topic) => {
-    const byMode = new Map<string, Set<ChallengePreset>>();
-    for (const variant of topic.variants) {
-      const presets = byMode.get(variant.mode) ?? new Set<ChallengePreset>();
-      presets.add(variant.challengePreset);
-      byMode.set(variant.mode, presets);
-    }
-    return [...byMode.values()].some(
-      (presets) =>
-        presets.has("GUIDED") && presets.has("APPLIED") && presets.has("VIVA"),
-    );
-  }).length;
-
   const errors: string[] = [];
   if (topics.length < 20) {
     errors.push(`practice pack requires at least 20 topics, got ${topics.length}`);
-  }
-  if (trioCount < 3) {
-    errors.push(
-      `practice pack requires at least 3 complete challenge trios, got ${trioCount}`,
-    );
   }
   if (errors.length > 0) {
     throw new PackValidationError("practice content gate failed", errors);

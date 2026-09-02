@@ -1,0 +1,1600 @@
+{
+  "subjectId": "neuro-physiotherapy",
+  "version": "2026-09-02",
+  "sourceDocument": "MediPrompt Master Topics.docx",
+  "expectedTopicCount": 365,
+  "sections": [
+    {
+      "sectionId": "stroke",
+      "titlePrefix": "Stroke",
+      "topics": [
+        {
+          "topicId": "stroke-umn-syndrome-after-stroke",
+          "label": "UMN syndrome after stroke"
+        },
+        {
+          "topicId": "stroke-brunnstrom-stages-of-motor-recovery",
+          "label": "Brunnstrom stages of motor recovery"
+        },
+        {
+          "topicId": "stroke-synergistic-movement-patterns",
+          "label": "Synergistic movement patterns"
+        },
+        {
+          "topicId": "stroke-spasticity-after-stroke",
+          "label": "Spasticity after stroke"
+        },
+        {
+          "topicId": "stroke-hemiplegic-gait",
+          "label": "Hemiplegic gait"
+        },
+        {
+          "topicId": "stroke-circumduction-gait",
+          "label": "Circumduction gait"
+        },
+        {
+          "topicId": "stroke-equinus-gait-after-stroke",
+          "label": "Equinus gait after stroke"
+        },
+        {
+          "topicId": "stroke-knee-hyperextension-after-stroke",
+          "label": "Knee hyperextension after stroke"
+        },
+        {
+          "topicId": "stroke-pusher-syndrome",
+          "label": "Pusher syndrome"
+        },
+        {
+          "topicId": "stroke-shoulder-subluxation-after-stroke",
+          "label": "Shoulder subluxation after stroke"
+        },
+        {
+          "topicId": "stroke-hemiplegic-shoulder-pain",
+          "label": "Hemiplegic shoulder pain"
+        },
+        {
+          "topicId": "stroke-neglect-vs-hemianopia",
+          "label": "Neglect vs hemianopia"
+        },
+        {
+          "topicId": "stroke-aphasia-vs-dysarthria",
+          "label": "Aphasia vs dysarthria"
+        },
+        {
+          "topicId": "stroke-apraxia-after-stroke",
+          "label": "Apraxia after stroke"
+        },
+        {
+          "topicId": "stroke-motor-recovery-after-stroke",
+          "label": "Motor recovery after stroke"
+        },
+        {
+          "topicId": "stroke-selective-motor-control-after-stroke",
+          "label": "Selective motor control after stroke"
+        },
+        {
+          "topicId": "stroke-task-specific-training",
+          "label": "Task-specific training"
+        },
+        {
+          "topicId": "stroke-constraint-induced-movement-therapy",
+          "label": "Constraint-induced movement therapy"
+        },
+        {
+          "topicId": "stroke-motor-relearning-programme",
+          "label": "Motor Relearning Programme"
+        },
+        {
+          "topicId": "stroke-ndt-bobath-in-stroke",
+          "label": "NDT/Bobath in stroke"
+        },
+        {
+          "topicId": "stroke-mirror-therapy",
+          "label": "Mirror therapy"
+        },
+        {
+          "topicId": "stroke-mental-practice",
+          "label": "Mental practice"
+        },
+        {
+          "topicId": "stroke-repetitive-task-training",
+          "label": "Repetitive task training"
+        },
+        {
+          "topicId": "stroke-upper-limb-rehabilitation",
+          "label": "Upper-limb rehabilitation"
+        },
+        {
+          "topicId": "stroke-balance-rehabilitation",
+          "label": "Balance rehabilitation"
+        },
+        {
+          "topicId": "stroke-sit-to-stand-after-stroke",
+          "label": "Sit-to-stand after stroke"
+        },
+        {
+          "topicId": "stroke-stair-climbing-after-stroke",
+          "label": "Stair climbing after stroke"
+        },
+        {
+          "topicId": "stroke-foot-drop-after-stroke",
+          "label": "Foot drop after stroke"
+        },
+        {
+          "topicId": "stroke-associated-reactions",
+          "label": "Associated reactions"
+        },
+        {
+          "topicId": "stroke-abnormal-reflexes-after-stroke",
+          "label": "Abnormal reflexes after stroke"
+        },
+        {
+          "topicId": "stroke-weight-shifting-after-stroke",
+          "label": "Weight shifting after stroke"
+        },
+        {
+          "topicId": "stroke-trunk-control-after-stroke",
+          "label": "Trunk control after stroke"
+        },
+        {
+          "topicId": "stroke-gait-symmetry-after-stroke",
+          "label": "Gait symmetry after stroke"
+        },
+        {
+          "topicId": "stroke-community-reintegration",
+          "label": "Community reintegration"
+        },
+        {
+          "topicId": "stroke-aerobic-exercise-after-stroke",
+          "label": "Aerobic exercise after stroke"
+        }
+      ]
+    },
+    {
+      "sectionId": "parkinsons",
+      "titlePrefix": "Parkinson's",
+      "topics": [
+        {
+          "topicId": "pd-cardinal-features-of-parkinsons-disease",
+          "label": "Cardinal features of Parkinson's disease"
+        },
+        {
+          "topicId": "pd-rigidity-lead-pipe-vs-cogwheel",
+          "label": "Rigidity: lead-pipe vs cogwheel"
+        },
+        {
+          "topicId": "pd-bradykinesia-vs-hypokinesia-vs-akinesia",
+          "label": "Bradykinesia vs hypokinesia vs akinesia"
+        },
+        {
+          "topicId": "pd-resting-tremor",
+          "label": "Resting tremor"
+        },
+        {
+          "topicId": "pd-parkinsonian-posture",
+          "label": "Parkinsonian posture"
+        },
+        {
+          "topicId": "pd-parkinsonian-gait",
+          "label": "Parkinsonian gait"
+        },
+        {
+          "topicId": "pd-festination",
+          "label": "Festination"
+        },
+        {
+          "topicId": "pd-freezing-of-gait",
+          "label": "Freezing of gait"
+        },
+        {
+          "topicId": "pd-freezing-during-turning",
+          "label": "Freezing during turning"
+        },
+        {
+          "topicId": "pd-reduced-arm-swing",
+          "label": "Reduced arm swing"
+        },
+        {
+          "topicId": "pd-trunk-rotation-deficit",
+          "label": "Trunk rotation deficit"
+        },
+        {
+          "topicId": "pd-postural-instability",
+          "label": "Postural instability"
+        },
+        {
+          "topicId": "pd-falls-in-parkinsons-disease",
+          "label": "Falls in Parkinson's disease"
+        },
+        {
+          "topicId": "pd-external-cueing",
+          "label": "External cueing"
+        },
+        {
+          "topicId": "pd-auditory-cueing-for-gait",
+          "label": "Auditory cueing for gait"
+        },
+        {
+          "topicId": "pd-visual-cueing-for-gait",
+          "label": "Visual cueing for gait"
+        },
+        {
+          "topicId": "pd-why-cueing-works-in-parkinsons-disease",
+          "label": "Why cueing works in Parkinson's disease"
+        },
+        {
+          "topicId": "pd-dual-task-gait",
+          "label": "Dual-task gait"
+        },
+        {
+          "topicId": "pd-bed-mobility-in-parkinsons-disease",
+          "label": "Bed mobility in Parkinson's disease"
+        },
+        {
+          "topicId": "pd-hoehn-and-yahr-staging",
+          "label": "Hoehn & Yahr staging"
+        },
+        {
+          "topicId": "pd-updrs-mds-updrs",
+          "label": "UPDRS/MDS-UPDRS"
+        },
+        {
+          "topicId": "pd-rhythmic-initiation-in-parkinsons",
+          "label": "Rhythmic Initiation in Parkinson's"
+        },
+        {
+          "topicId": "pd-pnf-in-parkinsons",
+          "label": "PNF in Parkinson's"
+        },
+        {
+          "topicId": "pd-exercise-prescription-in-parkinsons",
+          "label": "Exercise prescription in Parkinson's"
+        },
+        {
+          "topicId": "pd-motor-learning-in-parkinsons",
+          "label": "Motor learning in Parkinson's"
+        }
+      ]
+    },
+    {
+      "sectionId": "multiple-sclerosis",
+      "titlePrefix": "Multiple sclerosis",
+      "topics": [
+        {
+          "topicId": "ms-cardinal-clinical-features-of-ms",
+          "label": "Cardinal clinical features of MS"
+        },
+        {
+          "topicId": "ms-relapsing-remitting-ms",
+          "label": "Relapsing-remitting MS"
+        },
+        {
+          "topicId": "ms-ms-fatigue",
+          "label": "MS fatigue"
+        },
+        {
+          "topicId": "ms-uhthoff-phenomenon",
+          "label": "Uhthoff phenomenon"
+        },
+        {
+          "topicId": "ms-spasticity-in-ms",
+          "label": "Spasticity in MS"
+        },
+        {
+          "topicId": "ms-ataxia-in-ms",
+          "label": "Ataxia in MS"
+        },
+        {
+          "topicId": "ms-intention-tremor",
+          "label": "Intention tremor"
+        },
+        {
+          "topicId": "ms-sensory-impairment",
+          "label": "Sensory impairment"
+        },
+        {
+          "topicId": "ms-visual-manifestations",
+          "label": "Visual manifestations"
+        },
+        {
+          "topicId": "ms-balance-impairment",
+          "label": "Balance impairment"
+        },
+        {
+          "topicId": "ms-gait-abnormalities",
+          "label": "Gait abnormalities"
+        },
+        {
+          "topicId": "ms-foot-drop",
+          "label": "Foot drop"
+        },
+        {
+          "topicId": "ms-heat-sensitivity",
+          "label": "Heat sensitivity"
+        },
+        {
+          "topicId": "ms-energy-conservation",
+          "label": "Energy conservation"
+        },
+        {
+          "topicId": "ms-pacing",
+          "label": "Pacing"
+        },
+        {
+          "topicId": "ms-exercise-prescription-in-ms",
+          "label": "Exercise prescription in MS"
+        },
+        {
+          "topicId": "ms-edss",
+          "label": "EDSS"
+        },
+        {
+          "topicId": "ms-cognitive-impairment",
+          "label": "Cognitive impairment"
+        },
+        {
+          "topicId": "ms-bladder-dysfunction",
+          "label": "Bladder dysfunction"
+        },
+        {
+          "topicId": "ms-fatigue-management",
+          "label": "Fatigue management"
+        }
+      ]
+    },
+    {
+      "sectionId": "cerebellar",
+      "titlePrefix": "Cerebellar",
+      "topics": [
+        {
+          "topicId": "cereb-cerebellar-signs",
+          "label": "Cerebellar signs"
+        },
+        {
+          "topicId": "cereb-dysmetria",
+          "label": "Dysmetria"
+        },
+        {
+          "topicId": "cereb-dysdiadochokinesia",
+          "label": "Dysdiadochokinesia"
+        },
+        {
+          "topicId": "cereb-intention-tremor",
+          "label": "Intention tremor"
+        },
+        {
+          "topicId": "cereb-rebound-phenomenon",
+          "label": "Rebound phenomenon"
+        },
+        {
+          "topicId": "cereb-cerebellar-hypotonia",
+          "label": "Cerebellar hypotonia"
+        },
+        {
+          "topicId": "cereb-truncal-ataxia",
+          "label": "Truncal ataxia"
+        },
+        {
+          "topicId": "cereb-gait-ataxia",
+          "label": "Gait ataxia"
+        },
+        {
+          "topicId": "cereb-cerebellar-vs-sensory-ataxia",
+          "label": "Cerebellar vs sensory ataxia"
+        },
+        {
+          "topicId": "cereb-cerebellar-vs-vestibular-ataxia",
+          "label": "Cerebellar vs vestibular ataxia"
+        },
+        {
+          "topicId": "cereb-romberg-test",
+          "label": "Romberg test"
+        },
+        {
+          "topicId": "cereb-finger-nose-test",
+          "label": "Finger-nose test"
+        },
+        {
+          "topicId": "cereb-heel-shin-test",
+          "label": "Heel-shin test"
+        },
+        {
+          "topicId": "cereb-tandem-walking",
+          "label": "Tandem walking"
+        },
+        {
+          "topicId": "cereb-cerebellum-and-motor-learning",
+          "label": "Cerebellum and motor learning"
+        },
+        {
+          "topicId": "cereb-cerebellum-and-coordination",
+          "label": "Cerebellum and coordination"
+        },
+        {
+          "topicId": "cereb-cerebellum-and-postural-control",
+          "label": "Cerebellum and postural control"
+        }
+      ]
+    },
+    {
+      "sectionId": "sci",
+      "titlePrefix": "SCI",
+      "topics": [
+        {
+          "topicId": "sci-complete-vs-incomplete-sci",
+          "label": "Complete vs incomplete SCI"
+        },
+        {
+          "topicId": "sci-asia-isncsci-examination",
+          "label": "ASIA/ISNCSCI examination"
+        },
+        {
+          "topicId": "sci-neurological-level",
+          "label": "Neurological level"
+        },
+        {
+          "topicId": "sci-spinal-shock",
+          "label": "Spinal shock"
+        },
+        {
+          "topicId": "sci-neurogenic-shock",
+          "label": "Neurogenic shock"
+        },
+        {
+          "topicId": "sci-autonomic-dysreflexia",
+          "label": "Autonomic dysreflexia"
+        },
+        {
+          "topicId": "sci-umn-vs-lmn-bladder",
+          "label": "UMN vs LMN bladder"
+        },
+        {
+          "topicId": "sci-neurogenic-bowel",
+          "label": "Neurogenic bowel"
+        },
+        {
+          "topicId": "sci-respiratory-impairment-according-to-level",
+          "label": "Respiratory impairment according to level"
+        },
+        {
+          "topicId": "sci-pressure-injury-prevention",
+          "label": "Pressure injury prevention"
+        },
+        {
+          "topicId": "sci-contracture-prevention",
+          "label": "Contracture prevention"
+        },
+        {
+          "topicId": "sci-transfer-training",
+          "label": "Transfer training"
+        },
+        {
+          "topicId": "sci-wheelchair-skills",
+          "label": "Wheelchair skills"
+        },
+        {
+          "topicId": "sci-standing-programme",
+          "label": "Standing programme"
+        },
+        {
+          "topicId": "sci-orthoses-in-sci",
+          "label": "Orthoses in SCI"
+        },
+        {
+          "topicId": "sci-gait-training-according-to-neurological-level",
+          "label": "Gait training according to neurological level"
+        },
+        {
+          "topicId": "sci-functional-prognosis-according-to-sci-level",
+          "label": "Functional prognosis according to SCI level"
+        }
+      ]
+    },
+    {
+      "sectionId": "tbi",
+      "titlePrefix": "TBI",
+      "topics": [
+        {
+          "topicId": "tbi-primary-vs-secondary-brain-injury",
+          "label": "Primary vs secondary brain injury"
+        },
+        {
+          "topicId": "tbi-glasgow-coma-scale",
+          "label": "Glasgow Coma Scale"
+        },
+        {
+          "topicId": "tbi-post-traumatic-amnesia",
+          "label": "Post-traumatic amnesia"
+        },
+        {
+          "topicId": "tbi-decorticate-vs-decerebrate-posturing",
+          "label": "Decorticate vs decerebrate posturing"
+        },
+        {
+          "topicId": "tbi-spasticity-after-tbi",
+          "label": "Spasticity after TBI"
+        },
+        {
+          "topicId": "tbi-balance-problems",
+          "label": "Balance problems"
+        },
+        {
+          "topicId": "tbi-cognitive-impairment",
+          "label": "Cognitive impairment"
+        },
+        {
+          "topicId": "tbi-behavioural-problems",
+          "label": "Behavioural problems"
+        },
+        {
+          "topicId": "tbi-apraxia",
+          "label": "Apraxia"
+        },
+        {
+          "topicId": "tbi-motor-planning-deficits",
+          "label": "Motor planning deficits"
+        },
+        {
+          "topicId": "tbi-early-physiotherapy",
+          "label": "Early physiotherapy"
+        },
+        {
+          "topicId": "tbi-functional-rehabilitation",
+          "label": "Functional rehabilitation"
+        }
+      ]
+    },
+    {
+      "sectionId": "vestibular",
+      "titlePrefix": "Vestibular",
+      "topics": [
+        {
+          "topicId": "vest-vestibulo-ocular-reflex",
+          "label": "Vestibulo-ocular reflex"
+        },
+        {
+          "topicId": "vest-vestibular-hypofunction",
+          "label": "Vestibular hypofunction"
+        },
+        {
+          "topicId": "vest-central-vs-peripheral-vertigo",
+          "label": "Central vs peripheral vertigo"
+        },
+        {
+          "topicId": "vest-bppv",
+          "label": "BPPV"
+        },
+        {
+          "topicId": "vest-dix-hallpike-test",
+          "label": "Dix-Hallpike test"
+        },
+        {
+          "topicId": "vest-epley-manoeuvre",
+          "label": "Epley manoeuvre"
+        },
+        {
+          "topicId": "vest-dynamic-visual-acuity",
+          "label": "Dynamic visual acuity"
+        },
+        {
+          "topicId": "vest-sensory-organization-for-balance",
+          "label": "Sensory organization for balance"
+        },
+        {
+          "topicId": "vest-visual-dependence",
+          "label": "Visual dependence"
+        },
+        {
+          "topicId": "vest-vestibular-rehabilitation",
+          "label": "Vestibular rehabilitation"
+        },
+        {
+          "topicId": "vest-gaze-stabilization",
+          "label": "Gaze stabilization"
+        },
+        {
+          "topicId": "vest-habituation",
+          "label": "Habituation"
+        },
+        {
+          "topicId": "vest-balance-strategy-ankle-vs-hip",
+          "label": "Balance strategy: ankle vs hip"
+        },
+        {
+          "topicId": "vest-reactive-balance",
+          "label": "Reactive balance"
+        }
+      ]
+    },
+    {
+      "sectionId": "peripheral-nerve",
+      "titlePrefix": "Peripheral nerve",
+      "topics": [
+        {
+          "topicId": "pns-umn-vs-lmn-lesion",
+          "label": "UMN vs LMN lesion"
+        },
+        {
+          "topicId": "pns-peripheral-nerve-vs-nerve-root-lesion",
+          "label": "Peripheral nerve vs nerve root lesion"
+        },
+        {
+          "topicId": "pns-radiculopathy-vs-peripheral-neuropathy",
+          "label": "Radiculopathy vs peripheral neuropathy"
+        },
+        {
+          "topicId": "pns-foot-drop",
+          "label": "Foot drop"
+        },
+        {
+          "topicId": "pns-common-peroneal-nerve-lesion",
+          "label": "Common peroneal nerve lesion"
+        },
+        {
+          "topicId": "pns-median-nerve-lesion",
+          "label": "Median nerve lesion"
+        },
+        {
+          "topicId": "pns-ulnar-nerve-lesion",
+          "label": "Ulnar nerve lesion"
+        },
+        {
+          "topicId": "pns-radial-nerve-lesion",
+          "label": "Radial nerve lesion"
+        },
+        {
+          "topicId": "pns-guillain-barr-syndrome",
+          "label": "Guillain-Barré syndrome"
+        },
+        {
+          "topicId": "pns-gbs-ascending-weakness",
+          "label": "GBS ascending weakness"
+        },
+        {
+          "topicId": "pns-respiratory-involvement-in-gbs",
+          "label": "Respiratory involvement in GBS"
+        },
+        {
+          "topicId": "pns-physiotherapy-precautions-in-gbs",
+          "label": "Physiotherapy precautions in GBS"
+        },
+        {
+          "topicId": "pns-critical-illness-polyneuropathy",
+          "label": "Critical illness polyneuropathy"
+        }
+      ]
+    },
+    {
+      "sectionId": "motor-control",
+      "titlePrefix": "Motor control",
+      "topics": [
+        {
+          "topicId": "mcl-hierarchical-theory",
+          "label": "Hierarchical theory"
+        },
+        {
+          "topicId": "mcl-reflex-theory",
+          "label": "Reflex theory"
+        },
+        {
+          "topicId": "mcl-systems-theory",
+          "label": "Systems theory"
+        },
+        {
+          "topicId": "mcl-dynamic-systems-theory",
+          "label": "Dynamic systems theory"
+        },
+        {
+          "topicId": "mcl-motor-programme-theory",
+          "label": "Motor programme theory"
+        },
+        {
+          "topicId": "mcl-degrees-of-freedom-problem",
+          "label": "Degrees of freedom problem"
+        },
+        {
+          "topicId": "mcl-motor-learning-stages",
+          "label": "Motor learning stages"
+        },
+        {
+          "topicId": "mcl-cognitive-stage",
+          "label": "Cognitive stage"
+        },
+        {
+          "topicId": "mcl-associative-stage",
+          "label": "Associative stage"
+        },
+        {
+          "topicId": "mcl-autonomous-stage",
+          "label": "Autonomous stage"
+        },
+        {
+          "topicId": "mcl-whole-vs-part-practice",
+          "label": "Whole vs part practice"
+        },
+        {
+          "topicId": "mcl-blocked-vs-random-practice",
+          "label": "Blocked vs random practice"
+        },
+        {
+          "topicId": "mcl-knowledge-of-results-vs-knowledge-of-performance",
+          "label": "Knowledge of results vs knowledge of performance"
+        },
+        {
+          "topicId": "mcl-feedback",
+          "label": "Feedback"
+        },
+        {
+          "topicId": "mcl-intrinsic-vs-extrinsic-feedback",
+          "label": "Intrinsic vs extrinsic feedback"
+        },
+        {
+          "topicId": "mcl-transfer-of-learning",
+          "label": "Transfer of learning"
+        },
+        {
+          "topicId": "mcl-retention-of-learning",
+          "label": "Retention of learning"
+        }
+      ]
+    },
+    {
+      "sectionId": "cerebral-palsy",
+      "titlePrefix": "Cerebral palsy",
+      "topics": [
+        {
+          "topicId": "cp-classification-of-cp",
+          "label": "Classification of CP"
+        },
+        {
+          "topicId": "cp-spastic-cp",
+          "label": "Spastic CP"
+        },
+        {
+          "topicId": "cp-dyskinetic-cp",
+          "label": "Dyskinetic CP"
+        },
+        {
+          "topicId": "cp-ataxic-cp",
+          "label": "Ataxic CP"
+        },
+        {
+          "topicId": "cp-spastic-diplegia",
+          "label": "Spastic diplegia"
+        },
+        {
+          "topicId": "cp-spastic-quadriplegia",
+          "label": "Spastic quadriplegia"
+        },
+        {
+          "topicId": "cp-hemiplegic-cp",
+          "label": "Hemiplegic CP"
+        },
+        {
+          "topicId": "cp-hypotonic-cp",
+          "label": "Hypotonic CP"
+        },
+        {
+          "topicId": "cp-gmfcs",
+          "label": "GMFCS"
+        },
+        {
+          "topicId": "cp-gmfm",
+          "label": "GMFM"
+        },
+        {
+          "topicId": "cp-tone-assessment-in-cp",
+          "label": "Tone assessment in CP"
+        },
+        {
+          "topicId": "cp-spasticity-vs-dystonia",
+          "label": "Spasticity vs dystonia"
+        },
+        {
+          "topicId": "cp-primitive-reflex-persistence-in-cp",
+          "label": "Primitive reflex persistence in CP"
+        },
+        {
+          "topicId": "cp-crouch-gait",
+          "label": "Crouch gait"
+        },
+        {
+          "topicId": "cp-equinus-gait",
+          "label": "Equinus gait"
+        },
+        {
+          "topicId": "cp-scissoring-gait",
+          "label": "Scissoring gait"
+        },
+        {
+          "topicId": "cp-toe-walking-in-cp",
+          "label": "Toe walking in CP"
+        },
+        {
+          "topicId": "cp-gait-deviations-in-diplegia",
+          "label": "Gait deviations in diplegia"
+        },
+        {
+          "topicId": "cp-afos-in-cp",
+          "label": "AFOs in CP"
+        },
+        {
+          "topicId": "cp-ndt-bobath",
+          "label": "NDT/Bobath"
+        },
+        {
+          "topicId": "cp-pnf-in-cp",
+          "label": "PNF in CP"
+        },
+        {
+          "topicId": "cp-task-oriented-therapy",
+          "label": "Task-oriented therapy"
+        },
+        {
+          "topicId": "cp-cimt-in-hemiplegic-cp",
+          "label": "CIMT in hemiplegic CP"
+        },
+        {
+          "topicId": "cp-early-intervention",
+          "label": "Early intervention"
+        },
+        {
+          "topicId": "cp-contracture-prevention",
+          "label": "Contracture prevention"
+        },
+        {
+          "topicId": "cp-positioning",
+          "label": "Positioning"
+        },
+        {
+          "topicId": "cp-seating",
+          "label": "Seating"
+        },
+        {
+          "topicId": "cp-adaptive-equipment",
+          "label": "Adaptive equipment"
+        },
+        {
+          "topicId": "cp-ta-lengthening-rehabilitation",
+          "label": "TA lengthening rehabilitation"
+        },
+        {
+          "topicId": "cp-hip-surveillance",
+          "label": "Hip surveillance"
+        },
+        {
+          "topicId": "cp-family-centred-care",
+          "label": "Family-centred care"
+        }
+      ]
+    },
+    {
+      "sectionId": "reflexes",
+      "titlePrefix": "Reflexes",
+      "topics": [
+        {
+          "topicId": "reflex-moro-reflex",
+          "label": "Moro reflex"
+        },
+        {
+          "topicId": "reflex-atnr",
+          "label": "ATNR"
+        },
+        {
+          "topicId": "reflex-stnr",
+          "label": "STNR"
+        },
+        {
+          "topicId": "reflex-tlr",
+          "label": "TLR"
+        },
+        {
+          "topicId": "reflex-palmar-grasp",
+          "label": "Palmar grasp"
+        },
+        {
+          "topicId": "reflex-plantar-grasp",
+          "label": "Plantar grasp"
+        },
+        {
+          "topicId": "reflex-rooting-reflex",
+          "label": "Rooting reflex"
+        },
+        {
+          "topicId": "reflex-sucking-reflex",
+          "label": "Sucking reflex"
+        },
+        {
+          "topicId": "reflex-stepping-reflex",
+          "label": "Stepping reflex"
+        },
+        {
+          "topicId": "reflex-galant-reflex",
+          "label": "Galant reflex"
+        },
+        {
+          "topicId": "reflex-reflex-integration",
+          "label": "Reflex integration"
+        },
+        {
+          "topicId": "reflex-retained-primitive-reflexes",
+          "label": "Retained primitive reflexes"
+        },
+        {
+          "topicId": "reflex-primitive-reflex-vs-postural-reaction",
+          "label": "Primitive reflex vs postural reaction"
+        },
+        {
+          "topicId": "reflex-righting-reactions",
+          "label": "Righting reactions"
+        },
+        {
+          "topicId": "reflex-protective-reactions",
+          "label": "Protective reactions"
+        },
+        {
+          "topicId": "reflex-equilibrium-reactions",
+          "label": "Equilibrium reactions"
+        },
+        {
+          "topicId": "reflex-development-of-postural-control",
+          "label": "Development of postural control"
+        }
+      ]
+    },
+    {
+      "sectionId": "motor-development",
+      "titlePrefix": "Motor development",
+      "topics": [
+        {
+          "topicId": "nmd-cephalocaudal-development",
+          "label": "Cephalocaudal development"
+        },
+        {
+          "topicId": "nmd-proximodistal-development",
+          "label": "Proximodistal development"
+        },
+        {
+          "topicId": "nmd-prone-development",
+          "label": "Prone development"
+        },
+        {
+          "topicId": "nmd-supine-development",
+          "label": "Supine development"
+        },
+        {
+          "topicId": "nmd-rolling",
+          "label": "Rolling"
+        },
+        {
+          "topicId": "nmd-sitting-development",
+          "label": "Sitting development"
+        },
+        {
+          "topicId": "nmd-crawling",
+          "label": "Crawling"
+        },
+        {
+          "topicId": "nmd-standing",
+          "label": "Standing"
+        },
+        {
+          "topicId": "nmd-independent-walking",
+          "label": "Independent walking"
+        },
+        {
+          "topicId": "nmd-developmental-milestones",
+          "label": "Developmental milestones"
+        },
+        {
+          "topicId": "nmd-developmental-red-flags",
+          "label": "Developmental red flags"
+        },
+        {
+          "topicId": "nmd-developmental-sequence",
+          "label": "Developmental sequence"
+        }
+      ]
+    },
+    {
+      "sectionId": "developmental-delay",
+      "titlePrefix": "Developmental delay",
+      "topics": [
+        {
+          "topicId": "dd-definition-of-developmental-delay",
+          "label": "Definition of developmental delay"
+        },
+        {
+          "topicId": "dd-global-developmental-delay",
+          "label": "Global developmental delay"
+        },
+        {
+          "topicId": "dd-motor-developmental-delay",
+          "label": "Motor developmental delay"
+        },
+        {
+          "topicId": "dd-causes-of-developmental-delay",
+          "label": "Causes of developmental delay"
+        },
+        {
+          "topicId": "dd-developmental-red-flags",
+          "label": "Developmental red flags"
+        },
+        {
+          "topicId": "dd-developmental-assessment",
+          "label": "Developmental assessment"
+        },
+        {
+          "topicId": "dd-developmental-screening",
+          "label": "Developmental screening"
+        },
+        {
+          "topicId": "dd-early-intervention",
+          "label": "Early intervention"
+        },
+        {
+          "topicId": "dd-play-based-intervention",
+          "label": "Play-based intervention"
+        },
+        {
+          "topicId": "dd-family-centred-intervention",
+          "label": "Family-centred intervention"
+        },
+        {
+          "topicId": "dd-dynamic-systems-theory-and-development",
+          "label": "Dynamic Systems Theory and development"
+        },
+        {
+          "topicId": "dd-high-risk-infant",
+          "label": "High-risk infant"
+        }
+      ]
+    },
+    {
+      "sectionId": "neuromuscular-dmd",
+      "titlePrefix": "Neuromuscular (DMD)",
+      "topics": [
+        {
+          "topicId": "dmd-gowers-sign",
+          "label": "Gowers' sign"
+        },
+        {
+          "topicId": "dmd-calf-pseudohypertrophy",
+          "label": "Calf pseudohypertrophy"
+        },
+        {
+          "topicId": "dmd-pattern-of-weakness-in-dmd",
+          "label": "Pattern of weakness in DMD"
+        },
+        {
+          "topicId": "dmd-functional-progression-in-dmd",
+          "label": "Functional progression in DMD"
+        },
+        {
+          "topicId": "dmd-contractures-in-dmd",
+          "label": "Contractures in DMD"
+        },
+        {
+          "topicId": "dmd-respiratory-involvement",
+          "label": "Respiratory involvement"
+        },
+        {
+          "topicId": "dmd-cardiac-involvement",
+          "label": "Cardiac involvement"
+        },
+        {
+          "topicId": "dmd-exercise-prescription",
+          "label": "Exercise prescription"
+        },
+        {
+          "topicId": "dmd-exercise-precautions",
+          "label": "Exercise precautions"
+        },
+        {
+          "topicId": "dmd-energy-conservation",
+          "label": "Energy conservation"
+        },
+        {
+          "topicId": "dmd-positioning",
+          "label": "Positioning"
+        },
+        {
+          "topicId": "dmd-stretching",
+          "label": "Stretching"
+        },
+        {
+          "topicId": "dmd-orthoses",
+          "label": "Orthoses"
+        },
+        {
+          "topicId": "dmd-respiratory-physiotherapy",
+          "label": "Respiratory physiotherapy"
+        },
+        {
+          "topicId": "dmd-functional-assessment",
+          "label": "Functional assessment"
+        },
+        {
+          "topicId": "dmd-dmd-vs-becker",
+          "label": "DMD vs Becker"
+        },
+        {
+          "topicId": "dmd-limb-girdle-dystrophy",
+          "label": "Limb-girdle dystrophy"
+        },
+        {
+          "topicId": "dmd-myotonic-dystrophy",
+          "label": "Myotonic dystrophy"
+        }
+      ]
+    },
+    {
+      "sectionId": "spina-bifida",
+      "titlePrefix": "Spina bifida",
+      "topics": [
+        {
+          "topicId": "sb-types-of-spina-bifida",
+          "label": "Types of spina bifida"
+        },
+        {
+          "topicId": "sb-myelomeningocele",
+          "label": "Myelomeningocele"
+        },
+        {
+          "topicId": "sb-neurological-level",
+          "label": "Neurological level"
+        },
+        {
+          "topicId": "sb-functional-prognosis-by-level",
+          "label": "Functional prognosis by level"
+        },
+        {
+          "topicId": "sb-motor-impairment",
+          "label": "Motor impairment"
+        },
+        {
+          "topicId": "sb-sensory-impairment",
+          "label": "Sensory impairment"
+        },
+        {
+          "topicId": "sb-neurogenic-bladder",
+          "label": "Neurogenic bladder"
+        },
+        {
+          "topicId": "sb-neurogenic-bowel",
+          "label": "Neurogenic bowel"
+        },
+        {
+          "topicId": "sb-orthopaedic-deformities",
+          "label": "Orthopaedic deformities"
+        },
+        {
+          "topicId": "sb-hydrocephalus",
+          "label": "Hydrocephalus"
+        },
+        {
+          "topicId": "sb-assessment",
+          "label": "Assessment"
+        },
+        {
+          "topicId": "sb-orthoses-according-to-level",
+          "label": "Orthoses according to level"
+        },
+        {
+          "topicId": "sb-gait-training",
+          "label": "Gait training"
+        },
+        {
+          "topicId": "sb-mobility-training",
+          "label": "Mobility training"
+        },
+        {
+          "topicId": "sb-skin-protection",
+          "label": "Skin protection"
+        },
+        {
+          "topicId": "sb-physiotherapy-management",
+          "label": "Physiotherapy management"
+        },
+        {
+          "topicId": "sb-spinal-dysraphism",
+          "label": "Spinal dysraphism"
+        }
+      ]
+    },
+    {
+      "sectionId": "down-syndrome",
+      "titlePrefix": "Down syndrome",
+      "topics": [
+        {
+          "topicId": "ds-clinical-features-of-down-syndrome",
+          "label": "Clinical features of Down syndrome"
+        },
+        {
+          "topicId": "ds-hypotonia-in-down-syndrome",
+          "label": "Hypotonia in Down syndrome"
+        },
+        {
+          "topicId": "ds-motor-development-in-down-syndrome",
+          "label": "Motor development in Down syndrome"
+        },
+        {
+          "topicId": "ds-developmental-delay-in-down-syndrome",
+          "label": "Developmental delay in Down syndrome"
+        },
+        {
+          "topicId": "ds-atlantoaxial-instability",
+          "label": "Atlantoaxial instability"
+        },
+        {
+          "topicId": "ds-musculoskeletal-problems",
+          "label": "Musculoskeletal problems"
+        },
+        {
+          "topicId": "ds-balance-impairment",
+          "label": "Balance impairment"
+        },
+        {
+          "topicId": "ds-gait-abnormalities",
+          "label": "Gait abnormalities"
+        },
+        {
+          "topicId": "ds-assessment",
+          "label": "Assessment"
+        },
+        {
+          "topicId": "ds-early-intervention",
+          "label": "Early intervention"
+        },
+        {
+          "topicId": "ds-physiotherapy-management",
+          "label": "Physiotherapy management"
+        },
+        {
+          "topicId": "ds-intellectual-disability-and-function",
+          "label": "Intellectual disability and function"
+        },
+        {
+          "topicId": "ds-motor-learning-in-intellectual-disability",
+          "label": "Motor learning in intellectual disability"
+        }
+      ]
+    },
+    {
+      "sectionId": "autism",
+      "titlePrefix": "Autism",
+      "topics": [
+        {
+          "topicId": "asd-core-features-of-autism",
+          "label": "Core features of autism"
+        },
+        {
+          "topicId": "asd-sensory-processing-abnormalities",
+          "label": "Sensory processing abnormalities"
+        },
+        {
+          "topicId": "asd-tactile-hypersensitivity",
+          "label": "Tactile hypersensitivity"
+        },
+        {
+          "topicId": "asd-proprioceptive-processing",
+          "label": "Proprioceptive processing"
+        },
+        {
+          "topicId": "asd-vestibular-processing",
+          "label": "Vestibular processing"
+        },
+        {
+          "topicId": "asd-motor-coordination",
+          "label": "Motor coordination"
+        },
+        {
+          "topicId": "asd-postural-control",
+          "label": "Postural control"
+        },
+        {
+          "topicId": "asd-gait-in-autism",
+          "label": "Gait in autism"
+        },
+        {
+          "topicId": "asd-play-skills",
+          "label": "Play skills"
+        },
+        {
+          "topicId": "asd-early-intervention",
+          "label": "Early intervention"
+        },
+        {
+          "topicId": "asd-sensory-integration",
+          "label": "Sensory integration"
+        },
+        {
+          "topicId": "asd-role-of-physiotherapy",
+          "label": "Role of physiotherapy"
+        },
+        {
+          "topicId": "asd-family-centred-intervention",
+          "label": "Family-centred intervention"
+        }
+      ]
+    },
+    {
+      "sectionId": "paediatric-tbi",
+      "titlePrefix": "Paediatric TBI",
+      "topics": [
+        {
+          "topicId": "ptbi-primary-vs-secondary-injury",
+          "label": "Primary vs secondary injury"
+        },
+        {
+          "topicId": "ptbi-gcs-in-children",
+          "label": "GCS in children"
+        },
+        {
+          "topicId": "ptbi-post-traumatic-amnesia",
+          "label": "Post-traumatic amnesia"
+        },
+        {
+          "topicId": "ptbi-decorticate-vs-decerebrate-posturing",
+          "label": "Decorticate vs decerebrate posturing"
+        },
+        {
+          "topicId": "ptbi-paediatric-tbi-assessment",
+          "label": "Paediatric TBI assessment"
+        },
+        {
+          "topicId": "ptbi-cognitive-problems",
+          "label": "Cognitive problems"
+        },
+        {
+          "topicId": "ptbi-behavioural-problems",
+          "label": "Behavioural problems"
+        },
+        {
+          "topicId": "ptbi-motor-impairment",
+          "label": "Motor impairment"
+        },
+        {
+          "topicId": "ptbi-balance-impairment",
+          "label": "Balance impairment"
+        },
+        {
+          "topicId": "ptbi-early-rehabilitation",
+          "label": "Early rehabilitation"
+        },
+        {
+          "topicId": "ptbi-functional-rehabilitation",
+          "label": "Functional rehabilitation"
+        }
+      ]
+    },
+    {
+      "sectionId": "paediatric-sci",
+      "titlePrefix": "Paediatric SCI",
+      "topics": [
+        {
+          "topicId": "psci-complete-vs-incomplete-injury",
+          "label": "Complete vs incomplete injury"
+        },
+        {
+          "topicId": "psci-neurological-level",
+          "label": "Neurological level"
+        },
+        {
+          "topicId": "psci-functional-prognosis",
+          "label": "Functional prognosis"
+        },
+        {
+          "topicId": "psci-respiratory-complications",
+          "label": "Respiratory complications"
+        },
+        {
+          "topicId": "psci-spinal-shock",
+          "label": "Spinal shock"
+        },
+        {
+          "topicId": "psci-neurogenic-bladder",
+          "label": "Neurogenic bladder"
+        },
+        {
+          "topicId": "psci-neurogenic-bowel",
+          "label": "Neurogenic bowel"
+        },
+        {
+          "topicId": "psci-pressure-injury-prevention",
+          "label": "Pressure injury prevention"
+        },
+        {
+          "topicId": "psci-orthoses",
+          "label": "Orthoses"
+        },
+        {
+          "topicId": "psci-transfers",
+          "label": "Transfers"
+        },
+        {
+          "topicId": "psci-wheelchair-mobility",
+          "label": "Wheelchair mobility"
+        },
+        {
+          "topicId": "psci-standing",
+          "label": "Standing"
+        },
+        {
+          "topicId": "psci-gait-training",
+          "label": "Gait training"
+        },
+        {
+          "topicId": "psci-family-education",
+          "label": "Family education"
+        }
+      ]
+    },
+    {
+      "sectionId": "sensory-integration",
+      "titlePrefix": "Sensory integration",
+      "topics": [
+        {
+          "topicId": "si-sensory-integration-theory",
+          "label": "Sensory integration theory"
+        },
+        {
+          "topicId": "si-sensory-processing-disorder",
+          "label": "Sensory processing disorder"
+        },
+        {
+          "topicId": "si-tactile-defensiveness",
+          "label": "Tactile defensiveness"
+        },
+        {
+          "topicId": "si-vestibular-processing",
+          "label": "Vestibular processing"
+        },
+        {
+          "topicId": "si-proprioceptive-processing",
+          "label": "Proprioceptive processing"
+        },
+        {
+          "topicId": "si-sensory-modulation",
+          "label": "Sensory modulation"
+        },
+        {
+          "topicId": "si-sensory-discrimination",
+          "label": "Sensory discrimination"
+        },
+        {
+          "topicId": "si-sensory-integration-assessment",
+          "label": "Sensory integration assessment"
+        },
+        {
+          "topicId": "si-sensory-integration-intervention",
+          "label": "Sensory integration intervention"
+        },
+        {
+          "topicId": "si-sensory-integration-in-autism",
+          "label": "Sensory integration in autism"
+        }
+      ]
+    },
+    {
+      "sectionId": "neonatal-picu",
+      "titlePrefix": "Neonatal/PICU",
+      "topics": [
+        {
+          "topicId": "picu-role-of-physiotherapy-in-nicu",
+          "label": "Role of physiotherapy in NICU"
+        },
+        {
+          "topicId": "picu-role-of-physiotherapy-in-picu",
+          "label": "Role of physiotherapy in PICU"
+        },
+        {
+          "topicId": "picu-positioning-in-nicu",
+          "label": "Positioning in NICU"
+        },
+        {
+          "topicId": "picu-respiratory-physiotherapy-in-infants",
+          "label": "Respiratory physiotherapy in infants"
+        },
+        {
+          "topicId": "picu-airway-clearance-in-children",
+          "label": "Airway clearance in children"
+        },
+        {
+          "topicId": "picu-developmental-care",
+          "label": "Developmental care"
+        },
+        {
+          "topicId": "picu-handling-of-high-risk-infants",
+          "label": "Handling of high-risk infants"
+        },
+        {
+          "topicId": "picu-prevention-of-developmental-complications",
+          "label": "Prevention of developmental complications"
+        },
+        {
+          "topicId": "picu-early-mobilization-in-picu",
+          "label": "Early mobilization in PICU"
+        },
+        {
+          "topicId": "picu-family-education-in-picu",
+          "label": "Family education in PICU"
+        }
+      ]
+    },
+    {
+      "sectionId": "concepts",
+      "titlePrefix": "Concepts",
+      "topics": [
+        {
+          "topicId": "misc-orthotic-principles",
+          "label": "Orthotic principles"
+        },
+        {
+          "topicId": "misc-afo-indications",
+          "label": "AFO indications"
+        },
+        {
+          "topicId": "misc-kafo-indications",
+          "label": "KAFO indications"
+        },
+        {
+          "topicId": "misc-seating-systems",
+          "label": "Seating systems"
+        },
+        {
+          "topicId": "misc-standing-frames",
+          "label": "Standing frames"
+        },
+        {
+          "topicId": "misc-assistive-devices",
+          "label": "Assistive devices"
+        },
+        {
+          "topicId": "misc-adaptive-equipment",
+          "label": "Adaptive equipment"
+        },
+        {
+          "topicId": "misc-parent-counselling",
+          "label": "Parent counselling"
+        },
+        {
+          "topicId": "misc-home-programme",
+          "label": "Home programme"
+        },
+        {
+          "topicId": "misc-community-participation",
+          "label": "Community participation"
+        },
+        {
+          "topicId": "misc-quality-of-life",
+          "label": "Quality of life"
+        },
+        {
+          "topicId": "misc-family-centred-care",
+          "label": "Family-centred care"
+        },
+        {
+          "topicId": "misc-interdisciplinary-team",
+          "label": "Interdisciplinary team"
+        },
+        {
+          "topicId": "misc-outcome-measures",
+          "label": "Outcome measures"
+        },
+        {
+          "topicId": "misc-functional-independence",
+          "label": "Functional independence"
+        },
+        {
+          "topicId": "misc-goal-setting",
+          "label": "Goal setting"
+        },
+        {
+          "topicId": "misc-play-based-therapy",
+          "label": "Play-based therapy"
+        }
+      ]
+    }
+  ]
+}

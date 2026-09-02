@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import medicalCandidateJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
+import neuroCatalogJson from "@content/catalogs/neuro-physiotherapy-topics.json";
 import {
   eligibleVariants,
   listSubjects,
@@ -53,12 +54,35 @@ describe("curriculum subject availability", () => {
 });
 
 describe("active medical-content completeness", () => {
-  it("ships all 35 Neuro topics with sourced criteria for every variant", () => {
+  it("generates every Neuro catalog topic with stable section-qualified titles", () => {
     const neuro = pack.subjects.find(
       (subject) => subject.subjectId === "neuro-physiotherapy",
     )!;
-    expect(neuro.topics).toHaveLength(35);
+    const catalogTopics = neuroCatalogJson.sections.flatMap((section) =>
+      section.topics.map((topic) => ({
+        topicId: topic.topicId,
+        title: `${section.titlePrefix} — ${topic.label}`,
+      })),
+    );
+    expect(catalogTopics).toHaveLength(neuroCatalogJson.expectedTopicCount);
+    expect(
+      neuro.topics.map((topic) => ({ topicId: topic.topicId, title: topic.title })),
+    ).toEqual(catalogTopics);
+    expect(neuro.topics.find((topic) => topic.topicId === "stroke-hemiplegic-gait")?.title)
+      .toBe("Stroke — Hemiplegic gait");
     for (const topic of neuro.topics) {
+      const authored = topic.rubrics.some((rubric) => rubric.concepts.length > 0);
+      if (!authored) {
+        // Scaffolded topic: variants exist but rubric concepts are empty — valid under DRAFT.
+        for (const variant of topic.variants) {
+          const rubric = topic.rubrics.find(
+            (candidate) => candidate.rubricId === variant.rubricId,
+          );
+          expect(rubric?.concepts.length, variant.variantId).toBe(0);
+        }
+        continue;
+      }
+      // Authored topic: every variant's rubric has sourced criteria.
       for (const variant of topic.variants) {
         const rubric = topic.rubrics.find(
           (candidate) => candidate.rubricId === variant.rubricId,

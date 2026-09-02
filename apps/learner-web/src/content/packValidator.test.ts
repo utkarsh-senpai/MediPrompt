@@ -122,8 +122,8 @@ describe("validatePack — happy paths", () => {
     expect(() => validatePack(basePack())).not.toThrow();
   });
 
-  it("ships the viva-authored medical candidate as content version 0.3.0", () => {
-    expect(validatePack(medicalCandidateJson).version).toBe("0.3.0");
+  it("ships the viva-authored medical candidate as content version 0.9.0", () => {
+    expect(validatePack(medicalCandidateJson).version).toBe("0.9.0");
   });
 
   it("freezes the validated pack", () => {
@@ -202,8 +202,14 @@ describe("assertV02ProductionPack", () => {
     );
   });
 
-  it("rejects an empty rubric in an active subject during structural validation", () => {
+  it("rejects an empty rubric in an active APPROVED subject during structural validation", () => {
     const candidate = JSON.parse(JSON.stringify(medicalCandidateJson)) as RuntimePack;
+    // The DRAFT gate permits scaffolded (empty-rubric) topics in active subjects.
+    // Promote to APPROVED so the structural customChecks re-enables the empty-rubric
+    // rejection (an APPROVED pack can never contain scaffolds).
+    candidate.review.status = "APPROVED";
+    candidate.review.reviewers = [{ id: "reviewer", role: "MEDICAL_REVIEWER" }];
+    candidate.review.reviewedAt = "2026-08-30";
     const neuro = candidate.subjects.find(
       (subject) => subject.subjectId === "neuro-physiotherapy",
     )!;

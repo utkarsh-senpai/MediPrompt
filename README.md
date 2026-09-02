@@ -14,10 +14,10 @@ practice are additions to that basic tool—not prerequisites for it.
 
 ## Status
 
-**v0.8 — Three active MPT subjects** (release candidate)
+**v0.9 — 365-topic Neuro catalog** (release candidate)
 
 The runnable learner application lives in `apps/learner-web/`. On top of the compact
-mode/challenge/subject → Spin → timed-speech loop (no account, backend, or persistent
+mode/subject → Spin → timed-speech loop (no account, backend, or persistent
 storage), v0.3 added optional on-device speech feedback: a plain-language mic primer,
 session-local recording during the speaking window, in-app playback, Web Audio delivery
 observations (time speaking, pauses, clipping, loudness variation), and — on explicit request —
@@ -39,7 +39,7 @@ device. Because educator-labelled calibration is still pending, semantic matches
 “possibly present — not counted” evidence and cannot inflate coverage or the delta. The lexical
 engine remains the guaranteed offline numeric baseline.
 
-v0.6 adds an opt-in oral defense after review. Each 60-second viva answer has its own timer and
+v0.6 implemented an opt-in oral defense after review. Each 60-second viva answer has its own timer and
 attempt identity, can use the same optional local microphone/transcription or equal typed path, and
 is scored only against that question's target concepts. Future examiner prompts stay hidden until
 their turn. Unverifiable answers are named and excluded from the aggregate. The ladder is strictly
@@ -48,7 +48,7 @@ transcription, and clip lifecycle. The full reviewed contract is in
 [docs/V0.6_DEVELOPMENT_CONTEXT.md](docs/V0.6_DEVELOPMENT_CONTEXT.md). Scheduling and persistence
 remain later enhancements.
 
-v0.7 adds an opt-in **private learning plan**. After explicit consent, a reviewed
+v0.7 implemented an opt-in **private learning plan**. After explicit consent, a reviewed
 attempt saves only bounded topic identity, date, aggregate coverage, and scheduling metadata in
 IndexedDB; audio, transcripts, concept-by-concept evidence, and transcript excerpts remain
 session-local. The learner can open the next due topic directly, add an optional local-calendar
@@ -58,12 +58,16 @@ triaged weakest-coverage-first. Past exams never activate urgency sorting. Index
 visible and never blocks the original practice loop. The reviewed contract is in
 [docs/V0.7_DEVELOPMENT_CONTEXT.md](docs/V0.7_DEVELOPMENT_CONTEXT.md).
 
-v0.8 keeps every v0.2-v0.7 learning feature and completes the first three playable curriculum
+v0.8 completed the first three playable curriculum
 subjects: Neuro Physiotherapy (35), the curriculum-aligned combined Cardiovascular & Respiratory
 Physiotherapy subject (26), and Sports Physiotherapy (34). All 95 active topics have non-empty,
 source-linked speaking criteria; four additional curriculum subjects remain visible and disabled.
-The content is production-ready as an explicitly unreviewed practice beta, not medically attested.
 See [docs/V0.8_DEVELOPMENT_CONTEXT.md](docs/V0.8_DEVELOPMENT_CONTEXT.md).
+
+v0.9 replaces the 35-topic Neuro set with all 365 topics from the Neuro master list. It also
+temporarily removes the Explain/Apply/Defend control, Viva entry points, and private learning-plan
+surfaces so the released experience stays focused on subject → random topic → timed answer →
+review/retry. Their internal modules remain dormant for deliberate reactivation later.
 
 ```bash
 corepack prepare pnpm@9.15.0 --activate          # Node >= 22.23.2
@@ -77,23 +81,27 @@ pnpm test:e2e                                   # Playwright offline/service-wor
 pnpm audit --prod && pnpm audit                 # runtime + full dependency audit
 ```
 
-**Content status (v0.8 active-subject expansion):** the learner app uses the 265-topic MPT
+**Content status (v0.9 neuro expansion):** the learner app uses the 595-topic MPT
 competency-based curriculum candidate from
 `content/candidates/mpt-cardiorespiratory-review-candidate.json`, spanning seven app subjects
 (Research Methods & Bioethics, Applied Physiotherapeutics, Musculoskeletal, Neuro, combined
-Cardiovascular & Respiratory, Community Health, and Sports). All seven are visible. Neuro (35),
-combined Cardiovascular & Respiratory (26), and Sports (34) are active. Every variant across their
-95 topics has original, source-linked answer criteria. The other four subjects are disabled `COMING_SOON`
-curriculum skeletons and cannot enter a draw, saved-plan launch, or scoring path. Sources were
-checked in 2026 and include 2025-26 publications plus older still-current guidelines, validated
-measures, and foundational texts; this must not be described as “all sources are from 2025-26.”
+Cardiovascular & Respiratory, Community Health, and Sports). All seven are visible. Neuro (365),
+combined Cardiovascular & Respiratory (26), and Sports (34) are active. The 365 Neuro topics are
+section-prefixed (e.g. "Stroke — Hemiplegic gait") and drawn from a 22-section neuro master list;
+most are scaffolded (spinable with structure and delivery feedback, but no fabricated content score)
+with sourced answer criteria added per-topic in follow-up PRs. Combined Cardiovascular &
+Respiratory and Sports remain fully source-authored. The other four subjects are disabled
+`COMING_SOON` curriculum skeletons and cannot enter a draw, saved-plan launch, or scoring path.
+Sources were checked in 2026 and include 2025-26 publications plus older still-current guidelines,
+validated measures, and foundational texts; this must not be described as “all sources are from 2025-26.”
 The generic interaction fixture remains only as a schema/regression-test input.
 
-The medical pack remains `DRAFT`, with no reviewer or review date. Every screen therefore displays
-`Curriculum beta · unreviewed draft` and is for recall/speaking practice only—not diagnosis,
-treatment, clinical decisions, or a claim of medical approval. Source grounding makes the beta
-useful for feedback; a public **medical release** remains gated on a qualified educator reviewing
-the exact prompts, cases, rubrics, mappings, and cited-source scope. See the
+The medical pack remains internally `DRAFT`, with no reviewer or review date. The former recurring
+attestation banner is intentionally absent because the new Neuro cards are simple speaking-topic
+prompts, not clinical questions or medical answers. The product-level educational disclaimer and
+fail-closed content gates remain. Any future content that claims source-grounded clinical coverage
+still requires a qualified educator to review the exact prompts, rubrics, mappings, and source
+scope. See the
 [source review and educator checklist](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md).
 The generated [active-subject review worksheet](docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md)
 contains every active question and its expected evidence criteria for qualified human review.
@@ -115,6 +123,7 @@ contains every active question and its expected evidence criteria for qualified 
 | [v0.6 development context](docs/V0.6_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the oral-defense ladder and release hardening |
 | [v0.7 development context](docs/V0.7_DEVELOPMENT_CONTEXT.md) | Reviewed contract for the private learning plan and spaced resurfacing |
 | [v0.8 development context](docs/V0.8_DEVELOPMENT_CONTEXT.md) | Three-subject activation, evidence boundaries, counts, budgets, and release gates |
+| [v0.9 development context](docs/V0.9_DEVELOPMENT_CONTEXT.md) | 365-topic Neuro catalog, paused features, scaling workflow, and release gates |
 | [Medical source review](docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md) | 20-topic evidence matrix, currency decisions, and educator-review gate |
 | [Active-subject review worksheet](docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md) | All active prompts, expected criteria, citations, and reviewer sign-off fields |
 
@@ -123,8 +132,7 @@ contains every active question and its expected evidence criteria for qualified 
 The first playable must work without an account, microphone, model, transcript, or backend:
 
 1. Choose **Recall Sprint** or **Deep Research**.
-2. Choose an available challenge (**Explain**, **Apply**, or **Defend**) and subject. Challenge is
-   hidden when the selected pack has only one reviewed level.
+2. Choose one of the three available physiotherapy subjects.
 3. Press **Spin a topic** to draw a topic; the timer action stays unavailable until a topic is
    drawn.
 4. In Recall Sprint, press **Start timer**. In Deep Research, run or finish the research timer,
@@ -150,8 +158,6 @@ Correct the transcript
 Review content coverage and delivery separately
         ↓
 Retry with one specific goal
-        ↓
-Resurface weak topics later
 ```
 
 The extended loop is progressive enhancement. The basic timed speaking tool remains useful if
@@ -160,16 +166,12 @@ recording, transcription, evaluation, storage, or the network is unavailable.
 ## Practice modes
 
 - **Recall Sprint:** speak immediately; the default is 60 seconds.
-- **Viva Round:** after a structured answer, opt into progressive recall, explanation,
-  application, differentiation, and defence questions, 60 seconds each.
 - **Deep Research:** a configurable research timer defaulting to 10 minutes, an explicit
   ready-to-speak handoff, then the same 60-second answer.
-- **Teach-back:** explain the same topic to an examiner, junior student, or patient.
 
-Practice mode defines the activity. A separate challenge preset defines reasoning depth: Explain
-for structured retrieval, Apply for bounded case reasoning, or Defend under uncertainty. Register, visible support,
-and accessibility time remain independent. See the
-[difficulty and depth design](docs/DIFFICULTY_AND_DEPTH_DESIGN.md).
+Viva Round, Teach-back, the challenge selector, and the private learning plan are paused in the
+v0.9 UI. Their reviewed design history remains in the version documents, but they are not part of
+the current learner contract.
 
 ## What feedback means
 
@@ -195,9 +197,9 @@ The zero-cost learner experience is an offline-capable static PWA:
   candidate default subject to representative-device and Indian-English medical-speech tests.
 - A deterministic browser-local lexical rubric baseline, with optional pinned q8
   `all-MiniLM-L6-v2` sentence/rubric evidence that remains non-counting until educator calibration.
-- Learner-controlled IndexedDB for bounded private progress metadata, a service worker for application/runtime caching, and the
-  Transformers.js browser cache for opt-in model files.
-- Versioned, human-reviewed YAML topic packs compiled to static JSON.
+- A service worker for application/runtime caching and the Transformers.js browser cache for
+  opt-in model files. Learning-plan persistence is currently disabled.
+- Versioned, validated topic catalogs compiled to static JSON.
 
 Java remains a first-class part of the project through a Java 21/Spring Boot content compiler and,
 later, an optional connected modular monolith for accounts, synchronization, educator workflows,
@@ -226,16 +228,14 @@ would make later versions drift from decisions and code merged in earlier versio
 - No official grades, diagnosis, treatment advice, or replacement for educators.
 - Connected features require explicit consent, clear retention rules, server-side secrets, and
   deletion controls.
-- The local learning plan is off by default and never stores audio, transcript text, or transcript
-  excerpts; export and verified deletion are first-class controls.
+- The dormant learning-plan code is not reachable from the v0.9 learner application.
 
 ## Near-term target
 
 The first useful beta should serve one real medical student and let her complete the full prompt →
-speak → review → retry loop on a phone. The broad inventory contains 265
-[curriculum-derived candidate labels](docs/curriculum/MPT-CBC-topics.md). The 35 Neuro, 26 combined
-Cardiovascular & Respiratory, and 34 Sports topics are available in the explicitly labelled public
-practice beta; the remaining four subjects are visible but disabled until researched and authored.
+speak → review → retry loop on a phone. The runtime catalog contains 595 labels: 365 Neuro,
+26 combined Cardiovascular & Respiratory, and 34 Sports topics are active (425 total), while the
+remaining 170 topics across four subjects stay visible but disabled until researched and authored.
 Automated checks can make the software and beta
 delivery test-ready; they cannot make unreviewed medical content medically release-ready.
 

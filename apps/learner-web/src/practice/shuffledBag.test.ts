@@ -85,4 +85,33 @@ describe("draw", () => {
     const reshuffle = draw({ eligible, previousEligible, bag, random, lastDrawnId: last });
     expect(reshuffle.chosen).not.toBe(last);
   });
+
+  // Guards the v0.9 neuro expansion: a 365-topic subject must draw every topic
+  // exactly once before the bag is reshuffled (non-repeating by design).
+  it("draws every member of a 365-topic bag exactly once per cycle", () => {
+    const eligible = Array.from({ length: 365 }, (_, i) => `topic-${i}`);
+    const random = seededRandom(2026);
+    let bag: string[] = [];
+    let previousEligible: string[] | undefined;
+    let last: string | undefined;
+    const drawn: string[] = [];
+    for (let i = 0; i < eligible.length; i++) {
+      const out = draw({
+        eligible,
+        previousEligible,
+        bag,
+        random,
+        lastDrawnId: last,
+      });
+      drawn.push(out.chosen);
+      last = out.chosen;
+      bag = out.remaining;
+      previousEligible = eligible;
+    }
+    // Bag exhausted after one full cycle.
+    expect(bag).toEqual([]);
+    // Every eligible topic drawn exactly once — uniform, non-repeating coverage.
+    expect(new Set(drawn).size).toBe(eligible.length);
+    expect(drawn.slice().sort()).toEqual([...eligible].sort());
+  });
 });

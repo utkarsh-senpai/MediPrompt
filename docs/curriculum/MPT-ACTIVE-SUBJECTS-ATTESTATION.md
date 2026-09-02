@@ -6,11 +6,11 @@
 
 ## Review scope
 
-- Pack: `mpt-cardiorespiratory-review-candidate` version `0.3.0`
-- Generated from the validated candidate: 3 active subjects, 95 topics, 206 prompt variants
+- Pack: `mpt-cardiorespiratory-review-candidate` version `0.9.0`
+- Generated from the validated candidate: 3 active subjects, 425 topics, 858 prompt variants
 - Active subjects: Neuro Physiotherapy, Cardiovascular & Respiratory Physiotherapy, Sports Physiotherapy
 - Evidence status: sources were checked in 2026 and include 2025–26 publications plus older still-current guidelines, measurement standards, and foundational texts
-- Curriculum catalog: 265 topics across 7 visible subjects; 4 subjects remain `COMING_SOON` and cannot start practice
+- Curriculum catalog: 595 topics across 7 visible subjects; 4 subjects remain `COMING_SOON` and cannot start practice
 - This worksheet reviews educational prompts and answer criteria. It is not patient-specific guidance, a diagnostic protocol, or a substitute for local policy or supervised clinical training.
 
 ## Reviewer record
@@ -29,1495 +29,2195 @@ For every prompt below, verify factual accuracy, physiotherapy scope, safety bou
 
 ## Neuro Physiotherapy
 
-### 1. Stroke rehabilitation: physiotherapy management
+### 1. Stroke — UMN syndrome after stroke
 
-Topic ID: `stroke-management`
+Topic ID: `stroke-umn-syndrome-after-stroke`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain physiotherapy management after stroke, from early assessment through intensity, task-oriented practice, impairment-specific adjuncts, and outcome measurement.
+### 2. Stroke — Brunnstrom stages of motor recovery
 
-**Expected answer — required evidence criteria:**
+Topic ID: `stroke-brunnstrom-stages-of-motor-recovery`
 
-1. Deliver therapy early and at high intensity with task-oriented, repetitive practice (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `early high-intensity therapy`; `task-oriented repetitive practice`; `high repetition task practice`
-2. Select impairment-specific adjuncts by deficit: CIMT, mirror therapy, treadmill with body-weight support, virtual reality (`aha-asa-stroke-rehab-2016`, `cochrane-cimt-2015`, `cochrane-mirror-therapy-2018`, `cochrane-treadmill-bws-2017`, `cochrane-vr-stroke-2025`)
-   - Accepted evidence wording: `constraint-induced movement therapy`; `mirror therapy`; `treadmill with body weight support`; `virtual reality`
-3. Track progress with validated outcome measures and adjust the dose (`aha-asa-stroke-rehab-2016`, `berg-balance-1992`, `fugl-meyer-1975`)
-   - Accepted evidence wording: `Berg Balance Scale`; `Fugl-Meyer Assessment`; `track progress with outcome measures`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 3. Stroke — Synergistic movement patterns
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `stroke-synergistic-movement-patterns`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain physiotherapy management after stroke, from early assessment through intensity, task-oriented practice, impairment-specific adjuncts, and outcome measurement. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 4. Stroke — Spasticity after stroke
 
-**Expected answer — required evidence criteria:**
+Topic ID: `stroke-spasticity-after-stroke`
 
-1. Deliver therapy early and at high intensity with task-oriented, repetitive practice (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `early high-intensity therapy`; `task-oriented repetitive practice`; `high repetition task practice`
-2. Select impairment-specific adjuncts by deficit: CIMT, mirror therapy, treadmill with body-weight support, virtual reality (`aha-asa-stroke-rehab-2016`, `cochrane-cimt-2015`, `cochrane-mirror-therapy-2018`, `cochrane-treadmill-bws-2017`, `cochrane-vr-stroke-2025`)
-   - Accepted evidence wording: `constraint-induced movement therapy`; `mirror therapy`; `treadmill with body weight support`; `virtual reality`
-3. Track progress with validated outcome measures and adjust the dose (`aha-asa-stroke-rehab-2016`, `berg-balance-1992`, `fugl-meyer-1975`)
-   - Accepted evidence wording: `Berg Balance Scale`; `Fugl-Meyer Assessment`; `track progress with outcome measures`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 5. Stroke — Hemiplegic gait
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `stroke-hemiplegic-gait`
 
-#### Question — APPLIED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Using the fictional case, prioritize early physiotherapy goals, choose impairment-specific adjuncts, and outline a monitored progression with the outcome measures you would track.
+### 6. Stroke — Circumduction gait
 
-**Fictional case:** A fictional 64-year-old has a right middle cerebral artery infarct with left hemiparesis, is medically stable 72 hours after stroke, sits with assistance, and wants to walk independently and use the left arm for dressing.
+Topic ID: `stroke-circumduction-gait`
 
-**Reviewed follow-up questions:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-- PROBE: Which single adjunct would most change arm function for this person, and what limits its applicability?
+### 7. Stroke — Equinus gait after stroke
 
-**Expected answer — required evidence criteria:**
+Topic ID: `stroke-equinus-gait-after-stroke`
 
-1. Prioritize early sitting, standing, and walking practice at tolerable intensity (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `early sitting and standing`; `walking practice`; `tolerable intensity`
-2. Match adjuncts to the deficit: CIMT for the arm, treadmill training for gait (`cochrane-cimt-2015`, `cochrane-treadmill-bws-2017`)
-   - Accepted evidence wording: `constraint-induced movement therapy for arm`; `treadmill training for gait`; `match adjunct to deficit`
-3. Track Berg Balance and Fugl-Meyer to justify progression (`berg-balance-1992`, `fugl-meyer-1975`)
-   - Accepted evidence wording: `Berg Balance Scale`; `Fugl-Meyer Assessment`; `track to justify progression`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 8. Stroke — Knee hyperextension after stroke
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `stroke-knee-hyperextension-after-stroke`
 
-#### Question — VIVA / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Defend your early stroke rehabilitation plan for the fictional case, separate what the evidence supports from what is patient-specific, and state the findings that would pause progression and trigger escalation.
+### 9. Stroke — Pusher syndrome
 
-**Fictional case:** A fictional 64-year-old has a right middle cerebral artery infarct with left hemiparesis, is medically stable 72 hours after stroke, sits with assistance, and wants to walk independently and use the left arm for dressing.
+Topic ID: `stroke-pusher-syndrome`
 
-**Reviewed follow-up questions:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-- PROBE: Which single adjunct would most change arm function for this person, and what limits its applicability?
-- EVIDENCE_UPDATE: The person develops new shoulder pain during active left-arm practice. Explain how this changes your priorities and why forced-use CIMT must pause pending assessment.
+### 10. Stroke — Shoulder subluxation after stroke
 
-**Expected answer — required evidence criteria:**
+Topic ID: `stroke-shoulder-subluxation-after-stroke`
 
-1. Defend high-intensity task practice using dose-response evidence (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `dose-response evidence`; `high-intensity task practice`; `evidence supports intensity`
-2. Acknowledge individual tolerance, comorbidity, and response uncertainty (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `individual tolerance`; `comorbidity`; `response uncertainty`
-3. State that new instability, deterioration, or red flags pause progression and trigger escalation (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `pause progression`; `clinical escalation`; `red flags`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 11. Stroke — Hemiplegic shoulder pain
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `stroke-hemiplegic-shoulder-pain`
 
-### 2. Cerebral palsy: assessment and physiotherapy management
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `cerebral-palsy-management`
+### 12. Stroke — Neglect vs hemianopia
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `stroke-neglect-vs-hemianopia`
 
-Explain assessment and physiotherapy management of cerebral palsy, emphasizing MDT care, GMFM/GMFCS, comorbidity surveillance, and goal-based management.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 13. Stroke — Aphasia vs dysarthria
 
-1. Use MDT care from diagnosis with surveillance for pain, sleep, feeding, salivation, and mental health (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `multidisciplinary care from diagnosis`; `comorbidity surveillance`; `pain sleep feeding surveillance`
-2. Assess gross motor function with GMFM and classify with GMFCS to guide goals (`gmfm-russell-1989`, `gmfcs-palisano-1997`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `Gross Motor Function Measure`; `GMFCS classification`; `GMFM and GMFCS`
-3. Set functional goals and plan transition to adult services (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `functional goals`; `transition to adult services`; `goal-based management`
+Topic ID: `stroke-aphasia-vs-dysarthria`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 14. Stroke — Apraxia after stroke
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `stroke-apraxia-after-stroke`
 
-Use the cited evidence sources to prepare, then answer: Explain assessment and physiotherapy management of cerebral palsy, emphasizing MDT care, GMFM/GMFCS, comorbidity surveillance, and goal-based management. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 15. Stroke — Motor recovery after stroke
 
-1. Use MDT care from diagnosis with surveillance for pain, sleep, feeding, salivation, and mental health (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `multidisciplinary care from diagnosis`; `comorbidity surveillance`; `pain sleep feeding surveillance`
-2. Assess gross motor function with GMFM and classify with GMFCS to guide goals (`gmfm-russell-1989`, `gmfcs-palisano-1997`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `Gross Motor Function Measure`; `GMFCS classification`; `GMFM and GMFCS`
-3. Set functional goals and plan transition to adult services (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `functional goals`; `transition to adult services`; `goal-based management`
+Topic ID: `stroke-motor-recovery-after-stroke`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 16. Stroke — Selective motor control after stroke
 
-#### Question — APPLIED / RECALL_SPRINT
+Topic ID: `stroke-selective-motor-control-after-stroke`
 
-Using the fictional case, outline a GMFCS-stratified management plan, the comorbidity surveillance you would coordinate, and the goals you would set for school participation.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Fictional case:** A fictional 5-year-old with bilateral cerebral palsy, GMFCS level III, walks with a mobility aid, has tight calf muscles, and is due for primary-school entry.
+### 17. Stroke — Task-specific training
 
-**Reviewed follow-up questions:**
+Topic ID: `stroke-task-specific-training`
 
-- PROBE: What would change your management more: a one-level change in GMFCS, or a new pain complaint?
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 18. Stroke — Constraint-induced movement therapy
 
-1. Stratify management by GMFCS level and set participation goals (`gmfcs-palisano-1997`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `GMFCS level III`; `stratify by GMFCS`; `school participation goals`
-2. Coordinate MDT surveillance beyond motor impairment (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `MDT surveillance`; `comorbidity surveillance`; `coordinate multidisciplinary care`
-3. Use GMFM to track gross motor change (`gmfm-russell-1989`)
-   - Accepted evidence wording: `Gross Motor Function Measure`; `track motor change`; `GMFM progress`
+Topic ID: `stroke-constraint-induced-movement-therapy`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 19. Stroke — Motor Relearning Programme
 
-#### Question — VIVA / RECALL_SPRINT
+Topic ID: `stroke-motor-relearning-programme`
 
-Defend your management plan for the fictional child, distinguish what GMFCS predicts from what is individual, and explain how you would respond if participation goals and motor goals conflict.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Fictional case:** A fictional 5-year-old with bilateral cerebral palsy, GMFCS level III, walks with a mobility aid, has tight calf muscles, and is due for primary-school entry.
+### 20. Stroke — NDT/Bobath in stroke
 
-**Reviewed follow-up questions:**
+Topic ID: `stroke-ndt-bobath-in-stroke`
 
-- PROBE: What would change your management more: a one-level change in GMFCS, or a new pain complaint?
-- EVIDENCE_UPDATE: The child reports new hip pain. Explain how this changes surveillance priorities and why motor goals must be revisited before progression.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 21. Stroke — Mirror therapy
 
-1. Defend GMFCS-stratified goals using predicted mobility trajectory (`gmfcs-palisano-1997`)
-   - Accepted evidence wording: `GMFCS predicts mobility`; `predicted trajectory`; `stratified goals`
-2. Acknowledge individual variation and the limits of classification (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `individual variation`; `limits of classification`; `child-specific factors`
-3. Use shared decision making and reassessment to revise goals (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `shared decision making`; `reassess goals`; `revise the plan`
+Topic ID: `stroke-mirror-therapy`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 22. Stroke — Mental practice
 
-### 3. Pediatric neuromuscular disorders: DMD and SMA management
+Topic ID: `stroke-mental-practice`
 
-Topic ID: `pediatric-neuromuscular-dmd-sma`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 23. Stroke — Repetitive task training
 
-Explain physiotherapy management of Duchenne muscular dystrophy and spinal muscular atrophy, including contracture prevention, postural management, and multidisciplinary care.
+Topic ID: `stroke-repetitive-task-training`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Focus PT on contracture prevention, scoliosis surveillance, and staged stretching and orthotic programmes (`dmd-care-birnkrant-2018`, `sma-care-mercuri-2018`)
-   - Accepted evidence wording: `contracture prevention`; `scoliosis surveillance`; `stretching and orthotic programme`
-2. Work within multidisciplinary care that extends ambulation and survival with serial respiratory and cardiac monitoring (`dmd-care-birnkrant-2018`)
-   - Accepted evidence wording: `multidisciplinary care`; `extend ambulation`; `serial respiratory and cardiac monitoring`
-3. Adjust rehabilitation goals by disease severity and therapy status, with postural and ventilation support (`sma-care-mercuri-2018`)
-   - Accepted evidence wording: `postural management`; `assisted ventilation`; `goals by disease severity`
+### 24. Stroke — Upper-limb rehabilitation
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `stroke-upper-limb-rehabilitation`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 25. Stroke — Balance rehabilitation
 
-Use the cited evidence sources to prepare, then answer: Explain physiotherapy management of Duchenne muscular dystrophy and spinal muscular atrophy, including contracture prevention, postural management, and multidisciplinary care. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `stroke-balance-rehabilitation`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Focus PT on contracture prevention, scoliosis surveillance, and staged stretching and orthotic programmes (`dmd-care-birnkrant-2018`, `sma-care-mercuri-2018`)
-   - Accepted evidence wording: `contracture prevention`; `scoliosis surveillance`; `stretching and orthotic programme`
-2. Work within multidisciplinary care that extends ambulation and survival with serial respiratory and cardiac monitoring (`dmd-care-birnkrant-2018`)
-   - Accepted evidence wording: `multidisciplinary care`; `extend ambulation`; `serial respiratory and cardiac monitoring`
-3. Adjust rehabilitation goals by disease severity and therapy status, with postural and ventilation support (`sma-care-mercuri-2018`)
-   - Accepted evidence wording: `postural management`; `assisted ventilation`; `goals by disease severity`
+### 26. Stroke — Sit-to-stand after stroke
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `stroke-sit-to-stand-after-stroke`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — APPLIED / RECALL_SPRINT
+### 27. Stroke — Stair climbing after stroke
 
-Using the fictional case, outline a PT programme spanning contracture management, ambulation preservation, and the surveillance you would coordinate within the MDT.
+Topic ID: `stroke-stair-climbing-after-stroke`
 
-**Fictional case:** A fictional 7-year-old with Duchenne muscular dystrophy is still ambulant but beginning to rise from the floor with hand-to-thigh climbing, and has tight heel cords.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Reviewed follow-up questions:**
+### 28. Stroke — Foot drop after stroke
 
-- PROBE: Which monitored outcome would most signal the need to shift from ambulation goals to postural management?
+Topic ID: `stroke-foot-drop-after-stroke`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Design a stretching and night-orthotic programme for contracture prevention (`dmd-care-birnkrant-2018`)
-   - Accepted evidence wording: `stretching programme`; `night orthoses`; `contracture prevention`
-2. Coordinate serial respiratory and cardiac monitoring with the MDT (`dmd-care-birnkrant-2018`)
-   - Accepted evidence wording: `serial respiratory monitoring`; `cardiac monitoring`; `coordinate MDT`
-3. Set ambulation-preservation goals aligned to disease stage (`dmd-care-birnkrant-2018`, `sma-care-mercuri-2018`)
-   - Accepted evidence wording: `ambulation preservation`; `goals by disease stage`; `stage-aligned goals`
+### 29. Stroke — Associated reactions
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `stroke-associated-reactions`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — VIVA / RECALL_SPRINT
+### 30. Stroke — Abnormal reflexes after stroke
 
-Defend your DMD management plan, distinguish what is disease-stage specific from what is general, and explain how goals change if ambulation is lost.
+Topic ID: `stroke-abnormal-reflexes-after-stroke`
 
-**Fictional case:** A fictional 7-year-old with Duchenne muscular dystrophy is still ambulant but beginning to rise from the floor with hand-to-thigh climbing, and has tight heel cords.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Reviewed follow-up questions:**
+### 31. Stroke — Weight shifting after stroke
 
-- PROBE: Which monitored outcome would most signal the need to shift from ambulation goals to postural management?
-- EVIDENCE_UPDATE: The child loses independent ambulation over six months. Explain how the programme changes and why respiratory surveillance intensity increases.
+Topic ID: `stroke-weight-shifting-after-stroke`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Defend contracture and scoliosis surveillance using care-consideration evidence (`dmd-care-birnkrant-2018`, `sma-care-mercuri-2018`)
-   - Accepted evidence wording: `contracture and scoliosis surveillance`; `care considerations`; `evidence-based surveillance`
-2. Acknowledge therapy-status uncertainty and individual progression (`sma-care-mercuri-2018`)
-   - Accepted evidence wording: `therapy status`; `individual progression`; `disease progression uncertainty`
-3. State that loss of ambulation shifts goals to postural care, scoliosis, and ventilation support (`sma-care-mercuri-2018`)
-   - Accepted evidence wording: `postural care`; `scoliosis management`; `ventilation support`
+### 32. Stroke — Trunk control after stroke
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `stroke-trunk-control-after-stroke`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 4. Parkinson's disease: physiotherapy management
+### 33. Stroke — Gait symmetry after stroke
 
-Topic ID: `parkinsons-disease-management`
+Topic ID: `stroke-gait-symmetry-after-stroke`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain physiotherapy management of Parkinson's disease, focusing on gait, balance, transfers, freezing of gait, and falls reduction.
+### 34. Stroke — Community reintegration
 
-**Expected answer — required evidence criteria:**
+Topic ID: `stroke-community-reintegration`
 
-1. Offer physiotherapy targeting gait, balance, and transfers (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `gait balance and transfers`; `physiotherapy for Parkinson's`; `transfers training`
-2. Address freezing of gait and reduce falls (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `freezing of gait`; `reduce falls`; `falls reduction`
-3. Recognise that pharmacological management is levodopa-based and that non-motor symptoms need separate management (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `levodopa-based management`; `non-motor symptoms`; `depression sleep autonomic`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 35. Stroke — Aerobic exercise after stroke
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `stroke-aerobic-exercise-after-stroke`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain physiotherapy management of Parkinson's disease, focusing on gait, balance, transfers, freezing of gait, and falls reduction. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 36. Parkinson's — Cardinal features of Parkinson's disease
 
-**Expected answer — required evidence criteria:**
+Topic ID: `pd-cardinal-features-of-parkinsons-disease`
 
-1. Offer physiotherapy targeting gait, balance, and transfers (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `gait balance and transfers`; `physiotherapy for Parkinson's`; `transfers training`
-2. Address freezing of gait and reduce falls (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `freezing of gait`; `reduce falls`; `falls reduction`
-3. Recognise that pharmacological management is levodopa-based and that non-motor symptoms need separate management (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `levodopa-based management`; `non-motor symptoms`; `depression sleep autonomic`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 37. Parkinson's — Rigidity: lead-pipe vs cogwheel
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pd-rigidity-lead-pipe-vs-cogwheel`
 
-#### Question — APPLIED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Using the fictional case, design a physiotherapy plan targeting freezing of gait and falls, and explain how you would time therapy with medication cycles.
+### 38. Parkinson's — Bradykinesia vs hypokinesia vs akinesia
 
-**Fictional case:** A fictional 68-year-old with Parkinson's disease has freezing of gait at doorways, two near-falls in the past month, and is independent in transfers but slow.
+Topic ID: `pd-bradykinesia-vs-hypokinesia-vs-akinesia`
 
-**Reviewed follow-up questions:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-- PROBE: Which outcome would best show whether your falls programme is working, and over what timeframe?
+### 39. Parkinson's — Resting tremor
 
-**Expected answer — required evidence criteria:**
+Topic ID: `pd-resting-tremor`
 
-1. Target freezing of gait with cueing and strategy training (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `cueing strategies`; `freezing of gait`; `strategy training`
-2. Prioritise falls reduction through balance and transfer training (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `falls reduction`; `balance training`; `transfer training`
-3. Time active therapy to 'on' periods where possible (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `on periods`; `time therapy with medication`; `levodopa cycles`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 40. Parkinson's — Parkinsonian posture
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pd-parkinsonian-posture`
 
-#### Question — VIVA / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Defend your Parkinson's plan, separate what physiotherapy can change from what is medication-driven, and explain how you would respond to worsening falls.
+### 41. Parkinson's — Parkinsonian gait
 
-**Fictional case:** A fictional 68-year-old with Parkinson's disease has freezing of gait at doorways, two near-falls in the past month, and is independent in transfers but slow.
+Topic ID: `pd-parkinsonian-gait`
 
-**Reviewed follow-up questions:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-- PROBE: Which outcome would best show whether your falls programme is working, and over what timeframe?
-- EVIDENCE_UPDATE: The person reports more freezing in the afternoon. Explain how this changes your timing of therapy and what medical review you would flag.
+### 42. Parkinson's — Festination
 
-**Expected answer — required evidence criteria:**
+Topic ID: `pd-festination`
 
-1. Defend gait, balance, and transfer training using guideline evidence (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `gait balance and transfers`; `guideline evidence`; `physiotherapy benefit`
-2. Acknowledge that motor symptoms are levodopa-responsive and non-motor symptoms are not (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `levodopa-responsive motor symptoms`; `non-motor symptoms`; `medication-driven`
-3. State that worsening falls or new freezing triggers medical review and revised supervision (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `worsening falls`; `medical review`; `revised supervision`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 43. Parkinson's — Freezing of gait
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pd-freezing-of-gait`
 
-### 5. Outcome measures in neurological physiotherapy
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neuro-outcome-measures`
+### 44. Parkinson's — Freezing during turning
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `pd-freezing-during-turning`
 
-Explain how to select and interpret outcome measures in neuro physiotherapy, including Berg Balance, Fugl-Meyer, MMSE, and the ASIA Impairment Scale.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 45. Parkinson's — Reduced arm swing
 
-1. Use the Berg Balance Scale to measure static and dynamic balance; a change of about 4 points is the minimal detectable change (`berg-balance-1992`)
-   - Accepted evidence wording: `Berg Balance Scale`; `minimal detectable change`; `balance assessment`
-2. Use the Fugl-Meyer Assessment to quantify motor, balance, sensation and joint function in hemiplegia (`fugl-meyer-1975`)
-   - Accepted evidence wording: `Fugl-Meyer Assessment`; `motor sensory assessment`; `hemiplegia assessment`
-3. Use the MMSE as a bedside cognitive screen and the ASIA Impairment Scale for spinal cord injury classification (`mmse-folstein-1975`, `asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `Mini-Mental State Examination`; `ASIA Impairment Scale`; `cognitive screen`; `AIS grade`
+Topic ID: `pd-reduced-arm-swing`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 46. Parkinson's — Trunk rotation deficit
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `pd-trunk-rotation-deficit`
 
-Use the cited evidence sources to prepare, then answer: Explain how to select and interpret outcome measures in neuro physiotherapy, including Berg Balance, Fugl-Meyer, MMSE, and the ASIA Impairment Scale. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 47. Parkinson's — Postural instability
 
-1. Use the Berg Balance Scale to measure static and dynamic balance; a change of about 4 points is the minimal detectable change (`berg-balance-1992`)
-   - Accepted evidence wording: `Berg Balance Scale`; `minimal detectable change`; `balance assessment`
-2. Use the Fugl-Meyer Assessment to quantify motor, balance, sensation and joint function in hemiplegia (`fugl-meyer-1975`)
-   - Accepted evidence wording: `Fugl-Meyer Assessment`; `motor sensory assessment`; `hemiplegia assessment`
-3. Use the MMSE as a bedside cognitive screen and the ASIA Impairment Scale for spinal cord injury classification (`mmse-folstein-1975`, `asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `Mini-Mental State Examination`; `ASIA Impairment Scale`; `cognitive screen`; `AIS grade`
+Topic ID: `pd-postural-instability`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 48. Parkinson's — Falls in Parkinson's disease
 
-### 6. Neuro-therapeutic skills: task-oriented and evidence-based adjuncts
+Topic ID: `pd-falls-in-parkinsons-disease`
 
-Topic ID: `neuro-therapeutic-task-oriented`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 49. Parkinson's — External cueing
 
-Explain the evidence-based neuro-therapeutic approaches after stroke, emphasizing task-oriented practice and adjuncts with trial evidence.
+Topic ID: `pd-external-cueing`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Prioritise task-oriented, high-intensity repetitive practice as the core approach (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `task-oriented practice`; `high-intensity repetition`; `repetitive task practice`
-2. Apply constraint-induced movement therapy with a transfer package for arm function (`cochrane-cimt-2015`)
-   - Accepted evidence wording: `constraint-induced movement therapy`; `transfer package`; `shaping and restraint`
-3. Use mirror therapy and virtual reality as adjuncts to increase dose and engagement (`cochrane-mirror-therapy-2018`, `cochrane-vr-stroke-2025`)
-   - Accepted evidence wording: `mirror therapy`; `virtual reality adjunct`; `increase dose and engagement`
-4. Use treadmill training with or without body-weight support for walking (`cochrane-treadmill-bws-2017`)
-   - Accepted evidence wording: `treadmill training`; `body weight support`; `walking speed and endurance`
+### 50. Parkinson's — Auditory cueing for gait
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `pd-auditory-cueing-for-gait`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 51. Parkinson's — Visual cueing for gait
 
-Use the cited evidence sources to prepare, then answer: Explain the evidence-based neuro-therapeutic approaches after stroke, emphasizing task-oriented practice and adjuncts with trial evidence. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `pd-visual-cueing-for-gait`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Prioritise task-oriented, high-intensity repetitive practice as the core approach (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `task-oriented practice`; `high-intensity repetition`; `repetitive task practice`
-2. Apply constraint-induced movement therapy with a transfer package for arm function (`cochrane-cimt-2015`)
-   - Accepted evidence wording: `constraint-induced movement therapy`; `transfer package`; `shaping and restraint`
-3. Use mirror therapy and virtual reality as adjuncts to increase dose and engagement (`cochrane-mirror-therapy-2018`, `cochrane-vr-stroke-2025`)
-   - Accepted evidence wording: `mirror therapy`; `virtual reality adjunct`; `increase dose and engagement`
-4. Use treadmill training with or without body-weight support for walking (`cochrane-treadmill-bws-2017`)
-   - Accepted evidence wording: `treadmill training`; `body weight support`; `walking speed and endurance`
+### 52. Parkinson's — Why cueing works in Parkinson's disease
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `pd-why-cueing-works-in-parkinsons-disease`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 7. Advanced assessment of adult neurological conditions
+### 53. Parkinson's — Dual-task gait
 
-Topic ID: `adult-neuro-assessment`
+Topic ID: `pd-dual-task-gait`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain a structured physiotherapy assessment of an adult with a neurological condition, integrating impairment, activity, and participation with validated tools.
+### 54. Parkinson's — Bed mobility in Parkinson's disease
 
-**Expected answer — required evidence criteria:**
+Topic ID: `pd-bed-mobility-in-parkinsons-disease`
 
-1. Start early with structured assessment across body structure, activity, and participation (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `early structured assessment`; `impairment activity participation`; `ICF framework`
-2. Use Fugl-Meyer, Berg Balance, and MMSE to objectify motor, balance, and cognitive status (`fugl-meyer-1975`, `berg-balance-1992`, `mmse-folstein-1975`)
-   - Accepted evidence wording: `Fugl-Meyer Assessment`; `Berg Balance Scale`; `Mini-Mental State Examination`
-3. Screen for fatigue, mood, vision, hearing, and communication before planning (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `screen fatigue and mood`; `vision hearing communication`; `routine screening`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 55. Parkinson's — Hoehn & Yahr staging
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pd-hoehn-and-yahr-staging`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain a structured physiotherapy assessment of an adult with a neurological condition, integrating impairment, activity, and participation with validated tools. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 56. Parkinson's — UPDRS/MDS-UPDRS
 
-**Expected answer — required evidence criteria:**
+Topic ID: `pd-updrs-mds-updrs`
 
-1. Start early with structured assessment across body structure, activity, and participation (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `early structured assessment`; `impairment activity participation`; `ICF framework`
-2. Use Fugl-Meyer, Berg Balance, and MMSE to objectify motor, balance, and cognitive status (`fugl-meyer-1975`, `berg-balance-1992`, `mmse-folstein-1975`)
-   - Accepted evidence wording: `Fugl-Meyer Assessment`; `Berg Balance Scale`; `Mini-Mental State Examination`
-3. Screen for fatigue, mood, vision, hearing, and communication before planning (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `screen fatigue and mood`; `vision hearing communication`; `routine screening`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 57. Parkinson's — Rhythmic Initiation in Parkinson's
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pd-rhythmic-initiation-in-parkinsons`
 
-### 8. Advanced pediatric assessment: GMFM and GMFCS
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `pediatric-gross-motor-assessment`
+### 58. Parkinson's — PNF in Parkinson's
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `pd-pnf-in-parkinsons`
 
-Explain how the GMFM and GMFCS are used to assess and classify gross motor function in children with cerebral palsy and other paediatric neuro conditions.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 59. Parkinson's — Exercise prescription in Parkinson's
 
-1. Use GMFM-66/88 as a criterion-referenced, change-sensitive measure of gross motor function (`gmfm-russell-1989`)
-   - Accepted evidence wording: `Gross Motor Function Measure`; `criterion-referenced measure`; `change-sensitive`
-2. Classify gross motor ability with GMFCS levels I to V to predict mobility and guide goals (`gmfcs-palisano-1997`)
-   - Accepted evidence wording: `GMFCS classification`; `gross motor function classification`; `mobility trajectory`
+Topic ID: `pd-exercise-prescription-in-parkinsons`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 60. Parkinson's — Motor learning in Parkinson's
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `pd-motor-learning-in-parkinsons`
 
-Use the cited evidence sources to prepare, then answer: Explain how the GMFM and GMFCS are used to assess and classify gross motor function in children with cerebral palsy and other paediatric neuro conditions. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 61. Multiple sclerosis — Cardinal clinical features of MS
 
-1. Use GMFM-66/88 as a criterion-referenced, change-sensitive measure of gross motor function (`gmfm-russell-1989`)
-   - Accepted evidence wording: `Gross Motor Function Measure`; `criterion-referenced measure`; `change-sensitive`
-2. Classify gross motor ability with GMFCS levels I to V to predict mobility and guide goals (`gmfcs-palisano-1997`)
-   - Accepted evidence wording: `GMFCS classification`; `gross motor function classification`; `mobility trajectory`
+Topic ID: `ms-cardinal-clinical-features-of-ms`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 62. Multiple sclerosis — Relapsing-remitting MS
 
-### 9. Posture and gait management in pediatric neurological conditions
+Topic ID: `ms-relapsing-remitting-ms`
 
-Topic ID: `pediatric-posture-gait-cp`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 63. Multiple sclerosis — MS fatigue
 
-Explain assessment and management of posture and gait in children with cerebral palsy, linking GMFCS level to intervention goals.
+Topic ID: `ms-ms-fatigue`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Link posture and gait management to GMFCS level and functional goals (`gmfcs-palisano-1997`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `GMFCS level`; `posture and gait management`; `functional goals`
-2. Use MDT surveillance and orthotic or surgical options aligned to motor prognosis (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `orthotic management`; `MDT surveillance`; `motor prognosis`
+### 64. Multiple sclerosis — Uhthoff phenomenon
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `ms-uhthoff-phenomenon`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 65. Multiple sclerosis — Spasticity in MS
 
-Use the cited evidence sources to prepare, then answer: Explain assessment and management of posture and gait in children with cerebral palsy, linking GMFCS level to intervention goals. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `ms-spasticity-in-ms`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Link posture and gait management to GMFCS level and functional goals (`gmfcs-palisano-1997`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `GMFCS level`; `posture and gait management`; `functional goals`
-2. Use MDT surveillance and orthotic or surgical options aligned to motor prognosis (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `orthotic management`; `MDT surveillance`; `motor prognosis`
+### 66. Multiple sclerosis — Ataxia in MS
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `ms-ataxia-in-ms`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 10. Management of progressive and non-progressive pediatric neurological conditions
+### 67. Multiple sclerosis — Intention tremor
 
-Topic ID: `pediatric-progressive-management`
+Topic ID: `ms-intention-tremor`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain how physiotherapy management differs between progressive (e.g., DMD, SMA) and non-progressive (e.g., cerebral palsy) paediatric conditions.
+### 68. Multiple sclerosis — Sensory impairment
 
-**Expected answer — required evidence criteria:**
+Topic ID: `ms-sensory-impairment`
 
-1. For progressive conditions, focus on contracture prevention, postural care, and ambulation preservation within MDT care (`dmd-care-birnkrant-2018`, `sma-care-mercuri-2018`)
-   - Accepted evidence wording: `progressive conditions`; `contracture prevention`; `ambulation preservation`
-2. For non-progressive conditions, emphasise task-oriented motor learning and GMFCS-stratified goals (`nice-ng62-cerebral-palsy`, `gmfcs-palisano-1997`)
-   - Accepted evidence wording: `non-progressive conditions`; `motor learning`; `GMFCS-stratified goals`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 69. Multiple sclerosis — Visual manifestations
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `ms-visual-manifestations`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain how physiotherapy management differs between progressive (e.g., DMD, SMA) and non-progressive (e.g., cerebral palsy) paediatric conditions. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 70. Multiple sclerosis — Balance impairment
 
-**Expected answer — required evidence criteria:**
+Topic ID: `ms-balance-impairment`
 
-1. For progressive conditions, focus on contracture prevention, postural care, and ambulation preservation within MDT care (`dmd-care-birnkrant-2018`, `sma-care-mercuri-2018`)
-   - Accepted evidence wording: `progressive conditions`; `contracture prevention`; `ambulation preservation`
-2. For non-progressive conditions, emphasise task-oriented motor learning and GMFCS-stratified goals (`nice-ng62-cerebral-palsy`, `gmfcs-palisano-1997`)
-   - Accepted evidence wording: `non-progressive conditions`; `motor learning`; `GMFCS-stratified goals`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 71. Multiple sclerosis — Gait abnormalities
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `ms-gait-abnormalities`
 
-### 11. Neural plasticity and dose in neurorehabilitation
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neural-plasticity-dose`
+### 72. Multiple sclerosis — Foot drop
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `ms-foot-drop`
 
-Explain how neural plasticity and movement plasticity inform the dose and design of neurorehabilitation, using evidence of dose-response.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 73. Multiple sclerosis — Heat sensitivity
 
-1. Apply high-repetition, task-oriented practice to drive experience-dependent plasticity (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `experience-dependent plasticity`; `high-repetition practice`; `task-oriented practice`
-2. Expect a definable recovery sequence, tracked with the Fugl-Meyer Assessment (`fugl-meyer-1975`)
-   - Accepted evidence wording: `recovery sequence`; `proximal to distal`; `Fugl-Meyer Assessment`
+Topic ID: `ms-heat-sensitivity`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 74. Multiple sclerosis — Energy conservation
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `ms-energy-conservation`
 
-Use the cited evidence sources to prepare, then answer: Explain how neural plasticity and movement plasticity inform the dose and design of neurorehabilitation, using evidence of dose-response. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 75. Multiple sclerosis — Pacing
 
-1. Apply high-repetition, task-oriented practice to drive experience-dependent plasticity (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `experience-dependent plasticity`; `high-repetition practice`; `task-oriented practice`
-2. Expect a definable recovery sequence, tracked with the Fugl-Meyer Assessment (`fugl-meyer-1975`)
-   - Accepted evidence wording: `recovery sequence`; `proximal to distal`; `Fugl-Meyer Assessment`
+Topic ID: `ms-pacing`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 76. Multiple sclerosis — Exercise prescription in MS
 
-### 12. Evidence-based practice in adult neurorehabilitation
+Topic ID: `ms-exercise-prescription-in-ms`
 
-Topic ID: `adult-neuro-ebp`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 77. Multiple sclerosis — EDSS
 
-Explain how evidence-based practice shapes adult neurorehabilitation, including therapy intensity, telerehabilitation, and outcome review.
+Topic ID: `ms-edss`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Deliver structured, high-repetition task practice at sufficient dose (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `sufficient dose`; `structured task practice`; `therapy intensity`
-2. Use telerehabilitation as an acceptable delivery mode where appropriate (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `telerehabilitation`; `delivery mode`; `remote rehabilitation`
+### 78. Multiple sclerosis — Cognitive impairment
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `ms-cognitive-impairment`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 79. Multiple sclerosis — Bladder dysfunction
 
-Use the cited evidence sources to prepare, then answer: Explain how evidence-based practice shapes adult neurorehabilitation, including therapy intensity, telerehabilitation, and outcome review. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `ms-bladder-dysfunction`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Deliver structured, high-repetition task practice at sufficient dose (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `sufficient dose`; `structured task practice`; `therapy intensity`
-2. Use telerehabilitation as an acceptable delivery mode where appropriate (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `telerehabilitation`; `delivery mode`; `remote rehabilitation`
+### 80. Multiple sclerosis — Fatigue management
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `ms-fatigue-management`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 13. Community integration and early supported discharge after neurological injury
+### 81. Cerebellar — Cerebellar signs
 
-Topic ID: `adult-community-integration`
+Topic ID: `cereb-cerebellar-signs`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain how early supported discharge and community therapy support participation and continuity after neurological injury.
+### 82. Cerebellar — Dysmetria
 
-**Expected answer — required evidence criteria:**
+Topic ID: `cereb-dysmetria`
 
-1. Use early supported discharge with community therapy for eligible patients (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `early supported discharge`; `community therapy`; `community rehabilitation`
-2. Plan continuity and participation-focused goals beyond the acute phase (`nice-ng236-stroke-rehab`, `aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `continuity of therapy`; `participation goals`; `community integration`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 83. Cerebellar — Dysdiadochokinesia
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `cereb-dysdiadochokinesia`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain how early supported discharge and community therapy support participation and continuity after neurological injury. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 84. Cerebellar — Intention tremor
 
-**Expected answer — required evidence criteria:**
+Topic ID: `cereb-intention-tremor`
 
-1. Use early supported discharge with community therapy for eligible patients (`nice-ng236-stroke-rehab`)
-   - Accepted evidence wording: `early supported discharge`; `community therapy`; `community rehabilitation`
-2. Plan continuity and participation-focused goals beyond the acute phase (`nice-ng236-stroke-rehab`, `aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `continuity of therapy`; `participation goals`; `community integration`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 85. Cerebellar — Rebound phenomenon
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `cereb-rebound-phenomenon`
 
-### 14. Pharmacotherapeutics in adult neurological conditions: Parkinson's
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `parkinsons-pharmacotherapy`
+### 86. Cerebellar — Cerebellar hypotonia
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `cereb-cerebellar-hypotonia`
 
-Explain how pharmacotherapy for Parkinson's disease interacts with physiotherapy, including levodopa-based motor management and non-motor symptoms.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 87. Cerebellar — Truncal ataxia
 
-1. Recognise levodopa-based management of motor symptoms and time therapy with medication cycles (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `levodopa-based management`; `motor symptoms`; `on off fluctuations`
-2. Identify non-motor symptoms that require separate management (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `non-motor symptoms`; `depression sleep autonomic`; `separate management`
+Topic ID: `cereb-truncal-ataxia`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 88. Cerebellar — Gait ataxia
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `cereb-gait-ataxia`
 
-Use the cited evidence sources to prepare, then answer: Explain how pharmacotherapy for Parkinson's disease interacts with physiotherapy, including levodopa-based motor management and non-motor symptoms. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 89. Cerebellar — Cerebellar vs sensory ataxia
 
-1. Recognise levodopa-based management of motor symptoms and time therapy with medication cycles (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `levodopa-based management`; `motor symptoms`; `on off fluctuations`
-2. Identify non-motor symptoms that require separate management (`nice-ng71-parkinsons`)
-   - Accepted evidence wording: `non-motor symptoms`; `depression sleep autonomic`; `separate management`
+Topic ID: `cereb-cerebellar-vs-sensory-ataxia`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 90. Cerebellar — Cerebellar vs vestibular ataxia
 
-### 15. Recent advances in technology for neurological physiotherapy
+Topic ID: `cereb-cerebellar-vs-vestibular-ataxia`
 
-Topic ID: `neuro-tech-vr-fes`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 91. Cerebellar — Romberg test
 
-Explain the role of technology in neuro physiotherapy, including virtual reality and functional electrical stimulation, and their evidence as adjuncts.
+Topic ID: `cereb-romberg-test`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Use virtual reality and interactive gaming as an adjunct to increase dose and engagement after stroke (`cochrane-vr-stroke-2025`)
-   - Accepted evidence wording: `virtual reality`; `interactive gaming`; `adjunct to increase dose`
-2. Apply functional electrical stimulation for specific impairments where evidence supports (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `functional electrical stimulation`; `FES`; `evidence-based adjunct`
+### 92. Cerebellar — Finger-nose test
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `cereb-finger-nose-test`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 93. Cerebellar — Heel-shin test
 
-Use the cited evidence sources to prepare, then answer: Explain the role of technology in neuro physiotherapy, including virtual reality and functional electrical stimulation, and their evidence as adjuncts. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `cereb-heel-shin-test`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Use virtual reality and interactive gaming as an adjunct to increase dose and engagement after stroke (`cochrane-vr-stroke-2025`)
-   - Accepted evidence wording: `virtual reality`; `interactive gaming`; `adjunct to increase dose`
-2. Apply functional electrical stimulation for specific impairments where evidence supports (`aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `functional electrical stimulation`; `FES`; `evidence-based adjunct`
+### 94. Cerebellar — Tandem walking
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `cereb-tandem-walking`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 16. Spinal cord injury: ISNCSCI classification and early management
+### 95. Cerebellar — Cerebellum and motor learning
 
-Topic ID: `spinal-cord-injury-isncsci`
+Topic ID: `cereb-cerebellum-and-motor-learning`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain how the ISNCSCI examination classifies spinal cord injury and how the AIS grade and neurological level guide early physiotherapy management.
+### 96. Cerebellar — Cerebellum and coordination
 
-**Expected answer — required evidence criteria:**
+Topic ID: `cereb-cerebellum-and-coordination`
 
-1. Perform the ISNCSCI motor and sensory examination to determine the neurological level and AIS grade (`asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `ISNCSCI examination`; `motor and sensory examination`; `neurological level of injury`; `AIS grade`
-2. Use sacral sparing and key muscle levels to define completeness of injury (`asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `sacral sparing`; `ASIA Impairment Scale`; `completeness of injury`
-3. Guide early management by neurological level within the rehabilitation team (`asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `early management by level`; `rehabilitation team`; `neurological level guides management`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 97. Cerebellar — Cerebellum and postural control
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `cereb-cerebellum-and-postural-control`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain how the ISNCSCI examination classifies spinal cord injury and how the AIS grade and neurological level guide early physiotherapy management. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 98. SCI — Complete vs incomplete SCI
 
-**Expected answer — required evidence criteria:**
+Topic ID: `sci-complete-vs-incomplete-sci`
 
-1. Perform the ISNCSCI motor and sensory examination to determine the neurological level and AIS grade (`asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `ISNCSCI examination`; `motor and sensory examination`; `neurological level of injury`; `AIS grade`
-2. Use sacral sparing and key muscle levels to define completeness of injury (`asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `sacral sparing`; `ASIA Impairment Scale`; `completeness of injury`
-3. Guide early management by neurological level within the rehabilitation team (`asia-isncsci-9th-2026`)
-   - Accepted evidence wording: `early management by level`; `rehabilitation team`; `neurological level guides management`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 99. SCI — ASIA/ISNCSCI examination
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `sci-asia-isncsci-examination`
 
-### 17. Embryology of the nervous system; principles of human development
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-embryology-nervous-system`
+### 100. SCI — Neurological level
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `sci-neurological-level`
 
-Explain the clinically relevant development of the nervous system and how developmental history informs—but does not replace—a pediatric physiotherapy assessment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 101. SCI — Spinal shock
 
-1. Relate neurulation and neural-tube formation to development of the central nervous system (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `neurulation`; `neural tube`; `central nervous system development`
-2. Distinguish central nervous system development from neural-crest contributions to peripheral structures (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `neural crest`; `peripheral nervous system development`; `central and peripheral development`
-3. Use prenatal, perinatal, and developmental history alongside current function rather than inferring a diagnosis from history alone (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `prenatal and perinatal history`; `developmental history`; `not diagnostic alone`
+Topic ID: `sci-spinal-shock`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 102. SCI — Neurogenic shock
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `sci-neurogenic-shock`
 
-Use the cited evidence sources to prepare, then answer: Explain the clinically relevant development of the nervous system and how developmental history informs—but does not replace—a pediatric physiotherapy assessment. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 103. SCI — Autonomic dysreflexia
 
-1. Relate neurulation and neural-tube formation to development of the central nervous system (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `neurulation`; `neural tube`; `central nervous system development`
-2. Distinguish central nervous system development from neural-crest contributions to peripheral structures (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `neural crest`; `peripheral nervous system development`; `central and peripheral development`
-3. Use prenatal, perinatal, and developmental history alongside current function rather than inferring a diagnosis from history alone (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `prenatal and perinatal history`; `developmental history`; `not diagnostic alone`
+Topic ID: `sci-autonomic-dysreflexia`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 104. SCI — UMN vs LMN bladder
 
-### 18. Gross & fine motor development; assessment & testing of infant and child
+Topic ID: `sci-umn-vs-lmn-bladder`
 
-Topic ID: `neu-gross-fine-motor-development-assessment`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 105. SCI — Neurogenic bowel
 
-Explain how to assess gross and fine motor development using developmental surveillance, standardized measures, observation, and the child's family and functional context.
+Topic ID: `sci-neurogenic-bowel`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Assess the developmental trajectory across motor and related domains, not a single milestone in isolation (`cdc-developmental-milestones-2026`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `developmental trajectory`; `multiple developmental domains`; `not one milestone alone`
-2. Combine standardized age-appropriate measurement with observation of movement quality, activity, and participation (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `standardized assessment`; `movement quality`; `activity and participation`
-3. Treat milestone checklists as surveillance aids rather than diagnostic or validated screening instruments and refer concerns for formal assessment (`cdc-developmental-milestones-2026`)
-   - Accepted evidence wording: `surveillance aid`; `not diagnostic`; `refer for formal screening`
+### 106. SCI — Respiratory impairment according to level
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `sci-respiratory-impairment-according-to-level`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 107. SCI — Pressure injury prevention
 
-Use the cited evidence sources to prepare, then answer: Explain how to assess gross and fine motor development using developmental surveillance, standardized measures, observation, and the child's family and functional context. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `sci-pressure-injury-prevention`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Assess the developmental trajectory across motor and related domains, not a single milestone in isolation (`cdc-developmental-milestones-2026`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `developmental trajectory`; `multiple developmental domains`; `not one milestone alone`
-2. Combine standardized age-appropriate measurement with observation of movement quality, activity, and participation (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `standardized assessment`; `movement quality`; `activity and participation`
-3. Treat milestone checklists as surveillance aids rather than diagnostic or validated screening instruments and refer concerns for formal assessment (`cdc-developmental-milestones-2026`)
-   - Accepted evidence wording: `surveillance aid`; `not diagnostic`; `refer for formal screening`
+### 108. SCI — Contracture prevention
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `sci-contracture-prevention`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 19. Developmental reflexes (primitive, spinal, brainstem, cortical)
+### 109. SCI — Transfer training
 
-Topic ID: `neu-developmental-reflexes`
+Topic ID: `sci-transfer-training`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain how primitive and postural responses are examined in developmental assessment and why their presence, absence, asymmetry, or persistence must be interpreted in context.
+### 110. SCI — Wheelchair skills
 
-**Expected answer — required evidence criteria:**
+Topic ID: `sci-wheelchair-skills`
 
-1. Describe primitive and postural responses as one part of the developing motor-control system (`campbell-pt-children-2023`, `shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `primitive reflexes`; `postural reactions`; `developing motor control`
-2. Observe response quality, symmetry, and age-related integration rather than recording presence alone (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `response quality`; `symmetry`; `age-related integration`
-3. Integrate reflex findings with tone, voluntary movement, function, and standardized assessment; do not diagnose from a reflex in isolation (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `integrate with voluntary movement`; `functional assessment`; `not diagnostic alone`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 111. SCI — Standing programme
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `sci-standing-programme`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain how primitive and postural responses are examined in developmental assessment and why their presence, absence, asymmetry, or persistence must be interpreted in context. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 112. SCI — Orthoses in SCI
 
-**Expected answer — required evidence criteria:**
+Topic ID: `sci-orthoses-in-sci`
 
-1. Describe primitive and postural responses as one part of the developing motor-control system (`campbell-pt-children-2023`, `shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `primitive reflexes`; `postural reactions`; `developing motor control`
-2. Observe response quality, symmetry, and age-related integration rather than recording presence alone (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `response quality`; `symmetry`; `age-related integration`
-3. Integrate reflex findings with tone, voluntary movement, function, and standardized assessment; do not diagnose from a reflex in isolation (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `integrate with voluntary movement`; `functional assessment`; `not diagnostic alone`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 113. SCI — Gait training according to neurological level
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `sci-gait-training-according-to-neurological-level`
 
-### 20. Theories of motor development, motor control & motor learning; stages of learning
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-motor-development-control-learning-theories`
+### 114. SCI — Functional prognosis according to SCI level
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `sci-functional-prognosis-according-to-sci-level`
 
-Compare major motor-control and motor-learning perspectives and show how task, learner, environment, practice, and feedback shape a physiotherapy plan.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 115. TBI — Primary vs secondary brain injury
 
-1. Use a systems perspective in which movement emerges from interaction among the person, task, and environment (`shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `person task environment`; `systems perspective`; `movement emerges from interaction`
-2. Match practice structure and feedback to the learner's stage, goals, and task demands (`shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `practice structure`; `feedback schedule`; `stage of learning`
-3. Prioritize meaningful task-specific repetition and transfer to real contexts while monitoring performance and retention (`shumway-cook-motor-control-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `task-specific repetition`; `retention and transfer`; `meaningful practice`
+Topic ID: `tbi-primary-vs-secondary-brain-injury`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 116. TBI — Glasgow Coma Scale
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `tbi-glasgow-coma-scale`
 
-Use the cited evidence sources to prepare, then answer: Compare major motor-control and motor-learning perspectives and show how task, learner, environment, practice, and feedback shape a physiotherapy plan. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 117. TBI — Post-traumatic amnesia
 
-1. Use a systems perspective in which movement emerges from interaction among the person, task, and environment (`shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `person task environment`; `systems perspective`; `movement emerges from interaction`
-2. Match practice structure and feedback to the learner's stage, goals, and task demands (`shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `practice structure`; `feedback schedule`; `stage of learning`
-3. Prioritize meaningful task-specific repetition and transfer to real contexts while monitoring performance and retention (`shumway-cook-motor-control-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `task-specific repetition`; `retention and transfer`; `meaningful practice`
+Topic ID: `tbi-post-traumatic-amnesia`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 118. TBI — Decorticate vs decerebrate posturing
 
-### 21. Early identification & early intervention in pediatric neurological disorders
+Topic ID: `tbi-decorticate-vs-decerebrate-posturing`
 
-Topic ID: `neu-early-identification-intervention-pediatric`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 119. TBI — Spasticity after TBI
 
-Explain a pathway for early identification and early intervention when cerebral palsy or another pediatric neurological disorder is suspected.
+Topic ID: `tbi-spasticity-after-tbi`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Use converging history, standardized neurological or movement assessment, and neuroimaging where clinically indicated rather than a wait-and-see approach (`aacpdm-early-cp-detection`)
-   - Accepted evidence wording: `standardized neurological assessment`; `general movements assessment`; `do not wait and see`
-2. Communicate risk sensitively and refer promptly to the appropriate diagnostic and multidisciplinary pathway (`aacpdm-early-cp-detection`, `morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `communicate risk sensitively`; `prompt referral`; `multidisciplinary pathway`
-3. Begin goal-directed, active, task-specific, family-supported intervention for infants at high risk while monitoring development (`morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `goal-directed intervention`; `active task-specific practice`; `family-supported early intervention`
+### 120. TBI — Balance problems
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `tbi-balance-problems`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 121. TBI — Cognitive impairment
 
-Use the cited evidence sources to prepare, then answer: Explain a pathway for early identification and early intervention when cerebral palsy or another pediatric neurological disorder is suspected. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `tbi-cognitive-impairment`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Use converging history, standardized neurological or movement assessment, and neuroimaging where clinically indicated rather than a wait-and-see approach (`aacpdm-early-cp-detection`)
-   - Accepted evidence wording: `standardized neurological assessment`; `general movements assessment`; `do not wait and see`
-2. Communicate risk sensitively and refer promptly to the appropriate diagnostic and multidisciplinary pathway (`aacpdm-early-cp-detection`, `morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `communicate risk sensitively`; `prompt referral`; `multidisciplinary pathway`
-3. Begin goal-directed, active, task-specific, family-supported intervention for infants at high risk while monitoring development (`morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `goal-directed intervention`; `active task-specific practice`; `family-supported early intervention`
+### 122. TBI — Behavioural problems
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `tbi-behavioural-problems`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 22. Infant at high risk for developmental delay
+### 123. TBI — Apraxia
 
-Topic ID: `neu-infant-high-risk-developmental-delay`
+Topic ID: `tbi-apraxia`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain physiotherapy assessment, surveillance, and family-supported intervention for an infant at high risk of developmental delay.
+### 124. TBI — Motor planning deficits
 
-**Expected answer — required evidence criteria:**
+Topic ID: `tbi-motor-planning-deficits`
 
-1. Identify relevant antenatal, perinatal, neonatal, medical, and environmental risk information (`campbell-pt-children-2023`, `apta-pediatrics-resources-2026`)
-   - Accepted evidence wording: `antenatal and perinatal risk`; `neonatal history`; `environmental risk`
-2. Use repeated standardized assessment and observation of spontaneous movement and function, not milestones alone (`aacpdm-early-cp-detection`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `longitudinal standardized assessment`; `spontaneous movement`; `not milestones alone`
-3. Coach caregivers in safe, active, goal-directed opportunities embedded in daily routines and coordinate early referral (`morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `caregiver coaching`; `daily routines`; `early referral`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 125. TBI — Early physiotherapy
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `tbi-early-physiotherapy`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain physiotherapy assessment, surveillance, and family-supported intervention for an infant at high risk of developmental delay. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 126. TBI — Functional rehabilitation
 
-**Expected answer — required evidence criteria:**
+Topic ID: `tbi-functional-rehabilitation`
 
-1. Identify relevant antenatal, perinatal, neonatal, medical, and environmental risk information (`campbell-pt-children-2023`, `apta-pediatrics-resources-2026`)
-   - Accepted evidence wording: `antenatal and perinatal risk`; `neonatal history`; `environmental risk`
-2. Use repeated standardized assessment and observation of spontaneous movement and function, not milestones alone (`aacpdm-early-cp-detection`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `longitudinal standardized assessment`; `spontaneous movement`; `not milestones alone`
-3. Coach caregivers in safe, active, goal-directed opportunities embedded in daily routines and coordinate early referral (`morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `caregiver coaching`; `daily routines`; `early referral`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 127. Vestibular — Vestibulo-ocular reflex
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `vest-vestibulo-ocular-reflex`
 
-### 23. Spina bifida
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-spina-bifida`
+### 128. Vestibular — Vestibular hypofunction
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `vest-vestibular-hypofunction`
 
-Explain physiotherapy assessment and lifespan mobility management for spina bifida, including skin, musculoskeletal, equipment, participation, and escalation concerns.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 129. Vestibular — Central vs peripheral vertigo
 
-1. Relate neurological level, strength, range, alignment, sensation, and developmental status to functional mobility (`spina-bifida-mobility-guideline`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `neurological level`; `strength range and alignment`; `functional mobility`
-2. Plan individualized mobility, positioning, skin protection, orthotic, wheelchair, and physical-activity support with regular reassessment (`spina-bifida-mobility-guideline`, `who-wheelchair-provision-2023`)
-   - Accepted evidence wording: `skin protection`; `orthotic and wheelchair`; `individualized mobility`
-3. Coordinate multidisciplinary surveillance and urgently escalate new neurological loss, shunt concerns, skin breakdown, or suspected tethered cord (`spina-bifida-mobility-guideline`, `cns-pediatric-hydrocephalus-2020`)
-   - Accepted evidence wording: `multidisciplinary surveillance`; `shunt concern`; `tethered cord or skin breakdown`
+Topic ID: `vest-central-vs-peripheral-vertigo`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 130. Vestibular — BPPV
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `vest-bppv`
 
-Use the cited evidence sources to prepare, then answer: Explain physiotherapy assessment and lifespan mobility management for spina bifida, including skin, musculoskeletal, equipment, participation, and escalation concerns. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 131. Vestibular — Dix-Hallpike test
 
-1. Relate neurological level, strength, range, alignment, sensation, and developmental status to functional mobility (`spina-bifida-mobility-guideline`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `neurological level`; `strength range and alignment`; `functional mobility`
-2. Plan individualized mobility, positioning, skin protection, orthotic, wheelchair, and physical-activity support with regular reassessment (`spina-bifida-mobility-guideline`, `who-wheelchair-provision-2023`)
-   - Accepted evidence wording: `skin protection`; `orthotic and wheelchair`; `individualized mobility`
-3. Coordinate multidisciplinary surveillance and urgently escalate new neurological loss, shunt concerns, skin breakdown, or suspected tethered cord (`spina-bifida-mobility-guideline`, `cns-pediatric-hydrocephalus-2020`)
-   - Accepted evidence wording: `multidisciplinary surveillance`; `shunt concern`; `tethered cord or skin breakdown`
+Topic ID: `vest-dix-hallpike-test`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 132. Vestibular — Epley manoeuvre
 
-### 24. Pediatric traumatic brain injury & traumatic/non-traumatic spinal cord injury
+Topic ID: `vest-epley-manoeuvre`
 
-Topic ID: `neu-pediatric-tbi-sci`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 133. Vestibular — Dynamic visual acuity
 
-Explain staged physiotherapy management for pediatric brain or spinal cord injury from acute safety through rehabilitation and participation.
+Topic ID: `vest-dynamic-visual-acuity`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Confirm medical and neurological stability, precautions, and team-defined physiological limits before mobilization in acute severe injury (`btf-pediatric-severe-tbi`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `medical stability`; `neurological precautions`; `team-defined limits`
-2. Perform serial age-appropriate assessment of motor, sensory, respiratory, cognitive, functional, and participation needs (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `serial assessment`; `motor sensory and respiratory`; `function and participation`
-3. Progress positioning, mobility, task practice, equipment, education, and participation goals while preventing secondary complications (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `prevent secondary complications`; `progress mobility`; `family education and participation`
+### 134. Vestibular — Sensory organization for balance
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `vest-sensory-organization-for-balance`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 135. Vestibular — Visual dependence
 
-Use the cited evidence sources to prepare, then answer: Explain staged physiotherapy management for pediatric brain or spinal cord injury from acute safety through rehabilitation and participation. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `vest-visual-dependence`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Confirm medical and neurological stability, precautions, and team-defined physiological limits before mobilization in acute severe injury (`btf-pediatric-severe-tbi`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `medical stability`; `neurological precautions`; `team-defined limits`
-2. Perform serial age-appropriate assessment of motor, sensory, respiratory, cognitive, functional, and participation needs (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `serial assessment`; `motor sensory and respiratory`; `function and participation`
-3. Progress positioning, mobility, task practice, equipment, education, and participation goals while preventing secondary complications (`campbell-pt-children-2023`, `umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `prevent secondary complications`; `progress mobility`; `family education and participation`
+### 136. Vestibular — Vestibular rehabilitation
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `vest-vestibular-rehabilitation`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 25. Intellectual disabilities — Down syndrome
+### 137. Vestibular — Gaze stabilization
 
-Topic ID: `neu-down-syndrome-intellectual-disability`
+Topic ID: `vest-gaze-stabilization`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain a strengths-based physiotherapy assessment and management plan for a child or adolescent with Down syndrome.
+### 138. Vestibular — Habituation
 
-**Expected answer — required evidence criteria:**
+Topic ID: `vest-habituation`
 
-1. Assess motor development, strength, balance, endurance, joint mobility, activity, and participation rather than assuming limitations from diagnosis (`aap-down-syndrome-2022`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `motor and functional assessment`; `strength balance endurance`; `individual assessment`
-2. Use active, goal-directed practice and physical-activity support adapted to communication, learning, and family priorities (`aap-down-syndrome-2022`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `active goal-directed practice`; `physical activity`; `family priorities`
-3. Coordinate health surveillance and screen for symptoms or precautions that require medical review before higher-risk activity (`aap-down-syndrome-2022`)
-   - Accepted evidence wording: `health surveillance`; `medical review before risk`; `cervical or cardiac symptoms`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 139. Vestibular — Balance strategy: ankle vs hip
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `vest-balance-strategy-ankle-vs-hip`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain a strengths-based physiotherapy assessment and management plan for a child or adolescent with Down syndrome. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 140. Vestibular — Reactive balance
 
-**Expected answer — required evidence criteria:**
+Topic ID: `vest-reactive-balance`
 
-1. Assess motor development, strength, balance, endurance, joint mobility, activity, and participation rather than assuming limitations from diagnosis (`aap-down-syndrome-2022`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `motor and functional assessment`; `strength balance endurance`; `individual assessment`
-2. Use active, goal-directed practice and physical-activity support adapted to communication, learning, and family priorities (`aap-down-syndrome-2022`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `active goal-directed practice`; `physical activity`; `family priorities`
-3. Coordinate health surveillance and screen for symptoms or precautions that require medical review before higher-risk activity (`aap-down-syndrome-2022`)
-   - Accepted evidence wording: `health surveillance`; `medical review before risk`; `cervical or cardiac symptoms`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 141. Peripheral nerve — UMN vs LMN lesion
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pns-umn-vs-lmn-lesion`
 
-### 26. Autism spectrum disorder & physical therapy
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-autism-spectrum-physical-therapy`
+### 142. Peripheral nerve — Peripheral nerve vs nerve root lesion
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `pns-peripheral-nerve-vs-nerve-root-lesion`
 
-Explain the appropriate role of physiotherapy for an autistic child, focusing on motor function, physical activity, access, participation, and individualized support.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 143. Peripheral nerve — Radiculopathy vs peripheral neuropathy
 
-1. Assess and address identified movement, coordination, balance, fitness, mobility, or participation needs rather than treating autism itself (`nice-cg170-autism-under-19`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `motor and participation needs`; `physical activity access`; `not treating autism itself`
-2. Adapt communication, predictability, environment, and sensory demands with the child and family's preferences (`nice-cg170-autism-under-19`)
-   - Accepted evidence wording: `adapt communication`; `predictable environment`; `sensory preferences`
-3. Set functional multidisciplinary goals and avoid unsupported claims that physiotherapy cures core autistic characteristics (`nice-cg170-autism-under-19`)
-   - Accepted evidence wording: `functional goals`; `multidisciplinary support`; `avoid cure claims`
+Topic ID: `pns-radiculopathy-vs-peripheral-neuropathy`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 144. Peripheral nerve — Foot drop
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `pns-foot-drop`
 
-Use the cited evidence sources to prepare, then answer: Explain the appropriate role of physiotherapy for an autistic child, focusing on motor function, physical activity, access, participation, and individualized support. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 145. Peripheral nerve — Common peroneal nerve lesion
 
-1. Assess and address identified movement, coordination, balance, fitness, mobility, or participation needs rather than treating autism itself (`nice-cg170-autism-under-19`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `motor and participation needs`; `physical activity access`; `not treating autism itself`
-2. Adapt communication, predictability, environment, and sensory demands with the child and family's preferences (`nice-cg170-autism-under-19`)
-   - Accepted evidence wording: `adapt communication`; `predictable environment`; `sensory preferences`
-3. Set functional multidisciplinary goals and avoid unsupported claims that physiotherapy cures core autistic characteristics (`nice-cg170-autism-under-19`)
-   - Accepted evidence wording: `functional goals`; `multidisciplinary support`; `avoid cure claims`
+Topic ID: `pns-common-peroneal-nerve-lesion`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 146. Peripheral nerve — Median nerve lesion
 
-### 27. Parent education & counselling; family-centred care
+Topic ID: `pns-median-nerve-lesion`
 
-Topic ID: `neu-parent-education-family-centred-care`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 147. Peripheral nerve — Ulnar nerve lesion
 
-Explain family-centred pediatric physiotherapy, including shared decisions, caregiver coaching, daily routines, consent, and sustainable goals.
+Topic ID: `pns-ulnar-nerve-lesion`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Treat the child and family as partners and use shared decisions based on their priorities, culture, resources, and expertise (`campbell-pt-children-2023`, `morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `family partnership`; `shared decision making`; `family priorities and culture`
-2. Coach safe, active practice in meaningful daily routines instead of prescribing an unsustainable volume of passive handling (`morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `caregiver coaching`; `meaningful daily routines`; `active practice`
-3. Agree measurable participation goals, check understanding and burden, and revise the plan as the child and context change (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `measurable participation goals`; `check family burden`; `reassess and revise`
+### 148. Peripheral nerve — Radial nerve lesion
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `pns-radial-nerve-lesion`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 149. Peripheral nerve — Guillain-Barré syndrome
 
-Use the cited evidence sources to prepare, then answer: Explain family-centred pediatric physiotherapy, including shared decisions, caregiver coaching, daily routines, consent, and sustainable goals. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `pns-guillain-barr-syndrome`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Treat the child and family as partners and use shared decisions based on their priorities, culture, resources, and expertise (`campbell-pt-children-2023`, `morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `family partnership`; `shared decision making`; `family priorities and culture`
-2. Coach safe, active practice in meaningful daily routines instead of prescribing an unsustainable volume of passive handling (`morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `caregiver coaching`; `meaningful daily routines`; `active practice`
-3. Agree measurable participation goals, check understanding and burden, and revise the plan as the child and context change (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `measurable participation goals`; `check family burden`; `reassess and revise`
+### 150. Peripheral nerve — GBS ascending weakness
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `pns-gbs-ascending-weakness`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 28. Pathological & radiological investigations; evoked potentials
+### 151. Peripheral nerve — Respiratory involvement in GBS
 
-Topic ID: `neu-radiology-evoked-potentials`
+Topic ID: `pns-respiratory-involvement-in-gbs`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain how a physiotherapist uses reports from neuroimaging, electrodiagnostic studies, and evoked potentials within clinical reasoning and professional scope.
+### 152. Peripheral nerve — Physiotherapy precautions in GBS
 
-**Expected answer — required evidence criteria:**
+Topic ID: `pns-physiotherapy-precautions-in-gbs`
 
-1. State the clinical question and understand that imaging describes structure while electrodiagnostic and evoked-potential tests assess aspects of pathway function (`umphred-neuro-rehab-2025`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `imaging structure`; `evoked potential pathway function`; `clinical question`
-2. Use the formal report and appropriate specialist interpretation; physiotherapists do not independently diagnose from raw investigations outside competence (`umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `formal report`; `specialist interpretation`; `within competence`
-3. Integrate investigation findings with history, examination, function, and change over time rather than treating a test as a stand-alone answer (`umphred-neuro-rehab-2025`, `aacpdm-early-cp-detection`)
-   - Accepted evidence wording: `integrate with clinical examination`; `function over time`; `not a stand-alone test`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 153. Peripheral nerve — Critical illness polyneuropathy
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `pns-critical-illness-polyneuropathy`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain how a physiotherapist uses reports from neuroimaging, electrodiagnostic studies, and evoked potentials within clinical reasoning and professional scope. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 154. Motor control — Hierarchical theory
 
-**Expected answer — required evidence criteria:**
+Topic ID: `mcl-hierarchical-theory`
 
-1. State the clinical question and understand that imaging describes structure while electrodiagnostic and evoked-potential tests assess aspects of pathway function (`umphred-neuro-rehab-2025`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `imaging structure`; `evoked potential pathway function`; `clinical question`
-2. Use the formal report and appropriate specialist interpretation; physiotherapists do not independently diagnose from raw investigations outside competence (`umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `formal report`; `specialist interpretation`; `within competence`
-3. Integrate investigation findings with history, examination, function, and change over time rather than treating a test as a stand-alone answer (`umphred-neuro-rehab-2025`, `aacpdm-early-cp-detection`)
-   - Accepted evidence wording: `integrate with clinical examination`; `function over time`; `not a stand-alone test`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 155. Motor control — Reflex theory
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `mcl-reflex-theory`
 
-### 29. Surgical procedures in neuropediatric disorders (hydrocephalus, spina bifida) & perioperative PT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-neuropediatric-surgical-perioperative`
+### 156. Motor control — Systems theory
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `mcl-systems-theory`
 
-Explain the physiotherapy role around neurosurgical care for pediatric hydrocephalus or spina bifida, including baseline function, precautions, recovery, and escalation.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 157. Motor control — Dynamic systems theory
 
-1. Define diagnosis, procedure, medical stability, positioning, wound, device, and activity precautions with the neurosurgical team (`cns-pediatric-hydrocephalus-2020`, `spina-bifida-mobility-guideline`)
-   - Accepted evidence wording: `neurosurgical precautions`; `medical stability`; `wound and device precautions`
-2. Document preoperative function and, when cleared, progress respiratory care, positioning, transfers, mobility, equipment, and family education (`campbell-pt-children-2023`, `spina-bifida-mobility-guideline`)
-   - Accepted evidence wording: `preoperative baseline`; `progress mobility when cleared`; `family education`
-3. Stop and urgently escalate neurological deterioration, suspected shunt malfunction or infection, wound problems, or other acute instability (`cns-pediatric-hydrocephalus-2020`)
-   - Accepted evidence wording: `shunt malfunction or infection`; `neurological deterioration`; `urgent escalation`
+Topic ID: `mcl-dynamic-systems-theory`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 158. Motor control — Motor programme theory
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `mcl-motor-programme-theory`
 
-Use the cited evidence sources to prepare, then answer: Explain the physiotherapy role around neurosurgical care for pediatric hydrocephalus or spina bifida, including baseline function, precautions, recovery, and escalation. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 159. Motor control — Degrees of freedom problem
 
-1. Define diagnosis, procedure, medical stability, positioning, wound, device, and activity precautions with the neurosurgical team (`cns-pediatric-hydrocephalus-2020`, `spina-bifida-mobility-guideline`)
-   - Accepted evidence wording: `neurosurgical precautions`; `medical stability`; `wound and device precautions`
-2. Document preoperative function and, when cleared, progress respiratory care, positioning, transfers, mobility, equipment, and family education (`campbell-pt-children-2023`, `spina-bifida-mobility-guideline`)
-   - Accepted evidence wording: `preoperative baseline`; `progress mobility when cleared`; `family education`
-3. Stop and urgently escalate neurological deterioration, suspected shunt malfunction or infection, wound problems, or other acute instability (`cns-pediatric-hydrocephalus-2020`)
-   - Accepted evidence wording: `shunt malfunction or infection`; `neurological deterioration`; `urgent escalation`
+Topic ID: `mcl-degrees-of-freedom-problem`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 160. Motor control — Motor learning stages
 
-### 30. Advanced physiotherapy approaches (PNF, NDT, Rood's, Motor Relearning Program, Vojta)
+Topic ID: `mcl-motor-learning-stages`
 
-Topic ID: `neu-classic-approaches-pnf-ndt-rood-vojta-mrp`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 161. Motor control — Cognitive stage
 
-Critically compare PNF, NDT/Bobath, Rood, Vojta, and Motor Relearning approaches with contemporary task-specific motor-learning practice.
+Topic ID: `mcl-cognitive-stage`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Describe named approaches as historical or clinical frameworks with distinct handling, facilitation, or task-practice assumptions (`umphred-neuro-rehab-2025`, `shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `named clinical frameworks`; `facilitation and handling`; `task-practice assumptions`
-2. Do not claim that one named approach is universally superior; prioritize active, goal-directed, task-specific, sufficiently dosed practice (`shumway-cook-motor-control-2023`, `morgan-early-cp-intervention-2021`, `aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `no universal superiority`; `active goal-directed practice`; `task-specific sufficient dose`
-3. Select components by goal, evidence, child or adult response, preference, feasibility, and measured outcomes while stating uncertainty (`umphred-neuro-rehab-2025`, `shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `select components by goal`; `measured outcomes`; `state evidence uncertainty`
+### 162. Motor control — Associative stage
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `mcl-associative-stage`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 163. Motor control — Autonomous stage
 
-Use the cited evidence sources to prepare, then answer: Critically compare PNF, NDT/Bobath, Rood, Vojta, and Motor Relearning approaches with contemporary task-specific motor-learning practice. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `mcl-autonomous-stage`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Describe named approaches as historical or clinical frameworks with distinct handling, facilitation, or task-practice assumptions (`umphred-neuro-rehab-2025`, `shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `named clinical frameworks`; `facilitation and handling`; `task-practice assumptions`
-2. Do not claim that one named approach is universally superior; prioritize active, goal-directed, task-specific, sufficiently dosed practice (`shumway-cook-motor-control-2023`, `morgan-early-cp-intervention-2021`, `aha-asa-stroke-rehab-2016`)
-   - Accepted evidence wording: `no universal superiority`; `active goal-directed practice`; `task-specific sufficient dose`
-3. Select components by goal, evidence, child or adult response, preference, feasibility, and measured outcomes while stating uncertainty (`umphred-neuro-rehab-2025`, `shumway-cook-motor-control-2023`)
-   - Accepted evidence wording: `select components by goal`; `measured outcomes`; `state evidence uncertainty`
+### 164. Motor control — Whole vs part practice
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `mcl-whole-vs-part-practice`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 31. Clinical decision making & evidence-based practice (pediatric)
+### 165. Motor control — Blocked vs random practice
 
-Topic ID: `neu-pediatric-clinical-decision-ebp`
+Topic ID: `mcl-blocked-vs-random-practice`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain an evidence-based pediatric physiotherapy decision from assessment and goal setting through intervention choice, outcome review, and plan revision.
+### 166. Motor control — Knowledge of results vs knowledge of performance
 
-**Expected answer — required evidence criteria:**
+Topic ID: `mcl-knowledge-of-results-vs-knowledge-of-performance`
 
-1. Integrate the best available evidence with clinical expertise and the child and family's values and circumstances (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `best available evidence`; `clinical expertise`; `child and family values`
-2. Form a functional problem list, agree participation-focused goals, and choose valid age- and condition-appropriate outcomes (`campbell-pt-children-2023`, `morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `functional problem list`; `participation goals`; `appropriate outcome measures`
-3. Balance benefit, harm, burden, access, and feasibility; measure response and revise or escalate when progress or safety differs from expectation (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `benefit harm and burden`; `measure response`; `revise or escalate`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 167. Motor control — Feedback
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `mcl-feedback`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain an evidence-based pediatric physiotherapy decision from assessment and goal setting through intervention choice, outcome review, and plan revision. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 168. Motor control — Intrinsic vs extrinsic feedback
 
-**Expected answer — required evidence criteria:**
+Topic ID: `mcl-intrinsic-vs-extrinsic-feedback`
 
-1. Integrate the best available evidence with clinical expertise and the child and family's values and circumstances (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `best available evidence`; `clinical expertise`; `child and family values`
-2. Form a functional problem list, agree participation-focused goals, and choose valid age- and condition-appropriate outcomes (`campbell-pt-children-2023`, `morgan-early-cp-intervention-2021`)
-   - Accepted evidence wording: `functional problem list`; `participation goals`; `appropriate outcome measures`
-3. Balance benefit, harm, burden, access, and feasibility; measure response and revise or escalate when progress or safety differs from expectation (`campbell-pt-children-2023`)
-   - Accepted evidence wording: `benefit harm and burden`; `measure response`; `revise or escalate`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 169. Motor control — Transfer of learning
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `mcl-transfer-of-learning`
 
-### 32. Physiotherapy in neonatal & pediatric intensive care units
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-neonatal-pediatric-icu`
+### 170. Motor control — Retention of learning
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `mcl-retention-of-learning`
 
-Explain safe physiotherapy assessment and intervention in neonatal and pediatric intensive care, including readiness, monitoring, developmental care, family partnership, and stop criteria.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 171. Cerebral palsy — Classification of CP
 
-1. Confirm indication, medical stability, respiratory and neurological status, lines or devices, precautions, and team-defined readiness before intervention (`apta-pediatrics-resources-2026`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `medical stability and readiness`; `lines and devices`; `team-defined precautions`
-2. Individualize positioning, handling, respiratory support within scope, developmental activity, and early mobility to tolerance (`apta-pediatrics-resources-2026`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `individualized positioning`; `developmental care`; `early mobility to tolerance`
-3. Use continuous observation and relevant monitoring, minimize stress, involve caregivers, and stop or escalate for instability or distress (`apta-pediatrics-resources-2026`)
-   - Accepted evidence wording: `monitor physiological response`; `minimize stress`; `stop for instability`
+Topic ID: `cp-classification-of-cp`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 172. Cerebral palsy — Spastic CP
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `cp-spastic-cp`
 
-Use the cited evidence sources to prepare, then answer: Explain safe physiotherapy assessment and intervention in neonatal and pediatric intensive care, including readiness, monitoring, developmental care, family partnership, and stop criteria. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 173. Cerebral palsy — Dyskinetic CP
 
-1. Confirm indication, medical stability, respiratory and neurological status, lines or devices, precautions, and team-defined readiness before intervention (`apta-pediatrics-resources-2026`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `medical stability and readiness`; `lines and devices`; `team-defined precautions`
-2. Individualize positioning, handling, respiratory support within scope, developmental activity, and early mobility to tolerance (`apta-pediatrics-resources-2026`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `individualized positioning`; `developmental care`; `early mobility to tolerance`
-3. Use continuous observation and relevant monitoring, minimize stress, involve caregivers, and stop or escalate for instability or distress (`apta-pediatrics-resources-2026`)
-   - Accepted evidence wording: `monitor physiological response`; `minimize stress`; `stop for instability`
+Topic ID: `cp-dyskinetic-cp`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 174. Cerebral palsy — Ataxic CP
 
-### 33. Social integration of children (school/community, assistive technology, legislation, orthotics/prosthetics)
+Topic ID: `cp-ataxic-cp`
 
-Topic ID: `neu-pediatric-social-integration-orthotics-legislation`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / RECALL_SPRINT
+### 175. Cerebral palsy — Spastic diplegia
 
-Explain a participation-led plan for school and community inclusion using environmental change, assistive technology, mobility equipment, and orthotic or prosthetic services.
+Topic ID: `cp-spastic-diplegia`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Begin with the child's participation goals and identify personal, task, environmental, access, and attitudinal barriers with the family and school (`campbell-pt-children-2023`, `apta-pediatrics-resources-2026`)
-   - Accepted evidence wording: `participation goals`; `environmental barriers`; `family and school collaboration`
-2. Select assistive technology, seating, mobility, orthotic, or prosthetic options through assessment, shared choice, fitting, training, and follow-up (`who-wheelchair-provision-2023`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `assistive technology assessment`; `fitting and training`; `follow-up`
-3. Document functional need and reasonable supports, coordinate with relevant local education and disability processes, and review real-world participation (`apta-pediatrics-resources-2026`, `who-wheelchair-provision-2023`)
-   - Accepted evidence wording: `document functional need`; `education and disability supports`; `review participation`
+### 176. Cerebral palsy — Spastic quadriplegia
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `cp-spastic-quadriplegia`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-#### Question — GUIDED / DEEP_RESEARCH
+### 177. Cerebral palsy — Hemiplegic CP
 
-Use the cited evidence sources to prepare, then answer: Explain a participation-led plan for school and community inclusion using environmental change, assistive technology, mobility equipment, and orthotic or prosthetic services. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+Topic ID: `cp-hemiplegic-cp`
 
-**Expected answer — required evidence criteria:**
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-1. Begin with the child's participation goals and identify personal, task, environmental, access, and attitudinal barriers with the family and school (`campbell-pt-children-2023`, `apta-pediatrics-resources-2026`)
-   - Accepted evidence wording: `participation goals`; `environmental barriers`; `family and school collaboration`
-2. Select assistive technology, seating, mobility, orthotic, or prosthetic options through assessment, shared choice, fitting, training, and follow-up (`who-wheelchair-provision-2023`, `campbell-pt-children-2023`)
-   - Accepted evidence wording: `assistive technology assessment`; `fitting and training`; `follow-up`
-3. Document functional need and reasonable supports, coordinate with relevant local education and disability processes, and review real-world participation (`apta-pediatrics-resources-2026`, `who-wheelchair-provision-2023`)
-   - Accepted evidence wording: `document functional need`; `education and disability supports`; `review participation`
+### 178. Cerebral palsy — Hypotonic CP
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+Topic ID: `cp-hypotonic-cp`
 
-Reviewer notes: ____________________________________________________________________
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-### 34. Pharmacotherapeutics in pediatric neurological conditions
+### 179. Cerebral palsy — GMFCS
 
-Topic ID: `neu-pediatric-pharmacotherapeutics`
+Topic ID: `cp-gmfcs`
 
-#### Question — GUIDED / RECALL_SPRINT
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Explain how medication information affects pediatric neurological physiotherapy assessment, timing, monitoring, and multidisciplinary communication without crossing prescribing scope.
+### 180. Cerebral palsy — GMFM
 
-**Expected answer — required evidence criteria:**
+Topic ID: `cp-gmfm`
 
-1. Reconcile the prescribed indication, schedule, recent change, expected functional effect, and relevant adverse effects without independently prescribing or altering medication (`campbell-pt-children-2023`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `medication reconciliation`; `functional effect and adverse effects`; `do not alter medication`
-2. Account for medication-related alertness, tone, pain, fatigue, seizure control, cardiovascular response, or therapy timing in assessment and treatment (`campbell-pt-children-2023`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `alertness and tone`; `seizure control`; `therapy timing`
-3. Document observed response and promptly communicate suspected adverse effects, deterioration, or safety concerns to the prescribing team (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `document observed response`; `communicate adverse effects`; `prescribing team`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 181. Cerebral palsy — Tone assessment in CP
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `cp-tone-assessment-in-cp`
 
-#### Question — GUIDED / DEEP_RESEARCH
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Use the cited evidence sources to prepare, then answer: Explain how medication information affects pediatric neurological physiotherapy assessment, timing, monitoring, and multidisciplinary communication without crossing prescribing scope. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+### 182. Cerebral palsy — Spasticity vs dystonia
 
-**Expected answer — required evidence criteria:**
+Topic ID: `cp-spasticity-vs-dystonia`
 
-1. Reconcile the prescribed indication, schedule, recent change, expected functional effect, and relevant adverse effects without independently prescribing or altering medication (`campbell-pt-children-2023`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `medication reconciliation`; `functional effect and adverse effects`; `do not alter medication`
-2. Account for medication-related alertness, tone, pain, fatigue, seizure control, cardiovascular response, or therapy timing in assessment and treatment (`campbell-pt-children-2023`, `nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `alertness and tone`; `seizure control`; `therapy timing`
-3. Document observed response and promptly communicate suspected adverse effects, deterioration, or safety concerns to the prescribing team (`nice-ng62-cerebral-palsy`)
-   - Accepted evidence wording: `document observed response`; `communicate adverse effects`; `prescribing team`
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+### 183. Cerebral palsy — Primitive reflex persistence in CP
 
-Reviewer notes: ____________________________________________________________________
+Topic ID: `cp-primitive-reflex-persistence-in-cp`
 
-### 35. Space-occupying CNS lesions, TBI, vestibular disorders, myopathies (adult)
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Topic ID: `neu-adult-space-occupying-tbi-vestibular-myopathies`
+### 184. Cerebral palsy — Crouch gait
 
-#### Question — GUIDED / RECALL_SPRINT
+Topic ID: `cp-crouch-gait`
 
-Differentiate physiotherapy priorities for adults with a space-occupying CNS lesion, traumatic brain injury, peripheral vestibular hypofunction, or myopathy.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 185. Cerebral palsy — Equinus gait
 
-1. For a CNS lesion or brain injury, establish medical and neurological stability, precautions, impairments, cognition, function, and red flags before graded rehabilitation (`umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `neurological stability`; `cognitive and functional assessment`; `red flags before rehabilitation`
-2. For diagnosed peripheral vestibular hypofunction, use individualized gaze-stability, habituation where indicated, balance, and walking exercise with reassessment (`apta-vestibular-hypofunction-2022`)
-   - Accepted evidence wording: `gaze stability exercise`; `balance and gait exercise`; `vestibular reassessment`
-3. For myopathy, grade activity to disease, weakness, fatigue, respiratory or cardiac involvement, goals, and recovery while avoiding unsupported one-size-fits-all dosing (`umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `fatigue-aware graded activity`; `respiratory and cardiac involvement`; `individualized exercise dose`
+Topic ID: `cp-equinus-gait`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 186. Cerebral palsy — Scissoring gait
 
-#### Question — GUIDED / DEEP_RESEARCH
+Topic ID: `cp-scissoring-gait`
 
-Use the cited evidence sources to prepare, then answer: Differentiate physiotherapy priorities for adults with a space-occupying CNS lesion, traumatic brain injury, peripheral vestibular hypofunction, or myopathy. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-**Expected answer — required evidence criteria:**
+### 187. Cerebral palsy — Toe walking in CP
 
-1. For a CNS lesion or brain injury, establish medical and neurological stability, precautions, impairments, cognition, function, and red flags before graded rehabilitation (`umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `neurological stability`; `cognitive and functional assessment`; `red flags before rehabilitation`
-2. For diagnosed peripheral vestibular hypofunction, use individualized gaze-stability, habituation where indicated, balance, and walking exercise with reassessment (`apta-vestibular-hypofunction-2022`)
-   - Accepted evidence wording: `gaze stability exercise`; `balance and gait exercise`; `vestibular reassessment`
-3. For myopathy, grade activity to disease, weakness, fatigue, respiratory or cardiac involvement, goals, and recovery while avoiding unsupported one-size-fits-all dosing (`umphred-neuro-rehab-2025`)
-   - Accepted evidence wording: `fatigue-aware graded activity`; `respiratory and cardiac involvement`; `individualized exercise dose`
+Topic ID: `cp-toe-walking-in-cp`
 
-Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
-Reviewer notes: ____________________________________________________________________
+### 188. Cerebral palsy — Gait deviations in diplegia
+
+Topic ID: `cp-gait-deviations-in-diplegia`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 189. Cerebral palsy — AFOs in CP
+
+Topic ID: `cp-afos-in-cp`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 190. Cerebral palsy — NDT/Bobath
+
+Topic ID: `cp-ndt-bobath`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 191. Cerebral palsy — PNF in CP
+
+Topic ID: `cp-pnf-in-cp`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 192. Cerebral palsy — Task-oriented therapy
+
+Topic ID: `cp-task-oriented-therapy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 193. Cerebral palsy — CIMT in hemiplegic CP
+
+Topic ID: `cp-cimt-in-hemiplegic-cp`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 194. Cerebral palsy — Early intervention
+
+Topic ID: `cp-early-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 195. Cerebral palsy — Contracture prevention
+
+Topic ID: `cp-contracture-prevention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 196. Cerebral palsy — Positioning
+
+Topic ID: `cp-positioning`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 197. Cerebral palsy — Seating
+
+Topic ID: `cp-seating`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 198. Cerebral palsy — Adaptive equipment
+
+Topic ID: `cp-adaptive-equipment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 199. Cerebral palsy — TA lengthening rehabilitation
+
+Topic ID: `cp-ta-lengthening-rehabilitation`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 200. Cerebral palsy — Hip surveillance
+
+Topic ID: `cp-hip-surveillance`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 201. Cerebral palsy — Family-centred care
+
+Topic ID: `cp-family-centred-care`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 202. Reflexes — Moro reflex
+
+Topic ID: `reflex-moro-reflex`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 203. Reflexes — ATNR
+
+Topic ID: `reflex-atnr`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 204. Reflexes — STNR
+
+Topic ID: `reflex-stnr`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 205. Reflexes — TLR
+
+Topic ID: `reflex-tlr`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 206. Reflexes — Palmar grasp
+
+Topic ID: `reflex-palmar-grasp`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 207. Reflexes — Plantar grasp
+
+Topic ID: `reflex-plantar-grasp`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 208. Reflexes — Rooting reflex
+
+Topic ID: `reflex-rooting-reflex`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 209. Reflexes — Sucking reflex
+
+Topic ID: `reflex-sucking-reflex`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 210. Reflexes — Stepping reflex
+
+Topic ID: `reflex-stepping-reflex`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 211. Reflexes — Galant reflex
+
+Topic ID: `reflex-galant-reflex`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 212. Reflexes — Reflex integration
+
+Topic ID: `reflex-reflex-integration`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 213. Reflexes — Retained primitive reflexes
+
+Topic ID: `reflex-retained-primitive-reflexes`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 214. Reflexes — Primitive reflex vs postural reaction
+
+Topic ID: `reflex-primitive-reflex-vs-postural-reaction`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 215. Reflexes — Righting reactions
+
+Topic ID: `reflex-righting-reactions`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 216. Reflexes — Protective reactions
+
+Topic ID: `reflex-protective-reactions`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 217. Reflexes — Equilibrium reactions
+
+Topic ID: `reflex-equilibrium-reactions`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 218. Reflexes — Development of postural control
+
+Topic ID: `reflex-development-of-postural-control`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 219. Motor development — Cephalocaudal development
+
+Topic ID: `nmd-cephalocaudal-development`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 220. Motor development — Proximodistal development
+
+Topic ID: `nmd-proximodistal-development`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 221. Motor development — Prone development
+
+Topic ID: `nmd-prone-development`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 222. Motor development — Supine development
+
+Topic ID: `nmd-supine-development`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 223. Motor development — Rolling
+
+Topic ID: `nmd-rolling`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 224. Motor development — Sitting development
+
+Topic ID: `nmd-sitting-development`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 225. Motor development — Crawling
+
+Topic ID: `nmd-crawling`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 226. Motor development — Standing
+
+Topic ID: `nmd-standing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 227. Motor development — Independent walking
+
+Topic ID: `nmd-independent-walking`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 228. Motor development — Developmental milestones
+
+Topic ID: `nmd-developmental-milestones`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 229. Motor development — Developmental red flags
+
+Topic ID: `nmd-developmental-red-flags`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 230. Motor development — Developmental sequence
+
+Topic ID: `nmd-developmental-sequence`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 231. Developmental delay — Definition of developmental delay
+
+Topic ID: `dd-definition-of-developmental-delay`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 232. Developmental delay — Global developmental delay
+
+Topic ID: `dd-global-developmental-delay`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 233. Developmental delay — Motor developmental delay
+
+Topic ID: `dd-motor-developmental-delay`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 234. Developmental delay — Causes of developmental delay
+
+Topic ID: `dd-causes-of-developmental-delay`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 235. Developmental delay — Developmental red flags
+
+Topic ID: `dd-developmental-red-flags`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 236. Developmental delay — Developmental assessment
+
+Topic ID: `dd-developmental-assessment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 237. Developmental delay — Developmental screening
+
+Topic ID: `dd-developmental-screening`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 238. Developmental delay — Early intervention
+
+Topic ID: `dd-early-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 239. Developmental delay — Play-based intervention
+
+Topic ID: `dd-play-based-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 240. Developmental delay — Family-centred intervention
+
+Topic ID: `dd-family-centred-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 241. Developmental delay — Dynamic Systems Theory and development
+
+Topic ID: `dd-dynamic-systems-theory-and-development`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 242. Developmental delay — High-risk infant
+
+Topic ID: `dd-high-risk-infant`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 243. Neuromuscular (DMD) — Gowers' sign
+
+Topic ID: `dmd-gowers-sign`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 244. Neuromuscular (DMD) — Calf pseudohypertrophy
+
+Topic ID: `dmd-calf-pseudohypertrophy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 245. Neuromuscular (DMD) — Pattern of weakness in DMD
+
+Topic ID: `dmd-pattern-of-weakness-in-dmd`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 246. Neuromuscular (DMD) — Functional progression in DMD
+
+Topic ID: `dmd-functional-progression-in-dmd`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 247. Neuromuscular (DMD) — Contractures in DMD
+
+Topic ID: `dmd-contractures-in-dmd`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 248. Neuromuscular (DMD) — Respiratory involvement
+
+Topic ID: `dmd-respiratory-involvement`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 249. Neuromuscular (DMD) — Cardiac involvement
+
+Topic ID: `dmd-cardiac-involvement`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 250. Neuromuscular (DMD) — Exercise prescription
+
+Topic ID: `dmd-exercise-prescription`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 251. Neuromuscular (DMD) — Exercise precautions
+
+Topic ID: `dmd-exercise-precautions`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 252. Neuromuscular (DMD) — Energy conservation
+
+Topic ID: `dmd-energy-conservation`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 253. Neuromuscular (DMD) — Positioning
+
+Topic ID: `dmd-positioning`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 254. Neuromuscular (DMD) — Stretching
+
+Topic ID: `dmd-stretching`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 255. Neuromuscular (DMD) — Orthoses
+
+Topic ID: `dmd-orthoses`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 256. Neuromuscular (DMD) — Respiratory physiotherapy
+
+Topic ID: `dmd-respiratory-physiotherapy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 257. Neuromuscular (DMD) — Functional assessment
+
+Topic ID: `dmd-functional-assessment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 258. Neuromuscular (DMD) — DMD vs Becker
+
+Topic ID: `dmd-dmd-vs-becker`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 259. Neuromuscular (DMD) — Limb-girdle dystrophy
+
+Topic ID: `dmd-limb-girdle-dystrophy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 260. Neuromuscular (DMD) — Myotonic dystrophy
+
+Topic ID: `dmd-myotonic-dystrophy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 261. Spina bifida — Types of spina bifida
+
+Topic ID: `sb-types-of-spina-bifida`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 262. Spina bifida — Myelomeningocele
+
+Topic ID: `sb-myelomeningocele`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 263. Spina bifida — Neurological level
+
+Topic ID: `sb-neurological-level`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 264. Spina bifida — Functional prognosis by level
+
+Topic ID: `sb-functional-prognosis-by-level`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 265. Spina bifida — Motor impairment
+
+Topic ID: `sb-motor-impairment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 266. Spina bifida — Sensory impairment
+
+Topic ID: `sb-sensory-impairment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 267. Spina bifida — Neurogenic bladder
+
+Topic ID: `sb-neurogenic-bladder`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 268. Spina bifida — Neurogenic bowel
+
+Topic ID: `sb-neurogenic-bowel`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 269. Spina bifida — Orthopaedic deformities
+
+Topic ID: `sb-orthopaedic-deformities`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 270. Spina bifida — Hydrocephalus
+
+Topic ID: `sb-hydrocephalus`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 271. Spina bifida — Assessment
+
+Topic ID: `sb-assessment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 272. Spina bifida — Orthoses according to level
+
+Topic ID: `sb-orthoses-according-to-level`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 273. Spina bifida — Gait training
+
+Topic ID: `sb-gait-training`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 274. Spina bifida — Mobility training
+
+Topic ID: `sb-mobility-training`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 275. Spina bifida — Skin protection
+
+Topic ID: `sb-skin-protection`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 276. Spina bifida — Physiotherapy management
+
+Topic ID: `sb-physiotherapy-management`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 277. Spina bifida — Spinal dysraphism
+
+Topic ID: `sb-spinal-dysraphism`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 278. Down syndrome — Clinical features of Down syndrome
+
+Topic ID: `ds-clinical-features-of-down-syndrome`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 279. Down syndrome — Hypotonia in Down syndrome
+
+Topic ID: `ds-hypotonia-in-down-syndrome`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 280. Down syndrome — Motor development in Down syndrome
+
+Topic ID: `ds-motor-development-in-down-syndrome`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 281. Down syndrome — Developmental delay in Down syndrome
+
+Topic ID: `ds-developmental-delay-in-down-syndrome`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 282. Down syndrome — Atlantoaxial instability
+
+Topic ID: `ds-atlantoaxial-instability`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 283. Down syndrome — Musculoskeletal problems
+
+Topic ID: `ds-musculoskeletal-problems`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 284. Down syndrome — Balance impairment
+
+Topic ID: `ds-balance-impairment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 285. Down syndrome — Gait abnormalities
+
+Topic ID: `ds-gait-abnormalities`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 286. Down syndrome — Assessment
+
+Topic ID: `ds-assessment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 287. Down syndrome — Early intervention
+
+Topic ID: `ds-early-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 288. Down syndrome — Physiotherapy management
+
+Topic ID: `ds-physiotherapy-management`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 289. Down syndrome — Intellectual disability and function
+
+Topic ID: `ds-intellectual-disability-and-function`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 290. Down syndrome — Motor learning in intellectual disability
+
+Topic ID: `ds-motor-learning-in-intellectual-disability`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 291. Autism — Core features of autism
+
+Topic ID: `asd-core-features-of-autism`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 292. Autism — Sensory processing abnormalities
+
+Topic ID: `asd-sensory-processing-abnormalities`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 293. Autism — Tactile hypersensitivity
+
+Topic ID: `asd-tactile-hypersensitivity`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 294. Autism — Proprioceptive processing
+
+Topic ID: `asd-proprioceptive-processing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 295. Autism — Vestibular processing
+
+Topic ID: `asd-vestibular-processing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 296. Autism — Motor coordination
+
+Topic ID: `asd-motor-coordination`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 297. Autism — Postural control
+
+Topic ID: `asd-postural-control`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 298. Autism — Gait in autism
+
+Topic ID: `asd-gait-in-autism`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 299. Autism — Play skills
+
+Topic ID: `asd-play-skills`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 300. Autism — Early intervention
+
+Topic ID: `asd-early-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 301. Autism — Sensory integration
+
+Topic ID: `asd-sensory-integration`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 302. Autism — Role of physiotherapy
+
+Topic ID: `asd-role-of-physiotherapy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 303. Autism — Family-centred intervention
+
+Topic ID: `asd-family-centred-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 304. Paediatric TBI — Primary vs secondary injury
+
+Topic ID: `ptbi-primary-vs-secondary-injury`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 305. Paediatric TBI — GCS in children
+
+Topic ID: `ptbi-gcs-in-children`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 306. Paediatric TBI — Post-traumatic amnesia
+
+Topic ID: `ptbi-post-traumatic-amnesia`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 307. Paediatric TBI — Decorticate vs decerebrate posturing
+
+Topic ID: `ptbi-decorticate-vs-decerebrate-posturing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 308. Paediatric TBI — Paediatric TBI assessment
+
+Topic ID: `ptbi-paediatric-tbi-assessment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 309. Paediatric TBI — Cognitive problems
+
+Topic ID: `ptbi-cognitive-problems`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 310. Paediatric TBI — Behavioural problems
+
+Topic ID: `ptbi-behavioural-problems`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 311. Paediatric TBI — Motor impairment
+
+Topic ID: `ptbi-motor-impairment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 312. Paediatric TBI — Balance impairment
+
+Topic ID: `ptbi-balance-impairment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 313. Paediatric TBI — Early rehabilitation
+
+Topic ID: `ptbi-early-rehabilitation`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 314. Paediatric TBI — Functional rehabilitation
+
+Topic ID: `ptbi-functional-rehabilitation`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 315. Paediatric SCI — Complete vs incomplete injury
+
+Topic ID: `psci-complete-vs-incomplete-injury`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 316. Paediatric SCI — Neurological level
+
+Topic ID: `psci-neurological-level`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 317. Paediatric SCI — Functional prognosis
+
+Topic ID: `psci-functional-prognosis`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 318. Paediatric SCI — Respiratory complications
+
+Topic ID: `psci-respiratory-complications`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 319. Paediatric SCI — Spinal shock
+
+Topic ID: `psci-spinal-shock`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 320. Paediatric SCI — Neurogenic bladder
+
+Topic ID: `psci-neurogenic-bladder`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 321. Paediatric SCI — Neurogenic bowel
+
+Topic ID: `psci-neurogenic-bowel`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 322. Paediatric SCI — Pressure injury prevention
+
+Topic ID: `psci-pressure-injury-prevention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 323. Paediatric SCI — Orthoses
+
+Topic ID: `psci-orthoses`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 324. Paediatric SCI — Transfers
+
+Topic ID: `psci-transfers`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 325. Paediatric SCI — Wheelchair mobility
+
+Topic ID: `psci-wheelchair-mobility`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 326. Paediatric SCI — Standing
+
+Topic ID: `psci-standing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 327. Paediatric SCI — Gait training
+
+Topic ID: `psci-gait-training`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 328. Paediatric SCI — Family education
+
+Topic ID: `psci-family-education`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 329. Sensory integration — Sensory integration theory
+
+Topic ID: `si-sensory-integration-theory`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 330. Sensory integration — Sensory processing disorder
+
+Topic ID: `si-sensory-processing-disorder`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 331. Sensory integration — Tactile defensiveness
+
+Topic ID: `si-tactile-defensiveness`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 332. Sensory integration — Vestibular processing
+
+Topic ID: `si-vestibular-processing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 333. Sensory integration — Proprioceptive processing
+
+Topic ID: `si-proprioceptive-processing`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 334. Sensory integration — Sensory modulation
+
+Topic ID: `si-sensory-modulation`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 335. Sensory integration — Sensory discrimination
+
+Topic ID: `si-sensory-discrimination`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 336. Sensory integration — Sensory integration assessment
+
+Topic ID: `si-sensory-integration-assessment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 337. Sensory integration — Sensory integration intervention
+
+Topic ID: `si-sensory-integration-intervention`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 338. Sensory integration — Sensory integration in autism
+
+Topic ID: `si-sensory-integration-in-autism`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 339. Neonatal/PICU — Role of physiotherapy in NICU
+
+Topic ID: `picu-role-of-physiotherapy-in-nicu`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 340. Neonatal/PICU — Role of physiotherapy in PICU
+
+Topic ID: `picu-role-of-physiotherapy-in-picu`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 341. Neonatal/PICU — Positioning in NICU
+
+Topic ID: `picu-positioning-in-nicu`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 342. Neonatal/PICU — Respiratory physiotherapy in infants
+
+Topic ID: `picu-respiratory-physiotherapy-in-infants`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 343. Neonatal/PICU — Airway clearance in children
+
+Topic ID: `picu-airway-clearance-in-children`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 344. Neonatal/PICU — Developmental care
+
+Topic ID: `picu-developmental-care`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 345. Neonatal/PICU — Handling of high-risk infants
+
+Topic ID: `picu-handling-of-high-risk-infants`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 346. Neonatal/PICU — Prevention of developmental complications
+
+Topic ID: `picu-prevention-of-developmental-complications`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 347. Neonatal/PICU — Early mobilization in PICU
+
+Topic ID: `picu-early-mobilization-in-picu`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 348. Neonatal/PICU — Family education in PICU
+
+Topic ID: `picu-family-education-in-picu`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 349. Concepts — Orthotic principles
+
+Topic ID: `misc-orthotic-principles`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 350. Concepts — AFO indications
+
+Topic ID: `misc-afo-indications`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 351. Concepts — KAFO indications
+
+Topic ID: `misc-kafo-indications`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 352. Concepts — Seating systems
+
+Topic ID: `misc-seating-systems`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 353. Concepts — Standing frames
+
+Topic ID: `misc-standing-frames`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 354. Concepts — Assistive devices
+
+Topic ID: `misc-assistive-devices`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 355. Concepts — Adaptive equipment
+
+Topic ID: `misc-adaptive-equipment`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 356. Concepts — Parent counselling
+
+Topic ID: `misc-parent-counselling`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 357. Concepts — Home programme
+
+Topic ID: `misc-home-programme`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 358. Concepts — Community participation
+
+Topic ID: `misc-community-participation`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 359. Concepts — Quality of life
+
+Topic ID: `misc-quality-of-life`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 360. Concepts — Family-centred care
+
+Topic ID: `misc-family-centred-care`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 361. Concepts — Interdisciplinary team
+
+Topic ID: `misc-interdisciplinary-team`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 362. Concepts — Outcome measures
+
+Topic ID: `misc-outcome-measures`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 363. Concepts — Functional independence
+
+Topic ID: `misc-functional-independence`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 364. Concepts — Goal setting
+
+Topic ID: `misc-goal-setting`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
+
+### 365. Concepts — Play-based therapy
+
+Topic ID: `misc-play-based-therapy`
+
+_Scaffolded — detailed answer criteria not yet authored. Excluded from attestation until sourced rubric concepts are added._
 
 ## Cardiovascular & Respiratory Physiotherapy
 
@@ -3889,36 +4589,6 @@ Reviewer notes: ________________________________________________________________
 - `src-eras-cardiac-2019` — Engelman DT et al. Guidelines for perioperative care in cardiac surgery: ERAS Society recommendations. JAMA Surg. 2019;154:755-766. doi:10.1001/jamasurg.2019.1153. https://doi.org/10.1001/jamasurg.2019.1153 (accessed 2026-08-30)
 - `src-acsm-getp-2025` — American College of Sports Medicine. ACSM's Guidelines for Exercise Testing and Prescription, 12th ed., published 24 Mar 2025. ISBN 9781975219215. https://acsm.org/education-resources/books/guidelines-exercise-testing-prescription (accessed 2026-08-30)
 - `src-aha-bls-2025` — Kleinman ME et al. Part 7: Adult Basic Life Support, 2025 AHA CPR and ECC Guidelines. Circulation. 2025;152(suppl 2):S448-S478. doi:10.1161/CIR.0000000000001369. https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-basic-life-support (accessed 2026-08-30)
-- `nice-ng236-stroke-rehab` — NICE. Stroke rehabilitation in adults. NG236. Published 18 Oct 2023; replaces CG162 (2013). https://www.nice.org.uk/guidance/ng236 (accessed 2026-08-30)
-- `nice-ng62-cerebral-palsy` — NICE. Cerebral palsy in under 25s: assessment and management. NG62. Published 25 Jan 2017; last reviewed 19 Sep 2024. https://www.nice.org.uk/guidance/ng62 (accessed 2026-08-30)
-- `nice-ng71-parkinsons` — NICE. Parkinson's disease in adults. NG71. Published 19 Jul 2017; last reviewed 19 Dec 2024. Updates and replaces CG35 (2006). https://www.nice.org.uk/guidance/ng71 (accessed 2026-08-30)
-- `aha-asa-stroke-rehab-2016` — Winstein CJ et al.; AHA/ASA. Guidelines for Adult Stroke Rehabilitation and Recovery. Stroke. 2016;47(6):e98-e169. doi:10.1161/STR.0000000000000098. PMID:27145936. https://pubmed.ncbi.nlm.nih.gov/27145936/ (accessed 2026-08-30)
-- `cochrane-mirror-therapy-2018` — Thieme H et al. Mirror therapy for improving motor function after stroke. Cochrane Database Syst Rev. 2018;7:CD008449. doi:10.1002/14651858.CD008449.pub3. PMID:29993119. https://pubmed.ncbi.nlm.nih.gov/29993119/ (accessed 2026-08-30)
-- `cochrane-cimt-2015` — Corbetta D et al. Constraint-induced movement therapy for upper extremities in people with stroke. Cochrane Database Syst Rev. 2015;(10):CD004433. doi:10.1002/14651858.CD004433.pub3. PMID:26446577. https://pubmed.ncbi.nlm.nih.gov/26446577/ (accessed 2026-08-30)
-- `cochrane-vr-stroke-2025` — Laver KE et al. Virtual reality for stroke rehabilitation. Cochrane Database Syst Rev. 2025;6:CD008349. doi:10.1002/14651858.CD008349.pub5. PMID:40537150. https://pubmed.ncbi.nlm.nih.gov/40537150/ (accessed 2026-08-30)
-- `cochrane-treadmill-bws-2017` — Mehrholz J et al. Treadmill training and body weight support for walking after stroke. Cochrane Database Syst Rev. 2017;8:CD002840. doi:10.1002/14651858.CD002840.pub4. PMID:28815562. https://pubmed.ncbi.nlm.nih.gov/28815562/ (accessed 2026-08-30)
-- `fugl-meyer-1975` — Fugl-Meyer AR et al. The post-stroke hemiplegic patient: a method for evaluation of physical performance. Scand J Rehabil Med. 1975;7(1):13-31. PMID:1135616. https://pubmed.ncbi.nlm.nih.gov/1135616/ (accessed 2026-08-30)
-- `berg-balance-1992` — Berg KO et al. Measuring balance in the elderly: validation of an instrument. Can J Public Health. 1992;83 Suppl 2:S7-11. PMID:1468055. https://pubmed.ncbi.nlm.nih.gov/1468055/ (accessed 2026-08-30)
-- `gmfm-russell-1989` — Russell DJ et al. The gross motor function measure: a means to evaluate effects of physical therapy. Dev Med Child Neurol. 1989;31(3):341-52. doi:10.1111/j.1469-8749.1989.tb04003.x. PMID:2753238. https://pubmed.ncbi.nlm.nih.gov/2753238/ (accessed 2026-08-30)
-- `gmfcs-palisano-1997` — Palisano R et al. Development and reliability of a system to classify gross motor function in children with cerebral palsy. Dev Med Child Neurol. 1997;39(4):214-23. doi:10.1111/j.1469-8749.1997.tb07414.x. PMID:9183258. https://pubmed.ncbi.nlm.nih.gov/9183258/ (accessed 2026-08-30)
-- `dmd-care-birnkrant-2018` — Birnkrant DJ et al.; DMD Care Considerations Working Group. Diagnosis and management of Duchenne muscular dystrophy, part 1. Lancet Neurol. 2018;17(3):251-267. doi:10.1016/S1474-4422(18)30024-3. PMID:29395989. https://pubmed.ncbi.nlm.nih.gov/29395989/ (accessed 2026-08-30)
-- `sma-care-mercuri-2018` — Mercuri E et al.; SMA Care Group. Diagnosis and management of spinal muscular atrophy: Part 1. Neuromuscul Disord. 2018;28(2):103-115. doi:10.1016/j.nmd.2017.11.005. PMID:29290580. https://pubmed.ncbi.nlm.nih.gov/29290580/ (accessed 2026-08-30)
-- `asia-isncsci-9th-2026` — American Spinal Injury Association. International Standards for Neurological Classification of Spinal Cord Injury (ISNCSCI), 9th Edition (2026). Richmond, VA: ASIA. https://www.asia-spinalinjury.org/ (accessed 2026-08-30)
-- `mmse-folstein-1975` — Folstein MF, Folstein SE, McHugh PR. Mini-mental state: a practical method for grading the cognitive state of patients. J Psychiatr Res. 1975;12(3):189-98. https://pubmed.ncbi.nlm.nih.gov/?term=Folstein+mini-mental+state+1975 (accessed 2026-08-30)
-- `umphred-neuro-rehab-2025` — Lazaro RT et al., eds. Umphred's Neurological Rehabilitation. 8th ed. Elsevier; published 17 Nov 2025. ISBN 9780443112928. https://www.us.elsevierhealth.com/umphreds-neurological-rehabilitation-9780443112928.html (accessed 2026-09-02)
-- `campbell-pt-children-2023` — Palisano RJ et al., eds. Campbell's Physical Therapy for Children. 6th ed. Elsevier; 2023. ISBN 9780323797962. https://www.us.elsevierhealth.com/campbells-physical-therapy-for-children-9780323797962.html (accessed 2026-09-02)
-- `shumway-cook-motor-control-2023` — Shumway-Cook A, Woollacott MH. Motor Control: Translating Research into Clinical Practice. 6th ed. Wolters Kluwer; 2023. ISBN 9781975209568. https://shop.lww.com/Motor-Control/p/9781975209568 (accessed 2026-09-02)
-- `cdc-developmental-milestones-2026` — US CDC. Developmental Milestones. Learn the Signs. Act Early. Current website reviewed for 2026 use; milestone checklists are not diagnostic or screening tools. https://www.cdc.gov/act-early/milestones/index.html (accessed 2026-09-02)
-- `aacpdm-early-cp-detection` — AACPDM. Early Detection of Cerebral Palsy Care Pathway. Current care pathway reviewed 2 Sep 2026. https://www.aacpdm.org/publications/care-pathways/early-detection-of-cerebral-palsy (accessed 2026-09-02)
-- `morgan-early-cp-intervention-2021` — Morgan C et al. Early Intervention for Children Aged 0 to 2 Years With or at High Risk of Cerebral Palsy: International Clinical Practice Guideline. JAMA Pediatr. 2021;175:846-858. https://pmc.ncbi.nlm.nih.gov/articles/PMC9677545 (accessed 2026-09-02)
-- `spina-bifida-mobility-guideline` — Spina Bifida Association. Mobility Guideline. Current clinical guidance reviewed 2 Sep 2026. https://www.spinabifidaassociation.org/blog/mobility (accessed 2026-09-02)
-- `btf-pediatric-severe-tbi` — Brain Trauma Foundation. Guidelines for the Management of Pediatric Severe TBI, 3rd edition. Current guideline portal reviewed 2 Sep 2026. https://braintrauma.org/coma/guidelines/pediatric (accessed 2026-09-02)
-- `aap-down-syndrome-2022` — Bull MJ et al. Health Supervision for Children and Adolescents With Down Syndrome. Pediatrics. 2022;149(5):e2022057010. https://publications.aap.org/pediatrics/article/149/5/e2022057010/186778/Health-Supervision-for-Children-and-Adolescents (accessed 2026-09-02)
-- `nice-cg170-autism-under-19` — NICE. Autism spectrum disorder in under 19s: support and management. CG170. Published 2013; current surveillance status reviewed 2 Sep 2026. https://www.nice.org.uk/guidance/cg170 (accessed 2026-09-02)
-- `apta-pediatrics-resources-2026` — APTA Pediatrics. Evidence-based resource documents, including neonatal and school-based pediatric physical therapy resources. Current portal reviewed 2 Sep 2026. https://pediatricapta.org/resource-documents (accessed 2026-09-02)
-- `who-wheelchair-provision-2023` — World Health Organization. Wheelchair provision guidelines. Geneva: WHO; 2023. ISBN 9789240074521. https://www.who.int/publications/i/item/9789240074521 (accessed 2026-09-02)
-- `apta-vestibular-hypofunction-2022` — Hall CD et al. Vestibular Rehabilitation for Peripheral Vestibular Hypofunction: Updated Clinical Practice Guideline. J Neurol Phys Ther. 2022;46:118-177. https://pubmed.ncbi.nlm.nih.gov/34864777 (accessed 2026-09-02)
-- `cns-pediatric-hydrocephalus-2020` — Congress of Neurological Surgeons. Pediatric Hydrocephalus: Systematic Literature Review and Evidence-Based Guidelines. Updated 2020. https://www.cns.org/guidelines/browse-guidelines-detail/pediatric-hydrocephalus-guideline-1 (accessed 2026-09-02)
 - `aha-adult-als-2025` — American Heart Association. Part 9: Adult Advanced Life Support. 2025 AHA Guidelines for CPR and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2). https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-life-support (accessed 2026-09-02)
 - `fda-hyperbaric-oxygen-2021` — US Food and Drug Administration. Hyperbaric Oxygen Therapy: Get the Facts. Consumer safety communication; content current as of 26 July 2021. https://www.fda.gov/consumers/consumer-updates/hyperbaric-oxygen-therapy-get-facts (accessed 2026-09-02)
 - `wada-prohibited-list-2026` — World Anti-Doping Agency. The Prohibited List (2026 List, effective 1 January 2026). Montreal: WADA. https://www.wada-ama.org/en/what-we-do/the-prohibited-list (accessed 2026-08-30)

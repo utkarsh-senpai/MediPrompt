@@ -279,17 +279,21 @@ Rules:
 Extracted curriculum inventories are a separate authoring input, not a weak form of `TopicPack`.
 Each candidate moves through `candidate -> normalized -> prompt-ready-beta -> educator-reviewed ->
 published`. Only the last state may be compiled into an approved medical release pack. A
-source-grounded `prompt-ready-beta` snapshot may run only through the explicit public-draft gate,
-with empty attestation and a persistent non-clinical warning. Earlier incomplete states remain
-invalid learner content.
+source-grounded `prompt-ready-beta` snapshot may run only through the explicit public-draft gate
+with empty attestation. Label-only speaking cards may run without clinical scoring and without a
+recurring attestation banner; they must retain the product disclaimer and cannot claim correctness.
+Earlier incomplete clinical-answer content remains invalid learner content.
 
 The source-grounded candidate is stored in `content/candidates/`, not `content/packs/`.
 Candidate validation applies the runtime schema and demo depth minimums, then asserts that the
 medical release gate fails. Build copying allowlists that exact candidate for the public practice
 beta and rejects the generic regression fixture from the learner artifact. As of v0.7 the
-allowlisted candidate contains the full 265-topic catalog. v0.8 exposes exactly 95 active authored
-topics across Neuro (35), combined Cardiovascular & Respiratory (26), and Sports (34), with four
-disabled subject shells; its public gate fixes the subject IDs, counts, and availability split.
+allowlisted candidate contains 595 topics. v0.9 exposes 425 active topics across Neuro (365),
+combined Cardiovascular & Respiratory (26), and Sports (34), with four disabled subject shells.
+Neuro labels are compiled from `content/catalogs/neuro-physiotherapy-topics.json`; optional
+prompt/concept fields activate source-linked coverage. The public gate fixes subject identities and
+the three-active/four-disabled boundary but does not hardcode topic counts, so catalog changes do
+not require validator-code edits.
 
 The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
 assessment/investigation, clinical reasoning, intervention/rehabilitation,

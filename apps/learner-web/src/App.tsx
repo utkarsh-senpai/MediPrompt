@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   type RuntimePack,
-  type ExamScheduleStore,
-  type HistoryStore,
   type SettingsStore,
   type TopicSnapshot,
   type UserSettings,
@@ -32,8 +30,6 @@ import { systemMonotonicClock, systemWallClock } from "@/platform/clock";
 import { CryptoRandom } from "@/platform/random";
 import { InMemoryBagStore } from "@/platform/bagStore";
 import { LocalStorageSettingsStore } from "@/platform/settingsStore";
-import { IndexedDbHistoryStore } from "@/platform/historyStore";
-import { LocalStorageExamScheduleStore } from "@/platform/examScheduleStore";
 import { PracticeSurface } from "@/components/PracticeSurface";
 import { CountdownRing } from "@/components/CountdownRing";
 import { SettingsDialog } from "@/components/SettingsDialog";
@@ -45,12 +41,6 @@ import { ProcessingView } from "@/components/ProcessingView";
 import { TranscriptEditor } from "@/components/TranscriptEditor";
 import { SelfReview } from "@/components/SelfReview";
 import { AttemptReview } from "@/components/AttemptReview";
-import { VivaOverview } from "@/components/VivaOverview";
-import { VivaQuestionCard } from "@/components/VivaQuestionCard";
-import { VivaAnswerReview } from "@/components/VivaAnswerReview";
-import { VivaSummary } from "@/components/VivaSummary";
-import { VIVA_SPEAKING_SECONDS } from "@/practice/sessionReducer";
-import { LearningPlan } from "@/components/LearningPlan";
 
 interface PracticeAppProps {
   pack: RuntimePack;
@@ -59,10 +49,6 @@ interface PracticeAppProps {
   caps: Capabilities;
   onSettingsChange: (next: UserSettings) => void;
   onFocusModeChange: (active: boolean) => void;
-  historyStore: HistoryStore;
-  examStore: ExamScheduleStore;
-  historyRevision: number;
-  onHistoryChanged: () => void;
 }
 
 function useMilestones(remainingMsValue: number | null): string {
@@ -146,10 +132,6 @@ function PracticeApp({
   caps,
   onSettingsChange,
   onFocusModeChange,
-  historyStore,
-  examStore,
-  historyRevision,
-  onHistoryChanged,
 }: PracticeAppProps) {
   const monotonic = useMemo(() => systemMonotonicClock(), []);
   const wall = useMemo(() => systemWallClock(), []);
@@ -191,12 +173,9 @@ function PracticeApp({
     bagStore,
     audio: audioDeps,
     embedding: embeddingClient,
-    historyStore,
-    onHistoryChanged,
   });
 
-  const { state, now, subjects, presets, challengeVisible, eligibleCount, actions } =
-    session;
+  const { state, now, subjects, eligibleCount, actions } = session;
 
   const [showSettings, setShowSettings] = useState(false);
 
@@ -209,9 +188,6 @@ function PracticeApp({
   } else if (s.name === "RESEARCHING") {
     remaining = remainingMs(s.deadlineAt, now);
     totalMs = (s.topic.timePolicy.researchSeconds ?? settings.researchSeconds) * 1000;
-  } else if (s.name === "VIVA_SPEAKING") {
-    remaining = remainingMs(s.deadlineAt, now);
-    totalMs = VIVA_SPEAKING_SECONDS * 1000;
   }
   const milestone = useMilestones(remaining);
 
@@ -242,12 +218,6 @@ function PracticeApp({
       if (started) playTimerStart(muted);
     });
   }, [actions, muted]);
-  const startVivaSpeaking = useCallback(() => {
-    void actions.startVivaSpeaking().then((started) => {
-      if (started) playTimerStart(muted);
-    });
-  }, [actions, muted]);
-
   const topicEyebrow =
     s.name !== "IDLE" && s.name !== "DRAWING" && "topic" in s
       ? (() => {
@@ -273,31 +243,10 @@ function PracticeApp({
 
   return (
     <>
-      {pack.review.status === "DRAFT" ? (
-        <aside className="draft-notice" role="note">
-          <strong>Curriculum beta · unreviewed draft</strong>
-          <span>Practice only — not for diagnosis, treatment, or clinical decisions.</span>
-        </aside>
-      ) : null}
-
-      {s.name === "IDLE" ? (
-        <LearningPlan
-          pack={pack}
-          store={historyStore}
-          examStore={examStore}
-          enabled={settings.practiceHistory ?? false}
-          revision={historyRevision}
-          onPractice={actions.practiceTopic}
-          onChanged={onHistoryChanged}
-        />
-      ) : null}
-
       {showSurface ? (
         <PracticeSurface
           subjects={subjects}
           selection={s.selection}
-          presets={presets}
-          challengeVisible={challengeVisible}
           eligibleCount={eligibleCount}
           drawing={s.name === "DRAWING"}
           onChange={actions.setSelection}
@@ -493,154 +442,9 @@ function PracticeApp({
           refinementDelta={s.refinementDelta}
           attemptIndex={s.attempt.attemptIndex}
           semanticRefining={session.semanticRefining}
-          historySaveState={session.historySaveState}
           audio={session.audio}
           onSpinAgain={spinAgain}
           onTryAgain={actions.startSecondAttempt}
-          onBeginViva={actions.startViva}
-        />
-      ) : null}
-
-      {s.name === "VIVA_READY" ? (
-        <VivaOverview
-          topic={s.topic}
-          questions={s.viva.questions}
-          onBegin={actions.beginVivaQuestion}
-          onExit={actions.exitViva}
-        />
-      ) : null}
-
-      {s.name === "VIVA_ASKING" ? (
-        <>
-          <VivaQuestionCard
-            topic={s.topic}
-            question={s.viva.questions[s.viva.index]!}
-            questionIndex={s.viva.index}
-            total={s.viva.questions.length}
-            audio={session.audio}
-            onBeginAudioOptIn={actions.beginAudioOptIn}
-            onConfirmAudioOptIn={actions.confirmAudioOptIn}
-            onCancelAudioOptIn={actions.cancelAudioOptIn}
-            onStartSpeaking={startVivaSpeaking}
-            onExit={actions.exitViva}
-          />
-        </>
-      ) : null}
-
-      {s.name === "VIVA_SPEAKING" ? (
-        <section className="focus-view" aria-labelledby="speaking-heading">
-          <div className="focus-title-row">
-            <h2 id="speaking-heading" tabIndex={-1}>
-              {s.topic.title}
-            </h2>
-          </div>
-          <p className="status">
-            Viva · question {s.viva.index + 1} of {s.viva.questions.length}
-          </p>
-          <p className="prompt-copy">{s.viva.questions[s.viva.index]!.prompt}</p>
-          <CountdownRing
-            remainingMs={remaining ?? 0}
-            totalMs={totalMs}
-            caption="Defense time left"
-          />
-          {session.audio.status === "ACTIVE" ? <RecordingIndicator /> : null}
-          {session.audio.issue ? (
-            <p className="status" role="status">
-              {audioIssueCopy(session.audio.issue)}
-            </p>
-          ) : null}
-          <div className="toolbar">
-            <button type="button" onClick={actions.closeTimer}>
-              Finish now
-            </button>
-            <button type="button" onClick={actions.exitViva}>
-              Exit viva
-            </button>
-          </div>
-        </section>
-      ) : null}
-
-      {s.name === "VIVA_ATTEMPT_COMPLETE" ? (
-        <section aria-labelledby="complete-heading">
-          <h2 id="complete-heading" tabIndex={-1}>
-            Defense complete
-          </h2>
-          <p className="status">
-            You finished a timed defense answer. Review it, or exit the viva.
-          </p>
-          {session.audio.issue ? (
-            <p className="status" role="status">
-              {audioIssueCopy(session.audio.issue)}
-            </p>
-          ) : null}
-          {session.audio.armed && !session.audio.issue ? (
-            <p className="status" role="status">
-              Finalizing your recording…
-            </p>
-          ) : null}
-          <div className="toolbar">
-            <button type="button" className="primary" onClick={actions.startVivaTypedReview}>
-              Review this answer
-            </button>
-            <button type="button" onClick={actions.exitViva}>
-              Exit viva
-            </button>
-          </div>
-        </section>
-      ) : null}
-
-      {s.name === "VIVA_PROCESSING" ? (
-        <ProcessingView
-          topic={s.topic}
-          metrics={s.metrics}
-          transcription={s.transcription}
-          audio={session.audio}
-          onTranscribe={actions.requestVivaTranscription}
-          onDecline={actions.declineVivaTranscription}
-          onCancel={actions.startVivaTypedReview}
-        />
-      ) : null}
-
-      {s.name === "VIVA_TRANSCRIPT_REVIEW" ? (
-        <TranscriptEditor
-          draft={s.draft}
-          onApprove={actions.approveVivaTranscript}
-          onTypeInstead={actions.startVivaTypedReview}
-        />
-      ) : null}
-
-      {s.name === "VIVA_SELF_REVIEW" ? (
-        <SelfReview
-          metrics={s.metrics}
-          transcriptionIssue={s.transcriptionIssue}
-          audio={session.audio}
-          onSubmit={actions.submitVivaSelfReview}
-          onRetryTranscription={actions.requestVivaTranscription}
-        />
-      ) : null}
-
-      {s.name === "VIVA_ANSWER_REVIEW" ? (
-        <VivaAnswerReview
-          topic={s.topic}
-          question={s.viva.questions[s.viva.index]!}
-          questionIndex={s.viva.index}
-          total={s.viva.questions.length}
-          transcript={s.transcript}
-          coverage={s.coverage}
-          metrics={s.metrics}
-          textMetrics={s.textMetrics}
-          semanticRefining={session.semanticRefining}
-          audio={session.audio}
-          onNext={actions.nextVivaQuestion}
-          onExit={actions.exitViva}
-        />
-      ) : null}
-
-      {s.name === "VIVA_COMPLETE" ? (
-        <VivaSummary
-          topic={s.topic}
-          summary={s.summary}
-          onExit={actions.exitViva}
         />
       ) : null}
 
@@ -678,12 +482,6 @@ function PracticeApp({
 
 export function App() {
   const settingsStore = useMemo(() => new LocalStorageSettingsStore(), []);
-  const historyStore = useMemo(() => new IndexedDbHistoryStore(), []);
-  const examStore = useMemo(() => new LocalStorageExamScheduleStore(), []);
-  const [historyRevision, setHistoryRevision] = useState(0);
-  const handleHistoryChanged = useCallback(() => {
-    setHistoryRevision((current) => current + 1);
-  }, []);
   const [settings, setSettings] = useState<UserSettings>(() => ({
     ...(settingsStore.load() ?? DEFAULT_SETTINGS),
   }));
@@ -807,10 +605,6 @@ export function App() {
           caps={caps}
           onSettingsChange={setSettings}
           onFocusModeChange={handleFocusModeChange}
-          historyStore={historyStore}
-          examStore={examStore}
-          historyRevision={historyRevision}
-          onHistoryChanged={handleHistoryChanged}
         />
       ) : null}
 

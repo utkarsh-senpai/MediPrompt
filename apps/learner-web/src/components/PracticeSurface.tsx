@@ -1,8 +1,4 @@
-import type {
-  ChallengePreset,
-  PracticeSelection,
-  V02PracticeMode,
-} from "@/practice/types";
+import type { PracticeSelection, V02PracticeMode } from "@/practice/types";
 import type { SubjectOption } from "@/content/packQuery";
 import { subjectEmoji } from "@/app/subjectEmoji";
 import { InfoTip } from "./InfoTip";
@@ -10,8 +6,6 @@ import { InfoTip } from "./InfoTip";
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
   selection: PracticeSelection;
-  presets: ChallengePreset[];
-  challengeVisible: boolean;
   eligibleCount: number;
   drawing: boolean;
   onChange: (partial: Partial<PracticeSelection>) => void;
@@ -23,17 +17,9 @@ const MODES: { id: V02PracticeMode; label: string; hint: string; emoji: string }
   { id: "DEEP_RESEARCH", label: "Deep Research", hint: "Research first, then speak.", emoji: "🔬" },
 ];
 
-const PRESET_LABEL: Record<ChallengePreset, string> = {
-  GUIDED: "Explain",
-  APPLIED: "Apply",
-  VIVA: "Defend",
-};
-
 export function PracticeSurface({
   subjects,
   selection,
-  presets,
-  challengeVisible,
   eligibleCount,
   drawing,
   onChange,
@@ -77,30 +63,6 @@ export function PracticeSurface({
           ))}
         </div>
       </div>
-
-      {challengeVisible ? (
-        <div className="control-row">
-          <span className="label-row">
-            <span id="challenge-label">Challenge</span>
-            <InfoTip label="About challenge levels">
-              Explain builds a clear concept map. Apply adds a fictional scenario.
-              Defend changes a constraint and asks you to respond to new evidence.
-            </InfoTip>
-          </span>
-          <div className="chips" role="group" aria-labelledby="challenge-label">
-            {presets.map((p) => (
-              <button
-                key={p}
-                type="button"
-                aria-pressed={selection.challenge === p}
-                onClick={() => onChange({ challenge: p })}
-              >
-                {PRESET_LABEL[p]}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : null}
 
       <div className="control-row">
         <label htmlFor="subject-select">Subject</label>
