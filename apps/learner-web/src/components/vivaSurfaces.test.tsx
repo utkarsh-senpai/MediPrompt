@@ -30,15 +30,6 @@ function vivaSnapshot(): ReturnType<typeof toTopicSnapshot> {
   });
 }
 
-function noVivaSnapshot(): ReturnType<typeof toTopicSnapshot> {
-  const found = findVariant(pack, "respiratory-assessment-guided-recall-v1");
-  if (!found) throw new Error("guided variant not found");
-  return toTopicSnapshot(pack, found.variant, found.topic, found.subject, {
-    speakingSeconds: 90,
-    researchSeconds: 120,
-  });
-}
-
 const AUDIO: AudioUiState = {
   available: true,
   status: "OFF",
@@ -76,8 +67,8 @@ const COVERAGE: CoverageReport = {
 const METRICS: DeliveryMetrics = { durationMs: 60_000, pauses: [], limitations: [] };
 const TEXT_METRICS: TextMetrics = { wordsPerMinute: 90, fillerCount: 0, repeatedPhraseCount: 0 };
 
-describe("AttemptReview viva entry", () => {
-  it("shows Begin viva when the topic has viva questions", () => {
+describe("AttemptReview while viva is paused", () => {
+  it("does not expose viva controls or unavailable messaging", () => {
     render(
       <AttemptReview
         topic={vivaSnapshot()}
@@ -91,32 +82,10 @@ describe("AttemptReview viva entry", () => {
         audio={AUDIO}
         onSpinAgain={() => {}}
         onTryAgain={() => {}}
-        onBeginViva={() => {}}
-      />,
-    );
-    expect(screen.getByRole("button", { name: "Begin viva" })).toBeInTheDocument();
-    expect(screen.getByText(/3 timed follow-ups/i)).toBeInTheDocument();
-  });
-
-  it("shows an explicit unavailable note when the topic has no viva questions", () => {
-    render(
-      <AttemptReview
-        topic={noVivaSnapshot()}
-        metrics={null}
-        textMetrics={null}
-        transcript={APPROVED}
-        coverage={COVERAGE}
-        history={[]}
-        refinementDelta={null}
-        attemptIndex={1}
-        audio={AUDIO}
-        onSpinAgain={() => {}}
-        onTryAgain={() => {}}
-        onBeginViva={() => {}}
       />,
     );
     expect(screen.queryByRole("button", { name: "Begin viva" })).not.toBeInTheDocument();
-    expect(screen.getByText(/Viva is unavailable for this topic/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Viva is unavailable for this topic/i)).not.toBeInTheDocument();
   });
 });
 

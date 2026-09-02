@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { PracticeSurface } from "./PracticeSurface";
 import type { ChallengePreset, PracticeSelection } from "@/practice/types";
@@ -24,8 +24,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        presets={["GUIDED"]}
-        challengeVisible={false}
         eligibleCount={5}
         drawing={false}
         onChange={() => {}}
@@ -44,8 +42,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        presets={["GUIDED"]}
-        challengeVisible={false}
         eligibleCount={5}
         drawing={false}
         onChange={() => {}}
@@ -55,32 +51,11 @@ describe("PracticeSurface", () => {
     expect(screen.queryByText(/^Challenge$/)).not.toBeInTheDocument();
   });
 
-  it("shows the challenge selector when multiple presets are eligible", () => {
-    render(
-      <PracticeSurface
-        subjects={subjects}
-        selection={selection}
-        presets={["GUIDED", "APPLIED", "VIVA"]}
-        challengeVisible={true}
-        eligibleCount={3}
-        drawing={false}
-        onChange={() => {}}
-        onSpin={() => {}}
-      />,
-    );
-    expect(screen.getByText(/^Challenge$/)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Explain" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Defend" })).toBeInTheDocument();
-    expect(screen.queryByText(/easy|medium|hard/i)).not.toBeInTheDocument();
-  });
-
   it("disables Spin when there are no eligible topics", () => {
     render(
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        presets={["GUIDED"]}
-        challengeVisible={false}
         eligibleCount={0}
         drawing={false}
         onChange={() => {}}
@@ -98,8 +73,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        presets={["GUIDED"]}
-        challengeVisible={false}
         eligibleCount={5}
         drawing={true}
         onChange={() => {}}
@@ -112,28 +85,6 @@ describe("PracticeSurface", () => {
     expect(spin).toHaveAttribute("data-drawing", "true");
   });
 
-  it("mode and challenge are independent controls (changing mode does not change challenge)", () => {
-    const onChange = vi.fn();
-    render(
-      <PracticeSurface
-        subjects={subjects}
-        selection={selection}
-        presets={["GUIDED", "APPLIED"]}
-        challengeVisible={true}
-        eligibleCount={2}
-        drawing={false}
-        onChange={onChange}
-        onSpin={() => {}}
-      />,
-    );
-    // Pressing a challenge button reports only the challenge change.
-    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
-    expect(onChange).toHaveBeenCalledWith({ challenge: "APPLIED" });
-    // Pressing a mode button reports only the mode change.
-    fireEvent.click(screen.getByRole("button", { name: "Deep Research" }));
-    expect(onChange).toHaveBeenCalledWith({ mode: "DEEP_RESEARCH" });
-  });
-
   it("subject select change reports the new subjectId", async () => {
     const onChange = vi.fn();
     const user = userEvent.setup();
@@ -141,8 +92,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        presets={["GUIDED"]}
-        challengeVisible={false}
         eligibleCount={5}
         drawing={false}
         onChange={onChange}
@@ -158,8 +107,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        presets={["GUIDED"]}
-        challengeVisible={false}
         eligibleCount={5}
         drawing={false}
         onChange={() => {}}

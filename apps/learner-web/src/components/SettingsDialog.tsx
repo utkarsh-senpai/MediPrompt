@@ -28,9 +28,6 @@ export function SettingsDialog({
   const [semanticCoverage, setSemanticCoverage] = useState(
     settings.semanticCoverage ?? false,
   );
-  const [practiceHistory, setPracticeHistory] = useState(
-    settings.practiceHistory ?? false,
-  );
   const dialogRef = useRef<HTMLDialogElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -64,7 +61,7 @@ export function SettingsDialog({
       ),
       soundMuted,
       semanticCoverage,
-      practiceHistory,
+      practiceHistory: false,
     };
     store.save(next);
     onSaved(next);
@@ -145,21 +142,6 @@ export function SettingsDialog({
             Sound effects
             <span className="settings-hint">
               Soft cues for spins and the timer, synthesized on this device.
-            </span>
-          </label>
-        </div>
-        <div className="settings-sound">
-          <input
-            id="practice-history"
-            type="checkbox"
-            checked={practiceHistory}
-            onChange={(e) => setPracticeHistory(e.target.checked)}
-          />
-          <label htmlFor="practice-history">
-            Private learning plan
-            <span className="settings-hint">
-              Save bounded topic, date, and aggregate coverage metadata on this device for spaced
-              practice. Audio, transcripts, and transcript excerpts are never saved.
             </span>
           </label>
         </div>

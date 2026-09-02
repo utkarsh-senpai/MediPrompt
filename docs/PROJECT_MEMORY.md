@@ -4,14 +4,14 @@
 
 **Updated:** 2026-09-02
 
-**Current version:** v0.8 three-subject curriculum activation in PR #28, pending promotion through `develop` to `main`
+**Current version:** v0.9 Neuro catalog expansion in PR #30, pending promotion through `develop` to `main`
 
 ## Product invariant
 
 MediPrompt is a privacy-first speaking-practice PWA for medical students. Its permanent core is:
 
 ```text
-choose mode + challenge + subject -> spin -> topic -> timed speech -> finish/exit -> repeat
+choose mode + subject -> spin -> topic -> timed speech -> finish/exit -> repeat
 ```
 
 That path must work without an account, microphone, speech model, persistent storage, backend, or
@@ -22,7 +22,8 @@ content, copy, or visual identity.
 ## Implemented baseline
 
 - Static React/TypeScript PWA hosted at the GitHub Pages `/MediPrompt/` base path.
-- Recall Sprint and Deep Research with independent mode, challenge, subject, support, and time.
+- Recall Sprint and Deep Research with independent mode, subject, and time. The challenge selector
+  is paused in v0.9; runtime selection always resolves to the available Guided variant.
 - Full-fingerprint shuffled bags, deadline timers, reducer stale-event rejection, accessible
   settings, reduced-motion support, and a tested 320 px layout.
 - Strict topic-pack schema and content gates, fixed-manifest service-worker caching, CSP-safe
@@ -41,12 +42,12 @@ content, copy, or visual identity.
   timeout, offline, cancellation, or low memory retains lexical coverage. Until educator-labelled
   calibration, semantic results are “possibly present — not counted” and cannot change coverage or
   Refinement Delta.
-- v0.6 opt-in viva defense after review: future prompts remain hidden until their turn; each answer
+- v0.6 built an opt-in viva defense after review: future prompts remain hidden until their turn; each answer
   has a unique 60-second timer/attempt identity; the microphone, transcript, typed-review, lexical,
   and optional semantic paths reuse the hardened local pipeline. Active exit stops and releases all
   in-flight resources. Ladders are strictly increasing and all-or-nothing for one drawn rubric.
   Numeric summary copy uses only `scoredCount`; unverifiable answers remain visible but excluded.
-- v0.7 opt-in private learning plan: reviewed attempts save only bounded topic/practice identity,
+- v0.7 built an opt-in private learning plan: reviewed attempts save only bounded topic/practice identity,
   timestamp, aggregate coverage, scoring identity, and schedule. IndexedDB and JSON export never
   contain audio, transcript text, concept-level evidence, semantic transcript excerpts, or
   embeddings. Retention is capped at 500 records; two-step delete-all verifies an empty reload.
@@ -58,15 +59,19 @@ content, copy, or visual identity.
   a viva answer remains the fixed 60-second defense contract.
 - Microphone consent does not acquire a stream. Permission is requested only when the speaking
   timer starts; recording stops with the timer and every stream/object URL is released.
-- v0.8 preserves all prior behavior while exposing exactly three fully authored subjects: Neuro
-  (35), combined Cardiovascular & Respiratory (26), and Sports (34). The 95 active topics work in
-  Recall Sprint and Deep Research; authored challenge trios continue to support Apply and Defend.
+- v0.8 exposed exactly three fully authored subjects: Neuro (35), combined Cardiovascular &
+  Respiratory (26), and Sports (34).
+- v0.9 replaces the Neuro set with a validated 365-topic, 22-section catalog. The three active
+  subjects now contain 425 topics and the complete seven-subject runtime contains 595. Every Neuro
+  topic supports Recall Sprint and Deep Research; topics without sourced criteria report coverage
+  unavailable while delivery, transcript, and retry feedback continue normally.
+- v0.9 deliberately makes Viva, private learning-plan, and Explain/Apply/Defend entry points
+  unreachable. Their internal implementation remains dormant for a later reviewed reactivation.
 
 ## v0.3 interaction and identity decisions
 
-- User-facing challenge names are **Explain**, **Apply**, and **Defend**. Internal pack values
-  remain `GUIDED`, `APPLIED`, and `VIVA` for schema compatibility. The UI must not display
-  easy/medium/hard labels.
+- Internal pack values remain `GUIDED`, `APPLIED`, and `VIVA` for schema compatibility. The v0.9 UI
+  exposes no challenge control and must not display easy/medium/hard or Explain/Apply/Defend labels.
 - The topic draw is mandatory before timer start and uses a smooth 650 ms rotating compass state;
   reduced-motion users get a short non-animated transition.
 - Long topic expectation/scenario copy lives behind the accessible `?` control.
@@ -80,31 +85,46 @@ content, copy, or visual identity.
 
 ## Medical-content boundary
 
-- The 265 curriculum-derived labels under `docs/curriculum/` are the canonical catalog. The runtime
-  candidate mirrors seven merged app subjects and uses availability as a safety boundary.
-- `content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.3.0` is `MEDICAL`,
-  `DRAFT`, `reviewers: []`, and `reviewedAt: null`. Neuro (35), combined Cardiovascular &
-  Respiratory (26), and Sports (34) are the only `ACTIVE` subjects; every one of their 95 topics
-  has sourced criteria. The remaining four subjects are visible, disabled `COMING_SOON` skeletons.
-- All active topics are authored from the curriculum plus sources checked in 2026. The evidence
-  set includes 2025-26 publications, official current rules, and older still-current/foundational guidance and measures.
+- The runtime catalog contains 595 labels across seven subjects. Neuro's canonical editable source
+  is `content/catalogs/neuro-physiotherapy-topics.json`; the earlier 265-topic curriculum extraction
+  remains reference history rather than the Neuro source of truth.
+- `content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.9.0` is `MEDICAL`,
+  `DRAFT`, `reviewers: []`, and `reviewedAt: null`. Neuro (365), combined Cardiovascular &
+  Respiratory (26), and Sports (34) are the only `ACTIVE` subjects. The 365 Neuro labels are simple
+  speaking cards; Cardiorespiratory and Sports retain sourced criteria. The remaining four
+  subjects are visible, disabled `COMING_SOON` skeletons.
+- Cardiorespiratory and Sports answer criteria use sources checked in 2026. The evidence set
+  includes 2025-26 publications, official current rules, and older still-current/foundational guidance and measures.
   Never summarize it as “all references are 2025-26.” Currency and provenance support review;
   they do not substitute for qualified educator review.
-- Normal development and GitHub Pages load this candidate as an explicitly labelled **public
-  practice beta**. UI, query, session, direct-snapshot, and saved-plan paths limit practice to the
-  three active subjects; generic Everyday/Science/Reasoning topics are not shipped.
-- Every beta screen displays `Curriculum beta · unreviewed draft` and `not for diagnosis,
-  treatment, or clinical decisions`. The approved non-medical interaction fixture remains only for
-  schema/regression tests.
-- Build and service-worker validation require the exact `MEDICAL`, `DRAFT`, unattested 265-topic
-  catalog and its exact 3-active/4-coming-soon split. Structural validation forbids empty rubrics in
-  active subjects. The generic interaction fixture and legacy `beta-packs/` path remain excluded.
-- v0.8 deliberately raises the bounded pack limit to 640 KiB in both loader and service worker and
-  the schema source cap to 96; the generated candidate remains below the 640 KiB delivery cap and
-  includes dedicated primary records for concussion, WADA TUE, and elite-youth-athlete guidance.
+- Normal development and GitHub Pages load this candidate as a public practice beta. UI, query,
+  and session paths limit practice to the three active subjects; generic Everyday/Science/Reasoning
+  topics are not shipped.
+- The recurring learner-facing draft/attestation banner is removed for these simple topic prompts.
+  The pack stays internally `DRAFT`; the footer disclaimer and all fail-closed content gates remain.
+  The approved non-medical interaction fixture remains only for schema/regression tests.
+- Build and service-worker validation require the seven known subjects, exactly three active
+  subjects, non-empty subject catalogs, `MEDICAL`/`DRAFT`, and empty attestation. They intentionally
+  do not hardcode 595 or 365, so a reviewed catalog addition/deletion does not require validator
+  code changes. Approved medical packs still reject empty rubrics.
+- Loader, service worker, and PWA precache share a bounded 2 MiB pack ceiling. The current 1.10 MB
+  candidate remains outside initial-entry JavaScript and works offline; subject sharding is the
+  next scale step before this bounded ceiling is reached.
 - `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md` is generated from the candidate and covers
-  every active question and expected answer criterion. It remains unsigned and does not change
-  review status; `content:validate` rejects worksheet drift.
+  every active topic, explicitly marking cards without answer criteria as scaffolded. It remains
+  unsigned and does not change review status; `content:validate` rejects worksheet drift.
+
+## Topic catalog workflow
+
+- Add or delete a Neuro topic only in `content/catalogs/neuro-physiotherapy-topics.json`, update
+  `expectedTopicCount`, then run the medical-candidate and worksheet generators.
+- IDs and rendered titles must be unique. The generator rejects malformed sections, duplicate IDs,
+  duplicate titles, and count drift before producing learner content.
+- A label-only entry automatically receives both Guided Recall Sprint and Deep Research variants.
+  It uses no API or LLM token at runtime.
+- To enable source-linked content coverage later, add an optional `prompt` and `concepts` array to
+  the same catalog item. Each concept carries `label`, `acceptedPhrases`, and `sourceRefs`; referenced
+  sources must already exist in the generated pack. No generator-code change is required.
 
 ## Review and release policy
 
@@ -133,8 +153,8 @@ privacy-minimized learning-plan metadata after learner action.
 
 - No identifiable patient information; fictional cases only.
 - No audio or transcript upload in the zero-cost path.
-- The public beta may report lexical coverage against its source-linked draft rubric only while the
-  unreviewed-draft warning remains conspicuous. It must never claim correctness or medical approval.
+- The app may report lexical coverage only when a source-linked rubric exists. Label-only cards
+  must report coverage unavailable and must never claim correctness or medical approval.
 - Semantic evidence must remain non-counting until a qualified educator-labelled calibration set
   establishes and versions promotion/rejection thresholds.
 - Never score emotion, anxiety, confidence, personality, intelligence, competence, accent, or
@@ -143,9 +163,8 @@ privacy-minimized learning-plan metadata after learner action.
   an explicit threat model and server-side secret handling where appropriate.
 - Transcript uncertainty ranges render as escaped text highlights; pack and transcript strings are
   always untrusted content.
-- Practice-history persistence is off by default. Pausing saves does not imply deletion; export and
-  verified delete-all remain reachable. The unreleased IndexedDB v1 store is purged on migration
-  because it could contain transcript text and had a broken topic index.
+- Practice-history persistence, export, and delete controls are unreachable in v0.9. The dormant
+  implementation must retain its privacy properties for any later reactivation.
 
 ## Toolchain and verification
 
@@ -159,13 +178,11 @@ privacy-minimized learning-plan metadata after learner action.
 
 ## Current pickup state
 
-v0.8 contains every v0.2-v0.7 learning feature plus the 265-topic catalog and completed
-three-subject activation gate. It includes explicit consent, transcript-free records, working
-IndexedDB v2 indexing, strict validation, bounded retention, local-calendar scheduling, exam
-triage, exact due-topic launch, export, and verified deletion. The Java 21/Spring Boot content
-compiler moves to v0.9 and target-user hardening to v0.10. Extra registers, challenge suggestions, and
-additional packs remain unplanned. Whisper and MiniLM still use one shared bundled worker asset,
-while model instances and activation paths remain separate. GitHub operations must use
+v0.9 retains the focused spin/speak/review/retry loop and expands Neuro to 365 topics through a
+standalone catalog. Viva, private learning-plan, and challenge-selection surfaces are paused; do not
+reactivate them incidentally. The Java 21/Spring Boot content compiler and target-user hardening
+remain later work. Whisper and MiniLM still use one shared bundled worker asset, while model
+instances and activation paths remain separate. GitHub operations must use
 `utkarsh-senpai`; release changes flow through `develop` before `main` and Pages.
 
 The beta may be publicly testable, but medical approval remains blocked pending educator
@@ -183,9 +200,10 @@ the next release work is target-device/model benchmarking and a v1.x educator-re
 - `docs/V0.6_DEVELOPMENT_CONTEXT.md`: reviewed viva ladder, cleanup, content, and timer contract.
 - `docs/V0.7_DEVELOPMENT_CONTEXT.md`: private learning-plan privacy, storage, scheduling, and UI contract.
 - `docs/V0.8_DEVELOPMENT_CONTEXT.md`: merged-subject identity, active content, evidence, budgets, and release checks.
+- `docs/V0.9_DEVELOPMENT_CONTEXT.md`: Neuro catalog, paused features, scale limits, and release checks.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
-- `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`: generated review worksheet for all 95 active
+- `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`: generated review worksheet for all 425 active
   topics; never hand-edit or treat the unsigned file as approval.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.
 

@@ -101,21 +101,15 @@ for (const file of files.filter((candidate) => textExtensions.has(extname(candid
 // but it must remain an unattested DRAFT. These assertions prevent a build from
 // silently relabelling it as reviewed or switching back to generic topics.
 const publicPack = JSON.parse(readFileSync(resolve(distDir, PUBLIC_PRACTICE_PACK), "utf8"));
-const publicTopicCount = Array.isArray(publicPack.subjects)
-  ? publicPack.subjects.reduce(
-      (total, subject) => total + (Array.isArray(subject.topics) ? subject.topics.length : 0),
-      0,
-    )
-  : 0;
-const expectedSubjectCounts = {
-  "research-methods-and-bioethics": 32,
-  "applied-physiotherapeutics": 35,
-  "musculoskeletal-physiotherapy": 50,
-  "neuro-physiotherapy": 35,
-  "cardiovascular-and-respiratory-physiotherapy": 26,
-  "community-health-physiotherapy": 53,
-  "sports-physiotherapy": 34,
-};
+const expectedSubjectIds = new Set([
+  "research-methods-and-bioethics",
+  "applied-physiotherapeutics",
+  "musculoskeletal-physiotherapy",
+  "neuro-physiotherapy",
+  "cardiovascular-and-respiratory-physiotherapy",
+  "community-health-physiotherapy",
+  "sports-physiotherapy",
+]);
 const expectedActiveSubjects = new Set([
   "neuro-physiotherapy",
   "cardiovascular-and-respiratory-physiotherapy",
@@ -123,10 +117,12 @@ const expectedActiveSubjects = new Set([
 ]);
 const subjectContractValid =
   Array.isArray(publicPack.subjects) &&
-  publicPack.subjects.length === Object.keys(expectedSubjectCounts).length &&
+  publicPack.subjects.length === expectedSubjectIds.size &&
   publicPack.subjects.every(
     (subject) =>
-      expectedSubjectCounts[subject.subjectId] === subject.topics?.length &&
+      expectedSubjectIds.has(subject.subjectId) &&
+      Array.isArray(subject.topics) &&
+      subject.topics.length > 0 &&
       subject.availability ===
         (expectedActiveSubjects.has(subject.subjectId) ? "ACTIVE" : "COMING_SOON"),
   );
@@ -137,11 +133,10 @@ if (
   !Array.isArray(publicPack.review?.reviewers) ||
   publicPack.review.reviewers.length !== 0 ||
   publicPack.review.reviewedAt !== null ||
-  publicTopicCount !== 265 ||
   !subjectContractValid
 ) {
   errors.push(
-    "public physiotherapy pack is not the expected unattested 265-topic DRAFT with exactly three active subjects",
+    "public physiotherapy pack is not the expected curriculum DRAFT with exactly three active subjects",
   );
 }
 
@@ -201,12 +196,14 @@ const shellBytes = files
 // v0.5 reuses one shared model-worker asset for Whisper and MiniLM, so adding
 // meaning matching must not double the bundled transformers.js graph.
 // v0.7 adds the opt-in IndexedDB validator, scheduling, export/delete, and
-// learning-plan UI. The content pack grew from 20 to 265 curriculum topics
-// (~400 KiB) and is dynamically imported as a fallback chunk rather than bundled
+// learning-plan UI. The content pack now carries a growing curriculum catalog
+// (~1.03 MiB) and is dynamically imported as a fallback chunk rather than bundled
 // into the entry, so the stricter 512 KiB initial-entry budget above remains
 // unchanged. The shell budget is widened to carry the larger pack file plus its
-// fallback chunk alongside the reused model worker.
-const MAX_SHELL_BYTES = 2560 * 1024;
+// fallback chunk (the pack ships twice — precached under /packs and as a
+// dynamic-import chunk for offline-before-SW robustness) alongside the reused
+// model worker.
+const MAX_SHELL_BYTES = 4096 * 1024;
 if (shellBytes > MAX_SHELL_BYTES) errors.push(`shell budget exceeded: ${shellBytes} bytes`);
 
 if (errors.length > 0) {
