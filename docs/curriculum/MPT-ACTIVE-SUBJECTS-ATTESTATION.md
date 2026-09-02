@@ -7,7 +7,7 @@
 ## Review scope
 
 - Pack: `mpt-cardiorespiratory-review-candidate` version `0.3.0`
-- Generated from the validated candidate: 3 active subjects, 61 topics, 136 prompt variants
+- Generated from the validated candidate: 3 active subjects, 83 topics, 182 prompt variants
 - Active subjects: Neuro Physiotherapy, Respiratory Physiotherapy, and Cardiovascular Physiotherapy
 - Evidence status: sources were checked in 2026 and include 2025–26 publications plus older still-current guidelines, measurement standards, and foundational texts
 - Curriculum catalog: 265 topics across eight visible subjects; five subjects remain `COMING_SOON` and cannot start practice
@@ -1519,7 +1519,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-## Respiratory Physiotherapy
+## Cardiovascular & Respiratory Physiotherapy
 
 ### 1. Structured respiratory physiotherapy assessment
 
@@ -2109,9 +2109,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-## Cardiovascular Physiotherapy
-
-### 1. Cardiovascular assessment and ECG relevance
+### 14. Cardiovascular assessment and ECG relevance
 
 Topic ID: `cardiovascular-assessment-ecg`
 
@@ -2149,7 +2147,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 2. Comprehensive cardiovascular rehabilitation
+### 15. Comprehensive cardiovascular rehabilitation
 
 Topic ID: `cardiac-rehabilitation`
 
@@ -2234,7 +2232,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 3. Rehabilitation in chronic coronary syndromes
+### 16. Rehabilitation in chronic coronary syndromes
 
 Topic ID: `chronic-coronary-syndrome-rehab`
 
@@ -2272,7 +2270,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 4. Rehabilitation after acute coronary syndrome
+### 17. Rehabilitation after acute coronary syndrome
 
 Topic ID: `acute-coronary-syndrome-recovery`
 
@@ -2310,7 +2308,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 5. Exercise rehabilitation in chronic heart failure
+### 18. Exercise rehabilitation in chronic heart failure
 
 Topic ID: `heart-failure-rehabilitation`
 
@@ -2348,7 +2346,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 6. Structured walking exercise in peripheral artery disease
+### 19. Structured walking exercise in peripheral artery disease
 
 Topic ID: `peripheral-artery-disease-walking`
 
@@ -2386,7 +2384,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 7. Perioperative rehabilitation around CABG
+### 20. Perioperative rehabilitation around CABG
 
 Topic ID: `cabg-perioperative-rehabilitation`
 
@@ -2424,7 +2422,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 8. Exercise testing and cardiovascular risk stratification
+### 21. Exercise testing and cardiovascular risk stratification
 
 Topic ID: `exercise-testing-risk-stratification`
 
@@ -2462,7 +2460,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 9. Adult basic life support
+### 22. Adult basic life support
 
 Topic ID: `adult-basic-life-support`
 
@@ -2500,7 +2498,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 10. Anatomy, physiology & embryology of cardiovascular system
+### 23. Anatomy, physiology & embryology of cardiovascular system
 
 Topic ID: `cardiovascular-anatomy-physiology-embryology`
 
@@ -2538,7 +2536,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 11. Health & performance principles, risk stratification, prevention & health promotion
+### 24. Health & performance principles, risk stratification, prevention & health promotion
 
 Topic ID: `cardiovascular-risk-stratification-health-promotion`
 
@@ -2576,7 +2574,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 12. Basic & advanced life support
+### 25. Basic & advanced life support
 
 Topic ID: `cardiovascular-advanced-life-support`
 
@@ -2614,7 +2612,7 @@ Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wordi
 
 Reviewer notes: ____________________________________________________________________
 
-### 13. PT management in ICCU — monitoring, ventilator, hyperbaric oxygen therapy
+### 26. PT management in ICCU — monitoring, ventilator, hyperbaric oxygen therapy
 
 Topic ID: `cardiovascular-iccu-monitoring-hyperbaric`
 
@@ -2647,6 +2645,811 @@ Use the cited evidence sources to prepare, then answer: Explain physiotherapy de
    - Accepted evidence wording: `ventilator coordination`; `graded mobility`; `monitoring and stop criteria`
 3. Recognize hyperbaric oxygen as a specialist medical treatment for specific accepted indications, not a routine physiotherapy modality, and follow facility safety procedures (`fda-hyperbaric-oxygen-2021`)
    - Accepted evidence wording: `specialist medical treatment`; `not routine physiotherapy`; `accepted indications and safety`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+## Sports Physiotherapy
+
+### 1. Introduction to exercise physiology (sports context)
+
+Topic ID: `spr-exercise-physiology-sports-context`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain exercise physiology in a sports context — energy systems, training adaptation, and how they inform conditioning.
+
+**Expected answer — required evidence criteria:**
+
+1. Describe energy systems and training adaptation across strength and endurance demands (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `energy systems`; `training adaptation`; `strength and endurance`
+2. Use FITT-VP framing and preparticipation screening to justify fitness prescriptions (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `FITT-VP`; `preparticipation screening`; `fitness prescription`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain exercise physiology in a sports context — energy systems, training adaptation, and how they inform conditioning. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Describe energy systems and training adaptation across strength and endurance demands (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `energy systems`; `training adaptation`; `strength and endurance`
+2. Use FITT-VP framing and preparticipation screening to justify fitness prescriptions (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `FITT-VP`; `preparticipation screening`; `fitness prescription`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 2. Sports-specific fitness (cricket, football, track & field, aquatic)
+
+Topic ID: `spr-sports-specific-fitness`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain how sport-specific fitness is assessed and trained across cricket, football, track & field, and aquatic sports.
+
+**Expected answer — required evidence criteria:**
+
+1. Assess sport-specific fitness components relevant to the sport's demands (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sport-specific fitness`; `fitness components`; `sport demands`
+2. Use sport-appropriate testing and conditioning within physiotherapy scope (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sport-appropriate testing`; `conditioning`; `within physiotherapy scope`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain how sport-specific fitness is assessed and trained across cricket, football, track & field, and aquatic sports. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Assess sport-specific fitness components relevant to the sport's demands (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sport-specific fitness`; `fitness components`; `sport demands`
+2. Use sport-appropriate testing and conditioning within physiotherapy scope (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sport-appropriate testing`; `conditioning`; `within physiotherapy scope`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 3. Advanced cardio-respiratory exercise physiology; strength training; fitness & strength testing in sports
+
+Topic ID: `spr-advanced-cardiorespiratory-strength-testing`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain advanced cardio-respiratory exercise physiology and strength training, and how fitness and strength testing informs prescription in athletes.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate cardio-respiratory physiology with strength-training principles for athletic prescription (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `cardio-respiratory physiology`; `strength training`; `athletic prescription`
+2. Use fitness and strength testing to individualize training load (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `fitness and strength testing`; `individualize training load`; `testing to prescribe`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain advanced cardio-respiratory exercise physiology and strength training, and how fitness and strength testing informs prescription in athletes. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate cardio-respiratory physiology with strength-training principles for athletic prescription (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `cardio-respiratory physiology`; `strength training`; `athletic prescription`
+2. Use fitness and strength testing to individualize training load (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `fitness and strength testing`; `individualize training load`; `testing to prescribe`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 4. Sports-specific conditioning & agility training; sports equipment
+
+Topic ID: `spr-sports-conditioning-agility-equipment`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain sports-specific conditioning and agility training, and the role of sports equipment in performance and safety.
+
+**Expected answer — required evidence criteria:**
+
+1. Combine sport-specific conditioning with agility training matched to the sport's demands (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sport-specific conditioning`; `agility training`; `matched to sport demands`
+2. Relate sports equipment to performance, protection, and safety within scope (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sports equipment`; `performance and protection`; `safety`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain sports-specific conditioning and agility training, and the role of sports equipment in performance and safety. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Combine sport-specific conditioning with agility training matched to the sport's demands (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sport-specific conditioning`; `agility training`; `matched to sport demands`
+2. Relate sports equipment to performance, protection, and safety within scope (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `sports equipment`; `performance and protection`; `safety`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 5. Assessment & diagnosis of sports injuries
+
+Topic ID: `spr-assessment-diagnosis-sports-injuries`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain a structured assessment and diagnosis of a sports injury, from mechanism and examination to a within-scope problem formulation.
+
+**Expected answer — required evidence criteria:**
+
+1. Take a mechanism, history, and examination to reach a within-scope problem formulation (`ioc-manual-sports-injuries`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `mechanism and history`; `examination`; `within-scope problem formulation`
+2. Recognise red flags and refer rather than independently diagnosing outside scope (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `red flags`; `refer`; `within scope`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain a structured assessment and diagnosis of a sports injury, from mechanism and examination to a within-scope problem formulation. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Take a mechanism, history, and examination to reach a within-scope problem formulation (`ioc-manual-sports-injuries`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `mechanism and history`; `examination`; `within-scope problem formulation`
+2. Recognise red flags and refer rather than independently diagnosing outside scope (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `red flags`; `refer`; `within scope`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 6. Principles of investigations & imaging in sports injuries
+
+Topic ID: `spr-investigations-imaging-sports-injuries`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain how investigations and imaging are used in sports injuries, integrated with the clinical question and physiotherapy relevance.
+
+**Expected answer — required evidence criteria:**
+
+1. Select investigations and imaging according to the clinical question, not as isolated tests (`ioc-manual-sports-injuries`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `investigations and imaging`; `clinical question`; `not isolated tests`
+2. Interpret imaging alongside examination and mechanism rather than in isolation (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `interpret imaging`; `examination and mechanism`; `not in isolation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain how investigations and imaging are used in sports injuries, integrated with the clinical question and physiotherapy relevance. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Select investigations and imaging according to the clinical question, not as isolated tests (`ioc-manual-sports-injuries`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `investigations and imaging`; `clinical question`; `not isolated tests`
+2. Interpret imaging alongside examination and mechanism rather than in isolation (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `interpret imaging`; `examination and mechanism`; `not in isolation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 7. Tissue healing & soft-tissue injuries of lower limb (hip, thigh, knee, leg, ankle)
+
+Topic ID: `spr-soft-tissue-injuries-lower-limb`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain tissue healing and soft-tissue injury management for the lower limb, integrating healing principles with sport-specific rehabilitation.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply tissue-healing principles to lower-limb soft-tissue injury management (`nordic-hamstring-meta-2019`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `tissue healing`; `soft-tissue injury management`; `healing principles`
+2. Use prospective surveillance and prevention evidence, not raw injury counts (`ioc-epidemiology-consensus-2020`, `nordic-hamstring-meta-2019`)
+   - Accepted evidence wording: `prospective surveillance`; `injury prevention evidence`; `not raw counts`
+3. Base return-to-sport on functional performance and patient-reported function (`wikstrom-ankle-rts-2020`)
+   - Accepted evidence wording: `return to sport`; `functional performance`; `patient-reported function`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain tissue healing and soft-tissue injury management for the lower limb, integrating healing principles with sport-specific rehabilitation. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply tissue-healing principles to lower-limb soft-tissue injury management (`nordic-hamstring-meta-2019`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `tissue healing`; `soft-tissue injury management`; `healing principles`
+2. Use prospective surveillance and prevention evidence, not raw injury counts (`ioc-epidemiology-consensus-2020`, `nordic-hamstring-meta-2019`)
+   - Accepted evidence wording: `prospective surveillance`; `injury prevention evidence`; `not raw counts`
+3. Base return-to-sport on functional performance and patient-reported function (`wikstrom-ankle-rts-2020`)
+   - Accepted evidence wording: `return to sport`; `functional performance`; `patient-reported function`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 8. Tissue healing & soft-tissue injuries of upper limb (shoulder, elbow, forearm, wrist, hand)
+
+Topic ID: `spr-soft-tissue-injuries-upper-limb`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain tissue healing and soft-tissue injury management for the upper limb, integrating healing principles with taping and rehabilitation evidence.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply tissue-healing principles to upper-limb soft-tissue injury management (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `tissue healing`; `upper-limb injury management`; `healing principles`
+2. Use taping as an adjunct for symptom modulation, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `not a replacement for rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain tissue healing and soft-tissue injury management for the upper limb, integrating healing principles with taping and rehabilitation evidence. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply tissue-healing principles to upper-limb soft-tissue injury management (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `tissue healing`; `upper-limb injury management`; `healing principles`
+2. Use taping as an adjunct for symptom modulation, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `not a replacement for rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 9. Common fractures & dislocations; spinal injuries in sports
+
+Topic ID: `spr-fractures-dislocations-spinal-injuries`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain the assessment and within-scope management of fractures, dislocations, and spinal injuries in sport, including on-field decisions and referral.
+
+**Expected answer — required evidence criteria:**
+
+1. Recognise fractures, dislocations, and spinal injuries and apply on-field escalation (`amsterdam-2022-concussion`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `fractures and dislocations`; `spinal injuries`; `on-field escalation`
+2. Refer limb-threatening or spinal red flags rather than independently managing outside scope (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `refer`; `limb-threatening`; `spinal red flags`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain the assessment and within-scope management of fractures, dislocations, and spinal injuries in sport, including on-field decisions and referral. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Recognise fractures, dislocations, and spinal injuries and apply on-field escalation (`amsterdam-2022-concussion`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `fractures and dislocations`; `spinal injuries`; `on-field escalation`
+2. Refer limb-threatening or spinal red flags rather than independently managing outside scope (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `refer`; `limb-threatening`; `spinal red flags`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 10. Overuse injuries in sports
+
+Topic ID: `spr-overuse-injuries-sports`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain overuse injuries in sport — mechanisms, risk factors, and prevention through load management and surveillance.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate overuse mechanisms to training load and recovery, not to isolated pathology (`nordic-hamstring-meta-2019`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `overuse mechanisms`; `training load`; `recovery`
+2. Use prospective surveillance and load management to prevent overuse injury (`ioc-epidemiology-consensus-2020`, `nordic-hamstring-meta-2019`)
+   - Accepted evidence wording: `prospective surveillance`; `load management`; `prevent overuse`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain overuse injuries in sport — mechanisms, risk factors, and prevention through load management and surveillance. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate overuse mechanisms to training load and recovery, not to isolated pathology (`nordic-hamstring-meta-2019`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `overuse mechanisms`; `training load`; `recovery`
+2. Use prospective surveillance and load management to prevent overuse injury (`ioc-epidemiology-consensus-2020`, `nordic-hamstring-meta-2019`)
+   - Accepted evidence wording: `prospective surveillance`; `load management`; `prevent overuse`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 11. Sports-specific problems in female, pediatric & elderly athletes
+
+Topic ID: `spr-special-populations-female-pediatric-elderly`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain sports-specific problems in female, pediatric, and elderly athletes, including energy availability and age-appropriate loading.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply REDs (Relative Energy Deficiency in Sport) concepts across male, female, pediatric, and adult athletes (`ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `Relative Energy Deficiency in Sport`; `energy availability`; `REDs`
+2. Use the IOC REDs CAT2 risk-stratification and return-to-play framework for suspected REDs (`ioc-reds-cat2-2023`)
+   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `return-to-play framework`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain sports-specific problems in female, pediatric, and elderly athletes, including energy availability and age-appropriate loading. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply REDs (Relative Energy Deficiency in Sport) concepts across male, female, pediatric, and adult athletes (`ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `Relative Energy Deficiency in Sport`; `energy availability`; `REDs`
+2. Use the IOC REDs CAT2 risk-stratification and return-to-play framework for suspected REDs (`ioc-reds-cat2-2023`)
+   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `return-to-play framework`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 12. On-field assessment & decision making; injury prevention in sports
+
+Topic ID: `spr-on-field-assessment-injury-prevention`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain on-field assessment, decision making, and injury prevention in sport, including concussion recognition and graduated return.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply the Amsterdam 2022 concussion standard: immediate removal and no same-day return to play (`amsterdam-2022-concussion`)
+   - Accepted evidence wording: `Amsterdam 2022 concussion standard`; `immediate removal`; `no same-day return`
+2. Use graduated return-to-sport and return-to-school protocols after a concussion (`amsterdam-2022-concussion`)
+   - Accepted evidence wording: `graduated return-to-sport`; `return-to-school protocols`; `graduated return`
+3. Base injury prevention on prospective surveillance rather than retrospective recall (`ioc-epidemiology-consensus-2020`, `nordic-hamstring-meta-2019`)
+   - Accepted evidence wording: `prospective surveillance`; `injury prevention`; `not retrospective recall`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain on-field assessment, decision making, and injury prevention in sport, including concussion recognition and graduated return. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Apply the Amsterdam 2022 concussion standard: immediate removal and no same-day return to play (`amsterdam-2022-concussion`)
+   - Accepted evidence wording: `Amsterdam 2022 concussion standard`; `immediate removal`; `no same-day return`
+2. Use graduated return-to-sport and return-to-school protocols after a concussion (`amsterdam-2022-concussion`)
+   - Accepted evidence wording: `graduated return-to-sport`; `return-to-school protocols`; `graduated return`
+3. Base injury prevention on prospective surveillance rather than retrospective recall (`ioc-epidemiology-consensus-2020`, `nordic-hamstring-meta-2019`)
+   - Accepted evidence wording: `prospective surveillance`; `injury prevention`; `not retrospective recall`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 13. Doping & performance-enhancing drugs
+
+Topic ID: `spr-doping-performance-enhancing-drugs`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain doping and performance-enhancing drugs in sport, including the WADA Prohibited List and the therapeutic use exemption framework.
+
+**Expected answer — required evidence criteria:**
+
+1. Cite the current (2026) WADA Prohibited List for in- and out-of-competition banned substances and methods (`wada-prohibited-list-2026`)
+   - Accepted evidence wording: `WADA Prohibited List`; `banned substances`; `prohibited methods`
+2. Explain that legitimate therapeutic use requires a Therapeutic Use Exemption (TUE) (`wada-prohibited-list-2026`)
+   - Accepted evidence wording: `Therapeutic Use Exemption`; `TUE`; `legitimate therapeutic use`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain doping and performance-enhancing drugs in sport, including the WADA Prohibited List and the therapeutic use exemption framework. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Cite the current (2026) WADA Prohibited List for in- and out-of-competition banned substances and methods (`wada-prohibited-list-2026`)
+   - Accepted evidence wording: `WADA Prohibited List`; `banned substances`; `prohibited methods`
+2. Explain that legitimate therapeutic use requires a Therapeutic Use Exemption (TUE) (`wada-prohibited-list-2026`)
+   - Accepted evidence wording: `Therapeutic Use Exemption`; `TUE`; `legitimate therapeutic use`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 14. Principles of sports injury management
+
+Topic ID: `spr-sports-injury-management-principles`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain the principles of sports injury management, from acute care through structured rehabilitation and return-to-sport decisions.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate acute care, rehabilitation, and return-to-sport within a structured pathway (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `acute care`; `rehabilitation`; `return-to-sport pathway`
+2. Separate physiotherapy scope from medical decisions about surgery and return clearance (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `physiotherapy scope`; `medical decisions`; `surgery and return clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain the principles of sports injury management, from acute care through structured rehabilitation and return-to-sport decisions. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate acute care, rehabilitation, and return-to-sport within a structured pathway (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `acute care`; `rehabilitation`; `return-to-sport pathway`
+2. Separate physiotherapy scope from medical decisions about surgery and return clearance (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `physiotherapy scope`; `medical decisions`; `surgery and return clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 15. Surgical management & rehabilitation (incl. arthroscopic surgery) for sports injuries
+
+Topic ID: `spr-surgical-management-rehab-arthroscopy`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain physiotherapy around surgical management and arthroscopy for sports injuries, from preoperative optimization through rehabilitation and return-to-sport.
+
+**Expected answer — required evidence criteria:**
+
+1. Assess and optimize modifiable functional risks and engage the person before surgery (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `preoperative assessment`; `optimize functional risks`; `engage before surgery`
+2. Coordinate postoperative rehabilitation within surgical and team-defined safety limits (`ioc-manual-sports-injuries`, `welling-acl-rts-2024`)
+   - Accepted evidence wording: `postoperative rehabilitation`; `surgical safety limits`; `team-defined limits`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain physiotherapy around surgical management and arthroscopy for sports injuries, from preoperative optimization through rehabilitation and return-to-sport. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Assess and optimize modifiable functional risks and engage the person before surgery (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `preoperative assessment`; `optimize functional risks`; `engage before surgery`
+2. Coordinate postoperative rehabilitation within surgical and team-defined safety limits (`ioc-manual-sports-injuries`, `welling-acl-rts-2024`)
+   - Accepted evidence wording: `postoperative rehabilitation`; `surgical safety limits`; `team-defined limits`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — APPLIED / RECALL_SPRINT
+
+Using the fictional case, outline a criteria-based return-to-sport progression that combines physical, hop, and psychological readiness, and state the residual risk.
+
+**Fictional case:** A fictional 19-year-old ruptured the ACL during football and is 8 months post-reconstruction, has >=90% limb symmetry index on hop testing, and is anxious about returning to competitive play.
+
+**Reviewed follow-up questions:**
+
+- PROBE: Which single test would most change your return-to-sport decision, and why?
+
+**Expected answer — required evidence criteria:**
+
+1. Combine strength, hop battery, and psychological readiness for return-to-sport, not time since surgery alone (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `strength and hop battery`; `psychological readiness`; `not time since surgery alone`
+2. Acknowledge residual second-ACL-injury risk and use shared decision-making for progressive loading (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `residual second-ACL-injury risk`; `shared decision-making`; `progressive loading`
+3. Define sport-specific progressive loading with ongoing monitoring and reassessment (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `sport-specific progressive loading`; `ongoing monitoring`; `reassessment`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — VIVA / RECALL_SPRINT
+
+Defend your return-to-sport plan for the fictional ACL case, separate what the 2024 evidence supports from what is patient-specific, and state what would pause progression.
+
+**Fictional case:** A fictional 19-year-old ruptured the ACL during football and is 8 months post-reconstruction, has >=90% limb symmetry index on hop testing, and is anxious about returning to competitive play.
+
+**Reviewed follow-up questions:**
+
+- PROBE: Which single test would most change your return-to-sport decision, and why?
+- EVIDENCE_UPDATE: The person reports a new giving-way episode during sport-specific drills. Explain why progression pauses and what reassessment is required before returning.
+
+**Expected answer — required evidence criteria:**
+
+1. Defend criteria-based RTS using strength, hop, and psychological readiness (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `criteria-based return-to-sport`; `strength hop psychological readiness`; `2024 evidence`
+2. Acknowledge residual risk and individual response uncertainty (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `residual risk`; `individual response`; `uncertainty`
+3. State that new instability or recurrent symptoms pause progression and trigger reassessment (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `pause progression`; `reassessment`; `recurrent symptoms`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 16. Injury & sports-specific management; management of overuse injuries
+
+Topic ID: `spr-injury-specific-overuse-management`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain injury- and sports-specific management of overuse injuries, integrating load management with rehabilitation and return-to-sport criteria.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate load management with rehabilitation for overuse injuries (`ioc-manual-sports-injuries`, `welling-acl-rts-2024`)
+   - Accepted evidence wording: `load management`; `overuse rehabilitation`; `integrate load and rehab`
+2. Use return-to-sport criteria rather than time alone for overuse injuries (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `return-to-sport criteria`; `not time alone`; `overuse RTS`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain injury- and sports-specific management of overuse injuries, integrating load management with rehabilitation and return-to-sport criteria. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate load management with rehabilitation for overuse injuries (`ioc-manual-sports-injuries`, `welling-acl-rts-2024`)
+   - Accepted evidence wording: `load management`; `overuse rehabilitation`; `integrate load and rehab`
+2. Use return-to-sport criteria rather than time alone for overuse injuries (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `return-to-sport criteria`; `not time alone`; `overuse RTS`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 17. Electrotherapy in sports rehabilitation; rehabilitation of sports injuries
+
+Topic ID: `spr-electrotherapy-sports-rehabilitation`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain the role of electrotherapy in sports rehabilitation, integrated with active rehabilitation and return-to-sport decisions.
+
+**Expected answer — required evidence criteria:**
+
+1. Use electrotherapy as an adjunct within a rehabilitation pathway, not as a standalone treatment (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `electrotherapy adjunct`; `rehabilitation pathway`; `not standalone`
+2. Separate electrotherapy use from return-to-sport clearance decisions (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `electrotherapy use`; `return-to-sport clearance`; `separate from clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain the role of electrotherapy in sports rehabilitation, integrated with active rehabilitation and return-to-sport decisions. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Use electrotherapy as an adjunct within a rehabilitation pathway, not as a standalone treatment (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `electrotherapy adjunct`; `rehabilitation pathway`; `not standalone`
+2. Separate electrotherapy use from return-to-sport clearance decisions (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `electrotherapy use`; `return-to-sport clearance`; `separate from clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 18. Musculoskeletal screening of athletes (pre-season, in-season, post-season)
+
+Topic ID: `spr-msk-screening-athletes-season`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain musculoskeletal screening of athletes across pre-season, in-season, and post-season, and how it informs prevention and load management.
+
+**Expected answer — required evidence criteria:**
+
+1. Use prospective screening across the season cycle to inform prevention and load management (`ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `prospective screening`; `pre-season in-season post-season`; `prevention and load management`
+2. Interpret screening findings with the clinical question and ongoing monitoring (`ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `interpret screening`; `clinical question`; `ongoing monitoring`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain musculoskeletal screening of athletes across pre-season, in-season, and post-season, and how it informs prevention and load management. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Use prospective screening across the season cycle to inform prevention and load management (`ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `prospective screening`; `pre-season in-season post-season`; `prevention and load management`
+2. Interpret screening findings with the clinical question and ongoing monitoring (`ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `interpret screening`; `clinical question`; `ongoing monitoring`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 19. Taping techniques & recent advances in sports rehabilitation
+
+Topic ID: `spr-taping-advances-sports-rehabilitation`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain taping techniques and recent advances in sports rehabilitation, including the evidence and its limits as an adjunct.
+
+**Expected answer — required evidence criteria:**
+
+1. Use taping as an adjunct for symptom modulation and proprioception, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `proprioception`; `not a replacement for rehabilitation`
+2. Cite the certainty of evidence rather than anecdote when defending taping use (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `certainty of evidence`; `not anecdote`; `cite the evidence`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain taping techniques and recent advances in sports rehabilitation, including the evidence and its limits as an adjunct. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Use taping as an adjunct for symptom modulation and proprioception, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `proprioception`; `not a replacement for rehabilitation`
+2. Cite the certainty of evidence rather than anecdote when defending taping use (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `certainty of evidence`; `not anecdote`; `cite the evidence`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 20. Diet & sports (pre-session diet, pre-game meal, carbohydrate loading, high-fat/high-protein diet)
+
+Topic ID: `spr-diet-sports-carbohydrate-loading`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain diet in sports — pre-session, pre-game, carbohydrate loading, and high-fat/high-protein considerations within physiotherapy scope.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate dietary intake to training load and energy availability, not to isolated nutrients (`acsm-getp-12th-2025`, `ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `dietary intake`; `training load`; `energy availability`
+2. Stay within physiotherapy scope: advise on intake relative to training, not prescriptive dietary plans (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `within physiotherapy scope`; `intake relative to training`; `not prescriptive dietary plans`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain diet in sports — pre-session, pre-game, carbohydrate loading, and high-fat/high-protein considerations within physiotherapy scope. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate dietary intake to training load and energy availability, not to isolated nutrients (`acsm-getp-12th-2025`, `ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `dietary intake`; `training load`; `energy availability`
+2. Stay within physiotherapy scope: advise on intake relative to training, not prescriptive dietary plans (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `within physiotherapy scope`; `intake relative to training`; `not prescriptive dietary plans`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 21. Evidence-based sports rehabilitation & return-to-sports criteria
+
+Topic ID: `spr-ebp-sports-return-to-sports`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain evidence-based sports rehabilitation and return-to-sport criteria, integrating functional performance, patient-reported outcomes, and shared decision-making.
+
+**Expected answer — required evidence criteria:**
+
+1. Combine functional performance and patient-reported outcomes for return-to-sport, not time alone (`wikstrom-ankle-rts-2020`, `welling-acl-rts-2024`)
+   - Accepted evidence wording: `functional performance`; `patient-reported outcomes`; `not time alone`
+2. Use shared decision-making and ongoing monitoring for return-to-sport clearance (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `shared decision-making`; `ongoing monitoring`; `return-to-sport clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain evidence-based sports rehabilitation and return-to-sport criteria, integrating functional performance, patient-reported outcomes, and shared decision-making. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Combine functional performance and patient-reported outcomes for return-to-sport, not time alone (`wikstrom-ankle-rts-2020`, `welling-acl-rts-2024`)
+   - Accepted evidence wording: `functional performance`; `patient-reported outcomes`; `not time alone`
+2. Use shared decision-making and ongoing monitoring for return-to-sport clearance (`welling-acl-rts-2024`)
+   - Accepted evidence wording: `shared decision-making`; `ongoing monitoring`; `return-to-sport clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 22. Problems in female athletes; menstrual synchrony; preventive strategies
+
+Topic ID: `spr-female-athletes-menstrual-preventive`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain problems in female athletes, including menstrual function, and preventive strategies grounded in energy availability.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate menstrual dysfunction to low energy availability and training load, using the REDs framework (`ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `menstrual dysfunction`; `low energy availability`; `REDs framework`
+2. Use the IOC REDs CAT2 for risk stratification and preventive strategies (`ioc-reds-cat2-2023`)
+   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `preventive strategies`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain problems in female athletes, including menstrual function, and preventive strategies grounded in energy availability. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate menstrual dysfunction to low energy availability and training load, using the REDs framework (`ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `menstrual dysfunction`; `low energy availability`; `REDs framework`
+2. Use the IOC REDs CAT2 for risk stratification and preventive strategies (`ioc-reds-cat2-2023`)
+   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `preventive strategies`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2706,6 +3509,17 @@ Reviewer notes: ________________________________________________________________
 - `cns-pediatric-hydrocephalus-2020` — Congress of Neurological Surgeons. Pediatric Hydrocephalus: Systematic Literature Review and Evidence-Based Guidelines. Updated 2020. https://www.cns.org/guidelines/browse-guidelines-detail/pediatric-hydrocephalus-guideline-1 (accessed 2026-09-02)
 - `aha-adult-als-2025` — American Heart Association. Part 9: Adult Advanced Life Support. 2025 AHA Guidelines for CPR and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2). https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-life-support (accessed 2026-09-02)
 - `fda-hyperbaric-oxygen-2021` — US Food and Drug Administration. Hyperbaric Oxygen Therapy: Get the Facts. Consumer safety communication; content current as of 26 July 2021. https://www.fda.gov/consumers/consumer-updates/hyperbaric-oxygen-therapy-get-facts (accessed 2026-09-02)
+- `wada-prohibited-list-2026` — World Anti-Doping Agency. The Prohibited List (2026 List, effective 1 January 2026). Montreal: WADA. https://www.wada-ama.org/en/what-we-do/the-prohibited-list (accessed 2026-08-30)
+- `ioc-epidemiology-consensus-2020` — Bahr R, Clarsen B, Derman W, Dvorak J, Emery CA, et al. IOC consensus statement: methods for recording and reporting of epidemiological data on injury and illness in sport 2020 (STROBE-SIIS). Orthop J Sports Med. 2020;8(2):2325967120902908. doi:10.1177/2325967120902908. https://doi.org/10.1177/2325967120902908 (accessed 2026-08-30)
+- `amsterdam-2022-concussion` — Schneider KJ, Patricios JS. Amsterdam 2022 international consensus on concussion in sport. Br J Sports Med. 2023;57(11):615-616. doi:10.1136/bjsports-2023-107127. https://doi.org/10.1136/bjsports-2023-107127 (accessed 2026-08-30)
+- `nordic-hamstring-meta-2019` — van Dyk N, Behan FP, Whiteley R. Nordic hamstring exercise in injury prevention programmes halves the rate of hamstring injuries: systematic review and meta-analysis of 8459 athletes. Br J Sports Med. 2019;53(21):1362-1370. doi:10.1136/bjsports-2018-100045. https://doi.org/10.1136/bjsports-2018-100045 (accessed 2026-08-30)
+- `ioc-reds-consensus-2023` — Mountjoy M, Ackerman KE, et al. 2023 IOC consensus statement on Relative Energy Deficiency in Sport (REDs). Br J Sports Med. 2023;57(17):1073-1098. doi:10.1136/bjsports-2023-106994. https://doi.org/10.1136/bjsports-2023-106994 (accessed 2026-08-30)
+- `ioc-reds-cat2-2023` — Mountjoy M, Ackerman KE, Stellingwerff T, et al. IOC REDs CAT2 clinical assessment tool. Br J Sports Med. 2023;57(17):1068-1069. doi:10.1136/bjsports-2023-107549. https://doi.org/10.1136/bjsports-2023-107549 (accessed 2026-08-30)
+- `ioc-manual-sports-injuries` — Caine D, Caine C, Lindner K (eds). IOC Manual of Sports Injuries. Chichester: Wiley-Blackwell; 2012. ISBN 978-0-470-67495-5. doi:10.1002/9781118467947. https://doi.org/10.1002/9781118467947 (accessed 2026-08-30)
+- `cochrane-kt-rotator-cuff-2021` — Gianola S, et al. Kinesio taping for rotator cuff disease. Cochrane Database Syst Rev. 2021;(8):CD012720. doi:10.1002/14651858.CD012720.pub2. https://doi.org/10.1002/14651858.CD012720.pub2 (accessed 2026-08-30)
+- `wikstrom-ankle-rts-2020` — Wikstrom EA, Mueller C, Cain MS. Lack of consensus on return-to-sport criteria following lateral ankle sprain: systematic review of expert opinions. J Sport Rehabil. 2020;29(2):231-237. doi:10.1123/jsr.2019-0038. https://doi.org/10.1123/jsr.2019-0038 (accessed 2026-08-30)
+- `acsm-getp-12th-2025` — American College of Sports Medicine. ACSM's Guidelines for Exercise Testing and Prescription, 12th ed. Philadelphia: Wolters Kluwer; 2025. ISBN 9781975219215. https://doi.org/10.1249/FIT.0000000000001036 (accessed 2026-08-30)
+- `welling-acl-rts-2024` — Welling W. Return to sports after an ACL reconstruction in 2024 - A glass half full? A narrative review. Phys Ther Sport. 2024;69:51-59. doi:10.1016/j.ptsp.2024.05.001. https://doi.org/10.1016/j.ptsp.2024.05.001 (accessed 2026-08-30)
 
 ## Final disposition
 

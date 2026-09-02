@@ -36,18 +36,17 @@ describe("loadBundledPack", () => {
       "Applied Physiotherapeutics",
       "Musculoskeletal Physiotherapy",
       "Neuro Physiotherapy",
-      "Respiratory Physiotherapy",
-      "Cardiovascular Physiotherapy",
+      "Cardiovascular & Respiratory Physiotherapy",
       "Community Health Physiotherapy",
       "Sports Physiotherapy",
     ]);
-    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(265);
+    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(253);
     expect(
       result.pack.subjects.filter((subject) => subject.availability === "ACTIVE"),
     ).toHaveLength(3);
     expect(
       result.pack.subjects.filter((subject) => subject.availability === "COMING_SOON"),
-    ).toHaveLength(5);
+    ).toHaveLength(4);
     expect(Object.isFrozen(result.pack)).toBe(true);
   });
 
@@ -66,7 +65,7 @@ describe("loadBundledPack", () => {
     expect(result.source).toBe("COMPILED_FALLBACK");
     expect(result.warning).toMatch(/active offline/i);
     expect(result.pack.contentKind).toBe("MEDICAL");
-    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(265);
+    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(253);
   });
 
   it("rejects an oversized response before reading its body", async () => {

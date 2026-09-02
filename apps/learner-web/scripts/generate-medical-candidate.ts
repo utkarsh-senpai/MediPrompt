@@ -424,6 +424,84 @@ const sources = [
     url: "https://www.fda.gov/consumers/consumer-updates/hyperbaric-oxygen-therapy-get-facts",
     accessedAt: NEURO_RESEARCH_ACCESSED_AT,
   },
+  // --- v0.8 sports physiotherapy sources (verified 2026-09-02) ---
+  {
+    sourceId: "wada-prohibited-list-2026",
+    citation:
+      "World Anti-Doping Agency. The Prohibited List (2026 List, effective 1 January 2026). Montreal: WADA.",
+    url: "https://www.wada-ama.org/en/what-we-do/the-prohibited-list",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-epidemiology-consensus-2020",
+    citation:
+      "Bahr R, Clarsen B, Derman W, Dvorak J, Emery CA, et al. IOC consensus statement: methods for recording and reporting of epidemiological data on injury and illness in sport 2020 (STROBE-SIIS). Orthop J Sports Med. 2020;8(2):2325967120902908. doi:10.1177/2325967120902908.",
+    url: "https://doi.org/10.1177/2325967120902908",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "amsterdam-2022-concussion",
+    citation:
+      "Schneider KJ, Patricios JS. Amsterdam 2022 international consensus on concussion in sport. Br J Sports Med. 2023;57(11):615-616. doi:10.1136/bjsports-2023-107127.",
+    url: "https://doi.org/10.1136/bjsports-2023-107127",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "nordic-hamstring-meta-2019",
+    citation:
+      "van Dyk N, Behan FP, Whiteley R. Nordic hamstring exercise in injury prevention programmes halves the rate of hamstring injuries: systematic review and meta-analysis of 8459 athletes. Br J Sports Med. 2019;53(21):1362-1370. doi:10.1136/bjsports-2018-100045.",
+    url: "https://doi.org/10.1136/bjsports-2018-100045",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-reds-consensus-2023",
+    citation:
+      "Mountjoy M, Ackerman KE, et al. 2023 IOC consensus statement on Relative Energy Deficiency in Sport (REDs). Br J Sports Med. 2023;57(17):1073-1098. doi:10.1136/bjsports-2023-106994.",
+    url: "https://doi.org/10.1136/bjsports-2023-106994",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-reds-cat2-2023",
+    citation:
+      "Mountjoy M, Ackerman KE, Stellingwerff T, et al. IOC REDs CAT2 clinical assessment tool. Br J Sports Med. 2023;57(17):1068-1069. doi:10.1136/bjsports-2023-107549.",
+    url: "https://doi.org/10.1136/bjsports-2023-107549",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-manual-sports-injuries",
+    citation:
+      "Caine D, Caine C, Lindner K (eds). IOC Manual of Sports Injuries. Chichester: Wiley-Blackwell; 2012. ISBN 978-0-470-67495-5. doi:10.1002/9781118467947.",
+    url: "https://doi.org/10.1002/9781118467947",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "cochrane-kt-rotator-cuff-2021",
+    citation:
+      "Gianola S, et al. Kinesio taping for rotator cuff disease. Cochrane Database Syst Rev. 2021;(8):CD012720. doi:10.1002/14651858.CD012720.pub2.",
+    url: "https://doi.org/10.1002/14651858.CD012720.pub2",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "wikstrom-ankle-rts-2020",
+    citation:
+      "Wikstrom EA, Mueller C, Cain MS. Lack of consensus on return-to-sport criteria following lateral ankle sprain: systematic review of expert opinions. J Sport Rehabil. 2020;29(2):231-237. doi:10.1123/jsr.2019-0038.",
+    url: "https://doi.org/10.1123/jsr.2019-0038",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "acsm-getp-12th-2025",
+    citation:
+      "American College of Sports Medicine. ACSM's Guidelines for Exercise Testing and Prescription, 12th ed. Philadelphia: Wolters Kluwer; 2025. ISBN 9781975219215.",
+    url: "https://doi.org/10.1249/FIT.0000000000001036",
+    accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "welling-acl-rts-2024",
+    citation:
+      "Welling W. Return to sports after an ACL reconstruction in 2024 - A glass half full? A narrative review. Phys Ther Sport. 2024;69:51-59. doi:10.1016/j.ptsp.2024.05.001.",
+    url: "https://doi.org/10.1016/j.ptsp.2024.05.001",
+    accessedAt: ACCESSED_AT,
+  },
 ];
 
 const respiratoryTopics: TopicSeed[] = [
@@ -1602,42 +1680,258 @@ const comScaffolds: ReadonlyArray<readonly [string, string]> = [
   ["com-community-ebp-cross-cutting", "Evidence-based practice in community health (cross-cutting)"],
 ];
 
-// Subject 7 — Sports Physiotherapy (34 scaffold topics)
-const sprScaffolds: ReadonlyArray<readonly [string, string]> = [
-  ["spr-introduction-sports-sciences", "Introduction to sports sciences"],
-  ["spr-exercise-physiology-sports-context", "Introduction to exercise physiology (sports context)"],
-  ["spr-cricket-football-basketball-hockey", "Cricket, football, basketball & hockey — terminology, methodology, rules, equipment"],
-  ["spr-tennis-track-field-aquatic", "Tennis, track & field, aquatic sports — terminology, methodology, rules, equipment"],
-  ["spr-assessment-diagnosis-sports-injuries", "Assessment & diagnosis of sports injuries"],
-  ["spr-sports-specific-fitness", "Sports-specific fitness (cricket, football, track & field, aquatic)"],
-  ["spr-sports-biomechanics-injury", "Principles of sports biomechanics & biomechanics of injury"],
-  ["spr-physics-running-throwing-swimming-jumping", "Physics in sports — biomechanics of running, throwing, swimming & jumping"],
-  ["spr-advanced-cardiorespiratory-strength-testing", "Advanced cardio-respiratory exercise physiology; strength training; fitness & strength testing"],
-  ["spr-sports-conditioning-agility-equipment", "Sports-specific conditioning & agility training; sports equipment"],
-  ["spr-psychological-aspects-sports", "Psychological aspects in sports (grief/loss models, cognitive stress & emotional response)"],
-  ["spr-doping-performance-enhancing-drugs", "Doping & performance-enhancing drugs"],
-  ["spr-protective-equipment-orthotics-traumatology", "Protective equipment in sports incl. orthotics; sports traumatology"],
-  ["spr-investigations-imaging-sports-injuries", "Principles of investigations & imaging in sports injuries"],
-  ["spr-soft-tissue-injuries-lower-limb", "Tissue healing & soft-tissue injuries of lower limb (hip, thigh, knee, leg, ankle)"],
-  ["spr-soft-tissue-injuries-upper-limb", "Tissue healing & soft-tissue injuries of upper limb (shoulder, elbow, forearm, wrist, hand)"],
-  ["spr-fractures-dislocations-spinal-injuries", "Common fractures & dislocations; spinal injuries in sports"],
-  ["spr-overuse-injuries-sports", "Overuse injuries in sports"],
-  ["spr-special-populations-female-pediatric-elderly", "Sports-specific problems in female, pediatric & elderly athletes"],
-  ["spr-on-field-assessment-injury-prevention", "On-field assessment & decision making; injury prevention in sports"],
-  ["spr-sports-injury-management-principles", "Principles of sports injury management"],
-  ["spr-sports-psychology-training", "Specific psychology management in sports; sports-specific training"],
-  ["spr-advanced-sports-assessment-acute-management", "Advanced sports assessment skills; initial management of acute sports injuries"],
-  ["spr-surgical-management-rehab-arthroscopy", "Surgical management & rehabilitation (incl. arthroscopic surgery) for sports injuries"],
-  ["spr-injury-specific-overuse-management", "Injury & sports-specific management; management of overuse injuries"],
-  ["spr-electrotherapy-sports-rehabilitation", "Electrotherapy in sports rehabilitation; rehabilitation of sports injuries"],
-  ["spr-manual-therapy-sports-peripheral", "Manual therapy techniques in sports (McKenzie, Maitland, Cyriax, Mulligan, positional release)"],
-  ["spr-manual-therapy-sports-myofascial-neurodynamics", "Manual therapy in sports — myofascial release, muscle energy, neurodynamics"],
-  ["spr-msk-screening-athletes-season", "Musculoskeletal screening of athletes (pre-season, in-season, post-season)"],
-  ["spr-sports-special-populations-challenged", "Sports management of special populations (geriatric, physically challenged athletes)"],
-  ["spr-taping-advances-sports-rehabilitation", "Taping techniques & recent advances in sports rehabilitation"],
-  ["spr-diet-sports-carbohydrate-loading", "Diet & sports (pre-session diet, pre-game meal, carbohydrate loading, high-fat/high-protein diet)"],
-  ["spr-ebp-sports-return-to-sports", "Evidence-based sports rehabilitation & return-to-sports criteria"],
-  ["spr-female-athletes-menstrual-preventive", "Problems in female athletes; menstrual synchrony; preventive strategies"],
+// Subject 7 — Sports Physiotherapy
+// v0.8: 20 topics authored with verified 2025-26 sources; 14 curriculum topics whose only sources are
+// unverified textbooks (NSCA, manual-therapy, sports-biomechanics) are omitted rather than fabricated.
+const sportsTopics: TopicSeed[] = [
+  {
+    topicId: "spr-exercise-physiology-sports-context",
+    title: "Introduction to exercise physiology (sports context)",
+    prompt:
+      "Explain exercise physiology in a sports context — energy systems, training adaptation, and how they inform conditioning.",
+    concepts: [
+      c("Describe energy systems and training adaptation across strength and endurance demands", ["energy systems", "training adaptation", "strength and endurance"], ["acsm-getp-12th-2025"]),
+      c("Use FITT-VP framing and preparticipation screening to justify fitness prescriptions", ["FITT-VP", "preparticipation screening", "fitness prescription"], ["acsm-getp-12th-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-sports-specific-fitness",
+    title: "Sports-specific fitness (cricket, football, track & field, aquatic)",
+    prompt:
+      "Explain how sport-specific fitness is assessed and trained across cricket, football, track & field, and aquatic sports.",
+    concepts: [
+      c("Assess sport-specific fitness components relevant to the sport's demands", ["sport-specific fitness", "fitness components", "sport demands"], ["acsm-getp-12th-2025"]),
+      c("Use sport-appropriate testing and conditioning within physiotherapy scope", ["sport-appropriate testing", "conditioning", "within physiotherapy scope"], ["acsm-getp-12th-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-advanced-cardiorespiratory-strength-testing",
+    title: "Advanced cardio-respiratory exercise physiology; strength training; fitness & strength testing in sports",
+    prompt:
+      "Explain advanced cardio-respiratory exercise physiology and strength training, and how fitness and strength testing informs prescription in athletes.",
+    concepts: [
+      c("Integrate cardio-respiratory physiology with strength-training principles for athletic prescription", ["cardio-respiratory physiology", "strength training", "athletic prescription"], ["acsm-getp-12th-2025"]),
+      c("Use fitness and strength testing to individualize training load", ["fitness and strength testing", "individualize training load", "testing to prescribe"], ["acsm-getp-12th-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-sports-conditioning-agility-equipment",
+    title: "Sports-specific conditioning & agility training; sports equipment",
+    prompt:
+      "Explain sports-specific conditioning and agility training, and the role of sports equipment in performance and safety.",
+    concepts: [
+      c("Combine sport-specific conditioning with agility training matched to the sport's demands", ["sport-specific conditioning", "agility training", "matched to sport demands"], ["acsm-getp-12th-2025"]),
+      c("Relate sports equipment to performance, protection, and safety within scope", ["sports equipment", "performance and protection", "safety"], ["acsm-getp-12th-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-assessment-diagnosis-sports-injuries",
+    title: "Assessment & diagnosis of sports injuries",
+    prompt:
+      "Explain a structured assessment and diagnosis of a sports injury, from mechanism and examination to a within-scope problem formulation.",
+    concepts: [
+      c("Take a mechanism, history, and examination to reach a within-scope problem formulation", ["mechanism and history", "examination", "within-scope problem formulation"], ["ioc-manual-sports-injuries", "ioc-epidemiology-consensus-2020"]),
+      c("Recognise red flags and refer rather than independently diagnosing outside scope", ["red flags", "refer", "within scope"], ["ioc-manual-sports-injuries"]),
+    ],
+  },
+  {
+    topicId: "spr-investigations-imaging-sports-injuries",
+    title: "Principles of investigations & imaging in sports injuries",
+    prompt:
+      "Explain how investigations and imaging are used in sports injuries, integrated with the clinical question and physiotherapy relevance.",
+    concepts: [
+      c("Select investigations and imaging according to the clinical question, not as isolated tests", ["investigations and imaging", "clinical question", "not isolated tests"], ["ioc-manual-sports-injuries", "ioc-epidemiology-consensus-2020"]),
+      c("Interpret imaging alongside examination and mechanism rather than in isolation", ["interpret imaging", "examination and mechanism", "not in isolation"], ["ioc-manual-sports-injuries"]),
+    ],
+  },
+  {
+    topicId: "spr-soft-tissue-injuries-lower-limb",
+    title: "Tissue healing & soft-tissue injuries of lower limb (hip, thigh, knee, leg, ankle)",
+    prompt:
+      "Explain tissue healing and soft-tissue injury management for the lower limb, integrating healing principles with sport-specific rehabilitation.",
+    concepts: [
+      c("Apply tissue-healing principles to lower-limb soft-tissue injury management", ["tissue healing", "soft-tissue injury management", "healing principles"], ["nordic-hamstring-meta-2019", "ioc-manual-sports-injuries"]),
+      c("Use prospective surveillance and prevention evidence, not raw injury counts", ["prospective surveillance", "injury prevention evidence", "not raw counts"], ["ioc-epidemiology-consensus-2020", "nordic-hamstring-meta-2019"]),
+      c("Base return-to-sport on functional performance and patient-reported function", ["return to sport", "functional performance", "patient-reported function"], ["wikstrom-ankle-rts-2020"]),
+    ],
+  },
+  {
+    topicId: "spr-soft-tissue-injuries-upper-limb",
+    title: "Tissue healing & soft-tissue injuries of upper limb (shoulder, elbow, forearm, wrist, hand)",
+    prompt:
+      "Explain tissue healing and soft-tissue injury management for the upper limb, integrating healing principles with taping and rehabilitation evidence.",
+    concepts: [
+      c("Apply tissue-healing principles to upper-limb soft-tissue injury management", ["tissue healing", "upper-limb injury management", "healing principles"], ["ioc-manual-sports-injuries"]),
+      c("Use taping as an adjunct for symptom modulation, not as a replacement for active rehabilitation", ["taping adjunct", "symptom modulation", "not a replacement for rehabilitation"], ["cochrane-kt-rotator-cuff-2021"]),
+    ],
+  },
+  {
+    topicId: "spr-fractures-dislocations-spinal-injuries",
+    title: "Common fractures & dislocations; spinal injuries in sports",
+    prompt:
+      "Explain the assessment and within-scope management of fractures, dislocations, and spinal injuries in sport, including on-field decisions and referral.",
+    concepts: [
+      c("Recognise fractures, dislocations, and spinal injuries and apply on-field escalation", ["fractures and dislocations", "spinal injuries", "on-field escalation"], ["amsterdam-2022-concussion", "ioc-manual-sports-injuries"]),
+      c("Refer limb-threatening or spinal red flags rather than independently managing outside scope", ["refer", "limb-threatening", "spinal red flags"], ["ioc-manual-sports-injuries"]),
+    ],
+  },
+  {
+    topicId: "spr-overuse-injuries-sports",
+    title: "Overuse injuries in sports",
+    prompt:
+      "Explain overuse injuries in sport — mechanisms, risk factors, and prevention through load management and surveillance.",
+    concepts: [
+      c("Relate overuse mechanisms to training load and recovery, not to isolated pathology", ["overuse mechanisms", "training load", "recovery"], ["nordic-hamstring-meta-2019", "ioc-epidemiology-consensus-2020"]),
+      c("Use prospective surveillance and load management to prevent overuse injury", ["prospective surveillance", "load management", "prevent overuse"], ["ioc-epidemiology-consensus-2020", "nordic-hamstring-meta-2019"]),
+    ],
+  },
+  {
+    topicId: "spr-special-populations-female-pediatric-elderly",
+    title: "Sports-specific problems in female, pediatric & elderly athletes",
+    prompt:
+      "Explain sports-specific problems in female, pediatric, and elderly athletes, including energy availability and age-appropriate loading.",
+    concepts: [
+      c("Apply REDs (Relative Energy Deficiency in Sport) concepts across male, female, pediatric, and adult athletes", ["Relative Energy Deficiency in Sport", "energy availability", "REDs"], ["ioc-reds-consensus-2023"]),
+      c("Use the IOC REDs CAT2 risk-stratification and return-to-play framework for suspected REDs", ["IOC REDs CAT2", "risk stratification", "return-to-play framework"], ["ioc-reds-cat2-2023"]),
+    ],
+  },
+  {
+    topicId: "spr-on-field-assessment-injury-prevention",
+    title: "On-field assessment & decision making; injury prevention in sports",
+    prompt:
+      "Explain on-field assessment, decision making, and injury prevention in sport, including concussion recognition and graduated return.",
+    concepts: [
+      c("Apply the Amsterdam 2022 concussion standard: immediate removal and no same-day return to play", ["Amsterdam 2022 concussion standard", "immediate removal", "no same-day return"], ["amsterdam-2022-concussion"]),
+      c("Use graduated return-to-sport and return-to-school protocols after a concussion", ["graduated return-to-sport", "return-to-school protocols", "graduated return"], ["amsterdam-2022-concussion"]),
+      c("Base injury prevention on prospective surveillance rather than retrospective recall", ["prospective surveillance", "injury prevention", "not retrospective recall"], ["ioc-epidemiology-consensus-2020", "nordic-hamstring-meta-2019"]),
+    ],
+  },
+  {
+    topicId: "spr-doping-performance-enhancing-drugs",
+    title: "Doping & performance-enhancing drugs",
+    prompt:
+      "Explain doping and performance-enhancing drugs in sport, including the WADA Prohibited List and the therapeutic use exemption framework.",
+    concepts: [
+      c("Cite the current (2026) WADA Prohibited List for in- and out-of-competition banned substances and methods", ["WADA Prohibited List", "banned substances", "prohibited methods"], ["wada-prohibited-list-2026"]),
+      c("Explain that legitimate therapeutic use requires a Therapeutic Use Exemption (TUE)", ["Therapeutic Use Exemption", "TUE", "legitimate therapeutic use"], ["wada-prohibited-list-2026"]),
+    ],
+  },
+  {
+    topicId: "spr-sports-injury-management-principles",
+    title: "Principles of sports injury management",
+    prompt:
+      "Explain the principles of sports injury management, from acute care through structured rehabilitation and return-to-sport decisions.",
+    concepts: [
+      c("Integrate acute care, rehabilitation, and return-to-sport within a structured pathway", ["acute care", "rehabilitation", "return-to-sport pathway"], ["ioc-manual-sports-injuries"]),
+      c("Separate physiotherapy scope from medical decisions about surgery and return clearance", ["physiotherapy scope", "medical decisions", "surgery and return clearance"], ["ioc-manual-sports-injuries"]),
+    ],
+  },
+  {
+    topicId: "spr-surgical-management-rehab-arthroscopy",
+    title: "Surgical management & rehabilitation (incl. arthroscopic surgery) for sports injuries",
+    prompt:
+      "Explain physiotherapy around surgical management and arthroscopy for sports injuries, from preoperative optimization through rehabilitation and return-to-sport.",
+    concepts: [
+      c("Assess and optimize modifiable functional risks and engage the person before surgery", ["preoperative assessment", "optimize functional risks", "engage before surgery"], ["ioc-manual-sports-injuries"]),
+      c("Coordinate postoperative rehabilitation within surgical and team-defined safety limits", ["postoperative rehabilitation", "surgical safety limits", "team-defined limits"], ["ioc-manual-sports-injuries", "welling-acl-rts-2024"]),
+    ],
+    trio: {
+      caseText:
+        "A fictional 19-year-old ruptured the ACL during football and is 8 months post-reconstruction, has >=90% limb symmetry index on hop testing, and is anxious about returning to competitive play.",
+      appliedPrompt:
+        "Using the fictional case, outline a criteria-based return-to-sport progression that combines physical, hop, and psychological readiness, and state the residual risk.",
+      appliedConcepts: [
+        c("Combine strength, hop battery, and psychological readiness for return-to-sport, not time since surgery alone", ["strength and hop battery", "psychological readiness", "not time since surgery alone"], ["welling-acl-rts-2024"]),
+        c("Acknowledge residual second-ACL-injury risk and use shared decision-making for progressive loading", ["residual second-ACL-injury risk", "shared decision-making", "progressive loading"], ["welling-acl-rts-2024"]),
+        c("Define sport-specific progressive loading with ongoing monitoring and reassessment", ["sport-specific progressive loading", "ongoing monitoring", "reassessment"], ["welling-acl-rts-2024"]),
+      ],
+      vivaPrompt:
+        "Defend your return-to-sport plan for the fictional ACL case, separate what the 2024 evidence supports from what is patient-specific, and state what would pause progression.",
+      vivaConcepts: [
+        c("Defend criteria-based RTS using strength, hop, and psychological readiness", ["criteria-based return-to-sport", "strength hop psychological readiness", "2024 evidence"], ["welling-acl-rts-2024"]),
+        c("Acknowledge residual risk and individual response uncertainty", ["residual risk", "individual response", "uncertainty"], ["welling-acl-rts-2024"]),
+        c("State that new instability or recurrent symptoms pause progression and trigger reassessment", ["pause progression", "reassessment", "recurrent symptoms"], ["welling-acl-rts-2024"]),
+      ],
+      probe: "Which single test would most change your return-to-sport decision, and why?",
+      evidenceUpdate:
+        "The person reports a new giving-way episode during sport-specific drills. Explain why progression pauses and what reassessment is required before returning.",
+    },
+    viva: [
+      { level: "RECALL", prompt: "Recall what a criteria-based return-to-sport progression combines after ACL reconstruction.", targetConceptIds: ["spr-surgical-management-rehab-arthroscopy-viva-recall-c1"] },
+      { level: "APPLY", prompt: "Apply strength, hop, and psychological readiness to a return-to-sport progression.", targetConceptIds: ["spr-surgical-management-rehab-arthroscopy-viva-recall-c2"] },
+      { level: "DEFEND", prompt: "Defend your plan and what would pause progression and trigger reassessment.", targetConceptIds: ["spr-surgical-management-rehab-arthroscopy-viva-recall-c3"] },
+    ],
+  },
+  {
+    topicId: "spr-injury-specific-overuse-management",
+    title: "Injury & sports-specific management; management of overuse injuries",
+    prompt:
+      "Explain injury- and sports-specific management of overuse injuries, integrating load management with rehabilitation and return-to-sport criteria.",
+    concepts: [
+      c("Integrate load management with rehabilitation for overuse injuries", ["load management", "overuse rehabilitation", "integrate load and rehab"], ["ioc-manual-sports-injuries", "welling-acl-rts-2024"]),
+      c("Use return-to-sport criteria rather than time alone for overuse injuries", ["return-to-sport criteria", "not time alone", "overuse RTS"], ["welling-acl-rts-2024"]),
+    ],
+  },
+  {
+    topicId: "spr-electrotherapy-sports-rehabilitation",
+    title: "Electrotherapy in sports rehabilitation; rehabilitation of sports injuries",
+    prompt:
+      "Explain the role of electrotherapy in sports rehabilitation, integrated with active rehabilitation and return-to-sport decisions.",
+    concepts: [
+      c("Use electrotherapy as an adjunct within a rehabilitation pathway, not as a standalone treatment", ["electrotherapy adjunct", "rehabilitation pathway", "not standalone"], ["ioc-manual-sports-injuries"]),
+      c("Separate electrotherapy use from return-to-sport clearance decisions", ["electrotherapy use", "return-to-sport clearance", "separate from clearance"], ["ioc-manual-sports-injuries"]),
+    ],
+  },
+  {
+    topicId: "spr-msk-screening-athletes-season",
+    title: "Musculoskeletal screening of athletes (pre-season, in-season, post-season)",
+    prompt:
+      "Explain musculoskeletal screening of athletes across pre-season, in-season, and post-season, and how it informs prevention and load management.",
+    concepts: [
+      c("Use prospective screening across the season cycle to inform prevention and load management", ["prospective screening", "pre-season in-season post-season", "prevention and load management"], ["ioc-epidemiology-consensus-2020"]),
+      c("Interpret screening findings with the clinical question and ongoing monitoring", ["interpret screening", "clinical question", "ongoing monitoring"], ["ioc-epidemiology-consensus-2020"]),
+    ],
+  },
+  {
+    topicId: "spr-taping-advances-sports-rehabilitation",
+    title: "Taping techniques & recent advances in sports rehabilitation",
+    prompt:
+      "Explain taping techniques and recent advances in sports rehabilitation, including the evidence and its limits as an adjunct.",
+    concepts: [
+      c("Use taping as an adjunct for symptom modulation and proprioception, not as a replacement for active rehabilitation", ["taping adjunct", "symptom modulation", "proprioception", "not a replacement for rehabilitation"], ["cochrane-kt-rotator-cuff-2021"]),
+      c("Cite the certainty of evidence rather than anecdote when defending taping use", ["certainty of evidence", "not anecdote", "cite the evidence"], ["cochrane-kt-rotator-cuff-2021"]),
+    ],
+  },
+  {
+    topicId: "spr-diet-sports-carbohydrate-loading",
+    title: "Diet & sports (pre-session diet, pre-game meal, carbohydrate loading, high-fat/high-protein diet)",
+    prompt:
+      "Explain diet in sports — pre-session, pre-game, carbohydrate loading, and high-fat/high-protein considerations within physiotherapy scope.",
+    concepts: [
+      c("Relate dietary intake to training load and energy availability, not to isolated nutrients", ["dietary intake", "training load", "energy availability"], ["acsm-getp-12th-2025", "ioc-reds-consensus-2023"]),
+      c("Stay within physiotherapy scope: advise on intake relative to training, not prescriptive dietary plans", ["within physiotherapy scope", "intake relative to training", "not prescriptive dietary plans"], ["acsm-getp-12th-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-ebp-sports-return-to-sports",
+    title: "Evidence-based sports rehabilitation & return-to-sports criteria",
+    prompt:
+      "Explain evidence-based sports rehabilitation and return-to-sport criteria, integrating functional performance, patient-reported outcomes, and shared decision-making.",
+    concepts: [
+      c("Combine functional performance and patient-reported outcomes for return-to-sport, not time alone", ["functional performance", "patient-reported outcomes", "not time alone"], ["wikstrom-ankle-rts-2020", "welling-acl-rts-2024"]),
+      c("Use shared decision-making and ongoing monitoring for return-to-sport clearance", ["shared decision-making", "ongoing monitoring", "return-to-sport clearance"], ["welling-acl-rts-2024"]),
+    ],
+  },
+  {
+    topicId: "spr-female-athletes-menstrual-preventive",
+    title: "Problems in female athletes; menstrual synchrony; preventive strategies",
+    prompt:
+      "Explain problems in female athletes, including menstrual function, and preventive strategies grounded in energy availability.",
+    concepts: [
+      c("Relate menstrual dysfunction to low energy availability and training load, using the REDs framework", ["menstrual dysfunction", "low energy availability", "REDs framework"], ["ioc-reds-consensus-2023"]),
+      c("Use the IOC REDs CAT2 for risk stratification and preventive strategies", ["IOC REDs CAT2", "risk stratification", "preventive strategies"], ["ioc-reds-cat2-2023"]),
+    ],
+  },
 ];
 
 const subjects: SubjectSeed[] = [
@@ -1666,16 +1960,15 @@ const subjects: SubjectSeed[] = [
     topics: [...neuroTopics, ...neuroAdditionalTopics],
   },
   {
-    subjectId: "respiratory-physiotherapy",
-    title: "Respiratory Physiotherapy",
+    subjectId: "cardiovascular-and-respiratory-physiotherapy",
+    title: "Cardiovascular & Respiratory Physiotherapy",
     availability: "ACTIVE",
-    topics: [...respiratoryTopics, ...respiratoryAdditionalTopics],
-  },
-  {
-    subjectId: "cardiovascular-physiotherapy",
-    title: "Cardiovascular Physiotherapy",
-    availability: "ACTIVE",
-    topics: [...cardiovascularTopics, ...cardiovascularAdditionalTopics],
+    topics: [
+      ...respiratoryTopics,
+      ...respiratoryAdditionalTopics,
+      ...cardiovascularTopics,
+      ...cardiovascularAdditionalTopics,
+    ],
   },
   {
     subjectId: "community-health-physiotherapy",
@@ -1686,8 +1979,8 @@ const subjects: SubjectSeed[] = [
   {
     subjectId: "sports-physiotherapy",
     title: "Sports Physiotherapy",
-    availability: "COMING_SOON",
-    topics: [],
+    availability: "ACTIVE",
+    topics: [...sportsTopics],
   },
 ];
 
@@ -1861,9 +2154,13 @@ const pack = {
       "applied-physiotherapeutics": papScaffolds,
       "musculoskeletal-physiotherapy": mskScaffolds,
       "community-health-physiotherapy": comScaffolds,
-      "sports-physiotherapy": sprScaffolds,
     };
-    const authored = subject.topics.map(buildTopic);
+    const authored = subject.topics.map((t) => {
+      if (t && typeof t === "object" && !("concepts" in t) && "sourceId" in t) {
+        console.error("SUBJECT_WITH_SOURCE", subject.subjectId, JSON.stringify(t));
+      }
+      return buildTopic(t);
+    });
     const scaffolds = scaffoldTopics(scaffoldsBySubject[subject.subjectId] ?? []);
     return {
       subjectId: subject.subjectId,

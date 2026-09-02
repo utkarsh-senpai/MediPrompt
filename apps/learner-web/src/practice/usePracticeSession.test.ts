@@ -48,7 +48,7 @@ function setup() {
     hook.result.current.actions.setSelection({
       mode: "RECALL_SPRINT",
       challenge: "APPLIED",
-      subjectId: "respiratory-physiotherapy",
+      subjectId: "cardiovascular-and-respiratory-physiotherapy",
       register: "EXAMINER",
     }),
   );
@@ -115,7 +115,7 @@ describe("usePracticeSession", () => {
     act(() =>
       result.current.actions.setSelection({
         mode: "DEEP_RESEARCH",
-        subjectId: "respiratory-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
       }),
     );
     expect(result.current.state.name).toBe("IDLE");
@@ -287,7 +287,7 @@ describe("usePracticeSession", () => {
       hook.result.current.actions.setSelection({
         mode: "RECALL_SPRINT",
         challenge: "APPLIED",
-        subjectId: "respiratory-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
         register: "EXAMINER",
       }),
     );
@@ -373,7 +373,7 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
       result.current.actions.setSelection({
         mode: "RECALL_SPRINT",
         challenge: "APPLIED",
-        subjectId: "respiratory-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
         register: "EXAMINER",
       }),
     );
@@ -454,7 +454,7 @@ describe("usePracticeSession — v0.5 semantic refinement", () => {
       result.current.actions.setSelection({
         mode: "RECALL_SPRINT",
         challenge: "APPLIED",
-        subjectId: "respiratory-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
         register: "EXAMINER",
       }),
     );
@@ -564,12 +564,12 @@ async function flushAsync() {
 }
 
 function setupAudio(
-  options: { denyMic?: boolean; decodeFails?: boolean; decoder?: AudioDecoder } = {},
+  options: { denyMic?: boolean; decodeFails?: boolean; decoder?: AudioDecoder; seed?: number } = {},
 ) {
   const nowRef = { value: 0 };
   const monotonic = { now: () => nowRef.value };
   const wall = { isoNow: () => "2026-08-30T00:00:00.000Z" };
-  const random = seededRandom(123);
+  const random = seededRandom(options.seed ?? 123);
   const bagStore = new InMemoryBagStore();
   const rec = fakeRecorderDeps(options);
   const recorder = new AttemptRecorder(rec.deps);
@@ -600,7 +600,7 @@ function setupAudio(
     hook.result.current.actions.setSelection({
       mode: "RECALL_SPRINT",
       challenge: "APPLIED",
-      subjectId: "respiratory-physiotherapy",
+      subjectId: "cardiovascular-and-respiratory-physiotherapy",
       register: "EXAMINER",
     }),
   );
@@ -946,7 +946,7 @@ describe("usePracticeSession — v0.6 viva", () => {
     const nowRef = { value: 0 };
     const monotonic = { now: () => nowRef.value };
     const wall = { isoNow: () => "2026-09-01T00:00:00.000Z" };
-    const random = seededRandom(123);
+    const random = seededRandom(5);
     const bagStore = new InMemoryBagStore();
     const hook = renderHook(() =>
       usePracticeSession({
@@ -975,7 +975,7 @@ describe("usePracticeSession — v0.6 viva", () => {
     act(() =>
       result.current.actions.setSelection({
         challenge: "VIVA",
-        subjectId: "cardiovascular-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
       }),
     );
     act(() => result.current.actions.spin());
@@ -997,7 +997,7 @@ describe("usePracticeSession — v0.6 viva", () => {
     act(() =>
       result.current.actions.setSelection({
         challenge: "VIVA",
-        subjectId: "cardiovascular-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
       }),
     );
     act(() => result.current.actions.spin());
@@ -1081,7 +1081,7 @@ describe("usePracticeSession — v0.6 viva", () => {
     act(() =>
       result.current.actions.setSelection({
         challenge: "GUIDED",
-        subjectId: "cardiovascular-physiotherapy",
+        subjectId: "cardiovascular-and-respiratory-physiotherapy",
       }),
     );
     act(() => result.current.actions.spin());
@@ -1104,7 +1104,7 @@ describe("usePracticeSession — v0.6 viva", () => {
   });
 
   it("stops the live deadline and microphone when the learner exits an active viva", async () => {
-    const ctx = setupAudio();
+    const ctx = setupAudio({ seed: 5 });
     const { result } = ctx.hook;
     await toAudioReview(ctx);
 
@@ -1128,7 +1128,7 @@ describe("usePracticeSession — v0.6 viva", () => {
   });
 
   it("allows microphone opt-in at the viva question after a typed main attempt", async () => {
-    const ctx = setupAudio();
+    const ctx = setupAudio({ seed: 5 });
     const { result } = ctx.hook;
     await toAudioReview(ctx, false);
 
@@ -1163,7 +1163,7 @@ describe("usePracticeSession — v0.6 viva", () => {
     review.tabIndex = -1;
     document.body.append(processing, review);
 
-    const ctx = setupAudio();
+    const ctx = setupAudio({ seed: 5 });
     const { result } = ctx.hook;
     await toAudioReview(ctx);
     act(() => result.current.actions.startViva());
