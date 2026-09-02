@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import type {
   AudioUiState,
   HistorySaveState,
@@ -11,6 +12,8 @@ import type {
   TextMetrics,
   TopicSnapshot,
 } from "@/practice/types";
+import { FULL_COVERAGE_THRESHOLD } from "@/practice/types";
+import { playCoverageChime } from "@/app/sounds";
 import {
   formatRefinementDelta,
   refinementDirectionCopy,
@@ -32,6 +35,8 @@ interface AttemptReviewProps {
   semanticRefining?: boolean;
   historySaveState?: HistorySaveState;
   audio: AudioUiState;
+  /** Sound cues off when true; the coverage chime is skipped but confetti still plays. */
+  soundMuted?: boolean;
   onSpinAgain: () => void;
   onTryAgain: () => void;
   onBeginViva: () => void;
@@ -56,6 +61,7 @@ export function AttemptReview({
   semanticRefining = false,
   historySaveState = "OFF",
   audio,
+  soundMuted = false,
   onSpinAgain,
   onTryAgain,
   onBeginViva,
@@ -67,12 +73,55 @@ export function AttemptReview({
       ?.coverage.conceptResults.find((concept) => concept.conceptId === conceptId)?.label ??
     conceptId;
 
+  const isFullCoverage =
+    coverage.verifiable && coverage.weightedFraction >= FULL_COVERAGE_THRESHOLD;
+  const [reduceMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const celebratedRef = useRef(false);
+  useEffect(() => {
+    if (!isFullCoverage || reduceMotion || celebratedRef.current) return;
+    celebratedRef.current = true;
+    // Confetti is dynamically imported so canvas-confetti stays out of the
+    // initial-entry JS budget; it only loads when a review actually celebrates.
+    void import("canvas-confetti")
+      .then((mod) => {
+        const fire = mod.default;
+        fire({ particleCount: 90, spread: 70, origin: { y: 0.6 }, zIndex: 20 });
+        fire({
+          particleCount: 60,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.5 },
+        });
+        fire({
+          particleCount: 60,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.5 },
+        });
+      })
+      .catch(() => {
+        /* decorative only; never block the review */
+      });
+    playCoverageChime(soundMuted);
+  }, [isFullCoverage, reduceMotion, soundMuted]);
+
   return (
     <section aria-labelledby="review-heading">
       <h2 id="review-heading" tabIndex={-1}>
         Attempt review{attemptIndex > 1 ? ` (attempt ${attemptIndex})` : ""}
       </h2>
       <p className="status">{topic.title}</p>
+
+      {isFullCoverage && reduceMotion ? (
+        <p className="status" role="status">
+          Nice — full coverage.
+        </p>
+      ) : null}
 
       {historySaveState !== "OFF" && historySaveState !== "IDLE" ? (
         <p className="status" role="status">

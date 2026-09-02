@@ -2,6 +2,7 @@ import type { PracticeSelection, V02PracticeMode } from "@/practice/types";
 import type { SubjectOption, TopicIndexEntry } from "@/content/packQuery";
 import { subjectEmoji } from "@/app/subjectEmoji";
 import { InfoTip } from "./InfoTip";
+import { SpinReel } from "./SpinReel";
 
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
@@ -124,6 +125,11 @@ export function PracticeSurface({
         </svg>
         <span>{drawing ? "Finding a topic…" : "Spin a topic"}</span>
       </button>
+
+      <SpinReel
+        titles={topicIndex.map((entry) => entry.title)}
+        drawing={drawing}
+      />
 
       <p className="status" role="status">
         {eligibleCount === 0

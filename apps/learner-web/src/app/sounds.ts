@@ -77,3 +77,30 @@ export function playTimerEnd(muted: boolean): void {
     /* decorative cue only */
   }
 }
+
+/** Bright settle chime when a spun topic lands on the reel. */
+export function playSpinSettle(muted: boolean): void {
+  if (muted) return;
+  const ctx = audioContext();
+  if (!ctx) return;
+  try {
+    tone(ctx, { freq: 523.25, at: 0, dur: 0.12, type: "triangle", gain: 0.05 });
+    tone(ctx, { freq: 783.99, at: 0.1, dur: 0.22, type: "triangle", gain: 0.055 });
+  } catch {
+    /* decorative cue only */
+  }
+}
+
+/** Rising three-note chime when a review reveals full content coverage. */
+export function playCoverageChime(muted: boolean): void {
+  if (muted) return;
+  const ctx = audioContext();
+  if (!ctx) return;
+  try {
+    tone(ctx, { freq: 523.25, at: 0, dur: 0.14, gain: 0.055 });
+    tone(ctx, { freq: 659.25, at: 0.12, dur: 0.14, gain: 0.055 });
+    tone(ctx, { freq: 987.77, at: 0.24, dur: 0.34, gain: 0.06 });
+  } catch {
+    /* decorative cue only */
+  }
+}

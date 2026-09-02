@@ -194,6 +194,13 @@ export interface UserSettings {
    * Audio, transcripts, and transcript excerpts are never part of this record.
    */
   practiceHistory?: boolean;
+  /**
+   * v0.9: opt into a wobbly "hard-to-catch" hint button that drifts to random
+   * spots during the speaking timer. Deliberately adds cognitive load while
+   * speaking; off by default for accessibility. Reduced-motion users get a
+   * static, keyboard-accessible fallback regardless of this flag.
+   */
+  hardToCatchHints?: boolean;
 }
 
 export interface PracticeSelection {
@@ -934,7 +941,14 @@ export const DEFAULT_SETTINGS: Readonly<UserSettings> = Object.freeze({
   soundMuted: false,
   semanticCoverage: false,
   practiceHistory: false,
+  hardToCatchHints: false,
 });
+
+/**
+ * Weighted coverage fraction at which a review is treated as "full coverage"
+ * for the v0.9 celebratory confetti + chime. 1.0 = every weighted concept hit.
+ */
+export const FULL_COVERAGE_THRESHOLD = 1.0;
 
 /** Documented bounds for durations; clamped by the settings store and reducer. */
 export const TIME_BOUNDS = Object.freeze({

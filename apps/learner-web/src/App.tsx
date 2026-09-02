@@ -22,7 +22,7 @@ import {
   type Capabilities,
 } from "@/app/capabilities";
 import { audioIssueCopy } from "@/app/audioCopy";
-import { playSpinTick, playTimerEnd, playTimerStart } from "@/app/sounds";
+import { playSpinTick, playSpinSettle, playTimerEnd, playTimerStart } from "@/app/sounds";
 import { subjectEmoji } from "@/app/subjectEmoji";
 import { AttemptRecorder } from "@/audio/recorder";
 import { createWebAudioDecoder } from "@/audio/pcmDecode";
@@ -51,6 +51,8 @@ import { VivaAnswerReview } from "@/components/VivaAnswerReview";
 import { VivaSummary } from "@/components/VivaSummary";
 import { VIVA_SPEAKING_SECONDS } from "@/practice/sessionReducer";
 import { LearningPlan } from "@/components/LearningPlan";
+import { HintButton } from "@/components/HintButton";
+import { findRubric } from "@/content/packQuery";
 
 interface PracticeAppProps {
   pack: RuntimePack;
@@ -220,6 +222,14 @@ function PracticeApp({
     if (milestone === "Time's up.") playTimerEnd(muted);
   }, [milestone, muted]);
 
+  // Settle chime when a spun reel lands on a topic (DRAWING -> TOPIC_READY).
+  const prevNameRef = useRef<string | null>(null);
+  useEffect(() => {
+    const prev = prevNameRef.current;
+    if (s.name === "TOPIC_READY" && prev === "DRAWING") playSpinSettle(muted);
+    prevNameRef.current = s.name;
+  }, [s.name, muted]);
+
   const spin = useCallback(() => {
     playSpinTick(muted);
     actions.spin();
@@ -247,6 +257,17 @@ function PracticeApp({
       if (started) playTimerStart(muted);
     });
   }, [actions, muted]);
+
+  // Hints for the hard-to-catch button: rubric concept labels first (the "key
+  // ideas"), then the answer-arc beats as a fallback when no rubric is sourced.
+  const speakingHints = useMemo<readonly string[]>(() => {
+    if (s.name !== "SPEAKING") return [];
+    const rubric = findRubric(pack, s.topic.topicRef);
+    const concepts = rubric?.concepts.map((c) => c.label).filter(Boolean) ?? [];
+    const beats = s.topic.answerArc.map((step) => step.label);
+    const hints = [...concepts, ...beats];
+    return hints.length > 0 ? hints.slice(0, 8) : [s.topic.expectation];
+  }, [pack, s]);
 
   const topicEyebrow =
     s.name !== "IDLE" && s.name !== "DRAWING" && "topic" in s
@@ -414,6 +435,11 @@ function PracticeApp({
             totalMs={totalMs}
             active
           />
+          <HintButton
+            key={s.topic.topicRef.topicId}
+            hints={speakingHints}
+            enabled={settings.hardToCatchHints ?? false}
+          />
           <div className="toolbar">
             <button type="button" onClick={actions.closeTimer}>
               Finish now
@@ -494,6 +520,7 @@ function PracticeApp({
           semanticRefining={session.semanticRefining}
           historySaveState={session.historySaveState}
           audio={session.audio}
+          soundMuted={muted}
           onSpinAgain={spinAgain}
           onTryAgain={actions.startSecondAttempt}
           onBeginViva={actions.startViva}
