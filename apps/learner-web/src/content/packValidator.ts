@@ -21,7 +21,7 @@ type SchemaValidator = ((value: unknown) => boolean) & {
 // Keep CSP strict and verify drift with `pnpm schema:check`.
 const validateSchema = generatedSchemaValidator as SchemaValidator;
 
-export const MAX_PACK_BYTES = 512 * 1024;
+export const MAX_PACK_BYTES = 640 * 1024;
 const MAX_SCAN_DEPTH = 16;
 const MAX_SCAN_NODES = 50_000;
 
@@ -433,15 +433,15 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     "applied-physiotherapeutics": 35,
     "musculoskeletal-physiotherapy": 50,
     "neuro-physiotherapy": 35,
-    "respiratory-physiotherapy": 13,
-    "cardiovascular-physiotherapy": 13,
+    "cardiovascular-and-respiratory-physiotherapy": 26,
     "community-health-physiotherapy": 53,
     "sports-physiotherapy": 34,
   };
+
   const expectedActive = new Set([
     "neuro-physiotherapy",
-    "respiratory-physiotherapy",
-    "cardiovascular-physiotherapy",
+    "cardiovascular-and-respiratory-physiotherapy",
+    "sports-physiotherapy",
   ]);
   if (pack.contentKind !== "MEDICAL") {
     errors.push(`public practice draft must be MEDICAL, got ${pack.contentKind}`);

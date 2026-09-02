@@ -287,8 +287,9 @@ The source-grounded candidate is stored in `content/candidates/`, not `content/p
 Candidate validation applies the runtime schema and demo depth minimums, then asserts that the
 medical release gate fails. Build copying allowlists that exact candidate for the public practice
 beta and rejects the generic regression fixture from the learner artifact. As of v0.7 the
-allowlisted candidate contains the full 265-topic catalog, exactly 61 active authored topics, and
-five disabled subject shells; its public gate fixes the subject IDs, counts, and availability split.
+allowlisted candidate contains the full 265-topic catalog. v0.8 exposes exactly 95 active authored
+topics across Neuro (35), combined Cardiovascular & Respiratory (26), and Sports (34), with four
+disabled subject shells; its public gate fixes the subject IDs, counts, and availability split.
 
 The recommended primary-domain taxonomy is foundations/science, condition/pathophysiology,
 assessment/investigation, clinical reasoning, intervention/rehabilitation,

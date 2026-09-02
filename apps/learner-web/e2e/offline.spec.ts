@@ -1,10 +1,25 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+async function spinUntilTopic(page: Page, headingName: string, maxDraws = 32): Promise<void> {
+  const target = page.getByRole("heading", { name: headingName });
+  for (let drawNumber = 0; drawNumber < maxDraws; drawNumber += 1) {
+    const drawButton =
+      drawNumber === 0
+        ? page.getByRole("button", { name: "Spin for a topic" })
+        : page.getByRole("button", { name: "Spin again" }).first();
+    await drawButton.click();
+    await expect(page.getByRole("button", { name: "Start timer" })).toBeVisible();
+    if (await target.isVisible()) return;
+  }
+  throw new Error(`Topic '${headingName}' was not drawn within ${maxDraws} non-repeating draws`);
+}
 
 // Verifies the v0.2 exit gate: the mode/subject -> spin -> timed-speech flow works,
 // and after a successful first load it keeps working with the network disabled
 // (offline shell + precached pack served by the service worker).
 test("core loop works online and after an offline reload", async ({ page, context }) => {
   await page.goto("./");
+  await page.getByLabel("Subject").selectOption("neuro-physiotherapy");
   await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
   await expect(page.getByText("Curriculum beta · unreviewed draft")).toBeVisible();
   await expect(page.getByLabel("Subject").locator("option")).toHaveText([
@@ -12,16 +27,15 @@ test("core loop works online and after an offline reload", async ({ page, contex
     "🧬 Applied Physiotherapeutics — coming soon",
     "🧬 Musculoskeletal Physiotherapy — coming soon",
     "🧠 Neuro Physiotherapy",
-    "🫁 Respiratory Physiotherapy",
-    "❤️ Cardiovascular Physiotherapy",
+    "❤️ Cardiovascular & Respiratory Physiotherapy",
     "🧬 Community Health Physiotherapy — coming soon",
-    "🧬 Sports Physiotherapy — coming soon",
+    "🧬 Sports Physiotherapy",
   ]);
   const subjectAvailability = await page
     .getByLabel("Subject")
     .locator("option")
     .evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).disabled));
-  expect(subjectAvailability).toEqual([true, true, true, false, false, false, true, true]);
+  expect(subjectAvailability).toEqual([true, true, true, false, false, true, false]);
   await expect(page.getByText("Everyday Explanations")).toHaveCount(0);
 
   // Online core loop: spin -> topic -> start timer -> finish.
@@ -125,7 +139,7 @@ test("reduced-motion mode disables ambient and draw animation", async ({ page })
 test("Defend depth and Deep Research handoff remain distinct", async ({ page }) => {
   await page.goto("./");
 
-  await page.getByLabel("Subject").selectOption("respiratory-physiotherapy");
+  await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   const challenge = page.getByRole("group", { name: "Challenge" });
   await expect(challenge).toBeVisible();
   await expect(challenge.getByRole("button")).toHaveCount(3);
@@ -140,7 +154,7 @@ test("Defend depth and Deep Research handoff remain distinct", async ({ page }) 
 
   await page.reload();
   await page.getByRole("button", { name: "Deep Research" }).click();
-  await page.getByLabel("Subject").selectOption("respiratory-physiotherapy");
+  await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await expect(page.getByRole("group", { name: "Challenge" })).toHaveCount(0);
   await page.getByRole("button", { name: "Spin for a topic" }).click();
   await page.getByRole("button", { name: "Begin research" }).click();
@@ -157,12 +171,9 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   context,
 }) => {
   await page.goto("./");
-  await page.getByLabel("Subject").selectOption("cardiovascular-physiotherapy");
+  await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
-  await page.getByRole("button", { name: "Spin for a topic" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
-  ).toBeVisible();
+  await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
 
   await page.getByRole("button", { name: "Start timer" }).click();
   await page.getByRole("button", { name: "Finish now" }).click();
@@ -208,12 +219,9 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
 
 test("v0.6 viva defense ladder scores three answers and returns to review", async ({ page }) => {
   await page.goto("./");
-  await page.getByLabel("Subject").selectOption("cardiovascular-physiotherapy");
+  await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
-  await page.getByRole("button", { name: "Spin for a topic" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
-  ).toBeVisible();
+  await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
 
   // Reach the main attempt review via the typed path.
   await page.getByRole("button", { name: "Start timer" }).click();

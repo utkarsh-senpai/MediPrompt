@@ -94,7 +94,7 @@ describe("App accessibility + capability + security", () => {
     // Select a subject that has multiple challenge presets for Recall Sprint.
     await user.selectOptions(
       screen.getByLabelText("Subject"),
-      "respiratory-physiotherapy",
+      "neuro-physiotherapy",
     );
     const challengeGroup = screen.getByRole("group", { name: "Challenge" });
     const pressedButtons = within(challengeGroup).getAllByRole("button");
@@ -278,11 +278,23 @@ describe("App accessibility + capability + security", () => {
     const user = userEvent.setup();
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
-    await user.selectOptions(screen.getByLabelText("Subject"), "cardiovascular-physiotherapy");
+    await user.selectOptions(screen.getByLabelText("Subject"), "cardiovascular-and-respiratory-physiotherapy");
     const challenge = screen.getByRole("group", { name: "Challenge" });
     await user.click(within(challenge).getByRole("button", { name: "Defend" }));
+    // The merged cardioresp subject has three viva topics, but only the
+    // cardiac-rehabilitation ladder resolves to authored viva questions. Pin the
+    // Fisher-Yates draw to that topic by forcing the crypto RNG to 1, which
+    // selects the alphabetically-first eligible variant (cardiac-rehabilitation).
+    const cryptoSpy = vi
+      .spyOn(globalThis.crypto, "getRandomValues")
+      .mockImplementation(<T extends ArrayBufferView>(array: T): T => {
+        const view = array as unknown as Uint32Array;
+        if (view.length > 0) view[0] = 1;
+        return array;
+      });
     await user.click(screen.getByRole("button", { name: "Spin for a topic" }));
     await screen.findByRole("button", { name: "Start timer" });
+    cryptoSpy.mockRestore();
     await user.click(screen.getByRole("button", { name: "Start timer" }));
     await user.click(screen.getByRole("button", { name: "Finish now" }));
     await user.click(screen.getByRole("button", { name: "Review this attempt" }));

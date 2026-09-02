@@ -112,15 +112,14 @@ const expectedSubjectCounts = {
   "applied-physiotherapeutics": 35,
   "musculoskeletal-physiotherapy": 50,
   "neuro-physiotherapy": 35,
-  "respiratory-physiotherapy": 13,
-  "cardiovascular-physiotherapy": 13,
+  "cardiovascular-and-respiratory-physiotherapy": 26,
   "community-health-physiotherapy": 53,
   "sports-physiotherapy": 34,
 };
 const expectedActiveSubjects = new Set([
   "neuro-physiotherapy",
-  "respiratory-physiotherapy",
-  "cardiovascular-physiotherapy",
+  "cardiovascular-and-respiratory-physiotherapy",
+  "sports-physiotherapy",
 ]);
 const subjectContractValid =
   Array.isArray(publicPack.subjects) &&

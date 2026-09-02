@@ -16,7 +16,9 @@ const CACHE_FORMAT = "5";
 const PACK_PATH = "packs/mpt-cardiorespiratory-review-candidate.json";
 const ORT_RUNTIME_PREFIX = "models/ort/";
 const MAX_RESPONSE_BYTES = 2 * 1024 * 1024;
-const MAX_PACK_BYTES = 512 * 1024;
+// Keep this synchronized with content/packValidator.ts. The service worker
+// enforces the same bounded limit before caching a curriculum pack.
+const MAX_PACK_BYTES = 640 * 1024;
 // The pinned ORT wasm runtime (~21 MB) plus its JS loader; sized with headroom.
 const MAX_RUNTIME_BYTES = 32 * 1024 * 1024;
 

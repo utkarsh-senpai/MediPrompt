@@ -365,7 +365,7 @@ Curriculum extraction produces an authoring inventory, not the runtime schema sh
 current MPT file under `docs/curriculum/` is deliberately `runtimeCompatible: false`; empty prompt
 and rubric arrays are evidence that content has not been authored, not valid learner content.
 
-Minimum candidate shape for the planned v0.8 authoring schema:
+Minimum candidate shape for the planned v0.9 authoring schema:
 
 ```yaml
 schemaVersion: authoring-inventory/1.0
@@ -478,9 +478,11 @@ Review metadata models absence honestly: an unattested `DRAFT` has `reviewers: [
 `reviewedAt: null`. The schema condition requires at least one reviewer and a non-null ISO date for
 `APPROVED`; medical release validation then enforces the role/content-kind rule. Medical review
 candidates live under `content/candidates/`, must meet the practice topic/trio minimums, and must
-fail the medical release gate. The beta copy step allowlists the exact 265-topic candidate; runtime
-validation requires exactly 35 Neuro, 13 Respiratory, and 13 Cardiovascular active topics, five
-known `COMING_SOON` subject shells, `DRAFT`, no reviewers/date, and exclusion of generic packs.
+fail the medical release gate. The beta copy step allowlists the exact 265-topic candidate. Runtime
+validation requires exactly 35 Neuro, 26 combined Cardiovascular & Respiratory, and 34 Sports
+active topics, four known `COMING_SOON` subject shells, `DRAFT`, no reviewers/date, and exclusion
+of generic packs. The runtime and service worker enforce the same 640 KiB pack ceiling; the schema
+keeps sources bounded to 96 entries.
 `generate-active-subjects-attestation.ts` deterministically emits every active prompt, expected
 criterion, accepted phrase, and citation; its `--check` mode is part of `content:validate`.
 
@@ -665,8 +667,9 @@ CI performance on hosted runners is not presented as phone performance.
 | v0.5 | Optional non-counting semantic evidence with pinned model/versioned thresholds and lexical fallback, bounded same-identity retry history, mismatch rejection and valid Refinement Delta |
 | v0.6 | Opt-in post-review viva ladder; independent 60-second answer identities; hidden future prompts; typed/local-audio parity; strict one-rubric all-or-nothing validation; honest scored/unverifiable aggregate; active exit and stale-result cleanup; offline/a11y/budget/audit evidence |
 | v0.7 | Explicit persistence opt-in; transcript/audio-free bounded records; strict validation and local dates; real IndexedDB index/migration tests; due-topic launch; exam triage; metadata export and verified delete-all; no-storage core regression |
-| v0.8 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
-| v0.9 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
+| v0.8 | Combined cardiorespiratory identity; complete 35/26/34 active-subject counts; source-bounded Sports authoring; generated 95-topic review worksheet; deterministic offline/E2E gates |
+| v0.9 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
+| v0.10 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
 | v1.0 | Clean-device release journey, offline full loop, three approved packs, licence/privacy/security/recovery checklist |
 | v1.1+ | Consent/authz/sync/provider contracts, retention/deletion, source-grounded results and local-mode regression |
 

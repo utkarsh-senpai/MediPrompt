@@ -36,8 +36,7 @@ describe("loadBundledPack", () => {
       "Applied Physiotherapeutics",
       "Musculoskeletal Physiotherapy",
       "Neuro Physiotherapy",
-      "Respiratory Physiotherapy",
-      "Cardiovascular Physiotherapy",
+      "Cardiovascular & Respiratory Physiotherapy",
       "Community Health Physiotherapy",
       "Sports Physiotherapy",
     ]);
@@ -47,7 +46,7 @@ describe("loadBundledPack", () => {
     ).toHaveLength(3);
     expect(
       result.pack.subjects.filter((subject) => subject.availability === "COMING_SOON"),
-    ).toHaveLength(5);
+    ).toHaveLength(4);
     expect(Object.isFrozen(result.pack)).toBe(true);
   });
 

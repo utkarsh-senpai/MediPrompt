@@ -12,15 +12,15 @@ import { validatePack } from "./packValidator";
 const pack = validatePack(medicalCandidateJson);
 
 describe("curriculum subject availability", () => {
-  it("shows all eight subjects but activates exactly three", () => {
+  it("shows all seven subjects but activates exactly three", () => {
     const subjects = listSubjects(pack);
-    expect(subjects).toHaveLength(8);
+    expect(subjects).toHaveLength(7);
     expect(
       subjects.filter((subject) => subject.availability === "ACTIVE").map((subject) => subject.subjectId),
     ).toEqual([
       "neuro-physiotherapy",
-      "respiratory-physiotherapy",
-      "cardiovascular-physiotherapy",
+      "cardiovascular-and-respiratory-physiotherapy",
+      "sports-physiotherapy",
     ]);
   });
 
@@ -40,7 +40,7 @@ describe("curriculum subject availability", () => {
 
   it("rejects a direct snapshot launch from an inactive subject", () => {
     const subject = pack.subjects.find(
-      (candidate) => candidate.subjectId === "sports-physiotherapy",
+      (candidate) => candidate.subjectId === "musculoskeletal-physiotherapy",
     )!;
     const topic = subject.topics[0]!;
     expect(() =>
@@ -75,16 +75,14 @@ describe("active medical-content completeness", () => {
   it("preserves the original 20 cardiorespiratory topic definitions", () => {
     const digest = (value: unknown) =>
       createHash("sha256").update(JSON.stringify(value)).digest("hex");
-    const respiratory = pack.subjects.find(
-      (subject) => subject.subjectId === "respiratory-physiotherapy",
+    const cardioresp = pack.subjects.find(
+      (subject) => subject.subjectId === "cardiovascular-and-respiratory-physiotherapy",
     )!;
-    const cardiovascular = pack.subjects.find(
-      (subject) => subject.subjectId === "cardiovascular-physiotherapy",
-    )!;
-    expect(digest(respiratory.topics.slice(0, 11))).toBe(
+    expect(cardioresp.topics).toHaveLength(26);
+    expect(digest(cardioresp.topics.slice(0, 11))).toBe(
       "3008206005415e1071b3b2d9a4c4da4206379f2a2061cd8201b4c9471ee6818e",
     );
-    expect(digest(cardiovascular.topics.slice(0, 9))).toBe(
+    expect(digest(cardioresp.topics.slice(13, 22))).toBe(
       "3d436fb74cf87337b3276e51d670339e61fc150f698367e69a446c4f195ddb53",
     );
   });

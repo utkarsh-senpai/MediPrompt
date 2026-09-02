@@ -27,7 +27,7 @@ const deps: ReducerDeps = {
   audioArmed: false,
 };
 
-function recallSelection(subjectId = "respiratory-physiotherapy"): PracticeSelection {
+function recallSelection(subjectId = "cardiovascular-and-respiratory-physiotherapy"): PracticeSelection {
   return {
     mode: "RECALL_SPRINT",
     challenge: "GUIDED",
@@ -40,7 +40,7 @@ function deepResearchSelection(): PracticeSelection {
   return {
     mode: "DEEP_RESEARCH",
     challenge: "GUIDED",
-    subjectId: "respiratory-physiotherapy",
+    subjectId: "cardiovascular-and-respiratory-physiotherapy",
     register: "EXAMINER",
   };
 }
@@ -125,11 +125,11 @@ describe("reduceSession — IDLE / DRAWING", () => {
     ).state;
     const { state } = reduceSession(
       drawing,
-      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-and-respiratory-physiotherapy") },
       deps,
     );
     expect(state.name).toBe("IDLE");
-    if (state.name === "IDLE") expect(state.selection.subjectId).toBe("cardiovascular-physiotherapy");
+    if (state.name === "IDLE") expect(state.selection.subjectId).toBe("cardiovascular-and-respiratory-physiotherapy");
   });
 });
 
@@ -172,7 +172,7 @@ describe("reduceSession — invalid transitions are inert", () => {
 
     const changed = reduceSession(
       state,
-      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-and-respiratory-physiotherapy") },
       deps,
     );
     expect(changed.state).toBe(state);
@@ -267,7 +267,7 @@ describe("resolved topic snapshot", () => {
 
 describe("reduceSession — Deep Research path", () => {
   function drSelection(): PracticeSelection {
-    return { mode: "DEEP_RESEARCH", challenge: "GUIDED", subjectId: "respiratory-physiotherapy", register: "EXAMINER" };
+    return { mode: "DEEP_RESEARCH", challenge: "GUIDED", subjectId: "cardiovascular-and-respiratory-physiotherapy", register: "EXAMINER" };
   }
 
   it("START_TIMER from TOPIC_READY is invalid for Deep Research (must research first)", () => {
@@ -763,7 +763,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     const review = transcriptReviewState();
     const { state, commands } = reduceSession(
       review,
-      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-and-respiratory-physiotherapy") },
       armed,
     );
     expect(state.name).toBe("IDLE");
@@ -778,7 +778,7 @@ describe("reduceSession — v0.3 review and exits", () => {
     s = reduceSession(s, { type: "TIMER_ELAPSED", requestId: "r1", now: 90_000 }, deps).state;
     const { commands } = reduceSession(
       s,
-      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-physiotherapy") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-and-respiratory-physiotherapy") },
       deps,
     );
     expect(commands).toEqual([]);
@@ -931,7 +931,7 @@ describe("reduceSession — v0.6 viva", () => {
     return {
       mode: "RECALL_SPRINT",
       challenge: "VIVA",
-      subjectId: "cardiovascular-physiotherapy",
+      subjectId: "cardiovascular-and-respiratory-physiotherapy",
       register: "EXAMINER",
     };
   }
@@ -1217,7 +1217,7 @@ describe("reduceSession — v0.6 viva", () => {
     s = reduceSession(s, { type: "BEGIN_VIVA_QUESTION", attemptId: "vv-viva-q0", now: 92_100 }, armed).state;
     const { state, commands } = reduceSession(
       s,
-      { type: "CHANGE_SELECTION", selection: recallSelection("respiratory-physiotherapy") },
+      { type: "CHANGE_SELECTION", selection: recallSelection("cardiovascular-and-respiratory-physiotherapy") },
       armed,
     );
     expect(state.name).toBe("IDLE");

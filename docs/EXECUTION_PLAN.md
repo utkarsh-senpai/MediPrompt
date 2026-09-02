@@ -1,6 +1,6 @@
 # MediPrompt execution plan
 
-**Status:** v0.7 private learning plan implemented and under promotion review
+**Status:** v0.8 three-subject curriculum activation in PR #28 and under promotion review
 **Owner:** Utkarsh Meshram (`utkarsh-senpai`)
 **Last updated:** 2026-09-02
 
@@ -211,8 +211,8 @@ answers; schema/content/a11y/E2E/bundle/audit gates pass.
 **Rebaseline note (2026-09-02):** scheduling, exam countdown, persistent history, export/delete,
 additional registers, challenge suggestions, and two extra packs were previously grouped into
 v0.6. v0.7 accepts only the first four as one privacy-reviewed local learning-plan outcome.
-Registers, suggestions, and additional packs remain unplanned. The Java content pipeline moves to
-v0.8.
+Registers, suggestions, and additional packs remain unplanned. The v0.8 product priority is the
+third complete active subject; the Java content pipeline moves to v0.9.
 
 ### v0.7 — Private learning plan and spaced resurfacing
 
@@ -240,9 +240,32 @@ or audio-derived content; due-topic launch revalidates complete pack identity; s
 block practice; retention, migration, strict dates, export/delete, unit, accessibility, content,
 build, E2E, bundle, and dependency-audit gates pass.
 
-### v0.8 — Java content pipeline
+### v0.8 — Three active curriculum subjects
 
-**Planned branch:** `feature/v0.8-content-compiler`
+**Branch:** `feature/v0.8-active-subjects`
+
+Add:
+
+- Merge the separate Respiratory and Cardiovascular app subjects into the curriculum-aligned
+  `cardiovascular-and-respiratory-physiotherapy` subject without changing their authored meaning.
+- Activate exactly Neuro (35), combined Cardiovascular & Respiratory (26), and Sports (34).
+- Author all 34 Sports curriculum candidates with original prompts and non-empty sourced criteria,
+  using current 2025-26 guidance where available and identifying older still-current or
+  foundational evidence by its actual date.
+- Keep the other four subjects visible, disabled, and inaccessible to drawing and saved-plan paths.
+- Generate one unsigned educator worksheet for all 95 active topics while preserving `DRAFT`,
+  empty reviewers, and a null review date.
+- Keep loader, service-worker, schema-source, shell, and artifact limits bounded and synchronized.
+
+**Exit gate:** the catalog remains exactly 265 topics across seven subjects; active counts are
+35/26/34 with no empty active rubric; all v0.2-v0.7 behavior works for each active subject; random
+draw E2E tests are deterministically bounded; content, unit, accessibility, build, offline,
+responsive, audit, and diff checks pass. Software may be promoted as an unreviewed practice beta,
+but medical release remains blocked pending educator review.
+
+### v0.9 — Java content pipeline
+
+**Planned branch:** `feature/v0.9-content-compiler`
 
 Add a Java 21/Spring Boot command-line content compiler:
 
@@ -265,9 +288,9 @@ golden PDF fixtures are reproducible; every educator-reviewed candidate has an e
 mapping and page evidence; no extracted content is published without educator, source-use, licence,
 and runtime-schema approval.
 
-### v0.9 — Real-user beta hardening
+### v0.10 — Real-user beta hardening
 
-**Planned branch:** `feature/v0.9-beta-hardening`
+**Planned branch:** `feature/v0.10-beta-hardening`
 
 Add/fix only what is required by observed use:
 
@@ -371,8 +394,9 @@ The four-to-six-week beta target assumes focused solo development after v0.1 app
 | 3 | v0.4 deterministic lexical coverage and one prescription |
 | 4 | v0.5 semantic enhancement, same-identity retry, and Refinement Delta |
 | 5 | v0.6 hardened viva defense ladder |
-| 6 | v0.7 private learning plan; v0.8 content compiler follows promotion |
-| Beta | v0.9 hardening follows observed use on the target learner's devices |
+| 6 | v0.7 private learning plan; v0.8 completes three active subjects |
+| Next | v0.9 content compiler follows promotion |
+| Beta | v0.10 hardening follows observed use on the target learner's devices |
 
 Dates may move; exit gates do not. If the local model blocks phone usability, ship a useful typed or
 self-reviewed transcript path rather than delaying the entire learning loop.
