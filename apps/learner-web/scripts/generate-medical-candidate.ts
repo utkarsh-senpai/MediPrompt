@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ACCESSED_AT = "2026-08-30";
 const NEURO_RESEARCH_ACCESSED_AT = "2026-09-02";
+const SPORTS_RESEARCH_ACCESSED_AT = "2026-09-02";
 
 interface ConceptSeed {
   label: string;
@@ -433,6 +434,13 @@ const sources = [
     accessedAt: ACCESSED_AT,
   },
   {
+    sourceId: "wada-istue-2026",
+    citation:
+      "World Anti-Doping Agency. International Standard for Therapeutic Use Exemptions (ISTUE). Mandatory International Standard; in-force resource published 19 Dec 2025.",
+    url: "https://www.wada-ama.org/en/resources/world-anti-doping-code-and-international-standards/international-standard-therapeutic-use",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
     sourceId: "ioc-epidemiology-consensus-2020",
     citation:
       "Bahr R, Clarsen B, Derman W, Dvorak J, Emery CA, et al. IOC consensus statement: methods for recording and reporting of epidemiological data on injury and illness in sport 2020 (STROBE-SIIS). Orthop J Sports Med. 2020;8(2):2325967120902908. doi:10.1177/2325967120902908.",
@@ -442,8 +450,8 @@ const sources = [
   {
     sourceId: "amsterdam-2022-concussion",
     citation:
-      "Schneider KJ, Patricios JS. Amsterdam 2022 international consensus on concussion in sport. Br J Sports Med. 2023;57(11):615-616. doi:10.1136/bjsports-2023-107127.",
-    url: "https://doi.org/10.1136/bjsports-2023-107127",
+      "Patricios JS, Schneider KJ, Dvorak J, et al. Consensus statement on concussion in sport: the 6th International Conference on Concussion in Sport-Amsterdam, October 2022. Br J Sports Med. 2023;57(11):695-711. doi:10.1136/bjsports-2023-106898. PMID:37316210.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/37316210/",
     accessedAt: ACCESSED_AT,
   },
   {
@@ -501,6 +509,125 @@ const sources = [
       "Welling W. Return to sports after an ACL reconstruction in 2024 - A glass half full? A narrative review. Phys Ther Sport. 2024;69:51-59. doi:10.1016/j.ptsp.2024.05.001.",
     url: "https://doi.org/10.1016/j.ptsp.2024.05.001",
     accessedAt: ACCESSED_AT,
+  },
+  {
+    sourceId: "src-curriculum-sports",
+    citation:
+      "DMIHER. Competency-Based Post Graduate Curriculum for Indian Physiotherapy PG: Sports Physiotherapy, Papers III and IV, 2022-2027, PDF pp. 187-196; recommended references pp. 205-208.",
+    url: "https://dmiher.edu.in/lp/Educlass",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "nsca-sport-science-2022",
+    citation:
+      "French D, Torres Ronda L, eds. NSCA's Essentials of Sport Science. Human Kinetics; 2022. ISBN 9781492593355.",
+    url: "https://us.humankinetics.com/products/nscas-essentials-of-sport-science",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "mcginnis-biomechanics-4e",
+    citation:
+      "McGinnis PM. Biomechanics of Sport and Exercise. 4th ed. Human Kinetics. ISBN 9781492592334. Foundational mechanics source; current rules and clinical decisions require separate current sources.",
+    url: "https://us.humankinetics.com/products/biomechanics-of-sport-and-exercise-4th-edition-with-web-resource",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "icc-playing-conditions-2026",
+    citation:
+      "International Cricket Council. Official international playing conditions and regulations portal, including 2025-2026 competition documents.",
+    url: "https://www.icc-cricket.com/about/cricket/rules-and-regulations/playing-conditions",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "ifab-laws-2026-27",
+    citation:
+      "International Football Association Board. Laws of the Game 2026/27. Current official association-football rules portal.",
+    url: "https://www.theifab.com/laws-of-the-game-documents",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "fiba-rules-current",
+    citation:
+      "FIBA. Official Basketball Rules portal. Use the edition in force for the event; the 2026 edition takes effect 1 October 2026.",
+    url: "https://about.fiba.basketball/en/our-sport/official-basketball-rules",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "fih-rules-2026",
+    citation:
+      "International Hockey Federation. Rules of Hockey 2026, effective March 2026, with current protective-equipment resources.",
+    url: "https://www.fih.hockey/about-fih/official-documents/rules-of-hockey",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "itf-rules-2026",
+    citation:
+      "International Tennis Federation. 2026 Rules of Tennis and current tour regulations.",
+    url: "https://www.itftennis.com/en/about-us/governance/rules-and-regulations",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "world-athletics-rules-current",
+    citation:
+      "World Athletics. Constitution, Book of Rules, technical rules, and current competition regulations portal.",
+    url: "https://worldathletics.org/about-iaaf/documents/book-of-rules",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "world-aquatics-rules-current",
+    citation:
+      "World Aquatics. Current Competition Regulations and discipline-specific rules portal.",
+    url: "https://www.worldaquatics.com/rules/competition-regulations",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-mental-health-2026",
+    citation:
+      "Reardon CL et al. Mental health in elite athletes: International Olympic Committee consensus statement (2026). Br J Sports Med. 2026;60:1083-1130. doi:10.1136/bjsports-2025-111514.",
+    url: "https://doi.org/10.1136/bjsports-2025-111514",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "sport-injury-psychology-consensus-2024",
+    citation:
+      "Tranaeus U et al. 50 Years of Research on the Psychology of Sport Injury: A Consensus Statement. Sports Med. 2024;54:1733-1748. doi:10.1007/s40279-024-02045-w.",
+    url: "https://doi.org/10.1007/s40279-024-02045-w",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "manual-therapy-sports-clinical-reasoning-2023",
+    citation:
+      "Short S, Tuttle N. A Clinically-Reasoned Approach to Manual Therapy in Sports Physical Therapy. Int J Sports Phys Ther. 2023;18(1):262-278. doi:10.26603/001c.67936.",
+    url: "https://doi.org/10.26603/001c.67936",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "manual-therapy-mechanisms-2025",
+    citation:
+      "Keter DL et al. The mechanisms of manual therapy: a living review of systematic, narrative, and scoping reviews. PLoS One. 2025;20:e0319586. doi:10.1371/journal.pone.0319586.",
+    url: "https://doi.org/10.1371/journal.pone.0319586",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "para-athlete-sports-physio-2021",
+    citation:
+      "Fagher K et al. Sports physiotherapy—Actions to optimize the health of Para athletes. Int J Sports Phys Ther. 2021;16:1376-1378. doi:10.26603/001c.29910.",
+    url: "https://doi.org/10.26603/001c.29910",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-fair-2025",
+    citation:
+      "Crossley KM et al. Female/woman/girl Athlete Injury pRevention (FAIR) practical recommendations: IOC consensus meeting 2025. Br J Sports Med. 2025;59:1546-1559. doi:10.1136/bjsports-2025-110889.",
+    url: "https://doi.org/10.1136/bjsports-2025-110889",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
+  },
+  {
+    sourceId: "ioc-elite-youth-athletes-2024",
+    citation:
+      "Bergeron MF, Cote J, Erdener U, et al. IOC consensus statement on elite youth athletes competing at the Olympic Games: essentials to a healthy, safe and sustainable paradigm. Br J Sports Med. 2024;58(17):946-965. doi:10.1136/bjsports-2024-108186. PMID:39197945.",
+    url: "https://pubmed.ncbi.nlm.nih.gov/39197945/",
+    accessedAt: SPORTS_RESEARCH_ACCESSED_AT,
   },
 ];
 
@@ -1681,8 +1808,9 @@ const comScaffolds: ReadonlyArray<readonly [string, string]> = [
 ];
 
 // Subject 7 — Sports Physiotherapy
-// v0.8: 20 topics authored with verified 2025-26 sources; 14 curriculum topics whose only sources are
-// unverified textbooks (NSCA, manual-therapy, sports-biomechanics) are omitted rather than fabricated.
+// v0.8: all 34 curriculum candidates are authored. Current 2025-26 sources
+// are preferred where they exist; still-current consensus work, foundational
+// texts, and official sport rules are identified honestly by publication date.
 const sportsTopics: TopicSeed[] = [
   {
     topicId: "spr-exercise-physiology-sports-context",
@@ -1700,8 +1828,8 @@ const sportsTopics: TopicSeed[] = [
     prompt:
       "Explain how sport-specific fitness is assessed and trained across cricket, football, track & field, and aquatic sports.",
     concepts: [
-      c("Assess sport-specific fitness components relevant to the sport's demands", ["sport-specific fitness", "fitness components", "sport demands"], ["acsm-getp-12th-2025"]),
-      c("Use sport-appropriate testing and conditioning within physiotherapy scope", ["sport-appropriate testing", "conditioning", "within physiotherapy scope"], ["acsm-getp-12th-2025"]),
+      c("Assess sport-specific fitness components relevant to the sport's demands", ["sport-specific fitness", "fitness components", "sport demands"], ["nsca-sport-science-2022", "acsm-getp-12th-2025"]),
+      c("Use a needs analysis and sport-appropriate testing to plan conditioning within physiotherapy scope", ["needs analysis", "sport-appropriate testing", "conditioning within scope"], ["nsca-sport-science-2022"]),
     ],
   },
   {
@@ -1720,8 +1848,8 @@ const sportsTopics: TopicSeed[] = [
     prompt:
       "Explain sports-specific conditioning and agility training, and the role of sports equipment in performance and safety.",
     concepts: [
-      c("Combine sport-specific conditioning with agility training matched to the sport's demands", ["sport-specific conditioning", "agility training", "matched to sport demands"], ["acsm-getp-12th-2025"]),
-      c("Relate sports equipment to performance, protection, and safety within scope", ["sports equipment", "performance and protection", "safety"], ["acsm-getp-12th-2025"]),
+      c("Combine sport-specific conditioning with agility training matched to a needs analysis of the sport's demands", ["sport-specific conditioning", "agility training", "needs analysis"], ["nsca-sport-science-2022"]),
+      c("Relate sports equipment to performance, protection, fit, rules, and residual risk within scope", ["sports equipment", "fit and rules", "residual risk"], ["nsca-sport-science-2022", "ioc-manual-sports-injuries"]),
     ],
   },
   {
@@ -1762,7 +1890,7 @@ const sportsTopics: TopicSeed[] = [
       "Explain tissue healing and soft-tissue injury management for the upper limb, integrating healing principles with taping and rehabilitation evidence.",
     concepts: [
       c("Apply tissue-healing principles to upper-limb soft-tissue injury management", ["tissue healing", "upper-limb injury management", "healing principles"], ["ioc-manual-sports-injuries"]),
-      c("Use taping as an adjunct for symptom modulation, not as a replacement for active rehabilitation", ["taping adjunct", "symptom modulation", "not a replacement for rehabilitation"], ["cochrane-kt-rotator-cuff-2021"]),
+      c("If taping is trialled, define a functional or symptom goal, reassess response, and do not replace active rehabilitation; effects remain uncertain in the cited very-low-certainty evidence", ["taping trial and reassessment", "not a replacement for rehabilitation", "very low certainty and uncertain effects"], ["cochrane-kt-rotator-cuff-2021"]),
     ],
   },
   {
@@ -1771,7 +1899,7 @@ const sportsTopics: TopicSeed[] = [
     prompt:
       "Explain the assessment and within-scope management of fractures, dislocations, and spinal injuries in sport, including on-field decisions and referral.",
     concepts: [
-      c("Recognise fractures, dislocations, and spinal injuries and apply on-field escalation", ["fractures and dislocations", "spinal injuries", "on-field escalation"], ["amsterdam-2022-concussion", "ioc-manual-sports-injuries"]),
+      c("Recognise fractures, dislocations, and spinal injuries and apply on-field escalation", ["fractures and dislocations", "spinal injuries", "on-field escalation"], ["ioc-manual-sports-injuries"]),
       c("Refer limb-threatening or spinal red flags rather than independently managing outside scope", ["refer", "limb-threatening", "spinal red flags"], ["ioc-manual-sports-injuries"]),
     ],
   },
@@ -1791,8 +1919,9 @@ const sportsTopics: TopicSeed[] = [
     prompt:
       "Explain sports-specific problems in female, pediatric, and elderly athletes, including energy availability and age-appropriate loading.",
     concepts: [
-      c("Apply REDs (Relative Energy Deficiency in Sport) concepts across male, female, pediatric, and adult athletes", ["Relative Energy Deficiency in Sport", "energy availability", "REDs"], ["ioc-reds-consensus-2023"]),
-      c("Use the IOC REDs CAT2 risk-stratification and return-to-play framework for suspected REDs", ["IOC REDs CAT2", "risk stratification", "return-to-play framework"], ["ioc-reds-cat2-2023"]),
+      c("For female athletes, consider sex- and gender-informed injury prevention, menstrual health, and low energy availability without reducing every presentation to REDs", ["sex and gender informed prevention", "menstrual health and energy availability", "not every presentation is REDs"], ["ioc-fair-2025", "ioc-reds-consensus-2023"]),
+      c("For pediatric athletes, use a child-centred plan that accounts for growth, maturation, training exposure, recovery, psychosocial development, safeguarding, and long-term participation", ["child-centred plan", "growth maturation and recovery", "safeguarding and long-term participation"], ["ioc-elite-youth-athletes-2024"]),
+      c("For older athletes, individualize screening, progressive loading, and recovery around training history, goals, comorbidity, medication, strength, balance, symptoms, and function rather than age alone", ["not age alone", "comorbidity medication and recovery", "individualized progressive loading"], ["acsm-getp-12th-2025"]),
     ],
   },
   {
@@ -1813,7 +1942,7 @@ const sportsTopics: TopicSeed[] = [
       "Explain doping and performance-enhancing drugs in sport, including the WADA Prohibited List and the therapeutic use exemption framework.",
     concepts: [
       c("Cite the current (2026) WADA Prohibited List for in- and out-of-competition banned substances and methods", ["WADA Prohibited List", "banned substances", "prohibited methods"], ["wada-prohibited-list-2026"]),
-      c("Explain that legitimate therapeutic use requires a Therapeutic Use Exemption (TUE)", ["Therapeutic Use Exemption", "TUE", "legitimate therapeutic use"], ["wada-prohibited-list-2026"]),
+      c("Explain that an athlete who needs a prohibited substance or method must follow the applicable anti-doping organization's TUE process and satisfy the ISTUE criteria; clinical need alone is not an automatic exemption", ["Therapeutic Use Exemption", "ISTUE criteria", "not an automatic exemption"], ["wada-istue-2026"]),
     ],
   },
   {
@@ -1898,8 +2027,8 @@ const sportsTopics: TopicSeed[] = [
     prompt:
       "Explain taping techniques and recent advances in sports rehabilitation, including the evidence and its limits as an adjunct.",
     concepts: [
-      c("Use taping as an adjunct for symptom modulation and proprioception, not as a replacement for active rehabilitation", ["taping adjunct", "symptom modulation", "proprioception", "not a replacement for rehabilitation"], ["cochrane-kt-rotator-cuff-2021"]),
-      c("Cite the certainty of evidence rather than anecdote when defending taping use", ["certainty of evidence", "not anecdote", "cite the evidence"], ["cochrane-kt-rotator-cuff-2021"]),
+      c("Treat kinesiology taping effects as uncertain in the cited very-low-certainty evidence; do not promise pain, function, movement, or range-of-motion benefit", ["uncertain effects", "very low certainty", "do not promise benefit"], ["cochrane-kt-rotator-cuff-2021"]),
+      c("If taping is trialled as an adjunct, agree a functional or symptom goal, check skin and comfort, reassess meaningful response, and continue active rehabilitation", ["adjunct trial", "skin comfort and reassessment", "continue active rehabilitation"], ["cochrane-kt-rotator-cuff-2021", "ioc-manual-sports-injuries"]),
     ],
   },
   {
@@ -1929,7 +2058,127 @@ const sportsTopics: TopicSeed[] = [
       "Explain problems in female athletes, including menstrual function, and preventive strategies grounded in energy availability.",
     concepts: [
       c("Relate menstrual dysfunction to low energy availability and training load, using the REDs framework", ["menstrual dysfunction", "low energy availability", "REDs framework"], ["ioc-reds-consensus-2023"]),
-      c("Use the IOC REDs CAT2 for risk stratification and preventive strategies", ["IOC REDs CAT2", "risk stratification", "preventive strategies"], ["ioc-reds-cat2-2023"]),
+      c("Use REDs CAT2 and the 2025 FAIR recommendations to structure risk assessment and prevention without assuming one programme fits every female athlete", ["IOC REDs CAT2", "FAIR recommendations", "individualized prevention"], ["ioc-reds-cat2-2023", "ioc-fair-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-introduction-sports-sciences",
+    title: "Introduction to sports sciences",
+    prompt:
+      "Introduce sports sciences as an interdisciplinary field and explain how its disciplines support athlete health, performance, and physiotherapy decisions.",
+    concepts: [
+      c("Integrate physiology, biomechanics, psychology, performance analysis, epidemiology, nutrition, and ethics rather than treating one discipline as the whole of sport science", ["interdisciplinary sports science", "physiology biomechanics psychology", "performance and athlete health"], ["nsca-sport-science-2022", "src-curriculum-sports"]),
+      c("Translate measurements into a defined athlete or team question while separating performance support from diagnosis and medical clearance", ["defined performance question", "measurement in context", "separate from diagnosis and clearance"], ["nsca-sport-science-2022", "ioc-epidemiology-consensus-2020"]),
+    ],
+  },
+  {
+    topicId: "spr-cricket-football-basketball-hockey",
+    title: "Cricket, football, basketball & hockey — terminology, methodology, rules, equipment",
+    prompt:
+      "Compare the terminology, playing demands, rules, equipment, and infrastructure of cricket, football, basketball, and hockey that matter to a sports physiotherapist.",
+    concepts: [
+      c("For each sport, connect its playing objective, roles, movement and contact demands, surface, equipment, and substitution or medical-access rules to assessment and event planning", ["playing objective and roles", "movement and contact demands", "equipment and medical access"], ["nsca-sport-science-2022", "ioc-manual-sports-injuries", "src-curriculum-sports"]),
+      c("Verify the edition and competition-specific playing conditions with the governing federation instead of relying on memorized generic rules", ["verify current rules", "competition-specific playing conditions", "official federation source"], ["icc-playing-conditions-2026", "ifab-laws-2026-27", "fiba-rules-current", "fih-rules-2026"]),
+    ],
+  },
+  {
+    topicId: "spr-tennis-track-field-aquatic",
+    title: "Tennis, track & field, aquatic sports — terminology, methodology, rules, equipment",
+    prompt:
+      "Compare the terminology, event demands, rules, equipment, and infrastructure of tennis, track and field, and aquatic sports that matter to a sports physiotherapist.",
+    concepts: [
+      c("Relate court, track, field, and aquatic event demands—including repetition, impact, throwing, sprint or endurance load, and the environment—to physiotherapy observation and preparation", ["event-specific demands", "impact throwing sprint endurance", "environment and preparation"], ["nsca-sport-science-2022", "mcginnis-biomechanics-4e", "src-curriculum-sports"]),
+      c("Check the current discipline and competition rulebook before advising on equipment, field-of-play access, or return during an event", ["current discipline rulebook", "equipment and access", "event-specific return rules"], ["itf-rules-2026", "world-athletics-rules-current", "world-aquatics-rules-current"]),
+    ],
+  },
+  {
+    topicId: "spr-sports-biomechanics-injury",
+    title: "Principles of sports biomechanics & biomechanics of injury",
+    prompt:
+      "Explain the principles of sports biomechanics and show how they inform—but do not alone determine—an analysis of sports injury.",
+    concepts: [
+      c("Distinguish kinematics from kinetics and relate force, torque, work, power, impulse, momentum, and tissue loading to a defined movement task", ["kinematics and kinetics", "force torque impulse momentum", "tissue loading"], ["mcginnis-biomechanics-4e"]),
+      c("Use biomechanics to generate and test hypotheses alongside exposure, capacity, symptoms, context, and clinical findings rather than claiming a single movement causes injury", ["biomechanical hypothesis", "multifactorial injury", "not single-factor causation"], ["mcginnis-biomechanics-4e", "ioc-epidemiology-consensus-2020"]),
+    ],
+  },
+  {
+    topicId: "spr-physics-running-throwing-swimming-jumping",
+    title: "Physics in sports — biomechanics of running, throwing, swimming & jumping",
+    prompt:
+      "Use physics to compare running, throwing, swimming, and jumping, and explain how contemporary measurement can test a technique or rehabilitation question.",
+    concepts: [
+      c("Break each skill into phases and use appropriate variables such as ground-reaction force and impulse, angular momentum, projectile motion, or drag and buoyancy", ["movement phases", "ground reaction force and impulse", "angular momentum drag buoyancy"], ["mcginnis-biomechanics-4e"]),
+      c("Choose video, force, temporal-spatial, or wearable measures for a stated question and interpret measurement error before changing technique or rehabilitation", ["measurement matched to question", "video force wearable measures", "measurement error"], ["mcginnis-biomechanics-4e", "nsca-sport-science-2022"]),
+    ],
+  },
+  {
+    topicId: "spr-psychological-aspects-sports",
+    title: "Psychological aspects in sports (grief/loss models, cognitive stress & emotional response)",
+    prompt:
+      "Explain psychological responses to sport, injury, loss, rehabilitation, and return, using grief and stress models cautiously rather than as fixed stages.",
+    concepts: [
+      c("Describe cognitive appraisal, emotion, behaviour, identity, social context, and recovery as interacting and changing across injury rehabilitation and return to sport", ["cognitive appraisal", "emotional and behavioural response", "injury rehabilitation and return"], ["sport-injury-psychology-consensus-2024"]),
+      c("Use grief or loss models as optional communication frameworks, not a mandatory linear sequence, and screen, safeguard, and refer mental-health concerns within role and competence", ["not fixed grief stages", "screen and safeguard", "refer within competence"], ["ioc-mental-health-2026", "sport-injury-psychology-consensus-2024"]),
+    ],
+  },
+  {
+    topicId: "spr-protective-equipment-orthotics-traumatology",
+    title: "Protective equipment in sports incl. orthotics; sports traumatology",
+    prompt:
+      "Explain how protective equipment and orthoses fit into sports-trauma prevention and management, including fit, rules, residual risk, and reassessment.",
+    concepts: [
+      c("Match equipment or an orthosis to the sport, athlete, impairment, task, fit, skin and comfort checks, and the governing rules, then reassess function", ["sport and athlete specific fit", "skin comfort and function checks", "rules and reassessment"], ["ioc-manual-sports-injuries", "fih-rules-2026", "para-athlete-sports-physio-2021"]),
+      c("Explain that protective equipment can modify exposure or injury severity but does not eliminate risk or replace technique, load management, emergency planning, and rehabilitation", ["modify not eliminate risk", "not replace load management", "emergency planning and rehabilitation"], ["ioc-manual-sports-injuries", "ioc-epidemiology-consensus-2020"]),
+    ],
+  },
+  {
+    topicId: "spr-sports-psychology-training",
+    title: "Specific psychology management in sports; sports-specific training",
+    prompt:
+      "Explain psychologically informed sports rehabilitation and sports-specific training while keeping physiotherapy support distinct from specialist mental-health care.",
+    concepts: [
+      c("Use collaborative goals, graded exposure, confidence and readiness discussion, feedback, and monitoring to support adherence and return-to-sport training", ["collaborative goals", "graded exposure and confidence", "monitor readiness and adherence"], ["sport-injury-psychology-consensus-2024"]),
+      c("Recognize distress and risk, protect confidentiality, and use established referral pathways; diagnosis and psychotherapy belong to appropriately qualified professionals", ["recognize distress and risk", "confidential referral pathway", "qualified mental health professional"], ["ioc-mental-health-2026"]),
+    ],
+  },
+  {
+    topicId: "spr-advanced-sports-assessment-acute-management",
+    title: "Advanced sports assessment skills; initial management of acute sports injuries",
+    prompt:
+      "Explain an advanced on-field and off-field assessment of an acute sports injury and the decisions for emergency action, removal, referral, and reassessment.",
+    concepts: [
+      c("Start with scene safety, the event emergency-action plan, a primary survey, catastrophic-injury precautions, and timely escalation before a focused musculoskeletal examination", ["scene safety and emergency plan", "primary survey", "catastrophic injury escalation"], ["ioc-manual-sports-injuries"]),
+      c("Use mechanism, symptoms, observation, palpation, movement and function to decide removal or referral, and apply immediate removal with no same-day return when concussion is suspected", ["mechanism and focused examination", "remove or refer", "suspected concussion no same-day return"], ["ioc-manual-sports-injuries", "amsterdam-2022-concussion"]),
+    ],
+  },
+  {
+    topicId: "spr-manual-therapy-sports-peripheral",
+    title: "Manual therapy techniques in sports (McKenzie, Maitland, Cyriax, Mulligan, positional release)",
+    prompt:
+      "Compare named manual-therapy approaches used in sports physiotherapy and explain how assessment, consent, response, evidence, and active rehabilitation govern their use.",
+    concepts: [
+      c("Differentiate the named approaches as curricular frameworks without claiming that a school label identifies pathology or guarantees a technique-specific mechanism", ["compare named approaches", "not diagnostic school labels", "no guaranteed specific mechanism"], ["src-curriculum-sports", "manual-therapy-mechanisms-2025"]),
+      c("Use consented manual therapy only when a reasoned trial supports a functional goal, reassess the response, and integrate it as an adjunct to active rehabilitation", ["clinical reasoning and consent", "reassess response", "adjunct to active rehabilitation"], ["manual-therapy-sports-clinical-reasoning-2023", "manual-therapy-mechanisms-2025"]),
+    ],
+  },
+  {
+    topicId: "spr-manual-therapy-sports-myofascial-neurodynamics",
+    title: "Manual therapy in sports — myofascial release, muscle energy, neurodynamics",
+    prompt:
+      "Explain myofascial release, muscle-energy techniques, and neurodynamic or neural-mobilization techniques in sports rehabilitation, including evidence limits and safety.",
+    concepts: [
+      c("Describe each technique's intended examination-linked use and dosage while monitoring symptoms, neurological signs, irritability, contraindications, and the athlete's response", ["examination linked technique", "monitor neurological signs and irritability", "contraindications and response"], ["src-curriculum-sports", "manual-therapy-sports-clinical-reasoning-2023"]),
+      c("Explain that observed effects may involve multiple neurophysiological and contextual mechanisms; avoid unsupported tissue-release claims and pair any short-term benefit with active rehabilitation", ["multiple mechanisms", "avoid tissue release claims", "pair with active rehabilitation"], ["manual-therapy-mechanisms-2025", "manual-therapy-sports-clinical-reasoning-2023"]),
+    ],
+  },
+  {
+    topicId: "spr-sports-special-populations-challenged",
+    title: "Sports management of special populations (geriatric, physically challenged athletes)",
+    prompt:
+      "Explain sports physiotherapy management for older and Para athletes using person-, impairment-, sport-, equipment-, and environment-specific assessment.",
+    concepts: [
+      c("For a Para athlete, assess impairment-specific and secondary health risks, equipment and classification context, skin, thermoregulation, autonomic or overuse concerns, access, and the athlete's own expertise", ["Para athlete health risks", "equipment classification and access", "athlete expertise"], ["para-athlete-sports-physio-2021"]),
+      c("For an older athlete, individualize progressive loading and recovery around training history, goals, comorbidity, medication, strength, balance, symptoms, and function rather than chronological age alone", ["not age alone", "comorbidity medication and recovery", "individualized progressive loading"], ["acsm-getp-12th-2025"]),
     ],
   },
 ];
@@ -2155,12 +2404,7 @@ const pack = {
       "musculoskeletal-physiotherapy": mskScaffolds,
       "community-health-physiotherapy": comScaffolds,
     };
-    const authored = subject.topics.map((t) => {
-      if (t && typeof t === "object" && !("concepts" in t) && "sourceId" in t) {
-        console.error("SUBJECT_WITH_SOURCE", subject.subjectId, JSON.stringify(t));
-      }
-      return buildTopic(t);
-    });
+    const authored = subject.topics.map(buildTopic);
     const scaffolds = scaffoldTopics(scaffoldsBySubject[subject.subjectId] ?? []);
     return {
       subjectId: subject.subjectId,
@@ -2176,7 +2420,7 @@ const out = resolve(
   "../../../content/candidates/mpt-cardiorespiratory-review-candidate.json",
 );
 mkdirSync(dirname(out), { recursive: true });
-// Minified to stay within the 512 KiB pack byte budget (265 topics).
+// Minified to stay within the bounded public-pack byte budget (265 topics).
 const serialized = JSON.stringify(pack) + "\n";
 if (process.argv.includes("--check")) {
   if (readFileSync(out, "utf8") !== serialized) {

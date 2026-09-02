@@ -40,7 +40,7 @@ async function parseBoundedResponse(response: Response): Promise<unknown> {
 
 // The 265-topic pack (~400 KiB) is dynamically imported so it loads as a separate
 // chunk only when the fetched pack is unavailable, keeping the initial entry JS
-// within the 512 KiB budget. The service-worker precache is the primary offline path.
+// within the bounded pack budget. The service-worker precache is the primary offline path.
 async function compiledFallback(): Promise<RuntimePack> {
   const mod = (await import(
     "@content/candidates/mpt-cardiorespiratory-review-candidate.json"

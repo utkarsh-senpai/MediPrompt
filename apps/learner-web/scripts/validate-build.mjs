@@ -114,7 +114,7 @@ const expectedSubjectCounts = {
   "neuro-physiotherapy": 35,
   "cardiovascular-and-respiratory-physiotherapy": 26,
   "community-health-physiotherapy": 53,
-  "sports-physiotherapy": 22,
+  "sports-physiotherapy": 34,
 };
 const expectedActiveSubjects = new Set([
   "neuro-physiotherapy",
@@ -137,11 +137,11 @@ if (
   !Array.isArray(publicPack.review?.reviewers) ||
   publicPack.review.reviewers.length !== 0 ||
   publicPack.review.reviewedAt !== null ||
-  publicTopicCount !== 253 ||
+  publicTopicCount !== 265 ||
   !subjectContractValid
 ) {
   errors.push(
-    "public physiotherapy pack is not the expected unattested 253-topic DRAFT with exactly three active subjects",
+    "public physiotherapy pack is not the expected unattested 265-topic DRAFT with exactly three active subjects",
   );
 }
 

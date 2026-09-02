@@ -21,7 +21,7 @@ type SchemaValidator = ((value: unknown) => boolean) & {
 // Keep CSP strict and verify drift with `pnpm schema:check`.
 const validateSchema = generatedSchemaValidator as SchemaValidator;
 
-export const MAX_PACK_BYTES = 560 * 1024;
+export const MAX_PACK_BYTES = 640 * 1024;
 const MAX_SCAN_DEPTH = 16;
 const MAX_SCAN_NODES = 50_000;
 
@@ -435,7 +435,7 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     "neuro-physiotherapy": 35,
     "cardiovascular-and-respiratory-physiotherapy": 26,
     "community-health-physiotherapy": 53,
-    "sports-physiotherapy": 22,
+    "sports-physiotherapy": 34,
   };
 
   const expectedActive = new Set([
@@ -498,8 +498,8 @@ export function assertPublicDraftPracticePack(pack: RuntimePack): void {
     (total, subject) => total + subject.topics.length,
     0,
   );
-  if (topicCount !== 253) {
-    errors.push(`public curriculum skeleton requires exactly 253 topics, got ${topicCount}`);
+  if (topicCount !== 265) {
+    errors.push(`public curriculum skeleton requires exactly 265 topics, got ${topicCount}`);
   }
   try {
     assertV02PracticeMinimums(pack);

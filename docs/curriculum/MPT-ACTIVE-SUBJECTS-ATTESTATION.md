@@ -7,10 +7,10 @@
 ## Review scope
 
 - Pack: `mpt-cardiorespiratory-review-candidate` version `0.3.0`
-- Generated from the validated candidate: 3 active subjects, 83 topics, 182 prompt variants
-- Active subjects: Neuro Physiotherapy, Respiratory Physiotherapy, and Cardiovascular Physiotherapy
+- Generated from the validated candidate: 3 active subjects, 95 topics, 206 prompt variants
+- Active subjects: Neuro Physiotherapy, Cardiovascular & Respiratory Physiotherapy, Sports Physiotherapy
 - Evidence status: sources were checked in 2026 and include 2025–26 publications plus older still-current guidelines, measurement standards, and foundational texts
-- Curriculum catalog: 265 topics across eight visible subjects; five subjects remain `COMING_SOON` and cannot start practice
+- Curriculum catalog: 265 topics across 7 visible subjects; 4 subjects remain `COMING_SOON` and cannot start practice
 - This worksheet reviews educational prompts and answer criteria. It is not patient-specific guidance, a diagnostic protocol, or a substitute for local policy or supervised clinical training.
 
 ## Reviewer record
@@ -2696,10 +2696,10 @@ Explain how sport-specific fitness is assessed and trained across cricket, footb
 
 **Expected answer — required evidence criteria:**
 
-1. Assess sport-specific fitness components relevant to the sport's demands (`acsm-getp-12th-2025`)
+1. Assess sport-specific fitness components relevant to the sport's demands (`nsca-sport-science-2022`, `acsm-getp-12th-2025`)
    - Accepted evidence wording: `sport-specific fitness`; `fitness components`; `sport demands`
-2. Use sport-appropriate testing and conditioning within physiotherapy scope (`acsm-getp-12th-2025`)
-   - Accepted evidence wording: `sport-appropriate testing`; `conditioning`; `within physiotherapy scope`
+2. Use a needs analysis and sport-appropriate testing to plan conditioning within physiotherapy scope (`nsca-sport-science-2022`)
+   - Accepted evidence wording: `needs analysis`; `sport-appropriate testing`; `conditioning within scope`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2711,10 +2711,10 @@ Use the cited evidence sources to prepare, then answer: Explain how sport-specif
 
 **Expected answer — required evidence criteria:**
 
-1. Assess sport-specific fitness components relevant to the sport's demands (`acsm-getp-12th-2025`)
+1. Assess sport-specific fitness components relevant to the sport's demands (`nsca-sport-science-2022`, `acsm-getp-12th-2025`)
    - Accepted evidence wording: `sport-specific fitness`; `fitness components`; `sport demands`
-2. Use sport-appropriate testing and conditioning within physiotherapy scope (`acsm-getp-12th-2025`)
-   - Accepted evidence wording: `sport-appropriate testing`; `conditioning`; `within physiotherapy scope`
+2. Use a needs analysis and sport-appropriate testing to plan conditioning within physiotherapy scope (`nsca-sport-science-2022`)
+   - Accepted evidence wording: `needs analysis`; `sport-appropriate testing`; `conditioning within scope`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2764,10 +2764,10 @@ Explain sports-specific conditioning and agility training, and the role of sport
 
 **Expected answer — required evidence criteria:**
 
-1. Combine sport-specific conditioning with agility training matched to the sport's demands (`acsm-getp-12th-2025`)
-   - Accepted evidence wording: `sport-specific conditioning`; `agility training`; `matched to sport demands`
-2. Relate sports equipment to performance, protection, and safety within scope (`acsm-getp-12th-2025`)
-   - Accepted evidence wording: `sports equipment`; `performance and protection`; `safety`
+1. Combine sport-specific conditioning with agility training matched to a needs analysis of the sport's demands (`nsca-sport-science-2022`)
+   - Accepted evidence wording: `sport-specific conditioning`; `agility training`; `needs analysis`
+2. Relate sports equipment to performance, protection, fit, rules, and residual risk within scope (`nsca-sport-science-2022`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `sports equipment`; `fit and rules`; `residual risk`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2779,10 +2779,10 @@ Use the cited evidence sources to prepare, then answer: Explain sports-specific 
 
 **Expected answer — required evidence criteria:**
 
-1. Combine sport-specific conditioning with agility training matched to the sport's demands (`acsm-getp-12th-2025`)
-   - Accepted evidence wording: `sport-specific conditioning`; `agility training`; `matched to sport demands`
-2. Relate sports equipment to performance, protection, and safety within scope (`acsm-getp-12th-2025`)
-   - Accepted evidence wording: `sports equipment`; `performance and protection`; `safety`
+1. Combine sport-specific conditioning with agility training matched to a needs analysis of the sport's demands (`nsca-sport-science-2022`)
+   - Accepted evidence wording: `sport-specific conditioning`; `agility training`; `needs analysis`
+2. Relate sports equipment to performance, protection, fit, rules, and residual risk within scope (`nsca-sport-science-2022`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `sports equipment`; `fit and rules`; `residual risk`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2906,8 +2906,8 @@ Explain tissue healing and soft-tissue injury management for the upper limb, int
 
 1. Apply tissue-healing principles to upper-limb soft-tissue injury management (`ioc-manual-sports-injuries`)
    - Accepted evidence wording: `tissue healing`; `upper-limb injury management`; `healing principles`
-2. Use taping as an adjunct for symptom modulation, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
-   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `not a replacement for rehabilitation`
+2. If taping is trialled, define a functional or symptom goal, reassess response, and do not replace active rehabilitation; effects remain uncertain in the cited very-low-certainty evidence (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `taping trial and reassessment`; `not a replacement for rehabilitation`; `very low certainty and uncertain effects`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2921,8 +2921,8 @@ Use the cited evidence sources to prepare, then answer: Explain tissue healing a
 
 1. Apply tissue-healing principles to upper-limb soft-tissue injury management (`ioc-manual-sports-injuries`)
    - Accepted evidence wording: `tissue healing`; `upper-limb injury management`; `healing principles`
-2. Use taping as an adjunct for symptom modulation, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
-   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `not a replacement for rehabilitation`
+2. If taping is trialled, define a functional or symptom goal, reassess response, and do not replace active rehabilitation; effects remain uncertain in the cited very-low-certainty evidence (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `taping trial and reassessment`; `not a replacement for rehabilitation`; `very low certainty and uncertain effects`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -2938,7 +2938,7 @@ Explain the assessment and within-scope management of fractures, dislocations, a
 
 **Expected answer — required evidence criteria:**
 
-1. Recognise fractures, dislocations, and spinal injuries and apply on-field escalation (`amsterdam-2022-concussion`, `ioc-manual-sports-injuries`)
+1. Recognise fractures, dislocations, and spinal injuries and apply on-field escalation (`ioc-manual-sports-injuries`)
    - Accepted evidence wording: `fractures and dislocations`; `spinal injuries`; `on-field escalation`
 2. Refer limb-threatening or spinal red flags rather than independently managing outside scope (`ioc-manual-sports-injuries`)
    - Accepted evidence wording: `refer`; `limb-threatening`; `spinal red flags`
@@ -2953,7 +2953,7 @@ Use the cited evidence sources to prepare, then answer: Explain the assessment a
 
 **Expected answer — required evidence criteria:**
 
-1. Recognise fractures, dislocations, and spinal injuries and apply on-field escalation (`amsterdam-2022-concussion`, `ioc-manual-sports-injuries`)
+1. Recognise fractures, dislocations, and spinal injuries and apply on-field escalation (`ioc-manual-sports-injuries`)
    - Accepted evidence wording: `fractures and dislocations`; `spinal injuries`; `on-field escalation`
 2. Refer limb-threatening or spinal red flags rather than independently managing outside scope (`ioc-manual-sports-injuries`)
    - Accepted evidence wording: `refer`; `limb-threatening`; `spinal red flags`
@@ -3006,10 +3006,12 @@ Explain sports-specific problems in female, pediatric, and elderly athletes, inc
 
 **Expected answer — required evidence criteria:**
 
-1. Apply REDs (Relative Energy Deficiency in Sport) concepts across male, female, pediatric, and adult athletes (`ioc-reds-consensus-2023`)
-   - Accepted evidence wording: `Relative Energy Deficiency in Sport`; `energy availability`; `REDs`
-2. Use the IOC REDs CAT2 risk-stratification and return-to-play framework for suspected REDs (`ioc-reds-cat2-2023`)
-   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `return-to-play framework`
+1. For female athletes, consider sex- and gender-informed injury prevention, menstrual health, and low energy availability without reducing every presentation to REDs (`ioc-fair-2025`, `ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `sex and gender informed prevention`; `menstrual health and energy availability`; `not every presentation is REDs`
+2. For pediatric athletes, use a child-centred plan that accounts for growth, maturation, training exposure, recovery, psychosocial development, safeguarding, and long-term participation (`ioc-elite-youth-athletes-2024`)
+   - Accepted evidence wording: `child-centred plan`; `growth maturation and recovery`; `safeguarding and long-term participation`
+3. For older athletes, individualize screening, progressive loading, and recovery around training history, goals, comorbidity, medication, strength, balance, symptoms, and function rather than age alone (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `not age alone`; `comorbidity medication and recovery`; `individualized progressive loading`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3021,10 +3023,12 @@ Use the cited evidence sources to prepare, then answer: Explain sports-specific 
 
 **Expected answer — required evidence criteria:**
 
-1. Apply REDs (Relative Energy Deficiency in Sport) concepts across male, female, pediatric, and adult athletes (`ioc-reds-consensus-2023`)
-   - Accepted evidence wording: `Relative Energy Deficiency in Sport`; `energy availability`; `REDs`
-2. Use the IOC REDs CAT2 risk-stratification and return-to-play framework for suspected REDs (`ioc-reds-cat2-2023`)
-   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `return-to-play framework`
+1. For female athletes, consider sex- and gender-informed injury prevention, menstrual health, and low energy availability without reducing every presentation to REDs (`ioc-fair-2025`, `ioc-reds-consensus-2023`)
+   - Accepted evidence wording: `sex and gender informed prevention`; `menstrual health and energy availability`; `not every presentation is REDs`
+2. For pediatric athletes, use a child-centred plan that accounts for growth, maturation, training exposure, recovery, psychosocial development, safeguarding, and long-term participation (`ioc-elite-youth-athletes-2024`)
+   - Accepted evidence wording: `child-centred plan`; `growth maturation and recovery`; `safeguarding and long-term participation`
+3. For older athletes, individualize screening, progressive loading, and recovery around training history, goals, comorbidity, medication, strength, balance, symptoms, and function rather than age alone (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `not age alone`; `comorbidity medication and recovery`; `individualized progressive loading`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3080,8 +3084,8 @@ Explain doping and performance-enhancing drugs in sport, including the WADA Proh
 
 1. Cite the current (2026) WADA Prohibited List for in- and out-of-competition banned substances and methods (`wada-prohibited-list-2026`)
    - Accepted evidence wording: `WADA Prohibited List`; `banned substances`; `prohibited methods`
-2. Explain that legitimate therapeutic use requires a Therapeutic Use Exemption (TUE) (`wada-prohibited-list-2026`)
-   - Accepted evidence wording: `Therapeutic Use Exemption`; `TUE`; `legitimate therapeutic use`
+2. Explain that an athlete who needs a prohibited substance or method must follow the applicable anti-doping organization's TUE process and satisfy the ISTUE criteria; clinical need alone is not an automatic exemption (`wada-istue-2026`)
+   - Accepted evidence wording: `Therapeutic Use Exemption`; `ISTUE criteria`; `not an automatic exemption`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3095,8 +3099,8 @@ Use the cited evidence sources to prepare, then answer: Explain doping and perfo
 
 1. Cite the current (2026) WADA Prohibited List for in- and out-of-competition banned substances and methods (`wada-prohibited-list-2026`)
    - Accepted evidence wording: `WADA Prohibited List`; `banned substances`; `prohibited methods`
-2. Explain that legitimate therapeutic use requires a Therapeutic Use Exemption (TUE) (`wada-prohibited-list-2026`)
-   - Accepted evidence wording: `Therapeutic Use Exemption`; `TUE`; `legitimate therapeutic use`
+2. Explain that an athlete who needs a prohibited substance or method must follow the applicable anti-doping organization's TUE process and satisfy the ISTUE criteria; clinical need alone is not an automatic exemption (`wada-istue-2026`)
+   - Accepted evidence wording: `Therapeutic Use Exemption`; `ISTUE criteria`; `not an automatic exemption`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3329,10 +3333,10 @@ Explain taping techniques and recent advances in sports rehabilitation, includin
 
 **Expected answer — required evidence criteria:**
 
-1. Use taping as an adjunct for symptom modulation and proprioception, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
-   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `proprioception`; `not a replacement for rehabilitation`
-2. Cite the certainty of evidence rather than anecdote when defending taping use (`cochrane-kt-rotator-cuff-2021`)
-   - Accepted evidence wording: `certainty of evidence`; `not anecdote`; `cite the evidence`
+1. Treat kinesiology taping effects as uncertain in the cited very-low-certainty evidence; do not promise pain, function, movement, or range-of-motion benefit (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `uncertain effects`; `very low certainty`; `do not promise benefit`
+2. If taping is trialled as an adjunct, agree a functional or symptom goal, check skin and comfort, reassess meaningful response, and continue active rehabilitation (`cochrane-kt-rotator-cuff-2021`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `adjunct trial`; `skin comfort and reassessment`; `continue active rehabilitation`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3344,10 +3348,10 @@ Use the cited evidence sources to prepare, then answer: Explain taping technique
 
 **Expected answer — required evidence criteria:**
 
-1. Use taping as an adjunct for symptom modulation and proprioception, not as a replacement for active rehabilitation (`cochrane-kt-rotator-cuff-2021`)
-   - Accepted evidence wording: `taping adjunct`; `symptom modulation`; `proprioception`; `not a replacement for rehabilitation`
-2. Cite the certainty of evidence rather than anecdote when defending taping use (`cochrane-kt-rotator-cuff-2021`)
-   - Accepted evidence wording: `certainty of evidence`; `not anecdote`; `cite the evidence`
+1. Treat kinesiology taping effects as uncertain in the cited very-low-certainty evidence; do not promise pain, function, movement, or range-of-motion benefit (`cochrane-kt-rotator-cuff-2021`)
+   - Accepted evidence wording: `uncertain effects`; `very low certainty`; `do not promise benefit`
+2. If taping is trialled as an adjunct, agree a functional or symptom goal, check skin and comfort, reassess meaningful response, and continue active rehabilitation (`cochrane-kt-rotator-cuff-2021`, `ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `adjunct trial`; `skin comfort and reassessment`; `continue active rehabilitation`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3433,8 +3437,8 @@ Explain problems in female athletes, including menstrual function, and preventiv
 
 1. Relate menstrual dysfunction to low energy availability and training load, using the REDs framework (`ioc-reds-consensus-2023`)
    - Accepted evidence wording: `menstrual dysfunction`; `low energy availability`; `REDs framework`
-2. Use the IOC REDs CAT2 for risk stratification and preventive strategies (`ioc-reds-cat2-2023`)
-   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `preventive strategies`
+2. Use REDs CAT2 and the 2025 FAIR recommendations to structure risk assessment and prevention without assuming one programme fits every female athlete (`ioc-reds-cat2-2023`, `ioc-fair-2025`)
+   - Accepted evidence wording: `IOC REDs CAT2`; `FAIR recommendations`; `individualized prevention`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3448,8 +3452,416 @@ Use the cited evidence sources to prepare, then answer: Explain problems in fema
 
 1. Relate menstrual dysfunction to low energy availability and training load, using the REDs framework (`ioc-reds-consensus-2023`)
    - Accepted evidence wording: `menstrual dysfunction`; `low energy availability`; `REDs framework`
-2. Use the IOC REDs CAT2 for risk stratification and preventive strategies (`ioc-reds-cat2-2023`)
-   - Accepted evidence wording: `IOC REDs CAT2`; `risk stratification`; `preventive strategies`
+2. Use REDs CAT2 and the 2025 FAIR recommendations to structure risk assessment and prevention without assuming one programme fits every female athlete (`ioc-reds-cat2-2023`, `ioc-fair-2025`)
+   - Accepted evidence wording: `IOC REDs CAT2`; `FAIR recommendations`; `individualized prevention`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 23. Introduction to sports sciences
+
+Topic ID: `spr-introduction-sports-sciences`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Introduce sports sciences as an interdisciplinary field and explain how its disciplines support athlete health, performance, and physiotherapy decisions.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate physiology, biomechanics, psychology, performance analysis, epidemiology, nutrition, and ethics rather than treating one discipline as the whole of sport science (`nsca-sport-science-2022`, `src-curriculum-sports`)
+   - Accepted evidence wording: `interdisciplinary sports science`; `physiology biomechanics psychology`; `performance and athlete health`
+2. Translate measurements into a defined athlete or team question while separating performance support from diagnosis and medical clearance (`nsca-sport-science-2022`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `defined performance question`; `measurement in context`; `separate from diagnosis and clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Introduce sports sciences as an interdisciplinary field and explain how its disciplines support athlete health, performance, and physiotherapy decisions. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Integrate physiology, biomechanics, psychology, performance analysis, epidemiology, nutrition, and ethics rather than treating one discipline as the whole of sport science (`nsca-sport-science-2022`, `src-curriculum-sports`)
+   - Accepted evidence wording: `interdisciplinary sports science`; `physiology biomechanics psychology`; `performance and athlete health`
+2. Translate measurements into a defined athlete or team question while separating performance support from diagnosis and medical clearance (`nsca-sport-science-2022`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `defined performance question`; `measurement in context`; `separate from diagnosis and clearance`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 24. Cricket, football, basketball & hockey — terminology, methodology, rules, equipment
+
+Topic ID: `spr-cricket-football-basketball-hockey`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Compare the terminology, playing demands, rules, equipment, and infrastructure of cricket, football, basketball, and hockey that matter to a sports physiotherapist.
+
+**Expected answer — required evidence criteria:**
+
+1. For each sport, connect its playing objective, roles, movement and contact demands, surface, equipment, and substitution or medical-access rules to assessment and event planning (`nsca-sport-science-2022`, `ioc-manual-sports-injuries`, `src-curriculum-sports`)
+   - Accepted evidence wording: `playing objective and roles`; `movement and contact demands`; `equipment and medical access`
+2. Verify the edition and competition-specific playing conditions with the governing federation instead of relying on memorized generic rules (`icc-playing-conditions-2026`, `ifab-laws-2026-27`, `fiba-rules-current`, `fih-rules-2026`)
+   - Accepted evidence wording: `verify current rules`; `competition-specific playing conditions`; `official federation source`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Compare the terminology, playing demands, rules, equipment, and infrastructure of cricket, football, basketball, and hockey that matter to a sports physiotherapist. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. For each sport, connect its playing objective, roles, movement and contact demands, surface, equipment, and substitution or medical-access rules to assessment and event planning (`nsca-sport-science-2022`, `ioc-manual-sports-injuries`, `src-curriculum-sports`)
+   - Accepted evidence wording: `playing objective and roles`; `movement and contact demands`; `equipment and medical access`
+2. Verify the edition and competition-specific playing conditions with the governing federation instead of relying on memorized generic rules (`icc-playing-conditions-2026`, `ifab-laws-2026-27`, `fiba-rules-current`, `fih-rules-2026`)
+   - Accepted evidence wording: `verify current rules`; `competition-specific playing conditions`; `official federation source`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 25. Tennis, track & field, aquatic sports — terminology, methodology, rules, equipment
+
+Topic ID: `spr-tennis-track-field-aquatic`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Compare the terminology, event demands, rules, equipment, and infrastructure of tennis, track and field, and aquatic sports that matter to a sports physiotherapist.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate court, track, field, and aquatic event demands—including repetition, impact, throwing, sprint or endurance load, and the environment—to physiotherapy observation and preparation (`nsca-sport-science-2022`, `mcginnis-biomechanics-4e`, `src-curriculum-sports`)
+   - Accepted evidence wording: `event-specific demands`; `impact throwing sprint endurance`; `environment and preparation`
+2. Check the current discipline and competition rulebook before advising on equipment, field-of-play access, or return during an event (`itf-rules-2026`, `world-athletics-rules-current`, `world-aquatics-rules-current`)
+   - Accepted evidence wording: `current discipline rulebook`; `equipment and access`; `event-specific return rules`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Compare the terminology, event demands, rules, equipment, and infrastructure of tennis, track and field, and aquatic sports that matter to a sports physiotherapist. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Relate court, track, field, and aquatic event demands—including repetition, impact, throwing, sprint or endurance load, and the environment—to physiotherapy observation and preparation (`nsca-sport-science-2022`, `mcginnis-biomechanics-4e`, `src-curriculum-sports`)
+   - Accepted evidence wording: `event-specific demands`; `impact throwing sprint endurance`; `environment and preparation`
+2. Check the current discipline and competition rulebook before advising on equipment, field-of-play access, or return during an event (`itf-rules-2026`, `world-athletics-rules-current`, `world-aquatics-rules-current`)
+   - Accepted evidence wording: `current discipline rulebook`; `equipment and access`; `event-specific return rules`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 26. Principles of sports biomechanics & biomechanics of injury
+
+Topic ID: `spr-sports-biomechanics-injury`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain the principles of sports biomechanics and show how they inform—but do not alone determine—an analysis of sports injury.
+
+**Expected answer — required evidence criteria:**
+
+1. Distinguish kinematics from kinetics and relate force, torque, work, power, impulse, momentum, and tissue loading to a defined movement task (`mcginnis-biomechanics-4e`)
+   - Accepted evidence wording: `kinematics and kinetics`; `force torque impulse momentum`; `tissue loading`
+2. Use biomechanics to generate and test hypotheses alongside exposure, capacity, symptoms, context, and clinical findings rather than claiming a single movement causes injury (`mcginnis-biomechanics-4e`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `biomechanical hypothesis`; `multifactorial injury`; `not single-factor causation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain the principles of sports biomechanics and show how they inform—but do not alone determine—an analysis of sports injury. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Distinguish kinematics from kinetics and relate force, torque, work, power, impulse, momentum, and tissue loading to a defined movement task (`mcginnis-biomechanics-4e`)
+   - Accepted evidence wording: `kinematics and kinetics`; `force torque impulse momentum`; `tissue loading`
+2. Use biomechanics to generate and test hypotheses alongside exposure, capacity, symptoms, context, and clinical findings rather than claiming a single movement causes injury (`mcginnis-biomechanics-4e`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `biomechanical hypothesis`; `multifactorial injury`; `not single-factor causation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 27. Physics in sports — biomechanics of running, throwing, swimming & jumping
+
+Topic ID: `spr-physics-running-throwing-swimming-jumping`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Use physics to compare running, throwing, swimming, and jumping, and explain how contemporary measurement can test a technique or rehabilitation question.
+
+**Expected answer — required evidence criteria:**
+
+1. Break each skill into phases and use appropriate variables such as ground-reaction force and impulse, angular momentum, projectile motion, or drag and buoyancy (`mcginnis-biomechanics-4e`)
+   - Accepted evidence wording: `movement phases`; `ground reaction force and impulse`; `angular momentum drag buoyancy`
+2. Choose video, force, temporal-spatial, or wearable measures for a stated question and interpret measurement error before changing technique or rehabilitation (`mcginnis-biomechanics-4e`, `nsca-sport-science-2022`)
+   - Accepted evidence wording: `measurement matched to question`; `video force wearable measures`; `measurement error`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Use physics to compare running, throwing, swimming, and jumping, and explain how contemporary measurement can test a technique or rehabilitation question. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Break each skill into phases and use appropriate variables such as ground-reaction force and impulse, angular momentum, projectile motion, or drag and buoyancy (`mcginnis-biomechanics-4e`)
+   - Accepted evidence wording: `movement phases`; `ground reaction force and impulse`; `angular momentum drag buoyancy`
+2. Choose video, force, temporal-spatial, or wearable measures for a stated question and interpret measurement error before changing technique or rehabilitation (`mcginnis-biomechanics-4e`, `nsca-sport-science-2022`)
+   - Accepted evidence wording: `measurement matched to question`; `video force wearable measures`; `measurement error`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 28. Psychological aspects in sports (grief/loss models, cognitive stress & emotional response)
+
+Topic ID: `spr-psychological-aspects-sports`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain psychological responses to sport, injury, loss, rehabilitation, and return, using grief and stress models cautiously rather than as fixed stages.
+
+**Expected answer — required evidence criteria:**
+
+1. Describe cognitive appraisal, emotion, behaviour, identity, social context, and recovery as interacting and changing across injury rehabilitation and return to sport (`sport-injury-psychology-consensus-2024`)
+   - Accepted evidence wording: `cognitive appraisal`; `emotional and behavioural response`; `injury rehabilitation and return`
+2. Use grief or loss models as optional communication frameworks, not a mandatory linear sequence, and screen, safeguard, and refer mental-health concerns within role and competence (`ioc-mental-health-2026`, `sport-injury-psychology-consensus-2024`)
+   - Accepted evidence wording: `not fixed grief stages`; `screen and safeguard`; `refer within competence`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain psychological responses to sport, injury, loss, rehabilitation, and return, using grief and stress models cautiously rather than as fixed stages. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Describe cognitive appraisal, emotion, behaviour, identity, social context, and recovery as interacting and changing across injury rehabilitation and return to sport (`sport-injury-psychology-consensus-2024`)
+   - Accepted evidence wording: `cognitive appraisal`; `emotional and behavioural response`; `injury rehabilitation and return`
+2. Use grief or loss models as optional communication frameworks, not a mandatory linear sequence, and screen, safeguard, and refer mental-health concerns within role and competence (`ioc-mental-health-2026`, `sport-injury-psychology-consensus-2024`)
+   - Accepted evidence wording: `not fixed grief stages`; `screen and safeguard`; `refer within competence`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 29. Protective equipment in sports incl. orthotics; sports traumatology
+
+Topic ID: `spr-protective-equipment-orthotics-traumatology`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain how protective equipment and orthoses fit into sports-trauma prevention and management, including fit, rules, residual risk, and reassessment.
+
+**Expected answer — required evidence criteria:**
+
+1. Match equipment or an orthosis to the sport, athlete, impairment, task, fit, skin and comfort checks, and the governing rules, then reassess function (`ioc-manual-sports-injuries`, `fih-rules-2026`, `para-athlete-sports-physio-2021`)
+   - Accepted evidence wording: `sport and athlete specific fit`; `skin comfort and function checks`; `rules and reassessment`
+2. Explain that protective equipment can modify exposure or injury severity but does not eliminate risk or replace technique, load management, emergency planning, and rehabilitation (`ioc-manual-sports-injuries`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `modify not eliminate risk`; `not replace load management`; `emergency planning and rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain how protective equipment and orthoses fit into sports-trauma prevention and management, including fit, rules, residual risk, and reassessment. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Match equipment or an orthosis to the sport, athlete, impairment, task, fit, skin and comfort checks, and the governing rules, then reassess function (`ioc-manual-sports-injuries`, `fih-rules-2026`, `para-athlete-sports-physio-2021`)
+   - Accepted evidence wording: `sport and athlete specific fit`; `skin comfort and function checks`; `rules and reassessment`
+2. Explain that protective equipment can modify exposure or injury severity but does not eliminate risk or replace technique, load management, emergency planning, and rehabilitation (`ioc-manual-sports-injuries`, `ioc-epidemiology-consensus-2020`)
+   - Accepted evidence wording: `modify not eliminate risk`; `not replace load management`; `emergency planning and rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 30. Specific psychology management in sports; sports-specific training
+
+Topic ID: `spr-sports-psychology-training`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain psychologically informed sports rehabilitation and sports-specific training while keeping physiotherapy support distinct from specialist mental-health care.
+
+**Expected answer — required evidence criteria:**
+
+1. Use collaborative goals, graded exposure, confidence and readiness discussion, feedback, and monitoring to support adherence and return-to-sport training (`sport-injury-psychology-consensus-2024`)
+   - Accepted evidence wording: `collaborative goals`; `graded exposure and confidence`; `monitor readiness and adherence`
+2. Recognize distress and risk, protect confidentiality, and use established referral pathways; diagnosis and psychotherapy belong to appropriately qualified professionals (`ioc-mental-health-2026`)
+   - Accepted evidence wording: `recognize distress and risk`; `confidential referral pathway`; `qualified mental health professional`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain psychologically informed sports rehabilitation and sports-specific training while keeping physiotherapy support distinct from specialist mental-health care. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Use collaborative goals, graded exposure, confidence and readiness discussion, feedback, and monitoring to support adherence and return-to-sport training (`sport-injury-psychology-consensus-2024`)
+   - Accepted evidence wording: `collaborative goals`; `graded exposure and confidence`; `monitor readiness and adherence`
+2. Recognize distress and risk, protect confidentiality, and use established referral pathways; diagnosis and psychotherapy belong to appropriately qualified professionals (`ioc-mental-health-2026`)
+   - Accepted evidence wording: `recognize distress and risk`; `confidential referral pathway`; `qualified mental health professional`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 31. Advanced sports assessment skills; initial management of acute sports injuries
+
+Topic ID: `spr-advanced-sports-assessment-acute-management`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain an advanced on-field and off-field assessment of an acute sports injury and the decisions for emergency action, removal, referral, and reassessment.
+
+**Expected answer — required evidence criteria:**
+
+1. Start with scene safety, the event emergency-action plan, a primary survey, catastrophic-injury precautions, and timely escalation before a focused musculoskeletal examination (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `scene safety and emergency plan`; `primary survey`; `catastrophic injury escalation`
+2. Use mechanism, symptoms, observation, palpation, movement and function to decide removal or referral, and apply immediate removal with no same-day return when concussion is suspected (`ioc-manual-sports-injuries`, `amsterdam-2022-concussion`)
+   - Accepted evidence wording: `mechanism and focused examination`; `remove or refer`; `suspected concussion no same-day return`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain an advanced on-field and off-field assessment of an acute sports injury and the decisions for emergency action, removal, referral, and reassessment. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Start with scene safety, the event emergency-action plan, a primary survey, catastrophic-injury precautions, and timely escalation before a focused musculoskeletal examination (`ioc-manual-sports-injuries`)
+   - Accepted evidence wording: `scene safety and emergency plan`; `primary survey`; `catastrophic injury escalation`
+2. Use mechanism, symptoms, observation, palpation, movement and function to decide removal or referral, and apply immediate removal with no same-day return when concussion is suspected (`ioc-manual-sports-injuries`, `amsterdam-2022-concussion`)
+   - Accepted evidence wording: `mechanism and focused examination`; `remove or refer`; `suspected concussion no same-day return`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 32. Manual therapy techniques in sports (McKenzie, Maitland, Cyriax, Mulligan, positional release)
+
+Topic ID: `spr-manual-therapy-sports-peripheral`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Compare named manual-therapy approaches used in sports physiotherapy and explain how assessment, consent, response, evidence, and active rehabilitation govern their use.
+
+**Expected answer — required evidence criteria:**
+
+1. Differentiate the named approaches as curricular frameworks without claiming that a school label identifies pathology or guarantees a technique-specific mechanism (`src-curriculum-sports`, `manual-therapy-mechanisms-2025`)
+   - Accepted evidence wording: `compare named approaches`; `not diagnostic school labels`; `no guaranteed specific mechanism`
+2. Use consented manual therapy only when a reasoned trial supports a functional goal, reassess the response, and integrate it as an adjunct to active rehabilitation (`manual-therapy-sports-clinical-reasoning-2023`, `manual-therapy-mechanisms-2025`)
+   - Accepted evidence wording: `clinical reasoning and consent`; `reassess response`; `adjunct to active rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Compare named manual-therapy approaches used in sports physiotherapy and explain how assessment, consent, response, evidence, and active rehabilitation govern their use. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Differentiate the named approaches as curricular frameworks without claiming that a school label identifies pathology or guarantees a technique-specific mechanism (`src-curriculum-sports`, `manual-therapy-mechanisms-2025`)
+   - Accepted evidence wording: `compare named approaches`; `not diagnostic school labels`; `no guaranteed specific mechanism`
+2. Use consented manual therapy only when a reasoned trial supports a functional goal, reassess the response, and integrate it as an adjunct to active rehabilitation (`manual-therapy-sports-clinical-reasoning-2023`, `manual-therapy-mechanisms-2025`)
+   - Accepted evidence wording: `clinical reasoning and consent`; `reassess response`; `adjunct to active rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 33. Manual therapy in sports — myofascial release, muscle energy, neurodynamics
+
+Topic ID: `spr-manual-therapy-sports-myofascial-neurodynamics`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain myofascial release, muscle-energy techniques, and neurodynamic or neural-mobilization techniques in sports rehabilitation, including evidence limits and safety.
+
+**Expected answer — required evidence criteria:**
+
+1. Describe each technique's intended examination-linked use and dosage while monitoring symptoms, neurological signs, irritability, contraindications, and the athlete's response (`src-curriculum-sports`, `manual-therapy-sports-clinical-reasoning-2023`)
+   - Accepted evidence wording: `examination linked technique`; `monitor neurological signs and irritability`; `contraindications and response`
+2. Explain that observed effects may involve multiple neurophysiological and contextual mechanisms; avoid unsupported tissue-release claims and pair any short-term benefit with active rehabilitation (`manual-therapy-mechanisms-2025`, `manual-therapy-sports-clinical-reasoning-2023`)
+   - Accepted evidence wording: `multiple mechanisms`; `avoid tissue release claims`; `pair with active rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain myofascial release, muscle-energy techniques, and neurodynamic or neural-mobilization techniques in sports rehabilitation, including evidence limits and safety. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. Describe each technique's intended examination-linked use and dosage while monitoring symptoms, neurological signs, irritability, contraindications, and the athlete's response (`src-curriculum-sports`, `manual-therapy-sports-clinical-reasoning-2023`)
+   - Accepted evidence wording: `examination linked technique`; `monitor neurological signs and irritability`; `contraindications and response`
+2. Explain that observed effects may involve multiple neurophysiological and contextual mechanisms; avoid unsupported tissue-release claims and pair any short-term benefit with active rehabilitation (`manual-therapy-mechanisms-2025`, `manual-therapy-sports-clinical-reasoning-2023`)
+   - Accepted evidence wording: `multiple mechanisms`; `avoid tissue release claims`; `pair with active rehabilitation`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+### 34. Sports management of special populations (geriatric, physically challenged athletes)
+
+Topic ID: `spr-sports-special-populations-challenged`
+
+#### Question — GUIDED / RECALL_SPRINT
+
+Explain sports physiotherapy management for older and Para athletes using person-, impairment-, sport-, equipment-, and environment-specific assessment.
+
+**Expected answer — required evidence criteria:**
+
+1. For a Para athlete, assess impairment-specific and secondary health risks, equipment and classification context, skin, thermoregulation, autonomic or overuse concerns, access, and the athlete's own expertise (`para-athlete-sports-physio-2021`)
+   - Accepted evidence wording: `Para athlete health risks`; `equipment classification and access`; `athlete expertise`
+2. For an older athlete, individualize progressive loading and recovery around training history, goals, comorbidity, medication, strength, balance, symptoms, and function rather than chronological age alone (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `not age alone`; `comorbidity medication and recovery`; `individualized progressive loading`
+
+Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
+
+Reviewer notes: ____________________________________________________________________
+
+#### Question — GUIDED / DEEP_RESEARCH
+
+Use the cited evidence sources to prepare, then answer: Explain sports physiotherapy management for older and Para athletes using person-, impairment-, sport-, equipment-, and environment-specific assessment. State the source scope, one uncertainty, and what requires patient-specific clinical judgment.
+
+**Expected answer — required evidence criteria:**
+
+1. For a Para athlete, assess impairment-specific and secondary health risks, equipment and classification context, skin, thermoregulation, autonomic or overuse concerns, access, and the athlete's own expertise (`para-athlete-sports-physio-2021`)
+   - Accepted evidence wording: `Para athlete health risks`; `equipment classification and access`; `athlete expertise`
+2. For an older athlete, individualize progressive loading and recovery around training history, goals, comorbidity, medication, strength, balance, symptoms, and function rather than chronological age alone (`acsm-getp-12th-2025`)
+   - Accepted evidence wording: `not age alone`; `comorbidity medication and recovery`; `individualized progressive loading`
 
 Review: [ ] accurate  [ ] scope-safe  [ ] citations suitable  [ ] accepted wording suitable  [ ] revise
 
@@ -3510,8 +3922,9 @@ Reviewer notes: ________________________________________________________________
 - `aha-adult-als-2025` — American Heart Association. Part 9: Adult Advanced Life Support. 2025 AHA Guidelines for CPR and Emergency Cardiovascular Care. Circulation. 2025;152(suppl 2). https://cpr.heart.org/en/resuscitation-science/cpr-and-ecc-guidelines/adult-advanced-life-support (accessed 2026-09-02)
 - `fda-hyperbaric-oxygen-2021` — US Food and Drug Administration. Hyperbaric Oxygen Therapy: Get the Facts. Consumer safety communication; content current as of 26 July 2021. https://www.fda.gov/consumers/consumer-updates/hyperbaric-oxygen-therapy-get-facts (accessed 2026-09-02)
 - `wada-prohibited-list-2026` — World Anti-Doping Agency. The Prohibited List (2026 List, effective 1 January 2026). Montreal: WADA. https://www.wada-ama.org/en/what-we-do/the-prohibited-list (accessed 2026-08-30)
+- `wada-istue-2026` — World Anti-Doping Agency. International Standard for Therapeutic Use Exemptions (ISTUE). Mandatory International Standard; in-force resource published 19 Dec 2025. https://www.wada-ama.org/en/resources/world-anti-doping-code-and-international-standards/international-standard-therapeutic-use (accessed 2026-09-02)
 - `ioc-epidemiology-consensus-2020` — Bahr R, Clarsen B, Derman W, Dvorak J, Emery CA, et al. IOC consensus statement: methods for recording and reporting of epidemiological data on injury and illness in sport 2020 (STROBE-SIIS). Orthop J Sports Med. 2020;8(2):2325967120902908. doi:10.1177/2325967120902908. https://doi.org/10.1177/2325967120902908 (accessed 2026-08-30)
-- `amsterdam-2022-concussion` — Schneider KJ, Patricios JS. Amsterdam 2022 international consensus on concussion in sport. Br J Sports Med. 2023;57(11):615-616. doi:10.1136/bjsports-2023-107127. https://doi.org/10.1136/bjsports-2023-107127 (accessed 2026-08-30)
+- `amsterdam-2022-concussion` — Patricios JS, Schneider KJ, Dvorak J, et al. Consensus statement on concussion in sport: the 6th International Conference on Concussion in Sport-Amsterdam, October 2022. Br J Sports Med. 2023;57(11):695-711. doi:10.1136/bjsports-2023-106898. PMID:37316210. https://pubmed.ncbi.nlm.nih.gov/37316210/ (accessed 2026-08-30)
 - `nordic-hamstring-meta-2019` — van Dyk N, Behan FP, Whiteley R. Nordic hamstring exercise in injury prevention programmes halves the rate of hamstring injuries: systematic review and meta-analysis of 8459 athletes. Br J Sports Med. 2019;53(21):1362-1370. doi:10.1136/bjsports-2018-100045. https://doi.org/10.1136/bjsports-2018-100045 (accessed 2026-08-30)
 - `ioc-reds-consensus-2023` — Mountjoy M, Ackerman KE, et al. 2023 IOC consensus statement on Relative Energy Deficiency in Sport (REDs). Br J Sports Med. 2023;57(17):1073-1098. doi:10.1136/bjsports-2023-106994. https://doi.org/10.1136/bjsports-2023-106994 (accessed 2026-08-30)
 - `ioc-reds-cat2-2023` — Mountjoy M, Ackerman KE, Stellingwerff T, et al. IOC REDs CAT2 clinical assessment tool. Br J Sports Med. 2023;57(17):1068-1069. doi:10.1136/bjsports-2023-107549. https://doi.org/10.1136/bjsports-2023-107549 (accessed 2026-08-30)
@@ -3520,6 +3933,23 @@ Reviewer notes: ________________________________________________________________
 - `wikstrom-ankle-rts-2020` — Wikstrom EA, Mueller C, Cain MS. Lack of consensus on return-to-sport criteria following lateral ankle sprain: systematic review of expert opinions. J Sport Rehabil. 2020;29(2):231-237. doi:10.1123/jsr.2019-0038. https://doi.org/10.1123/jsr.2019-0038 (accessed 2026-08-30)
 - `acsm-getp-12th-2025` — American College of Sports Medicine. ACSM's Guidelines for Exercise Testing and Prescription, 12th ed. Philadelphia: Wolters Kluwer; 2025. ISBN 9781975219215. https://doi.org/10.1249/FIT.0000000000001036 (accessed 2026-08-30)
 - `welling-acl-rts-2024` — Welling W. Return to sports after an ACL reconstruction in 2024 - A glass half full? A narrative review. Phys Ther Sport. 2024;69:51-59. doi:10.1016/j.ptsp.2024.05.001. https://doi.org/10.1016/j.ptsp.2024.05.001 (accessed 2026-08-30)
+- `src-curriculum-sports` — DMIHER. Competency-Based Post Graduate Curriculum for Indian Physiotherapy PG: Sports Physiotherapy, Papers III and IV, 2022-2027, PDF pp. 187-196; recommended references pp. 205-208. https://dmiher.edu.in/lp/Educlass (accessed 2026-09-02)
+- `nsca-sport-science-2022` — French D, Torres Ronda L, eds. NSCA's Essentials of Sport Science. Human Kinetics; 2022. ISBN 9781492593355. https://us.humankinetics.com/products/nscas-essentials-of-sport-science (accessed 2026-09-02)
+- `mcginnis-biomechanics-4e` — McGinnis PM. Biomechanics of Sport and Exercise. 4th ed. Human Kinetics. ISBN 9781492592334. Foundational mechanics source; current rules and clinical decisions require separate current sources. https://us.humankinetics.com/products/biomechanics-of-sport-and-exercise-4th-edition-with-web-resource (accessed 2026-09-02)
+- `icc-playing-conditions-2026` — International Cricket Council. Official international playing conditions and regulations portal, including 2025-2026 competition documents. https://www.icc-cricket.com/about/cricket/rules-and-regulations/playing-conditions (accessed 2026-09-02)
+- `ifab-laws-2026-27` — International Football Association Board. Laws of the Game 2026/27. Current official association-football rules portal. https://www.theifab.com/laws-of-the-game-documents (accessed 2026-09-02)
+- `fiba-rules-current` — FIBA. Official Basketball Rules portal. Use the edition in force for the event; the 2026 edition takes effect 1 October 2026. https://about.fiba.basketball/en/our-sport/official-basketball-rules (accessed 2026-09-02)
+- `fih-rules-2026` — International Hockey Federation. Rules of Hockey 2026, effective March 2026, with current protective-equipment resources. https://www.fih.hockey/about-fih/official-documents/rules-of-hockey (accessed 2026-09-02)
+- `itf-rules-2026` — International Tennis Federation. 2026 Rules of Tennis and current tour regulations. https://www.itftennis.com/en/about-us/governance/rules-and-regulations (accessed 2026-09-02)
+- `world-athletics-rules-current` — World Athletics. Constitution, Book of Rules, technical rules, and current competition regulations portal. https://worldathletics.org/about-iaaf/documents/book-of-rules (accessed 2026-09-02)
+- `world-aquatics-rules-current` — World Aquatics. Current Competition Regulations and discipline-specific rules portal. https://www.worldaquatics.com/rules/competition-regulations (accessed 2026-09-02)
+- `ioc-mental-health-2026` — Reardon CL et al. Mental health in elite athletes: International Olympic Committee consensus statement (2026). Br J Sports Med. 2026;60:1083-1130. doi:10.1136/bjsports-2025-111514. https://doi.org/10.1136/bjsports-2025-111514 (accessed 2026-09-02)
+- `sport-injury-psychology-consensus-2024` — Tranaeus U et al. 50 Years of Research on the Psychology of Sport Injury: A Consensus Statement. Sports Med. 2024;54:1733-1748. doi:10.1007/s40279-024-02045-w. https://doi.org/10.1007/s40279-024-02045-w (accessed 2026-09-02)
+- `manual-therapy-sports-clinical-reasoning-2023` — Short S, Tuttle N. A Clinically-Reasoned Approach to Manual Therapy in Sports Physical Therapy. Int J Sports Phys Ther. 2023;18(1):262-278. doi:10.26603/001c.67936. https://doi.org/10.26603/001c.67936 (accessed 2026-09-02)
+- `manual-therapy-mechanisms-2025` — Keter DL et al. The mechanisms of manual therapy: a living review of systematic, narrative, and scoping reviews. PLoS One. 2025;20:e0319586. doi:10.1371/journal.pone.0319586. https://doi.org/10.1371/journal.pone.0319586 (accessed 2026-09-02)
+- `para-athlete-sports-physio-2021` — Fagher K et al. Sports physiotherapy—Actions to optimize the health of Para athletes. Int J Sports Phys Ther. 2021;16:1376-1378. doi:10.26603/001c.29910. https://doi.org/10.26603/001c.29910 (accessed 2026-09-02)
+- `ioc-fair-2025` — Crossley KM et al. Female/woman/girl Athlete Injury pRevention (FAIR) practical recommendations: IOC consensus meeting 2025. Br J Sports Med. 2025;59:1546-1559. doi:10.1136/bjsports-2025-110889. https://doi.org/10.1136/bjsports-2025-110889 (accessed 2026-09-02)
+- `ioc-elite-youth-athletes-2024` — Bergeron MF, Cote J, Erdener U, et al. IOC consensus statement on elite youth athletes competing at the Olympic Games: essentials to a healthy, safe and sustainable paradigm. Br J Sports Med. 2024;58(17):946-965. doi:10.1136/bjsports-2024-108186. PMID:39197945. https://pubmed.ncbi.nlm.nih.gov/39197945/ (accessed 2026-09-02)
 
 ## Final disposition
 

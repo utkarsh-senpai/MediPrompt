@@ -4,7 +4,7 @@
 
 **Updated:** 2026-09-02
 
-**Current version:** v0.7 private learning plan in PR #24, pending promotion through `develop` to `main`
+**Current version:** v0.8 three-subject curriculum activation in PR #28, pending promotion through `develop` to `main`
 
 ## Product invariant
 
@@ -58,6 +58,9 @@ content, copy, or visual identity.
   a viva answer remains the fixed 60-second defense contract.
 - Microphone consent does not acquire a stream. Permission is requested only when the speaking
   timer starts; recording stops with the timer and every stream/object URL is released.
+- v0.8 preserves all prior behavior while exposing exactly three fully authored subjects: Neuro
+  (35), combined Cardiovascular & Respiratory (26), and Sports (34). The 95 active topics work in
+  Recall Sprint and Deep Research; authored challenge trios continue to support Apply and Defend.
 
 ## v0.3 interaction and identity decisions
 
@@ -78,13 +81,13 @@ content, copy, or visual identity.
 ## Medical-content boundary
 
 - The 265 curriculum-derived labels under `docs/curriculum/` are the canonical catalog. The runtime
-  candidate mirrors all eight app subjects but uses availability as a safety boundary.
+  candidate mirrors seven merged app subjects and uses availability as a safety boundary.
 - `content/candidates/mpt-cardiorespiratory-review-candidate.json` version `0.3.0` is `MEDICAL`,
-  `DRAFT`, `reviewers: []`, and `reviewedAt: null`. Neuro (35), Respiratory (13), and
-  Cardiovascular (13) are the only `ACTIVE` subjects; every one of their 61 topics has sourced
-  criteria. The remaining five subjects are visible, disabled `COMING_SOON` skeletons.
-- All 35 Neuro topics are authored from the curriculum plus sources checked in 2026. The evidence
-  set includes 2025-26 publications and older still-current/foundational guidance and measures.
+  `DRAFT`, `reviewers: []`, and `reviewedAt: null`. Neuro (35), combined Cardiovascular &
+  Respiratory (26), and Sports (34) are the only `ACTIVE` subjects; every one of their 95 topics
+  has sourced criteria. The remaining four subjects are visible, disabled `COMING_SOON` skeletons.
+- All active topics are authored from the curriculum plus sources checked in 2026. The evidence
+  set includes 2025-26 publications, official current rules, and older still-current/foundational guidance and measures.
   Never summarize it as “all references are 2025-26.” Currency and provenance support review;
   they do not substitute for qualified educator review.
 - Normal development and GitHub Pages load this candidate as an explicitly labelled **public
@@ -94,8 +97,11 @@ content, copy, or visual identity.
   treatment, or clinical decisions`. The approved non-medical interaction fixture remains only for
   schema/regression tests.
 - Build and service-worker validation require the exact `MEDICAL`, `DRAFT`, unattested 265-topic
-  catalog and its exact 3-active/5-coming-soon split. Structural validation forbids empty rubrics in
+  catalog and its exact 3-active/4-coming-soon split. Structural validation forbids empty rubrics in
   active subjects. The generic interaction fixture and legacy `beta-packs/` path remain excluded.
+- v0.8 deliberately raises the bounded pack limit to 640 KiB in both loader and service worker and
+  the schema source cap to 96; the generated candidate remains below the 640 KiB delivery cap and
+  includes dedicated primary records for concussion, WADA TUE, and elite-youth-athlete guidance.
 - `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md` is generated from the candidate and covers
   every active question and expected answer criterion. It remains unsigned and does not change
   review status; `content:validate` rejects worksheet drift.
@@ -153,11 +159,11 @@ privacy-minimized learning-plan metadata after learner action.
 
 ## Current pickup state
 
-v0.7 contains the private learning plan and spaced-resurfacing outcome plus the 265-topic catalog
-and three-subject activation gate. It includes explicit consent, transcript-free records, working
+v0.8 contains every v0.2-v0.7 learning feature plus the 265-topic catalog and completed
+three-subject activation gate. It includes explicit consent, transcript-free records, working
 IndexedDB v2 indexing, strict validation, bounded retention, local-calendar scheduling, exam
 triage, exact due-topic launch, export, and verified deletion. The Java 21/Spring Boot content
-compiler is now v0.8; target-user hardening is v0.9. Extra registers, challenge suggestions, and
+compiler moves to v0.9 and target-user hardening to v0.10. Extra registers, challenge suggestions, and
 additional packs remain unplanned. Whisper and MiniLM still use one shared bundled worker asset,
 while model instances and activation paths remain separate. GitHub operations must use
 `utkarsh-senpai`; release changes flow through `develop` before `main` and Pages.
@@ -176,9 +182,10 @@ the next release work is target-device/model benchmarking and a v1.x educator-re
 - `docs/V0.5_DEVELOPMENT_CONTEXT.md`: reviewed retry, delta, semantic, and safety contract.
 - `docs/V0.6_DEVELOPMENT_CONTEXT.md`: reviewed viva ladder, cleanup, content, and timer contract.
 - `docs/V0.7_DEVELOPMENT_CONTEXT.md`: private learning-plan privacy, storage, scheduling, and UI contract.
+- `docs/V0.8_DEVELOPMENT_CONTEXT.md`: merged-subject identity, active content, evidence, budgets, and release checks.
 - `docs/curriculum/MPT-CARDIORESPIRATORY-SOURCE-REVIEW.md`: evidence register and educator-review
   checklist.
-- `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`: generated review worksheet for all 61 active
+- `docs/curriculum/MPT-ACTIVE-SUBJECTS-ATTESTATION.md`: generated review worksheet for all 95 active
   topics; never hand-edit or treat the unsigned file as approval.
 - `docs/L1_PRODUCT_AND_SYSTEM_CONTEXT.md` through `docs/L4_CODE_DESIGN.md`: architecture.
 

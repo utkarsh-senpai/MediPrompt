@@ -1,4 +1,18 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+async function spinUntilTopic(page: Page, headingName: string, maxDraws = 32): Promise<void> {
+  const target = page.getByRole("heading", { name: headingName });
+  for (let drawNumber = 0; drawNumber < maxDraws; drawNumber += 1) {
+    const drawButton =
+      drawNumber === 0
+        ? page.getByRole("button", { name: "Spin for a topic" })
+        : page.getByRole("button", { name: "Spin again" }).first();
+    await drawButton.click();
+    await expect(page.getByRole("button", { name: "Start timer" })).toBeVisible();
+    if (await target.isVisible()) return;
+  }
+  throw new Error(`Topic '${headingName}' was not drawn within ${maxDraws} non-repeating draws`);
+}
 
 // Verifies the v0.2 exit gate: the mode/subject -> spin -> timed-speech flow works,
 // and after a successful first load it keeps working with the network disabled
@@ -21,7 +35,7 @@ test("core loop works online and after an offline reload", async ({ page, contex
     .getByLabel("Subject")
     .locator("option")
     .evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).disabled));
-  expect(subjectAvailability).toEqual([false, false, false, true, true, false, true]);
+  expect(subjectAvailability).toEqual([true, true, true, false, false, true, false]);
   await expect(page.getByText("Everyday Explanations")).toHaveCount(0);
 
   // Online core loop: spin -> topic -> start timer -> finish.
@@ -159,18 +173,7 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
-  await page.getByRole("button", { name: "Spin for a topic" }).click();
-  // The merged subject has 26 topics; only cardiac-rehabilitation carries a viva
-  // ladder. Re-spin until "Begin viva" appears (i.e., the draw landed on it).
-  while (
-    await page.getByRole("button", { name: "Begin viva" }).count() === 0 &&
-    (await page.getByRole("button", { name: "Spin again" }).count() > 0)
-  ) {
-    await page.getByRole("button", { name: "Spin again" }).first().click();
-  }
-  await expect(
-    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
-  ).toBeVisible();
+  await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
 
   await page.getByRole("button", { name: "Start timer" }).click();
   await page.getByRole("button", { name: "Finish now" }).click();
@@ -218,10 +221,7 @@ test("v0.6 viva defense ladder scores three answers and returns to review", asyn
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await page.getByRole("group", { name: "Challenge" }).getByRole("button", { name: "Defend" }).click();
-  await page.getByRole("button", { name: "Spin for a topic" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Comprehensive cardiovascular rehabilitation" }),
-  ).toBeVisible();
+  await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
 
   // Reach the main attempt review via the typed path.
   await page.getByRole("button", { name: "Start timer" }).click();
