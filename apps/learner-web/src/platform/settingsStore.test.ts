@@ -95,7 +95,6 @@ describe("LocalStorageSettingsStore", () => {
       soundMuted: false,
       semanticCoverage: false,
       practiceHistory: false,
-      hardToCatchHints: false,
     });
   });
 

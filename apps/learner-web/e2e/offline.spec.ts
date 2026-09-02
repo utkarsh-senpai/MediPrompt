@@ -21,7 +21,7 @@ test("core loop works online and after an offline reload", async ({ page, contex
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("neuro-physiotherapy");
   await expect(page.getByRole("button", { name: "Spin for a topic" })).toBeEnabled();
-  await expect(page.getByText("Curriculum beta · unreviewed draft")).toBeVisible();
+  await expect(page.getByText("Curriculum beta · unreviewed draft")).toHaveCount(0);
   await expect(page.getByLabel("Subject").locator("option")).toHaveText([
     "📖 Research Methods and Bioethics — coming soon",
     "🧬 Applied Physiotherapeutics — coming soon",
@@ -155,6 +155,9 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   page,
   context,
 }) => {
+  // The randomized bag may draw all 26 cardiorespiratory topics before the
+  // regression target. Keep the draw bounded while allowing the full cycle.
+  test.setTimeout(90_000);
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
@@ -201,7 +204,10 @@ test("v0.5 scores and compares a real physiotherapy retry while offline", async 
   await context.setOffline(false);
 });
 
-test("v0.6 viva defense ladder scores three answers and returns to review", async ({ page }) => {
+test("viva defense stays unavailable while the feature is paused", async ({ page }) => {
+  // Use a formerly Viva-enabled topic so this proves the entry point is paused,
+  // even when the randomized bag reaches it last.
+  test.setTimeout(60_000);
   await page.goto("./");
   await page.getByLabel("Subject").selectOption("cardiovascular-and-respiratory-physiotherapy");
   await spinUntilTopic(page, "Comprehensive cardiovascular rehabilitation");
@@ -212,84 +218,14 @@ test("v0.6 viva defense ladder scores three answers and returns to review", asyn
   await page.getByRole("button", { name: "Review this attempt" }).click();
   await page.getByLabel(/Type what you said/i).fill("Safety assessment and secondary prevention.");
   await page.getByRole("button", { name: "Save review" }).click();
-  // The main attempt review appears before the viva entry is opened.
   await expect(page.getByRole("heading", { name: "Attempt review" })).toBeVisible();
-
-  // Open the viva ladder.
-  await page.getByRole("button", { name: "Begin viva" }).first().click();
-  await expect(page.getByRole("heading", { name: /Viva:/ })).toBeVisible();
-  await page.getByRole("button", { name: "Begin viva" }).click();
-
-  const answers = [
-    "Safety assessment with secondary prevention and patient goals.",
-    "Individualized exercise with supervision and risk stratification.",
-    "Shared decision making with escalation for recurrent symptoms.",
-  ];
-  for (const answer of answers) {
-    await expect(page.getByRole("button", { name: "Start speaking" })).toBeVisible();
-    await page.getByRole("button", { name: "Start speaking" }).click();
-    await page.getByRole("button", { name: "Finish now" }).click();
-    await page.getByRole("button", { name: "Review this answer" }).click();
-    await page.getByLabel(/Type what you said/i).fill(answer);
-    await page.getByRole("button", { name: "Save review" }).click();
-    await expect(page.getByRole("heading", { name: "Content coverage" })).toBeVisible();
-    if (answer === answers[answers.length - 1]) {
-      await page.getByRole("button", { name: "Finish viva" }).click();
-    } else {
-      await page.getByRole("button", { name: "Next question" }).click();
-    }
-  }
-
-  await expect(page.getByRole("heading", { name: /Viva complete:/ })).toBeVisible();
-  await expect(
-    page.getByText(/100% target-concept coverage across 3 scored answers/i),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Back to attempt review" }).click();
-  await expect(page.getByRole("heading", { name: "Attempt review" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Begin viva" })).toHaveCount(0);
+  await expect(page.getByText(/Viva is unavailable/i)).toHaveCount(0);
 });
 
-test("v0.7 learning plan is opt-in, persists metadata, and verifies deletion", async ({ page }) => {
+test("private learning plan stays unavailable while the feature is paused", async ({ page }) => {
   await page.goto("./");
-  await expect(page.getByText("Learning plan · paused")).toBeVisible();
-
+  await expect(page.getByText(/Learning plan/i)).toHaveCount(0);
   await page.getByRole("button", { name: "Settings" }).click();
-  const planOptIn = page.getByLabel(/Private learning plan/i);
-  await expect(planOptIn).not.toBeChecked();
-  await planOptIn.check();
-  await page.getByRole("button", { name: "Save" }).click();
-
-  await page.getByRole("button", { name: "Spin for a topic" }).click();
-  await page.getByRole("button", { name: "Start timer" }).click();
-  await page.getByRole("button", { name: "Finish now" }).click();
-  await page.getByRole("button", { name: "Review this attempt" }).click();
-  await page.getByLabel(/Type what you said/i).fill("A structured physiotherapy answer.");
-  await page.getByRole("button", { name: "Save review" }).click();
-  await expect(page.getByText(/Saved to your private learning plan/i)).toBeVisible();
-
-  const storedShape = await page.evaluate(async () => {
-    const database = await new Promise<IDBDatabase>((resolve, reject) => {
-      const request = indexedDB.open("mediprompt-history", 2);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    const records = await new Promise<unknown[]>((resolve, reject) => {
-      const request = database.transaction("records", "readonly").objectStore("records").getAll();
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
-    });
-    database.close();
-    return JSON.stringify(records);
-  });
-  expect(storedShape).not.toContain("transcript");
-  expect(storedShape).not.toContain("conceptResults");
-
-  await page.reload();
-  await page.getByText(/Learning plan · 0 due/i).click();
-  await expect(page.getByText("1 saved attempt; maximum 500.")).toBeVisible();
-  await page.getByRole("button", { name: "Delete saved data" }).click();
-  await page.getByRole("button", { name: "Delete all plan data" }).click();
-  await expect(
-    page.getByText("All saved learning-plan data was deleted from this browser."),
-  ).toBeVisible();
-  await expect(page.getByText("0 saved attempts; maximum 500.")).toBeVisible();
+  await expect(page.getByLabel(/Private learning plan/i)).toHaveCount(0);
 });

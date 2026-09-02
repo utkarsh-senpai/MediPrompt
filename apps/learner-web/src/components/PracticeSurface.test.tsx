@@ -24,7 +24,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        topicIndex={[]}
         eligibleCount={5}
         drawing={false}
         onChange={() => {}}
@@ -43,7 +42,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        topicIndex={[]}
         eligibleCount={5}
         drawing={false}
         onChange={() => {}}
@@ -58,7 +56,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        topicIndex={[]}
         eligibleCount={0}
         drawing={false}
         onChange={() => {}}
@@ -76,7 +73,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        topicIndex={[]}
         eligibleCount={5}
         drawing={true}
         onChange={() => {}}
@@ -96,7 +92,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        topicIndex={[]}
         eligibleCount={5}
         drawing={false}
         onChange={onChange}
@@ -112,7 +107,6 @@ describe("PracticeSurface", () => {
       <PracticeSurface
         subjects={subjects}
         selection={selection}
-        topicIndex={[]}
         eligibleCount={5}
         drawing={false}
         onChange={() => {}}

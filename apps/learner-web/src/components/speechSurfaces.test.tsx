@@ -486,7 +486,6 @@ describe("AttemptReview", () => {
         audio={audioUi()}
         onSpinAgain={onSpinAgain}
         onTryAgain={() => {}}
-        onBeginViva={() => {}}
       />,
     );
     expect(screen.getByText("Zippers interlock teeth.")).toBeInTheDocument();
@@ -521,7 +520,6 @@ describe("AttemptReview", () => {
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
         onTryAgain={() => {}}
-        onBeginViva={() => {}}
       />,
     );
     expect(screen.getByText(/<img src=x onerror=alert\(1\)>/)).toBeInTheDocument();
@@ -542,7 +540,6 @@ describe("AttemptReview", () => {
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
         onTryAgain={() => {}}
-        onBeginViva={() => {}}
       />,
     );
     expect(
@@ -571,7 +568,6 @@ describe("AttemptReview", () => {
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
         onTryAgain={onTryAgain}
-        onBeginViva={() => {}}
       />,
     );
     expect(screen.getByRole("heading", { name: "Refinement Delta" })).toBeInTheDocument();
@@ -600,7 +596,6 @@ describe("AttemptReview", () => {
         audio={audioUi({ playback: null })}
         onSpinAgain={() => {}}
         onTryAgain={() => {}}
-        onBeginViva={() => {}}
       />,
     );
     expect(screen.queryByRole("heading", { name: "Refinement Delta" })).toBeNull();

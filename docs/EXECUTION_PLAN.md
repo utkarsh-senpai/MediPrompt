@@ -1,6 +1,6 @@
 # MediPrompt execution plan
 
-**Status:** v0.8 three-subject curriculum activation in PR #28 and under promotion review
+**Status:** v0.9 365-topic Neuro catalog in PR #30 and under promotion review
 **Owner:** Utkarsh Meshram (`utkarsh-senpai`)
 **Last updated:** 2026-09-02
 
@@ -15,9 +15,10 @@ The execution strategy optimizes for validated learning value in this order:
 1. The Unprompted-format mode/subject → spin → timed-speaking tool must work immediately.
 2. A selected medical prompt must lead to a completed spoken attempt without accounts or AI.
 3. Feedback should cause a better second attempt when the learner enables the enhancement.
-4. Weak topics should return at the right time.
+4. Broad topic coverage must remain fast and maintainable as subjects grow.
 5. The system must work on the learner's actual phone, accent, microphone, and network conditions.
-6. Connected and generative capabilities may improve the loop only after the basic tool works.
+6. Scheduling, Viva, connected, and generative capabilities may improve the loop only after the
+   broad basic tool works.
 
 ## 2. Evaluation of the updated research memory
 
@@ -263,9 +264,32 @@ draw E2E tests are deterministically bounded; content, unit, accessibility, buil
 responsive, audit, and diff checks pass. Software may be promoted as an unreviewed practice beta,
 but medical release remains blocked pending educator review.
 
-### v0.9 — Java content pipeline
+### v0.9 — 365-topic Neuro catalog and focused surface
 
-**Planned branch:** `feature/v0.9-content-compiler`
+**Branch:** `feature/v0.9-neuro-365`
+
+Add:
+
+- Replace the old 35-topic Neuro set with all 365 items from the 22-section Neuro master list.
+- Store Neuro labels in a standalone validated catalog instead of generator source code.
+- Generate Guided Recall Sprint and Deep Research variants for every label.
+- Permit optional source-linked prompt/concept enrichment in the same catalog without generator
+  changes; label-only topics report content coverage unavailable.
+- Keep exactly Neuro, combined Cardiovascular & Respiratory, and Sports active.
+- Pause Explain/Apply/Defend, Viva, and private learning-plan entry points while preserving their
+  dormant implementation for later deliberate reactivation.
+- Remove the recurring learner-facing attestation banner for simple topic prompts while retaining
+  internal `MEDICAL`/`DRAFT` status, approval gates, and the product disclaimer.
+- Synchronize bounded runtime, build, PWA, and service-worker limits for the larger catalog.
+
+**Exit gate:** the catalog matches all 365 unique Neuro items; all support both modes; the active
+counts are 365/26/34; additions/deletions need only a catalog edit, expected-count update, and
+regeneration; the focused UI exposes no paused feature; desktop, 320 px, reduced-motion, offline,
+content, unit, accessibility, build, E2E, audit, and diff checks pass.
+
+### v0.10 — Java content pipeline
+
+**Planned branch:** `feature/v0.10-content-compiler`
 
 Add a Java 21/Spring Boot command-line content compiler:
 
@@ -288,9 +312,9 @@ golden PDF fixtures are reproducible; every educator-reviewed candidate has an e
 mapping and page evidence; no extracted content is published without educator, source-use, licence,
 and runtime-schema approval.
 
-### v0.10 — Real-user beta hardening
+### v0.11 — Real-user beta hardening
 
-**Planned branch:** `feature/v0.10-beta-hardening`
+**Planned branch:** `feature/v0.11-beta-hardening`
 
 Add/fix only what is required by observed use:
 
@@ -395,8 +419,9 @@ The four-to-six-week beta target assumes focused solo development after v0.1 app
 | 4 | v0.5 semantic enhancement, same-identity retry, and Refinement Delta |
 | 5 | v0.6 hardened viva defense ladder |
 | 6 | v0.7 private learning plan; v0.8 completes three active subjects |
-| Next | v0.9 content compiler follows promotion |
-| Beta | v0.10 hardening follows observed use on the target learner's devices |
+| Next | v0.9 expands Neuro to 365 topics and focuses the learner surface |
+| Later | v0.10 content compiler follows the catalog release |
+| Beta | v0.11 hardening follows observed use on the target learner's devices |
 
 Dates may move; exit gates do not. If the local model blocks phone usability, ship a useful typed or
 self-reviewed transcript path rather than delaying the entire learning loop.
@@ -433,10 +458,9 @@ must not be claimed before the study design supports them.
 ## 8. Current blockers and inputs
 
 - Owner review of v0.1 design.
-- Initial syllabus/topic PDF and its reuse constraints. (2026-08-30: the MPT curriculum has been
-  reviewed into 265 candidate practice-topic labels under `docs/curriculum/`; page-level section
-  provenance is recorded, while exact per-candidate competency mapping, licence decision, prompts,
-  rubrics, and educator approval remain pending.)
+- Source-use/licence constraints for the curriculum and master topic documents. The seven-subject
+  runtime now contains 595 labels, including the separately validated 365-topic Neuro catalog;
+  label provenance does not constitute prompt/rubric approval.
 - Friend's course/year, exam format, date, target subjects, devices, and preferred language.
 - At least one educator review route for rubrics and later calibration.
 - Final software/content licence decision before public contributions.

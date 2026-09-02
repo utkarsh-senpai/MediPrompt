@@ -140,18 +140,13 @@ describe("App accessibility + capability + security", () => {
     expect(screen.getByLabelText(/Meaning-match evidence/)).toBeChecked();
   });
 
-  it("requires explicit opt-in before saving a private learning plan", async () => {
+  it("keeps the private learning plan unavailable while the feature is paused", async () => {
     const user = userEvent.setup();
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Settings" })).toBeEnabled());
-    expect(screen.getByText(/Learning plan · paused/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Learning plan/i)).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Settings" }));
-    const history = screen.getByLabelText(/Private learning plan/);
-    expect(history).not.toBeChecked();
-    await user.click(history);
-    await user.click(screen.getByRole("button", { name: "Save" }));
-    await user.click(screen.getByRole("button", { name: "Settings" }));
-    expect(screen.getByLabelText(/Private learning plan/)).toBeChecked();
+    expect(screen.queryByLabelText(/Private learning plan/)).not.toBeInTheDocument();
   });
 
   it("renders at a 320px viewport without throwing", async () => {
@@ -268,7 +263,7 @@ describe("App accessibility + capability + security", () => {
     expect(document.querySelector("script")).toBeNull();
   });
 
-  it("v0.6 viva: defends a topic and reaches the viva overview from review", async () => {
+  it("keeps viva defense unavailable from attempt review while paused", async () => {
     const user = userEvent.setup();
     render(<App />);
     await waitFor(() => expect(screen.getByRole("button", { name: "Spin for a topic" })).toBeEnabled());
@@ -296,12 +291,7 @@ describe("App accessibility + capability + security", () => {
       "Safety assessment and secondary prevention.",
     );
     await user.click(screen.getByRole("button", { name: "Save review" }));
-    // Review exposes the viva entry on this topic.
-    const beginViva = await screen.findByRole("button", { name: "Begin viva" });
-    await user.click(beginViva);
-    expect(screen.getByRole("heading", { name: /Viva:/ })).toBeInTheDocument();
-    // The ladder overview offers Begin and a return to attempt review.
-    expect(screen.getByRole("button", { name: "Begin viva" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Back to attempt review" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Begin viva" })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Viva is unavailable/i)).not.toBeInTheDocument();
   }, 20000);
 });

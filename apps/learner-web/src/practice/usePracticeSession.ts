@@ -10,7 +10,6 @@ import {
 } from "./spacedRepetition";
 import {
   listSubjects,
-  listTopicIndex,
   presetsFor,
   eligibleVariantIds,
   findRubric,
@@ -1334,7 +1333,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     state.selection.mode,
     state.selection.challenge,
   ).length;
-  const topicIndex = listTopicIndex(pack, state.selection.subjectId);
 
   const audioUi: AudioUiState = {
     available: audio != null,
@@ -1351,7 +1349,6 @@ export function usePracticeSession(deps: OrchestratorDeps) {
     presets,
     challengeVisible,
     eligibleCount,
-    topicIndex,
     audio: audioUi,
     semanticRefining: semanticRefining && inCoverageView,
     historySaveState: !settings.practiceHistory

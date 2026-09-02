@@ -33,6 +33,8 @@ MediPrompt/
 │       ├── src/main/java/io/mediprompt/content/
 │       └── src/test/
 ├── content/
+│   ├── catalogs/                      # editable subject catalogs
+│   ├── candidates/                    # generated public-practice candidates
 │   ├── schema/
 │   ├── source-packs/                 # reviewed YAML
 │   ├── runtime-packs/                # generated JSON
@@ -461,7 +463,9 @@ unique stable IDs, versioned challenge profiles, bounded timer values, non-empty
 resolvable source references, explicit subject availability in the curriculum beta, and allowed
 review statuses. `availability` is optional for backward-compatible fixtures (missing means active),
 but the public candidate explicitly marks `ACTIVE` or `COMING_SOON`. Empty rubric concepts are
-structurally valid only for `COMING_SOON` shells; active subjects require sourced concepts. The
+structurally valid in a `DRAFT` pack so a label-only active speaking card can retain delivery and
+retry functionality without a fabricated content score. An `APPROVED` active topic still requires
+sourced concepts. The
 normal medical release gate rejects
 anything not `APPROVED`; the separate public-practice-beta gate accepts only one allowlisted,
 source-grounded `MEDICAL`/`DRAFT` snapshot with empty attestation. `contentKind` is required; an approved `MEDICAL` pack requires at least one
@@ -478,11 +482,14 @@ Review metadata models absence honestly: an unattested `DRAFT` has `reviewers: [
 `reviewedAt: null`. The schema condition requires at least one reviewer and a non-null ISO date for
 `APPROVED`; medical release validation then enforces the role/content-kind rule. Medical review
 candidates live under `content/candidates/`, must meet the practice topic/trio minimums, and must
-fail the medical release gate. The beta copy step allowlists the exact 265-topic candidate. Runtime
-validation requires exactly 35 Neuro, 26 combined Cardiovascular & Respiratory, and 34 Sports
-active topics, four known `COMING_SOON` subject shells, `DRAFT`, no reviewers/date, and exclusion
-of generic packs. The runtime and service worker enforce the same 640 KiB pack ceiling; the schema
-keeps sources bounded to 96 entries.
+fail the medical release gate. The beta copy step allowlists the current 595-topic candidate.
+Runtime validation requires the seven known subject identities, exactly Neuro, combined
+Cardiovascular & Respiratory, and Sports active, non-empty subject catalogs, four known
+`COMING_SOON` subjects, `DRAFT`, no reviewers/date, and exclusion of generic packs. Counts are data,
+not validator constants. The Neuro source catalog is validated for duplicate IDs/titles, section
+shape, and declared-count drift; optional prompt/concept fields compile into both Guided modes. The
+runtime and service worker enforce the same 2 MiB pack ceiling, a subject is bounded to 1,000 topics,
+and the schema keeps sources bounded to 96 entries.
 `generate-active-subjects-attestation.ts` deterministically emits every active prompt, expected
 criterion, accepted phrase, and citation; its `--check` mode is part of `content:validate`.
 
@@ -668,8 +675,9 @@ CI performance on hosted runners is not presented as phone performance.
 | v0.6 | Opt-in post-review viva ladder; independent 60-second answer identities; hidden future prompts; typed/local-audio parity; strict one-rubric all-or-nothing validation; honest scored/unverifiable aggregate; active exit and stale-result cleanup; offline/a11y/budget/audit evidence |
 | v0.7 | Explicit persistence opt-in; transcript/audio-free bounded records; strict validation and local dates; real IndexedDB index/migration tests; due-topic launch; exam triage; metadata export and verified delete-all; no-storage core regression |
 | v0.8 | Combined cardiorespiratory identity; complete 35/26/34 active-subject counts; source-bounded Sports authoring; generated 95-topic review worksheet; deterministic offline/E2E gates |
-| v0.9 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
-| v0.10 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
+| v0.9 | Exact 365-topic Neuro catalog; one-file add/delete/enrich workflow; 365/26/34 active counts; paused challenge/Viva/plan UI; matched runtime/SW limits; offline/responsive gates |
+| v0.10 | Safe PDF rejection/extraction, human-review/lifecycle gate, challenge-vector and fake-escalation validation, schema policy, deterministic JSON/manifest |
+| v0.11 | Target-user end-to-end beta, crash recovery, pack migration, WCAG audit and measured budgets |
 | v1.0 | Clean-device release journey, offline full loop, three approved packs, licence/privacy/security/recovery checklist |
 | v1.1+ | Consent/authz/sync/provider contracts, retention/deletion, source-grounded results and local-mode regression |
 
@@ -683,6 +691,6 @@ CI performance on hosted runners is not presented as phone performance.
 6. Add a failure-path test with every new capability.
 7. Keep generated output out of manual editing and verify it has no drift.
 8. Record a short architecture decision when changing a boundary or trust assumption.
-9. Preserve the complete mode/challenge/subject -> Spin -> focused timer -> finish/exit -> repeat tool without
+9. Preserve the complete mode/subject -> Spin -> focused timer -> finish/exit -> repeat tool without
    account, model, microphone, persistent storage, or network.
 10. Do not merge a version until its exit gate in the execution plan has evidence.

@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import medicalCandidateJson from "@content/candidates/mpt-cardiorespiratory-review-candidate.json";
+import neuroCatalogJson from "@content/catalogs/neuro-physiotherapy-topics.json";
 import {
   eligibleVariants,
   listSubjects,
@@ -53,11 +54,22 @@ describe("curriculum subject availability", () => {
 });
 
 describe("active medical-content completeness", () => {
-  it("ships 365 Neuro topics; authored topics have sourced criteria for every variant", () => {
+  it("generates every Neuro catalog topic with stable section-qualified titles", () => {
     const neuro = pack.subjects.find(
       (subject) => subject.subjectId === "neuro-physiotherapy",
     )!;
-    expect(neuro.topics).toHaveLength(365);
+    const catalogTopics = neuroCatalogJson.sections.flatMap((section) =>
+      section.topics.map((topic) => ({
+        topicId: topic.topicId,
+        title: `${section.titlePrefix} — ${topic.label}`,
+      })),
+    );
+    expect(catalogTopics).toHaveLength(neuroCatalogJson.expectedTopicCount);
+    expect(
+      neuro.topics.map((topic) => ({ topicId: topic.topicId, title: topic.title })),
+    ).toEqual(catalogTopics);
+    expect(neuro.topics.find((topic) => topic.topicId === "stroke-hemiplegic-gait")?.title)
+      .toBe("Stroke — Hemiplegic gait");
     for (const topic of neuro.topics) {
       const authored = topic.rubrics.some((rubric) => rubric.concepts.length > 0);
       if (!authored) {

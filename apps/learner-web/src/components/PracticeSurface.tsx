@@ -1,14 +1,12 @@
 import type { PracticeSelection, V02PracticeMode } from "@/practice/types";
-import type { SubjectOption, TopicIndexEntry } from "@/content/packQuery";
+import type { SubjectOption } from "@/content/packQuery";
 import { subjectEmoji } from "@/app/subjectEmoji";
 import { InfoTip } from "./InfoTip";
-import { SpinReel } from "./SpinReel";
 
 export interface PracticeSurfaceProps {
   subjects: SubjectOption[];
   selection: PracticeSelection;
   eligibleCount: number;
-  topicIndex: TopicIndexEntry[];
   drawing: boolean;
   onChange: (partial: Partial<PracticeSelection>) => void;
   onSpin: () => void;
@@ -23,13 +21,11 @@ export function PracticeSurface({
   subjects,
   selection,
   eligibleCount,
-  topicIndex,
   drawing,
   onChange,
   onSpin,
 }: PracticeSurfaceProps) {
   const spinDisabled = drawing || eligibleCount === 0;
-  const authoredCount = topicIndex.filter((t) => t.authored).length;
 
   return (
     <section className="setup-surface" aria-labelledby="controls-heading">
@@ -88,27 +84,6 @@ export function PracticeSurface({
         </select>
       </div>
 
-      {topicIndex.length > 0 ? (
-        <details className="topic-index">
-          <summary>
-            Browse all {topicIndex.length} topics
-            {authoredCount < topicIndex.length
-              ? ` (${authoredCount} with full feedback, ${topicIndex.length - authoredCount} preparing)`
-              : ""}
-          </summary>
-          <ol>
-            {topicIndex.map((topic) => (
-              <li key={topic.topicId} className={topic.authored ? "authored" : "scaffolded"}>
-                <span className="topic-index-title">{topic.title}</span>
-                <span className="topic-index-badge">
-                  {topic.authored ? "Full feedback" : "Feedback coming"}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </details>
-      ) : null}
-
       <button
         type="button"
         className="spin"
@@ -125,11 +100,6 @@ export function PracticeSurface({
         </svg>
         <span>{drawing ? "Finding a topic…" : "Spin a topic"}</span>
       </button>
-
-      <SpinReel
-        titles={topicIndex.map((entry) => entry.title)}
-        drawing={drawing}
-      />
 
       <p className="status" role="status">
         {eligibleCount === 0

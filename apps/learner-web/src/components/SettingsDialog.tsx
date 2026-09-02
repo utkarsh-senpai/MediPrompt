@@ -28,12 +28,6 @@ export function SettingsDialog({
   const [semanticCoverage, setSemanticCoverage] = useState(
     settings.semanticCoverage ?? false,
   );
-  const [practiceHistory, setPracticeHistory] = useState(
-    settings.practiceHistory ?? false,
-  );
-  const [hardToCatchHints, setHardToCatchHints] = useState(
-    settings.hardToCatchHints ?? false,
-  );
   const dialogRef = useRef<HTMLDialogElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
@@ -67,8 +61,7 @@ export function SettingsDialog({
       ),
       soundMuted,
       semanticCoverage,
-      practiceHistory,
-      hardToCatchHints,
+      practiceHistory: false,
     };
     store.save(next);
     onSaved(next);
@@ -154,21 +147,6 @@ export function SettingsDialog({
         </div>
         <div className="settings-sound">
           <input
-            id="practice-history"
-            type="checkbox"
-            checked={practiceHistory}
-            onChange={(e) => setPracticeHistory(e.target.checked)}
-          />
-          <label htmlFor="practice-history">
-            Private learning plan
-            <span className="settings-hint">
-              Save bounded topic, date, and aggregate coverage metadata on this device for spaced
-              practice. Audio, transcripts, and transcript excerpts are never saved.
-            </span>
-          </label>
-        </div>
-        <div className="settings-sound">
-          <input
             id="semantic-coverage"
             type="checkbox"
             checked={semanticCoverage}
@@ -181,23 +159,6 @@ export function SettingsDialog({
               {semanticCoverageAvailable
                 ? "Refine content coverage with on-device meaning matching (downloads a small model on first use). The lexical baseline runs first, so this never blocks practice."
                 : "Meaning matching needs WebAssembly and Web Worker support on this browser; lexical coverage remains available."}
-            </span>
-          </label>
-        </div>
-        <div className="settings-sound">
-          <input
-            id="hard-to-catch-hints"
-            type="checkbox"
-            checked={hardToCatchHints}
-            onChange={(e) => setHardToCatchHints(e.target.checked)}
-          />
-          <label htmlFor="hard-to-catch-hints">
-            Hard-to-catch hint button
-            <span className="settings-hint">
-              Show a wobbly hint button that drifts around during the speaking
-              timer. Catching it reveals one answer beat. It deliberately adds
-              pressure while you speak, so it is off by default. Reduced-motion
-              users get a static, keyboard-accessible version instead.
             </span>
           </label>
         </div>

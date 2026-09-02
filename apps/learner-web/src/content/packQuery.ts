@@ -32,32 +32,6 @@ export function isSubjectActive(subject: Subject | undefined): boolean {
   return subject !== undefined && subject.availability !== "COMING_SOON";
 }
 
-export interface TopicIndexEntry {
-  topicId: string;
-  title: string;
-  /** True when at least one variant rubric has sourced concepts (full coverage feedback). */
-  authored: boolean;
-}
-
-/** Flat, in-order topic list for a subject, flagging authored vs scaffolded topics. */
-export function listTopicIndex(
-  pack: RuntimePack,
-  subjectId: string,
-): TopicIndexEntry[] {
-  const subject = findSubject(pack, subjectId);
-  if (!subject) return [];
-  return subject.topics.map((topic) => ({
-    topicId: topic.topicId,
-    title: topic.title,
-    authored: topic.variants.some((variant) => {
-      const rubric = topic.rubrics.find(
-        (candidate) => candidate.rubricId === variant.rubricId,
-      );
-      return rubric !== undefined && rubric.concepts.length > 0;
-    }),
-  }));
-}
-
 export function findSubject(
   pack: RuntimePack,
   subjectId: string,

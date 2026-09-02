@@ -40,7 +40,9 @@ describe("loadBundledPack", () => {
       "Community Health Physiotherapy",
       "Sports Physiotherapy",
     ]);
-    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(595);
+    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(
+      medicalCandidateJson.subjects.flatMap((subject) => subject.topics).length,
+    );
     expect(
       result.pack.subjects.filter((subject) => subject.availability === "ACTIVE"),
     ).toHaveLength(3);
@@ -65,7 +67,9 @@ describe("loadBundledPack", () => {
     expect(result.source).toBe("COMPILED_FALLBACK");
     expect(result.warning).toMatch(/active offline/i);
     expect(result.pack.contentKind).toBe("MEDICAL");
-    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(595);
+    expect(result.pack.subjects.flatMap((subject) => subject.topics)).toHaveLength(
+      medicalCandidateJson.subjects.flatMap((subject) => subject.topics).length,
+    );
   });
 
   it("rejects an oversized response before reading its body", async () => {

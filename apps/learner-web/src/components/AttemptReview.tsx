@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import type {
   AudioUiState,
-  HistorySaveState,
 } from "@/practice/usePracticeSession";
 import type {
   ApprovedTranscript,
@@ -12,8 +10,6 @@ import type {
   TextMetrics,
   TopicSnapshot,
 } from "@/practice/types";
-import { FULL_COVERAGE_THRESHOLD } from "@/practice/types";
-import { playCoverageChime } from "@/app/sounds";
 import {
   formatRefinementDelta,
   refinementDirectionCopy,
@@ -33,13 +29,9 @@ interface AttemptReviewProps {
   refinementDelta: RefinementDeltaResult | null;
   attemptIndex: number;
   semanticRefining?: boolean;
-  historySaveState?: HistorySaveState;
   audio: AudioUiState;
-  /** Sound cues off when true; the coverage chime is skipped but confetti still plays. */
-  soundMuted?: boolean;
   onSpinAgain: () => void;
   onTryAgain: () => void;
-  onBeginViva: () => void;
 }
 
 function coverageCopy(coverage: CoverageReport): string {
@@ -59,12 +51,9 @@ export function AttemptReview({
   refinementDelta,
   attemptIndex,
   semanticRefining = false,
-  historySaveState = "OFF",
   audio,
-  soundMuted = false,
   onSpinAgain,
   onTryAgain,
-  onBeginViva,
 }: AttemptReviewProps) {
   const labelFor = (conceptId: string) =>
     coverage.conceptResults.find((concept) => concept.conceptId === conceptId)?.label ??
@@ -73,67 +62,12 @@ export function AttemptReview({
       ?.coverage.conceptResults.find((concept) => concept.conceptId === conceptId)?.label ??
     conceptId;
 
-  const isFullCoverage =
-    coverage.verifiable && coverage.weightedFraction >= FULL_COVERAGE_THRESHOLD;
-  const [reduceMotion] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
-  const celebratedRef = useRef(false);
-  useEffect(() => {
-    if (!isFullCoverage || reduceMotion || celebratedRef.current) return;
-    celebratedRef.current = true;
-    // Confetti is dynamically imported so canvas-confetti stays out of the
-    // initial-entry JS budget; it only loads when a review actually celebrates.
-    void import("canvas-confetti")
-      .then((mod) => {
-        const fire = mod.default;
-        fire({ particleCount: 90, spread: 70, origin: { y: 0.6 }, zIndex: 20 });
-        fire({
-          particleCount: 60,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0, y: 0.5 },
-        });
-        fire({
-          particleCount: 60,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1, y: 0.5 },
-        });
-      })
-      .catch(() => {
-        /* decorative only; never block the review */
-      });
-    playCoverageChime(soundMuted);
-  }, [isFullCoverage, reduceMotion, soundMuted]);
-
   return (
     <section aria-labelledby="review-heading">
       <h2 id="review-heading" tabIndex={-1}>
         Attempt review{attemptIndex > 1 ? ` (attempt ${attemptIndex})` : ""}
       </h2>
       <p className="status">{topic.title}</p>
-
-      {isFullCoverage && reduceMotion ? (
-        <p className="status" role="status">
-          Nice — full coverage.
-        </p>
-      ) : null}
-
-      {historySaveState !== "OFF" && historySaveState !== "IDLE" ? (
-        <p className="status" role="status">
-          {historySaveState === "SAVING"
-            ? "Saving learning-plan metadata on this device…"
-            : historySaveState === "SAVED"
-              ? "Saved to your private learning plan. No transcript was stored."
-              : historySaveState === "SAVED_SESSION"
-                ? "Browser storage is unavailable. Learning-plan metadata lasts only for this tab; no transcript was stored."
-              : "This attempt could not be saved; your review is still available in this session."}
-        </p>
-      ) : null}
 
       {semanticRefining ? (
         <p className="status" role="status">
@@ -210,25 +144,6 @@ export function AttemptReview({
           </li>
         </ol>
       </details>
-
-      {topic.vivaQuestions.length > 0 ? (
-        <section className="viva-entry" aria-labelledby="viva-entry-heading">
-          <h3 id="viva-entry-heading">Defend this topic</h3>
-          <p className="status">
-            Take {topic.vivaQuestions.length} timed follow-up
-            {topic.vivaQuestions.length === 1 ? "" : "s"}, climbing from Recall
-            toward Defend. The microphone is optional; target-concept coverage is not a grade.
-          </p>
-          <button type="button" className="primary" onClick={onBeginViva}>
-            Begin viva
-          </button>
-        </section>
-      ) : (
-        <p className="status">
-          Viva is unavailable for this topic: no source-grounded defense questions are
-          authored for it yet.
-        </p>
-      )}
 
       <div className="toolbar">
         <button type="button" className="primary" onClick={onTryAgain}>
